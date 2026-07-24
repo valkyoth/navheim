@@ -34,6 +34,20 @@ CRC/FEC correctness does not imply authentication. Navigation-message
 authentication does not prove signal-source authenticity. Neither implies
 solution integrity.
 
+## Threat-to-Invariant Matrix
+
+| Threat | Required invariant | Required evidence |
+| --- | --- | --- |
+| RF spoofing/meaconing | RF facts begin untrusted; authenticated data is not origin proof | conducted/shielded replay, gradual time drift, common-clock and multi-source scenarios |
+| Jamming/interference | loss and degradation cannot become stale valid output | CW, chirp, pulse, broadband, AGC saturation and partial-band tests |
+| Time rollback | GNSS, host wall, capture, persisted watermark and trust-root time stay separate | cold boot, storage rollback, truncated week, stale leap and delayed-key tests |
+| Correction mixing | provider/station/frame/antenna/peer/issue/epoch stay session-bound | cross-session injection, replay, incomplete-group and atomic-transition tests |
+| Parser differential | progress, exact consumption, normalization and recovery are deterministic | independent corpora, chunk variations, unknowns, duplicates and overlong inputs |
+| Resource exhaustion | accepted plans bound all state, work, queues and output | false acquisition, worst-case FEC, queue pressure and reconnect-storm tests |
+| Evidence rollback | later assessment or invalidation cannot be ignored silently | reordered/replayed events, acknowledgement loss and forced-resynchronization tests |
+| Credential/location leak | routine errors and telemetry exclude secrets and sensitive location/time | sentinel-secret and sensitive-diagnostic snapshot tests |
+| FFI/DMA/SIMD fault | unsafe code only transfers validated bounded values into safe ownership | hostile length/alignment, disconnect/reset, model-check and sanitizer evidence |
+
 ## Mandatory Mitigations
 
 - bounded parsing, collections, recursion, work, state, and output;
@@ -41,6 +55,10 @@ solution integrity.
 - no panics or partial commits across untrusted boundaries;
 - explicit freshness, validity, time-scale, frame, provider, and station checks;
 - staged/transactional navigation state updates;
+- immutable artifact IDs and separately targeted correctness, authentication,
+  signal-authenticity, integrity and policy-decision objects;
+- immutable correction sessions binding peer, provider, station, frame, datum,
+  antenna, issue, epoch and generation;
 - explicit capability planning before hardware is opened;
 - caller-visible degradation, exclusion, uncertainty, and authentication state;
 - explicit timing invalidation/withdrawal events after stale models, receiver
@@ -52,6 +70,12 @@ solution integrity.
 - first-party GNSS correctness with isolated reviewed TLS/crypto/FFI adapters;
 - fuzzing, independent differential evidence, live-sky evidence, shielded RF
   testing, pentests, and external audits.
+
+Time rollback protection consumes untrusted measurement time, boot-relative
+capture time, trusted configuration/model versions and an optional
+platform-provided high-water authority. Secure storage, TPMs or monotonic
+counters are never implied by `no_std`; their presence and failure are explicit
+capabilities.
 
 ## Out of Scope
 

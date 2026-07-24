@@ -16,7 +16,7 @@ Tags use:
 
 ```text
 v0.N.0        milestone release
-v0.N.P        bounded fix/remediation release
+v0.N.P        bounded compatible implementation/remediation release
 v1.0.0-rc.N   exact production candidate
 v1.0.0        unchanged promotion of the approved candidate
 ```
@@ -29,7 +29,8 @@ Every release requires:
 - authoritative standards/source evidence for affected behavior;
 - unit, negative, adversarial, conformance, and fuzz evidence appropriate to
   the surface;
-- MSRV, `no_std`, platform, numerical, and resource evidence as applicable;
+- MSRV behavioral tests once behavior exists, plus `no_std`, platform,
+  numerical, and resource evidence as applicable;
 - updated docs, current status, coverage, changelog, and release notes;
 - current dependency/tool/action review, Cargo policy, RustSec, and SBOM;
 - no hand-maintained code file above 500 lines;
@@ -69,11 +70,17 @@ Every version, including patch and prerelease tags, follows this handoff:
    `Reviewed-Commit: <40 hex>`, `Tester`, `Scope`, and `Date`.
 10. Require the report commit to be the direct child of the reviewed commit
     and to change no other path.
-11. Run `scripts/validate-release-readiness.sh vX.Y.Z`.
-12. Tag or publish only on explicit maintainer request.
+11. Prove package file lists and checksums are identical at the reviewed
+    implementation commit and its report-only child.
+12. Run `scripts/validate-release-readiness.sh vX.Y.Z`.
+13. Tag or publish only on explicit maintainer request.
 
-The final `v1.0.0` tag and crate archives must be byte-for-byte the approved
-`v1.0.0-rc.N` candidate. Any change requires another RC.
+For the production candidate, all Cargo manifests already declare package
+version `1.0.0`. `v1.0.0-rc.N` is a repository candidate tag over those
+unpublished final-version sources, not a differently versioned crates.io
+package. The final `v1.0.0` tag points to the same approved commit and publishes
+the retained archives byte-for-byte. Any source, metadata, documentation, or
+archive change requires another RC.
 
 ## Crate Publication Policy
 
@@ -114,6 +121,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.1.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -133,23 +141,105 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.1.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.2.0 - Bounded collections, fixed-capacity strings and core error model
+### v0.1.1 - Metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and...
 
 Status: planned.
 
-Goal: deliver bounded collections, fixed-capacity strings and core error model as one bounded,
+Goal: deliver metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and package-provenance validation as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- bounded collections, fixed-capacity strings and core error model.
+- metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and package-provenance validation.
+- Derive crate/tier/unsafe checks from Cargo metadata or an architecture manifest and parse release versions with strict SemVer.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.1.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test malformed tags, future workspace crates, tier violations, stale pentest parents, and package drift across report-only commits.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.1.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.1.2 - Exact standards-document, amendment, legal-access, implementation and test-traceabili...
+
+Status: planned.
+
+Goal: deliver exact standards-document, amendment, legal-access, implementation and test-traceability schema as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- exact standards-document, amendment, legal-access, implementation and test-traceability schema.
+- Define exact document/amendment/vector records and require module, section, feature, limitation, legal, and test mappings.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.1.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Reject aggregate implemented claims, missing revisions, unmapped tests, silent revision changes, and disallowed retained documents.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.1.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.2.0 - Checked arithmetic, capacities and structured core error model
+
+Status: planned.
+
+Goal: deliver checked arithmetic, capacities and structured core error model as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- checked arithmetic, capacities and structured core error model.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.2.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -169,23 +259,141 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.2.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.3.0 - Physical unit types and checked conversions
+### v0.2.1 - Safe fixed byte buffers and checked fixed-capacity UTF-8 strings
 
 Status: planned.
 
-Goal: deliver physical unit types and checked conversions as one bounded,
+Goal: deliver safe fixed byte buffers and checked fixed-capacity UTF-8 strings as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- physical unit types and checked conversions.
+- safe fixed byte buffers and checked fixed-capacity UTF-8 strings.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.2.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.2.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.2.2 - Safe bounded sequence/deque contracts with documented representation and cost
+
+Status: planned.
+
+Goal: deliver safe bounded sequence/deque contracts with documented representation and cost as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- safe bounded sequence/deque contracts with documented representation and cost.
+- Choose safe bounded representations honestly; record size/alignment overhead and do not promise zero-overhead generic storage.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.2.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test zero/full capacity, drop behavior, wraparound, large element alignment, and representation-size contracts without unsafe code.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.2.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.2.3 - Caller-owned scratch-region and bounded-arena handles
+
+Status: planned.
+
+Goal: deliver caller-owned scratch-region and bounded-arena handles as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- caller-owned scratch-region and bounded-arena handles.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.2.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.2.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.0 - Exact scaled-integer and reduced-rational numeric primitives
+
+Status: planned.
+
+Goal: deliver exact scaled-integer and reduced-rational numeric primitives as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- exact scaled-integer and reduced-rational numeric primitives.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.3.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -205,24 +413,102 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.3.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.4.0 - Native GNSS time representations and raw/resolved state model with no leap conversion...
+### v0.3.1 - Physical unit types and checked conversions
 
 Status: planned.
 
-Goal: deliver native GNSS time representations and raw/resolved state model with no leap conversion yet as one bounded,
+Goal: deliver physical unit types and checked conversions as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- native GNSS time representations and raw/resolved state model with no leap conversion yet.
+- physical unit types and checked conversions.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.3.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.3.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.3.2 - Measurement intervals, asymmetric uncertainty, typed covariance and finite floating a...
+
+Status: planned.
+
+Goal: deliver measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.3.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.3.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.4.0 - Raw native GNSS time fields and extensible scale identifiers
+
+Status: planned.
+
+Goal: deliver raw native GNSS time fields and extensible scale identifiers as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- raw native GNSS time fields and extensible scale identifiers.
 - Define checked, exact, `no_std` native-scale types; preserve unknown scales and keep raw, ambiguous, and resolved time in different types.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.4.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -243,26 +529,28 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.4.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.5.0 - UTC/leap model with provenance and explicit era/week ambiguity
+### v0.4.1 - Resolved native instants with private fields and resolution evidence
 
 Status: planned.
 
-Goal: deliver uTC/leap model with provenance and explicit era/week ambiguity as one bounded,
+Goal: deliver resolved native instants with private fields and resolution evidence as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- UTC/leap model with provenance and explicit era/week ambiguity.
-- Model UTC realization, offset/leap source, model identity, freshness, and era/week resolution evidence without consulting host wall time.
+- resolved native instants with private fields and resolution evidence.
+- Make all resolved fields private and retain method, anchor, alternatives, model identity, validity, freshness, and untrusted hints.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
-  public documentation, migration notes, and `RELEASE_NOTES_0.5.0.md`.
+  public documentation, migration notes, and `RELEASE_NOTES_0.4.1.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
   planned capability is complete.
 
@@ -270,7 +558,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test leap insertion/deletion, truncated weeks, stale/conflicting models, rollover, ambiguity, and serialization without trust upgrade.
+- Prove equivalent instants have one canonical representation and no ambiguous or invalid native value can use the resolved type.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -281,9 +569,244 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.4.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.4.2 - Capture clock-domain/generation identifiers and exact sample timestamps
+
+Status: planned.
+
+Goal: deliver capture clock-domain/generation identifiers and exact sample timestamps as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- capture clock-domain/generation identifiers and exact sample timestamps.
+- Wrap foreign capture values with clock-domain and reset-generation identity while preserving dependency direction.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.4.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Prove cross-domain/generation values cannot be ordered or subtracted without an explicit mapping and reset invalidates comparability.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.4.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.4.3 - Truncated week/day/era ambiguity alternatives and resolution context
+
+Status: planned.
+
+Goal: deliver truncated week/day/era ambiguity alternatives and resolution context as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- truncated week/day/era ambiguity alternatives and resolution context.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.4.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.4.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.5.0 - Exact TAI instant and explicit GNSS-scale conversion
+
+Status: planned.
+
+Goal: deliver exact TAI instant and explicit GNSS-scale conversion as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- exact TAI instant and explicit GNSS-scale conversion.
+- Model continuous atomic time and explicit GNSS-scale conversion without consulting host wall time.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.5.0.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test every epoch, offset boundary, out-of-range value, and forbidden implicit Unix/wall-clock conversion.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.5.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.5.1 - UTC realization and leap model with provenance, activation, freshness and expiry
+
+Status: planned.
+
+Goal: deliver UTC realization and leap model with provenance, activation, freshness and expiry as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- UTC realization and leap model with provenance, activation, freshness and expiry.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.5.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.5.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.5.2 - Time rollback/freshness guard and platform persistence-authority contract
+
+Status: planned.
+
+Goal: deliver time rollback/freshness guard and platform persistence-authority contract as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- time rollback/freshness guard and platform persistence-authority contract.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.5.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.5.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.5.3 - Reason-bearing time availability and targeted invalidation primitives
+
+Status: planned.
+
+Goal: deliver reason-bearing time availability and targeted invalidation primitives as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- reason-bearing time availability and targeted invalidation primitives.
+- Use reason-bearing availability for trust-relevant absence and define target artifact/model, sequence, generation, interval, and withdrawal.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.5.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test pending, unsupported, ambiguous, stale, rejected, failed, replayed, reordered, replaced, and mandatory-withdrawal states.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.5.3 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.6.0 - Coordinate types: geodetic, ECEF, ENU and NED
 
@@ -298,6 +821,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.6.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -317,9 +841,86 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.6.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.6.1 - Body frames, velocity, acceleration, rotations, lever arms and sensor latency
+
+Status: planned.
+
+Goal: deliver body frames, velocity, acceleration, rotations, lever arms and sensor latency as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- body frames, velocity, acceleration, rotations, lever arms and sensor latency.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.6.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.6.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.6.2 - Typed covariance layouts with state ordering, units, frame and epoch
+
+Status: planned.
+
+Goal: deliver typed covariance layouts with state ordering, units, frame and epoch as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- typed covariance layouts with state ordering, units, frame and epoch.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.6.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.6.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.7.0 - Geodesic, ellipsoid and reference-frame primitives
 
@@ -334,6 +935,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.7.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -353,9 +955,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.7.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.7.1 - Datum/reference-frame realization and Earth-orientation input contracts
+
+Status: planned.
+
+Goal: deliver datum/reference-frame realization and Earth-orientation input contracts as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- datum/reference-frame realization and Earth-orientation input contracts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.7.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.7.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.8.0 - Bit readers/writers, sign extension and reserved-bit preservation
 
@@ -370,6 +1011,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.8.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -389,9 +1031,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.8.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.8.1 - Exact-consumption results and original-bit/canonical round-trip modes
+
+Status: planned.
+
+Goal: deliver exact-consumption results and original-bit/canonical round-trip modes as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- exact-consumption results and original-bit/canonical round-trip modes.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.8.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.8.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.9.0 - Checksums, CRC framework and GNSS parity primitives
 
@@ -406,6 +1087,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.9.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -425,9 +1107,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.9.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.9.1 - Named constellation parity/checksum families with authoritative vectors
+
+Status: planned.
+
+Goal: deliver named constellation parity/checksum families with authoritative vectors as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- named constellation parity/checksum families with authoritative vectors.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.9.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.9.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.10.0 - Convolutional, BCH, Reed–Solomon and interleaving primitives required by the selected...
 
@@ -442,6 +1163,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.10.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -461,9 +1183,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.10.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.10.1 - Bounded soft decisions, path-metric saturation and interleaver capacity contracts
+
+Status: planned.
+
+Goal: deliver bounded soft decisions, path-metric saturation and interleaver capacity contracts as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- bounded soft decisions, path-metric saturation and interleaver capacity contracts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.10.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.10.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.11.0 - LDPC/polar or other modern FEC kernels required by public signals, one verified famil...
 
@@ -478,6 +1239,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.11.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -497,9 +1259,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.11.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.11.1 - Fixed iteration/work limits and decoder resource receipts
+
+Status: planned.
+
+Goal: deliver fixed iteration/work limits and decoder resource receipts as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- fixed iteration/work limits and decoder resource receipts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.11.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.11.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.12.0 - Extensible system/satellite/signal identifiers and registry versioning
 
@@ -514,6 +1315,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.12.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -533,9 +1335,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.12.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.12.1 - Namespaced registry authorities and bounded identifier sets without closed public masks
+
+Status: planned.
+
+Goal: deliver namespaced registry authorities and bounded identifier sets without closed public masks as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- namespaced registry authorities and bounded identifier sets without closed public masks.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.12.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.12.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.13.0 - Canonical observation/epoch model with distinct transmit, receive and capture times
 
@@ -551,6 +1392,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.13.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -571,9 +1413,90 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.13.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.13.1 - Immutable artifacts, bounded provenance parents and separate targeted assessment iden...
+
+Status: planned.
+
+Goal: deliver immutable artifacts, bounded provenance parents and separate targeted assessment identifiers as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- immutable artifacts, bounded provenance parents and separate targeted assessment identifiers.
+- Separate facts, correctness, authentication, signal authenticity, integrity, and policy decisions through immutable target IDs.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.13.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Prove delayed assessments never mutate facts and bounded parent graphs reject cycles, overflow, unknown derivations, and stale generations.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.13.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.13.2 - Tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation s...
+
+Status: planned.
+
+Goal: deliver tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages.
+- Make every observation derivation stage a distinct type and preserve protocol/sample offsets, clocks, corrections, exclusions, and parents.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.13.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Compile-fail impossible stage mixing and test raw-to-solver provenance, unavailable solutions, correction order, and epoch consistency.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.13.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.14.0 - Ephemeris, almanac, health and satellite-clock model traits
 
@@ -585,10 +1508,10 @@ reviewable release in Phase A (Foundation and contracts).
 Deliverables:
 
 - ephemeris, almanac, health and satellite-clock model traits.
-- Expose satellite clock state, health, validity, group/inter-signal delays, issue-of-data, uncertainty, and provenance through traits.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.14.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -598,7 +1521,6 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test unhealthy, stale, mismatched issue-of-data, boundary-valid, and discontinuous clock models against independent references.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -609,9 +1531,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.14.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.14.1 - Model issue, validity, discontinuity, delay, uncertainty and transactional generation...
+
+Status: planned.
+
+Goal: deliver model issue, validity, discontinuity, delay, uncertainty and transactional generation rules as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.14.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.14.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.15.0 - Correction and provenance models
 
@@ -626,6 +1587,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.15.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -645,9 +1607,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.15.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.15.1 - Immutable correction sessions and ordered applied-correction ledger with anti-mixing...
+
+Status: planned.
+
+Goal: deliver immutable correction sessions and ordered applied-correction ledger with anti-mixing policy as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- immutable correction sessions and ordered applied-correction ledger with anti-mixing policy.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.15.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.15.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.16.0 - Event, source, sink and deterministic polling traits with explicit invalidation
 
@@ -659,10 +1660,11 @@ reviewable release in Phase A (Foundation and contracts).
 Deliverables:
 
 - event, source, sink and deterministic polling traits with explicit invalidation.
-- Define the allocation-free `GnssTimingSource`-style event boundary for observations, model changes, gaps, invalidations, and alerts.
+- Define allocation-free progress traits for observations, model changes, gaps, invalidations, and alerts.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.16.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -683,9 +1685,88 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.16.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.16.1 - Small push/poll/transform/reset vocabulary with borrowed or caller-provided output slots
+
+Status: planned.
+
+Goal: deliver small push/poll/transform/reset vocabulary with borrowed or caller-provided output slots as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- small push/poll/transform/reset vocabulary with borrowed or caller-provided output slots.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.16.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.16.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.16.2 - Sequenced targeted invalidation, acknowledgement, queue pressure and resynchronizatio...
+
+Status: planned.
+
+Goal: deliver sequenced targeted invalidation, acknowledgement, queue pressure and resynchronization contracts as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- sequenced targeted invalidation, acknowledgement, queue pressure and resynchronization contracts.
+- Sequence events per source generation and require explicit behavior for mandatory invalidation under queue pressure.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.16.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Model event replay/reorder/loss, acknowledgement failure, coalescing, producer stop, consumer lag, reset, and forced resynchronization.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.16.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.17.0 - Capability negotiation and resource-planning contracts
 
@@ -700,6 +1781,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.17.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -719,9 +1801,88 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.17.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.17.1 - Executable preflight schema and immutable normalized `PlanReceipt`
+
+Status: planned.
+
+Goal: deliver executable preflight schema and immutable normalized `PlanReceipt` as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- executable preflight schema and immutable normalized `PlanReceipt`.
+- Normalize every capacity, scratch region, alignment, work, queue, throughput, latency, retention, and recovery limit into a receipt.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.17.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test arithmetic overflow, overlap/alignment, mismatched blocks, hostile metadata, maximum plans, and execution attempts beyond the receipt.
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.17.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.17.2 - Prepared facade planning and caller review before devices, credentials, networking or...
+
+Status: planned.
+
+Goal: deliver prepared facade planning and caller review before devices, credentials, networking or threads as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- prepared facade planning and caller review before devices, credentials, networking or threads.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.17.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.17.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.18.0 - Canonical configuration serialization without external serialization crates
 
@@ -736,6 +1897,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.18.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -755,6 +1917,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
@@ -772,6 +1935,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.19.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -791,6 +1955,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.19.0 implementation stop reached. Run pentest for this exact commit.`
@@ -808,6 +1973,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.20.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -827,9 +1993,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.20.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.20.1 - Structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries
+
+Status: planned.
+
+Goal: deliver structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.20.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states and undeclared resource use are unrepresentable or rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.20.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase B: File and byte-stream interoperability
 
@@ -837,7 +2042,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver nMEA 0183 framing, checksum and bounded recovery as one bounded,
+Goal: deliver NMEA 0183 framing, checksum and bounded recovery as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -846,6 +2051,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.21.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -865,15 +2071,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.21.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.21.1 - Parser forward progress, exact consumption, deterministic chunks and structured offsets
+
+Status: planned.
+
+Goal: deliver parser forward progress, exact consumption, deterministic chunks and structured offsets as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- parser forward progress, exact consumption, deterministic chunks and structured offsets.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.21.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.21.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.22.0 - GNSS-relevant NMEA 0183 sentence models for the licensed baseline
 
 Status: planned.
 
-Goal: deliver gNSS-relevant NMEA 0183 sentence models for the licensed baseline as one bounded,
+Goal: deliver GNSS-relevant NMEA 0183 sentence models for the licensed baseline as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -882,6 +2127,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.22.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -901,15 +2147,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.22.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.22.1 - Borrowed/visitor, owned, canonical and original-preserving NMEA APIs
+
+Status: planned.
+
+Goal: deliver borrowed/visitor, owned, canonical and original-preserving NMEA APIs as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- borrowed/visitor, owned, canonical and original-preserving NMEA APIs.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.22.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.22.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.23.0 - RTCM 3 framing and CRC
 
 Status: planned.
 
-Goal: deliver rTCM 3 framing and CRC as one bounded,
+Goal: deliver RTCM 3 framing and CRC as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -918,6 +2203,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.23.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -937,15 +2223,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.23.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.23.1 - Raw frame, correctness assessment, semantic conversion and transactional insertion bo...
+
+Status: planned.
+
+Goal: deliver raw frame, correctness assessment, semantic conversion and transactional insertion boundary as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- raw frame, correctness assessment, semantic conversion and transactional insertion boundary.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.23.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.23.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.24.0 - RTCM station/antenna descriptor messages
 
 Status: planned.
 
-Goal: deliver rTCM station/antenna descriptor messages as one bounded,
+Goal: deliver RTCM station/antenna descriptor messages as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -954,6 +2279,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.24.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -973,6 +2299,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.24.0 implementation stop reached. Run pentest for this exact commit.`
@@ -981,7 +2308,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver rTCM MSM observation decoding/encoding as one bounded,
+Goal: deliver RTCM MSM observation decoding/encoding as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -990,6 +2317,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.25.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1009,15 +2337,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.25.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.25.1 - MSM provider/station/frame/session binding and cross-constellation round trips
+
+Status: planned.
+
+Goal: deliver mSM provider/station/frame/session binding and cross-constellation round trips as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- MSM provider/station/frame/session binding and cross-constellation round trips.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.25.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.25.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.26.0 - RTCM constellation ephemeris messages
 
 Status: planned.
 
-Goal: deliver rTCM constellation ephemeris messages as one bounded,
+Goal: deliver RTCM constellation ephemeris messages as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -1026,6 +2393,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.26.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1045,6 +2413,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.26.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1062,6 +2431,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.27.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1081,6 +2451,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.27.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1098,6 +2469,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.28.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1117,15 +2489,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.28.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.28.1 - Bounded redirects/reconnects/headers, credential redaction, GGA consent and downgrade...
+
+Status: planned.
+
+Goal: deliver bounded redirects/reconnects/headers, credential redaction, GGA consent and downgrade policy as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- bounded redirects/reconnects/headers, credential redaction, GGA consent and downgrade policy.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.28.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.28.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.29.0 - RINEX 2 observation streaming parser/writer
 
 Status: planned.
 
-Goal: deliver rINEX 2 observation streaming parser/writer as one bounded,
+Goal: deliver RINEX 2 observation streaming parser/writer as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -1134,6 +2545,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.29.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1153,6 +2565,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.29.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1161,7 +2574,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver rINEX 3 observation and navigation support as one bounded,
+Goal: deliver RINEX 3 observation and navigation support as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -1170,6 +2583,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.30.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1189,6 +2603,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.30.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1197,7 +2612,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver rINEX 4 generic navigation records and current additions as one bounded,
+Goal: deliver RINEX 4 generic navigation records and current additions as one bounded,
 reviewable release in Phase B (File and byte-stream interoperability).
 
 Deliverables:
@@ -1206,6 +2621,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1225,9 +2641,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.31.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.31.1 - Cross-version canonical/original preservation and deterministic chunk-boundary audit
+
+Status: planned.
+
+Goal: deliver cross-version canonical/original preservation and deterministic chunk-boundary audit as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- cross-version canonical/original preservation and deterministic chunk-boundary audit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.31.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.31.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.32.0 - SP3 orbit and precise clock products
 
@@ -1242,6 +2697,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.32.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1261,6 +2717,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.32.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1278,6 +2735,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.33.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1297,6 +2755,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.33.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1314,6 +2773,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.34.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1333,6 +2793,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.34.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1350,6 +2811,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.35.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1369,6 +2831,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.35.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1386,6 +2849,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.36.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1405,9 +2869,88 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.36.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.36.1 - Replay checkpoints, digests, corruption recovery and version compatibility
+
+Status: planned.
+
+Goal: deliver replay checkpoints, digests, corruption recovery and version compatibility as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- replay checkpoints, digests, corruption recovery and version compatibility.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.36.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.36.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.36.2 - Cross-format canonical comparison and differential parser audit
+
+Status: planned.
+
+Goal: deliver cross-format canonical comparison and differential parser audit as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- cross-format canonical comparison and differential parser audit.
+- Compare semantic artifacts across formats and independent parsers without discarding raw/original representations.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.36.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Vary every chunk boundary and test duplicate, unknown, malformed, overlong, reordered, recovery, and differential-result cases.
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.36.2 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase C: Native DSP reference implementation
 
@@ -1424,6 +2967,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.37.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1443,9 +2987,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.37.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.37.1 - Fixed-point widening, narrowing, rounding, saturation and sticky-overflow replay cont...
+
+Status: planned.
+
+Goal: deliver fixed-point widening, narrowing, rounding, saturation and sticky-overflow replay contract as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- fixed-point widening, narrowing, rounding, saturation and sticky-overflow replay contract.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.37.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.37.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.38.0 - FIR/IIR and decimation primitives
 
@@ -1460,6 +3043,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.38.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1479,6 +3063,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.38.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1496,6 +3081,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.39.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1515,9 +3101,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.39.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.39.1 - Rational resampler timestamp and group-delay accounting
+
+Status: planned.
+
+Goal: deliver rational resampler timestamp and group-delay accounting as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- rational resampler timestamp and group-delay accounting.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.39.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.39.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.40.0 - Scalar radix-2/radix-4 FFT
 
@@ -1532,6 +3157,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.40.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1551,9 +3177,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.40.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.40.1 - Accepted FFT size families, checked factorization and caller-scratch planning
+
+Status: planned.
+
+Goal: deliver accepted FFT size families, checked factorization and caller-scratch planning as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- accepted FFT size families, checked factorization and caller-scratch planning.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.40.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.40.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.41.0 - Mixed-radix FFT and convolution
 
@@ -1568,6 +3233,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.41.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1587,9 +3253,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.41.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.41.1 - Floating numerical replay contract for FMA, denormals, finiteness and platform tolera...
+
+Status: planned.
+
+Goal: deliver floating numerical replay contract for FMA, denormals, finiteness and platform tolerances as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- floating numerical replay contract for FMA, denormals, finiteness and platform tolerances.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.41.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.41.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.42.0 - Polyphase channelizer
 
@@ -1604,6 +3309,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.42.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1623,6 +3329,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.42.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1640,6 +3347,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.43.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1659,9 +3367,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.43.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.43.1 - Acquisition work tokens, bounded candidates and named false-alarm assumptions
+
+Status: planned.
+
+Goal: deliver acquisition work tokens, bounded candidates and named false-alarm assumptions as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- acquisition work tokens, bounded candidates and named false-alarm assumptions.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.43.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.43.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.44.0 - DLL/FLL/PLL tracking-loop primitives
 
@@ -1676,6 +3423,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.44.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1695,9 +3443,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.44.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.44.1 - Loop coefficient/stability evidence and discontinuity/reacquisition lifecycle
+
+Status: planned.
+
+Goal: deliver loop coefficient/stability evidence and discontinuity/reacquisition lifecycle as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- loop coefficient/stability evidence and discontinuity/reacquisition lifecycle.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.44.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.44.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.45.0 - Correlator banks, CN0 and lock estimators
 
@@ -1712,6 +3499,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.45.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1731,6 +3519,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.45.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1748,6 +3537,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.46.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1767,6 +3557,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.46.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1784,6 +3575,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.47.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1803,9 +3595,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.47.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.47.1 - Sample/host/hardware capture-domain mapping and per-block metadata validation
+
+Status: planned.
+
+Goal: deliver sample/host/hardware capture-domain mapping and per-block metadata validation as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- sample/host/hardware capture-domain mapping and per-block metadata validation.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.47.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.47.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.48.0 - Scalar real-time scheduler and channel lifecycle
 
@@ -1820,6 +3651,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.48.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1839,9 +3671,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.48.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.48.1 - Scheduler work tokens, candidate/channel eviction, backpressure and resource events
+
+Status: planned.
+
+Goal: deliver scheduler work tokens, candidate/channel eviction, backpressure and resource events as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- scheduler work tokens, candidate/channel eviction, backpressure and resource events.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.48.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.48.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.49.0 - SIMD dispatch boundary with reference equivalence tests
 
@@ -1856,6 +3727,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.49.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1875,6 +3747,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.49.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1892,6 +3765,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.50.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1911,9 +3785,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.50.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.50.1 - Sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block...
+
+Status: planned.
+
+Goal: deliver sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
+- Seal deployment and DSP decisions before execution and revalidate every sample block against the accepted receipt.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.50.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Exercise maximum channels/candidates/FEC/FFT/scratch/work, gap/overrun, metadata lies, throughput failure, and deterministic eviction.
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.50.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase D: GPS end-to-end
 
@@ -1921,7 +3836,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L1 C/A code generation and test vectors as one bounded,
+Goal: deliver GPS L1 C/A code generation and test vectors as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -1930,6 +3845,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.51.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1949,6 +3865,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.51.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1957,7 +3874,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L1 C/A acquisition as one bounded,
+Goal: deliver GPS L1 C/A acquisition as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -1966,6 +3883,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.52.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -1985,6 +3903,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.52.0 implementation stop reached. Run pentest for this exact commit.`
@@ -1993,7 +3912,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L1 C/A tracking and observables as one bounded,
+Goal: deliver GPS L1 C/A tracking and observables as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2002,6 +3921,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.53.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2021,6 +3941,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.53.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2029,7 +3950,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS LNAV parity/frame/subframe decode as one bounded,
+Goal: deliver GPS LNAV parity/frame/subframe decode as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2038,6 +3959,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.54.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2057,15 +3979,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.54.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.54.1 - Bounded multi-page assembly and atomic navigation-store transactions
+
+Status: planned.
+
+Goal: deliver bounded multi-page assembly and atomic navigation-store transactions as one bounded,
+reviewable release in Phase D (GPS end-to-end).
+
+Deliverables:
+
+- bounded multi-page assembly and atomic navigation-store transactions.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.54.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.54.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.55.0 - GPS LNAV ephemeris, almanac, UTC and ionosphere
 
 Status: planned.
 
-Goal: deliver gPS LNAV ephemeris, almanac, UTC and ionosphere as one bounded,
+Goal: deliver GPS LNAV ephemeris, almanac, UTC and ionosphere as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2074,6 +4035,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.55.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2093,6 +4055,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.55.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2110,6 +4073,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.56.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2129,6 +4093,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.56.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2146,6 +4111,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.57.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2165,6 +4131,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.57.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2182,6 +4149,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.58.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2201,9 +4169,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.58.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.58.1 - Typed solver covariance, rank/condition/non-finite checks and explicit unavailable ev...
+
+Status: planned.
+
+Goal: deliver typed solver covariance, rank/condition/non-finite checks and explicit unavailable events as one bounded,
+reviewable release in Phase D (GPS end-to-end).
+
+Deliverables:
+
+- typed solver covariance, rank/condition/non-finite checks and explicit unavailable events.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.58.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.58.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.59.0 - Doppler velocity and receiver clock drift
 
@@ -2218,6 +4225,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.59.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2237,15 +4245,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.59.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.59.1 - Recorded-I/Q-to-PVT independent receiver, resource and input-panic audit
+
+Status: planned.
+
+Goal: deliver recorded-I/Q-to-PVT independent receiver, resource and input-panic audit as one bounded,
+reviewable release in Phase D (GPS end-to-end).
+
+Deliverables:
+
+- recorded-I/Q-to-PVT independent receiver, resource and input-panic audit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.59.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.59.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.60.0 - GPS L2C codes, acquisition and tracking
 
 Status: planned.
 
-Goal: deliver gPS L2C codes, acquisition and tracking as one bounded,
+Goal: deliver GPS L2C codes, acquisition and tracking as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2254,6 +4301,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.60.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2273,6 +4321,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.60.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2281,7 +4330,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS CNAV decode as one bounded,
+Goal: deliver GPS CNAV decode as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2290,6 +4339,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.61.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2309,6 +4359,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.61.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2317,7 +4368,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L5 acquisition/tracking as one bounded,
+Goal: deliver GPS L5 acquisition/tracking as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2326,6 +4377,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.62.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2345,6 +4397,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.62.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2353,7 +4406,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L5 CNAV and signal corrections as one bounded,
+Goal: deliver GPS L5 CNAV and signal corrections as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2362,6 +4415,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.63.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2381,6 +4435,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.63.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2389,7 +4444,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS L1C acquisition/tracking as one bounded,
+Goal: deliver GPS L1C acquisition/tracking as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2398,6 +4453,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.64.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2417,6 +4473,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.64.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2425,7 +4482,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS CNAV-2 as one bounded,
+Goal: deliver GPS CNAV-2 as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2434,6 +4491,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.65.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2453,6 +4511,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.65.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2461,7 +4520,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gPS multi-frequency combinations and consistency as one bounded,
+Goal: deliver GPS multi-frequency combinations and consistency as one bounded,
 reviewable release in Phase D (GPS end-to-end).
 
 Deliverables:
@@ -2470,6 +4529,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.66.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2489,6 +4549,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase D acceptance is demonstrated: GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.66.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2499,7 +4560,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E1 code generation/acquisition as one bounded,
+Goal: deliver Galileo E1 code generation/acquisition as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2508,6 +4569,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.67.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2527,6 +4589,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.67.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2535,7 +4598,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E1 tracking and secondary-code synchronization as one bounded,
+Goal: deliver Galileo E1 tracking and secondary-code synchronization as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2544,6 +4607,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.68.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2563,6 +4627,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.68.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2571,7 +4636,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo I/NAV page/FEC decode as one bounded,
+Goal: deliver Galileo I/NAV page/FEC decode as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2580,6 +4645,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.69.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2599,6 +4665,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.69.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2607,7 +4674,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo ephemeris, clock, health, GST/UTC as one bounded,
+Goal: deliver Galileo ephemeris, clock, health, GST/UTC as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2616,6 +4683,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.70.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2635,6 +4703,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.70.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2643,7 +4712,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E5a acquisition/tracking as one bounded,
+Goal: deliver Galileo E5a acquisition/tracking as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2652,6 +4721,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.71.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2671,6 +4741,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.71.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2679,7 +4750,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo F/NAV as one bounded,
+Goal: deliver Galileo F/NAV as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2688,6 +4759,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.72.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2707,6 +4779,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.72.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2715,7 +4788,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E5b acquisition/tracking and I/NAV path as one bounded,
+Goal: deliver Galileo E5b acquisition/tracking and I/NAV path as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2724,6 +4797,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.73.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2743,6 +4817,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.73.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2751,7 +4826,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo AltBOC component and full-band processing as one bounded,
+Goal: deliver Galileo AltBOC component and full-band processing as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2760,6 +4835,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.74.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2779,6 +4855,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.74.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2787,7 +4864,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E6 acquisition/tracking as one bounded,
+Goal: deliver Galileo E6 acquisition/tracking as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2796,6 +4873,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.75.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2815,6 +4893,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.75.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2823,7 +4902,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo HAS message and correction model as one bounded,
+Goal: deliver Galileo HAS message and correction model as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2832,6 +4911,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.76.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2851,6 +4931,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.76.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2859,7 +4940,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo SAR/RLS public message support as one bounded,
+Goal: deliver Galileo SAR/RLS public message support as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2868,6 +4949,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.77.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2887,6 +4969,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.77.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2895,7 +4978,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo Timing Service Message as one bounded,
+Goal: deliver Galileo Timing Service Message as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2904,6 +4987,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.78.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2923,6 +5007,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.78.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2931,7 +5016,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo EWSS/public emergency-message support as one bounded,
+Goal: deliver Galileo EWSS/public emergency-message support as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2940,6 +5025,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.79.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2959,6 +5045,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.79.0 implementation stop reached. Run pentest for this exact commit.`
@@ -2967,7 +5054,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver galileo E5 quasi-pilot/current new-signal additions as one bounded,
+Goal: deliver Galileo E5 quasi-pilot/current new-signal additions as one bounded,
 reviewable release in Phase E (Galileo).
 
 Deliverables:
@@ -2976,6 +5063,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.80.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -2995,6 +5083,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase E acceptance is demonstrated: Galileo outputs remain traceable to immutable raw artifacts and official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.80.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3005,7 +5094,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS FDMA band/channel planner as one bounded,
+Goal: deliver GLONASS FDMA band/channel planner as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3014,6 +5103,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.81.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3033,6 +5123,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.81.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3041,7 +5132,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L1OF acquisition/tracking as one bounded,
+Goal: deliver GLONASS L1OF acquisition/tracking as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3050,6 +5141,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.82.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3069,6 +5161,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.82.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3077,7 +5170,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L1OF navigation strings and time as one bounded,
+Goal: deliver GLONASS L1OF navigation strings and time as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3086,6 +5179,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.83.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3105,6 +5199,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.83.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3113,7 +5208,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS orbit/clock computation as one bounded,
+Goal: deliver GLONASS orbit/clock computation as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3122,6 +5217,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.84.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3141,6 +5237,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.84.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3149,7 +5246,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L2OF acquisition/tracking and navigation as one bounded,
+Goal: deliver GLONASS L2OF acquisition/tracking and navigation as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3158,6 +5255,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.85.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3177,6 +5275,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.85.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3185,7 +5284,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS FDMA observation/bias model as one bounded,
+Goal: deliver GLONASS FDMA observation/bias model as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3194,6 +5293,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.86.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3213,6 +5313,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.86.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3221,7 +5322,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L1OC public CDMA signal as one bounded,
+Goal: deliver GLONASS L1OC public CDMA signal as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3230,6 +5331,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.87.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3249,6 +5351,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.87.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3257,7 +5360,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L2OC public CDMA signal as one bounded,
+Goal: deliver GLONASS L2OC public CDMA signal as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3266,6 +5369,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.88.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3285,6 +5389,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.88.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3293,7 +5398,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gLONASS L3OC public CDMA signal as one bounded,
+Goal: deliver GLONASS L3OC public CDMA signal as one bounded,
 reviewable release in Phase F (GLONASS).
 
 Deliverables:
@@ -3302,6 +5407,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.89.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3321,6 +5427,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.89.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3338,6 +5445,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.90.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3357,6 +5465,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase F acceptance is demonstrated: GLONASS outputs preserve channel/time/bias context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.90.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3367,7 +5476,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B1I acquisition/tracking as one bounded,
+Goal: deliver BeiDou B1I acquisition/tracking as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3376,6 +5485,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.91.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3395,6 +5505,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.91.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3403,7 +5514,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou D1/D2 navigation and GEO/IGSO/MEO handling as one bounded,
+Goal: deliver BeiDou D1/D2 navigation and GEO/IGSO/MEO handling as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3412,6 +5523,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.92.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3431,6 +5543,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.92.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3439,7 +5552,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou time, orbit and clock computation as one bounded,
+Goal: deliver BeiDou time, orbit and clock computation as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3448,6 +5561,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.93.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3467,6 +5581,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.93.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3475,7 +5590,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B2I and B3I public signal paths as one bounded,
+Goal: deliver BeiDou B2I and B3I public signal paths as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3484,6 +5599,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.94.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3503,6 +5619,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.94.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3511,7 +5628,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B1C acquisition/tracking as one bounded,
+Goal: deliver BeiDou B1C acquisition/tracking as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3520,6 +5637,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.95.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3539,6 +5657,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.95.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3547,7 +5666,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B-CNAV1 as one bounded,
+Goal: deliver BeiDou B-CNAV1 as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3556,6 +5675,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.96.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3575,6 +5695,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.96.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3583,7 +5704,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B2a acquisition/tracking as one bounded,
+Goal: deliver BeiDou B2a acquisition/tracking as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3592,6 +5713,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.97.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3611,6 +5733,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.97.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3619,7 +5742,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B-CNAV2 as one bounded,
+Goal: deliver BeiDou B-CNAV2 as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3628,6 +5751,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.98.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3647,6 +5771,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.98.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3655,7 +5780,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B2b acquisition/tracking as one bounded,
+Goal: deliver BeiDou B2b acquisition/tracking as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3664,6 +5789,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.99.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3683,6 +5809,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.99.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3691,7 +5818,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B-CNAV3/basic navigation as one bounded,
+Goal: deliver BeiDou B-CNAV3/basic navigation as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3700,6 +5827,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.100.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3719,6 +5847,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.100.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3727,7 +5856,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou B2ab combined processing as one bounded,
+Goal: deliver BeiDou B2ab combined processing as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3736,6 +5865,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.101.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3755,6 +5885,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.101.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3763,7 +5894,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver beiDou PPP-B2b correction service as one bounded,
+Goal: deliver BeiDou PPP-B2b correction service as one bounded,
 reviewable release in Phase G (BeiDou).
 
 Deliverables:
@@ -3772,6 +5903,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.102.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3791,6 +5923,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.102.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3808,6 +5941,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.103.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3827,6 +5961,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.103.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3837,7 +5972,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS L1 family and regional geometry as one bounded,
+Goal: deliver QZSS L1 family and regional geometry as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -3846,6 +5981,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.104.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3865,6 +6001,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.104.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3873,7 +6010,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS L2C/L5 as one bounded,
+Goal: deliver QZSS L2C/L5 as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -3882,6 +6019,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.105.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3901,6 +6039,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.105.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3909,7 +6048,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS L1S and SLAS as one bounded,
+Goal: deliver QZSS L1S and SLAS as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -3918,6 +6057,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.106.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3937,6 +6077,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.106.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3945,7 +6086,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS L5S public augmentation path as one bounded,
+Goal: deliver QZSS L5S public augmentation path as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -3954,6 +6095,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.107.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -3973,6 +6115,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.107.0 implementation stop reached. Run pentest for this exact commit.`
@@ -3981,7 +6124,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS L6 acquisition/tracking as one bounded,
+Goal: deliver QZSS L6 acquisition/tracking as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -3990,6 +6133,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.108.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4009,6 +6153,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.108.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4017,7 +6162,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS CLAS correction decode as one bounded,
+Goal: deliver QZSS CLAS correction decode as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4026,6 +6171,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.109.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4045,6 +6191,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.109.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4053,7 +6200,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver qZSS MADOCA/MADOCA-PPP public profiles as one bounded,
+Goal: deliver QZSS MADOCA/MADOCA-PPP public profiles as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4062,6 +6209,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.110.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4081,6 +6229,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.110.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4089,7 +6238,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver navIC L5 SPS as one bounded,
+Goal: deliver NavIC L5 SPS as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4098,6 +6247,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.111.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4117,6 +6267,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.111.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4125,7 +6276,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver navIC S-band SPS as one bounded,
+Goal: deliver NavIC S-band SPS as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4134,6 +6285,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.112.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4153,6 +6305,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.112.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4161,7 +6314,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver navIC L1 SPS as one bounded,
+Goal: deliver NavIC L1 SPS as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4170,6 +6323,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.113.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4189,6 +6343,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.113.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4197,7 +6352,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver navIC time/orbit/clock and multi-band solution as one bounded,
+Goal: deliver NavIC time/orbit/clock and multi-band solution as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4206,6 +6361,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.114.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4225,6 +6381,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.114.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4242,6 +6399,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.115.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4261,6 +6419,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.115.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4269,7 +6428,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver sBAS correction/degradation state machine as one bounded,
+Goal: deliver SBAS correction/degradation state machine as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4278,6 +6437,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.116.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4297,6 +6457,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.116.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4305,7 +6466,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver sBAS integrity and protection-level inputs as one bounded,
+Goal: deliver SBAS integrity and protection-level inputs as one bounded,
 reviewable release in Phase H (QZSS, NavIC and SBAS).
 
 Deliverables:
@@ -4314,6 +6475,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.117.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4333,6 +6495,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.117.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4350,6 +6513,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.118.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4369,6 +6533,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.118.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4386,6 +6551,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.119.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4405,9 +6571,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.119.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.119.1 - Public GBAS/ABAS data-model, applicability and integrity-interface boundary
+
+Status: planned.
+
+Goal: deliver public GBAS/ABAS data-model, applicability and integrity-interface boundary as one bounded,
+reviewable release in Phase H (QZSS, NavIC and SBAS).
+
+Deliverables:
+
+- public GBAS/ABAS data-model, applicability and integrity-interface boundary.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.119.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.119.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase I: Multi-GNSS solution quality
 
@@ -4424,6 +6629,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4443,9 +6649,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.120.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.120.1 - Named solver state/covariance layout and explicit solution availability lifecycle
+
+Status: planned.
+
+Goal: deliver named solver state/covariance layout and explicit solution availability lifecycle as one bounded,
+reviewable release in Phase I (Multi-GNSS solution quality).
+
+Deliverables:
+
+- named solver state/covariance layout and explicit solution availability lifecycle.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.120.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.120.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.121.0 - Robust estimation and fault exclusion
 
@@ -4460,6 +6705,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.121.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4479,9 +6725,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.121.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.121.1 - Square-root filtering and near-singular numerical failure evidence
+
+Status: planned.
+
+Goal: deliver square-root filtering and near-singular numerical failure evidence as one bounded,
+reviewable release in Phase I (Multi-GNSS solution quality).
+
+Deliverables:
+
+- square-root filtering and near-singular numerical failure evidence.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.121.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.121.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.122.0 - Broadcast ionosphere/troposphere model suite
 
@@ -4496,6 +6781,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.122.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4515,6 +6801,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.122.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4532,6 +6819,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.123.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4551,6 +6839,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.123.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4568,6 +6857,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.124.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4587,6 +6877,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.124.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4604,6 +6895,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.125.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4623,6 +6915,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.125.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4640,6 +6933,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.126.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4659,6 +6953,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.126.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4676,6 +6971,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.127.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4695,6 +6991,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.127.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4712,6 +7009,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.128.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4731,6 +7029,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.128.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4748,6 +7047,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4767,9 +7067,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.129.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.129.1 - Immutable targeted integrity assessments, exclusions and recovery lifecycle
+
+Status: planned.
+
+Goal: deliver immutable targeted integrity assessments, exclusions and recovery lifecycle as one bounded,
+reviewable release in Phase I (Multi-GNSS solution quality).
+
+Deliverables:
+
+- immutable targeted integrity assessments, exclusions and recovery lifecycle.
+- Target integrity bounds, assumptions, risk models, exclusions, validity, and recovery at immutable epoch/solution artifacts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase I contract: Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.129.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test unavailable assumptions, exclusion exhaustion, late evidence, withdrawal, recovery, and independence from authentication state.
+- perform independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase I acceptance is demonstrated: non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.129.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase J: RTK and precise positioning
 
@@ -4786,6 +7127,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.130.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4805,6 +7147,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.130.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4822,6 +7165,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.131.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4841,6 +7185,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.131.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4858,6 +7203,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.132.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4877,6 +7223,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.132.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4894,6 +7241,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.133.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4913,6 +7261,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.133.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4930,6 +7279,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.134.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4949,6 +7299,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.134.0 implementation stop reached. Run pentest for this exact commit.`
@@ -4966,6 +7317,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.135.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -4985,15 +7337,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.135.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.135.1 - Explicit RTK convergence artifacts, withdrawal and superseded-state handling
+
+Status: planned.
+
+Goal: deliver explicit RTK convergence artifacts, withdrawal and superseded-state handling as one bounded,
+reviewable release in Phase J (RTK and precise positioning).
+
+Deliverables:
+
+- explicit RTK convergence artifacts, withdrawal and superseded-state handling.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.135.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.135.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.136.0 - GLONASS FDMA RTK biases
 
 Status: planned.
 
-Goal: deliver gLONASS FDMA RTK biases as one bounded,
+Goal: deliver GLONASS FDMA RTK biases as one bounded,
 reviewable release in Phase J (RTK and precise positioning).
 
 Deliverables:
@@ -5002,6 +7393,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.136.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5021,6 +7413,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.136.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5038,6 +7431,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.137.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5057,6 +7451,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.137.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5074,6 +7469,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.138.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5093,6 +7489,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.138.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5101,7 +7498,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver rTCM SSR complete public baseline as one bounded,
+Goal: deliver RTCM SSR complete public baseline as one bounded,
 reviewable release in Phase J (RTK and precise positioning).
 
 Deliverables:
@@ -5110,6 +7507,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.139.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5129,9 +7527,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.139.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.139.1 - Atomic SSR group completeness, expiry and correction-session anti-mixing
+
+Status: planned.
+
+Goal: deliver atomic SSR group completeness, expiry and correction-session anti-mixing as one bounded,
+reviewable release in Phase J (RTK and precise positioning).
+
+Deliverables:
+
+- atomic SSR group completeness, expiry and correction-session anti-mixing.
+- Bind SSR state to peer/provider/station/solution/frame/datum/antenna/issue/epoch/generation and commit complete groups atomically.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.139.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Inject cross-session, incomplete, stale, replayed, conflicting, and issue-transition groups and prove no partial solver update.
+- perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.139.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.140.0 - IGS SSR profile
 
@@ -5146,6 +7585,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.140.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5165,6 +7605,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.140.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5182,6 +7623,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.141.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5201,6 +7643,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.141.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5218,6 +7661,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.142.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5237,9 +7681,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.142.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.142.1 - PPP convergence, product/frame/age validation, rollback and invalidation
+
+Status: planned.
+
+Goal: deliver pPP convergence, product/frame/age validation, rollback and invalidation as one bounded,
+reviewable release in Phase J (RTK and precise positioning).
+
+Deliverables:
+
+- PPP convergence, product/frame/age validation, rollback and invalidation.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.142.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.142.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.143.0 - PPP ambiguity resolution
 
@@ -5254,6 +7737,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.143.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5273,6 +7757,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.143.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5290,6 +7775,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.144.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5309,6 +7795,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.144.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5326,6 +7813,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.145.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5345,6 +7833,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase J acceptance is demonstrated: stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.145.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5364,6 +7853,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.146.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5383,15 +7873,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.146.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.146.1 - Trusted-time, trust-root generation and platform anti-rollback authority binding
+
+Status: planned.
+
+Goal: deliver trusted-time, trust-root generation and platform anti-rollback authority binding as one bounded,
+reviewable release in Phase K (Authentication and resilience).
+
+Deliverables:
+
+- trusted-time, trust-root generation and platform anti-rollback authority binding.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.146.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.146.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.147.0 - Galileo OSNMA framing/assembly
 
 Status: planned.
 
-Goal: deliver galileo OSNMA framing/assembly as one bounded,
+Goal: deliver Galileo OSNMA framing/assembly as one bounded,
 reviewable release in Phase K (Authentication and resilience).
 
 Deliverables:
@@ -5400,6 +7929,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.147.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5419,6 +7949,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.147.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5436,6 +7967,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.148.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5455,6 +7987,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.148.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5472,6 +8005,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.149.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5491,15 +8025,56 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.149.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.149.1 - Immutable delayed-authentication assessments targeting existing artifacts
+
+Status: planned.
+
+Goal: deliver immutable delayed-authentication assessments targeting existing artifacts as one bounded,
+reviewable release in Phase K (Authentication and resilience).
+
+Deliverables:
+
+- immutable delayed-authentication assessments targeting existing artifacts.
+- Add delayed OSNMA assessments to immutable message/field-set artifacts with trust-root, key-chain, time-context, renewal and revocation IDs.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.149.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test delayed/reordered keys, root transitions, persistence rollback, expiry, revocation, reassessment, and meaconed authentic signals.
+- perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.149.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.150.0 - QZSS QZNMA decode and verification
 
 Status: planned.
 
-Goal: deliver qZSS QZNMA decode and verification as one bounded,
+Goal: deliver QZSS QZNMA decode and verification as one bounded,
 reviewable release in Phase K (Authentication and resilience).
 
 Deliverables:
@@ -5508,6 +8083,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.150.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5527,6 +8103,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.150.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5544,6 +8121,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.151.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5563,6 +8141,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.151.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5580,6 +8159,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.152.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5599,6 +8179,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.152.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5616,6 +8197,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.153.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5635,6 +8217,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.153.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5652,6 +8235,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.154.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5671,6 +8255,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.154.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5688,6 +8273,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.155.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5707,6 +8293,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.155.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5724,6 +8311,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.156.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5743,9 +8331,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.156.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.156.1 - Versioned targeted policy decisions, hysteresis and ordered reevaluation
+
+Status: planned.
+
+Goal: deliver versioned targeted policy decisions, hysteresis and ordered reevaluation as one bounded,
+reviewable release in Phase K (Authentication and resilience).
+
+Deliverables:
+
+- versioned targeted policy decisions, hysteresis and ordered reevaluation.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.156.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.156.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.157.0 - Signed forensic provenance stream
 
@@ -5760,6 +8387,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.157.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5779,9 +8407,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.157.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.157.1 - Sensitive forensic sinks, routine telemetry privacy and scoped correlation identifiers
+
+Status: planned.
+
+Goal: deliver sensitive forensic sinks, routine telemetry privacy and scoped correlation identifiers as one bounded,
+reviewable release in Phase K (Authentication and resilience).
+
+Deliverables:
+
+- sensitive forensic sinks, routine telemetry privacy and scoped correlation identifiers.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.157.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase K acceptance is demonstrated: delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.157.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase L: Timing and fusion
 
@@ -5799,6 +8466,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.158.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5819,9 +8487,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.158.1 - Reason-bearing time availability and explicit capture-domain/generation stamps
+
+Status: planned.
+
+Goal: deliver reason-bearing time availability and explicit capture-domain/generation stamps as one bounded,
+reviewable release in Phase L (Timing and fusion).
+
+Deliverables:
+
+- reason-bearing time availability and explicit capture-domain/generation stamps.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.158.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.158.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.159.0 - External PPS/time-mark semantic correlation and calibrated-delay model
 
@@ -5837,6 +8544,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.159.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5857,9 +8565,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.159.1 - Bounded named delay/uncertainty contributions, confidence semantics and correlation g...
+
+Status: planned.
+
+Goal: deliver bounded named delay/uncertainty contributions, confidence semantics and correlation groups as one bounded,
+reviewable release in Phase L (Timing and fusion).
+
+Deliverables:
+
+- bounded named delay/uncertainty contributions, confidence semantics and correlation groups.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.159.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.159.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.160.0 - Validated time-only solution and stable GNSS timing observation/event API
 
@@ -5871,10 +8618,11 @@ reviewable release in Phase L (Timing and fusion).
 Deliverables:
 
 - validated time-only solution and stable GNSS timing observation/event API.
-- Freeze the GNSS timing observation/event API with time-only solution, opaque capture domain, explicit absence states, and invalidation.
+- Freeze the GNSS timing observation/event API with time-only solution, capture identity, reason-bearing states, and targeted invalidation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.160.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5895,9 +8643,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.160.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.160.1 - Caller-provided bounded event slots and maximum event/queue resource contract
+
+Status: planned.
+
+Goal: deliver caller-provided bounded event slots and maximum event/queue resource contract as one bounded,
+reviewable release in Phase L (Timing and fusion).
+
+Deliverables:
+
+- caller-provided bounded event slots and maximum event/queue resource contract.
+- Use caller-provided bounded event storage with declared maximum event size, queue depth, outstanding acknowledgements, and progress behavior.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.160.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test undersized slots, consumer stalls, maximum events, assessment bursts, invalidation priority, no allocation, and resynchronization.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.160.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.161.0 - Satellite/receiver clock estimates and GNSS timing uncertainty budget
 
@@ -5913,6 +8702,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.161.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5933,6 +8723,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.161.0 implementation stop reached. Run pentest for this exact commit.`
@@ -5941,7 +8732,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver gNSS timing freshness, discontinuity, outage and explicit invalidation as one bounded,
+Goal: deliver GNSS timing freshness, discontinuity, outage and explicit invalidation as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
@@ -5951,6 +8742,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.162.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -5971,9 +8763,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.162.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.162.1 - Targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchroniz...
+
+Status: planned.
+
+Goal: deliver targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchronization behavior as one bounded,
+reviewable release in Phase L (Timing and fusion).
+
+Deliverables:
+
+- targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchronization behavior.
+- Make withdrawal target-specific, ordered, acknowledged, replay-resistant, and mandatory when its reason requires fail-closed behavior.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.162.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test lost/reordered/replayed withdrawal, replacement races, source generation reset, queue exhaustion, and consumer disagreement.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.162.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.163.0 - Authenticated/integrity-aware GNSS time evidence and consumer policy inputs
 
@@ -5989,6 +8822,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.163.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6009,6 +8843,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.163.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6026,6 +8861,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.164.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6045,6 +8881,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.164.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6062,6 +8899,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.165.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6081,6 +8919,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.165.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6098,6 +8937,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.166.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6117,6 +8957,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.166.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6134,6 +8975,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.167.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6153,15 +8995,54 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.167.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.167.1 - Bounded delayed queues, deterministic update order and sensor clock/reset generations
+
+Status: planned.
+
+Goal: deliver bounded delayed queues, deterministic update order and sensor clock/reset generations as one bounded,
+reviewable release in Phase L (Timing and fusion).
+
+Deliverables:
+
+- bounded delayed queues, deterministic update order and sensor clock/reset generations.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.167.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.167.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.168.0 - GNSS outage/dead-reckoning lifecycle
 
 Status: planned.
 
-Goal: deliver gNSS outage/dead-reckoning lifecycle as one bounded,
+Goal: deliver GNSS outage/dead-reckoning lifecycle as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
@@ -6170,6 +9051,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.168.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6189,6 +9071,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.168.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6206,6 +9089,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6225,6 +9109,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.169.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6244,6 +9129,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.170.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6263,6 +9149,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.170.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6280,6 +9167,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.171.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6299,6 +9187,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.171.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6316,6 +9205,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.172.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6335,6 +9225,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.172.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6352,6 +9243,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.173.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6371,6 +9263,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.173.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6388,6 +9281,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.174.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6407,6 +9301,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.174.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6424,6 +9319,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.175.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6443,6 +9339,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.175.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6460,6 +9357,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.176.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6479,6 +9377,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.176.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6496,6 +9395,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.177.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6515,9 +9415,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.177.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.177.1 - Isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug sa...
+
+Status: planned.
+
+Goal: deliver isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence.
+- Keep parsers safe; isolate bindings and unsafe transfers behind one reviewed module with ownership, alignment, length, and unplug contracts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.177.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Reproduce bindings and run wrapper models, sanitizers, short/stale transfer, alignment, cancellation, disconnect, and reset cases.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.177.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.178.0 - Windows WinUSB/COM/location implementation
 
@@ -6532,6 +9473,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.178.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6551,11 +9493,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.178.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.179.0 - MacOS IOKit/serial/Core Location implementation
+### v0.178.1 - Windows provider permission/mock/timestamp/accuracy metadata and no synthetic raw obs...
+
+Status: planned.
+
+Goal: deliver windows provider permission/mock/timestamp/accuracy metadata and no synthetic raw observations as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- Windows provider permission/mock/timestamp/accuracy metadata and no synthetic raw observations.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.178.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.178.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.179.0 - macOS IOKit/serial/Core Location implementation
 
 Status: planned.
 
@@ -6568,6 +9549,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.179.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6587,23 +9569,63 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.179.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.180.0 - FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation
+### v0.179.1 - iOS Core Location OS-derived fix adapter with explicit raw-measurement non-claim
 
 Status: planned.
 
-Goal: deliver freeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation as one bounded,
+Goal: deliver iOS Core Location OS-derived fix adapter with explicit raw-measurement non-claim as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation.
+- iOS Core Location OS-derived fix adapter with explicit raw-measurement non-claim.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.179.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.179.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.180.0 - Shared BSD serial, USB and socket I/O contracts
+
+Status: planned.
+
+Goal: deliver shared BSD serial, USB and socket I/O contracts as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- shared BSD serial, USB and socket I/O contracts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6623,11 +9645,126 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.180.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.181.0 - Gpsd protocol adapter
+### v0.180.1 - FreeBSD I/O implementation and fault matrix
+
+Status: planned.
+
+Goal: deliver FreeBSD I/O implementation and fault matrix as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- FreeBSD I/O implementation and fault matrix.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.180.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.180.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.180.2 - OpenBSD I/O implementation and fault matrix
+
+Status: planned.
+
+Goal: deliver OpenBSD I/O implementation and fault matrix as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- OpenBSD I/O implementation and fault matrix.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.180.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.180.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.180.3 - NetBSD I/O implementation and fault matrix
+
+Status: planned.
+
+Goal: deliver NetBSD I/O implementation and fault matrix as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- NetBSD I/O implementation and fault matrix.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.180.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.180.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.181.0 - gpsd protocol adapter
 
 Status: planned.
 
@@ -6640,6 +9777,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.181.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6659,11 +9797,12 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.181.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.182.0 - U-blox UBX adapter
+### v0.182.0 - u-blox UBX adapter
 
 Status: planned.
 
@@ -6676,6 +9815,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.182.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6695,6 +9835,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.182.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6712,6 +9853,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.183.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6731,6 +9873,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.183.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6748,6 +9891,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.184.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6767,23 +9911,25 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.184.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.185.0 - Additional stable public receiver protocols
+### v0.185.0 - Receiver-protocol admission gate; every additional protocol requires a named patch mi...
 
 Status: planned.
 
-Goal: deliver additional stable public receiver protocols as one bounded,
+Goal: deliver receiver-protocol admission gate; every additional protocol requires a named patch milestone as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- additional stable public receiver protocols.
+- receiver-protocol admission gate; every additional protocol requires a named patch milestone.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.185.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6803,6 +9949,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.185.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6820,6 +9967,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6839,6 +9987,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.186.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6856,6 +10005,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.187.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6875,6 +10025,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.187.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6892,6 +10043,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.188.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6911,6 +10063,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.188.0 implementation stop reached. Run pentest for this exact commit.`
@@ -6928,6 +10081,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.189.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6947,15 +10101,56 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.189.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.1 - Non-clone secret types, redacted diagnostics and reviewed zeroization boundary
+
+Status: planned.
+
+Goal: deliver non-clone secret types, redacted diagnostics and reviewed zeroization boundary as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
+- Keep secrets out of Clone, ordinary serialization, Display, URLs, errors, and routine telemetry; expose them only through guarded access.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Send sentinel secrets through every redirect, TLS, reconnect, parse, debug, error, and logging path and verify reviewed zeroization claims.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.190.0 - NMEA 2000 transport/legal PGN baseline
 
 Status: planned.
 
-Goal: deliver nMEA 2000 transport/legal PGN baseline as one bounded,
+Goal: deliver NMEA 2000 transport/legal PGN baseline as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
@@ -6964,6 +10159,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -6983,9 +10179,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.190.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.1 - CAN/J1939, fast-packet, address-claim and licensed PGN semantic separation
+
+Status: planned.
+
+Goal: deliver cAN/J1939, fast-packet, address-claim and licensed PGN semantic separation as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- CAN/J1939, fast-packet, address-claim and licensed PGN semantic separation.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase N: Simulation, hardening and 1.0 stabilization
 
@@ -7002,6 +10237,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.191.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7021,6 +10257,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.191.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7038,6 +10275,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.192.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7057,6 +10295,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.192.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7074,6 +10313,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.193.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7093,6 +10333,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.193.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7110,6 +10351,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.194.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7129,6 +10371,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.194.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7146,6 +10389,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.195.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7165,6 +10409,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.195.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7182,6 +10427,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.196.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7201,6 +10447,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.196.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7218,6 +10465,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.197.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7237,6 +10485,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.197.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7254,6 +10503,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.198.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7273,9 +10523,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.198.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.198.1 - Differential/chunk-boundary parser corpus and sensitive diagnostic snapshot audit
+
+Status: planned.
+
+Goal: deliver differential/chunk-boundary parser corpus and sensitive diagnostic snapshot audit as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- differential/chunk-boundary parser corpus and sensitive diagnostic snapshot audit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.198.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.198.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.199.0 - Numerical condition/precision audit
 
@@ -7290,6 +10579,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.199.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7309,9 +10599,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.199.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.199.1 - Fixed/floating cross-architecture replay and tolerance audit
+
+Status: planned.
+
+Goal: deliver fixed/floating cross-architecture replay and tolerance audit as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- fixed/floating cross-architecture replay and tolerance audit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.199.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.199.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.200.0 - Unsafe/FFI audit and device fault injection
 
@@ -7326,6 +10655,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.200.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7345,9 +10675,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.200.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.200.1 - Miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit
+
+Status: planned.
+
+Goal: deliver miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- Miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit.
+- Assign Miri, Kani, Loom, sanitizers and hardware fault injection only to boundaries they can actually execute and record generated provenance.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.200.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Audit each unsafe module's evidence matrix and reject unsupported claims such as treating mocked Miri tests as real driver evidence.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.200.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.201.0 - Portable SIMD performance release
 
@@ -7362,6 +10733,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.201.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7381,6 +10753,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.201.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7398,6 +10771,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.202.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7417,6 +10791,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.202.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7425,7 +10800,7 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver wASM decoding/post-processing profile as one bounded,
+Goal: deliver WASM decoding/post-processing profile as one bounded,
 reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
 
 Deliverables:
@@ -7434,6 +10809,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.203.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7453,9 +10829,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.203.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.203.1 - Bare-metal and future Aesynx caller-buffer/work-budget conformance contract
+
+Status: planned.
+
+Goal: deliver bare-metal and future Aesynx caller-buffer/work-budget conformance contract as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- bare-metal and future Aesynx caller-buffer/work-budget conformance contract.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.203.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.203.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.204.0 - API naming and visibility freeze
 
@@ -7470,6 +10885,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.204.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7489,6 +10905,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.204.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7506,6 +10923,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.205.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7525,6 +10943,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.205.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7542,6 +10961,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.206.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7561,6 +10981,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.206.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7578,6 +10999,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.207.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7597,9 +11019,48 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.207.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.207.1 - MSRV behavioral core test suite and allocator-free target evidence
+
+Status: planned.
+
+Goal: deliver mSRV behavioral core test suite and allocator-free target evidence as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- MSRV behavioral core test suite and allocator-free target evidence.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.207.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.207.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.208.0 - Independent receiver comparison campaign
 
@@ -7614,6 +11075,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.208.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7633,6 +11095,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.208.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7650,6 +11113,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.209.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7669,6 +11133,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.209.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7686,6 +11151,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.210.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7705,9 +11171,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.210.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.210.1 - Exact document/amendment/module/vector/adversarial-test traceability closure
+
+Status: planned.
+
+Goal: deliver exact document/amendment/module/vector/adversarial-test traceability closure as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- exact document/amendment/module/vector/adversarial-test traceability closure.
+- Close exact revision/amendment/module/section/constant/feature/vector/adversarial-test/limitation mappings for every frozen claim.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.210.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Machine-check full bidirectional traceability and reject aggregate, orphaned, stale, legally ambiguous, or evidence-free records.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.210.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.211.0 - Complete public-signal coverage audit
 
@@ -7722,6 +11229,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.211.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7741,6 +11249,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.211.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7758,6 +11267,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.212.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7777,6 +11287,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.212.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7795,6 +11306,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.213.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7815,6 +11327,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.213.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7833,6 +11346,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.214.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7853,9 +11367,50 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.214.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.214.1 - Capability-tier, side-effect, resource, privacy and failure-contract documentation audit
+
+Status: planned.
+
+Goal: deliver capability-tier, side-effect, resource, privacy and failure-contract documentation audit as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- capability-tier, side-effect, resource, privacy and failure-contract documentation audit.
+- Document every public API's tier, allocation, floating behavior, side effects, authority, capacities, sensitivity, failures, and non-claims.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.214.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Audit rustdoc/examples/config expansion for silent fallback, hidden authority, precision inflation, sensitive output, and missing limits.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.214.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.215.0 - External security audit fixes
 
@@ -7870,6 +11425,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.215.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7889,6 +11445,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.215.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7906,6 +11463,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.216.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7925,6 +11483,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.216.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7942,6 +11501,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.217.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7961,6 +11521,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.217.0 implementation stop reached. Run pentest for this exact commit.`
@@ -7978,6 +11539,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.218.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -7997,6 +11559,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.218.0 implementation stop reached. Run pentest for this exact commit.`
@@ -8014,6 +11577,7 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.219.0.md`.
 - Add failure-state and resource-limit behavior; do not imply any adjacent
@@ -8033,6 +11597,7 @@ Exit criteria:
 
 - the stated deliverable is implemented, independently testable, documented,
   mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.219.0 implementation stop reached. Run pentest for this exact commit.`
@@ -8049,6 +11614,8 @@ GNSS-domain, and remediation milestone has passed.
 
 Deliverables:
 
+- Set every publishable Cargo package version to `1.0.0` before creating the
+  first candidate tag; do not publish a crates.io prerelease.
 - Freeze all 1.0 public APIs, crate versions, features, standards profiles,
   supported platforms, non-claims, migration policy, and package archives.
 - Produce signed checksums, semantic SBOM, provenance, conformance inventory,
@@ -8066,12 +11633,15 @@ Verification:
   and clean retest;
 - verify package contents, checksums, SBOM, provenance, publish order, docs,
   examples, and current capability tables against the frozen baseline;
+- prove the reviewed implementation commit and its report-only child produce
+  identical package file lists, bytes, and checksums;
 - run `scripts/validate-release-readiness.sh v1.0.0-rc.1`.
 
 Exit criteria:
 
 - every frozen civil/open 1.0 claim is implemented, independently evidenced,
   documented, and free of unresolved critical/high findings;
+- all publishable manifests already declare `1.0.0`;
 - all candidate archives and checksums are retained without regeneration;
 - `v1.0.0-rc.1 implementation stop reached. Run pentest for this exact commit.`
 
@@ -8084,7 +11654,8 @@ without changing source, dependencies, metadata, archives, SBOM, or provenance.
 
 Deliverables:
 
-- Point `v1.0.0` at the unchanged approved `v1.0.0-rc.N` commit.
+- Point `v1.0.0` at the exact commit already tagged as the approved
+  `v1.0.0-rc.N`.
 - Publish the exact retained and audited candidate crate archives.
 - Publish final release notes, checksums, SBOM, provenance, audit references,
   frozen standards matrix, platform matrix, and support policy without

@@ -7,13 +7,25 @@ must continue to forbid unsafe code. Unsafe code may exist only in isolated
 platform FFI, SIMD intrinsic, or hardware DMA modules when safe Rust cannot
 provide the required boundary.
 
+Before the first adapter requiring unsafe code, the workspace-default lint
+changes from `forbid` to `deny`, while every canonical crate retains an
+explicit crate-root `#![forbid(unsafe_code)]`. An adapter remains
+`#![deny(unsafe_code)]` and permits unsafe code only in one narrowly scoped
+`sys`, `ffi`, `dma`, or `simd` module. This transition occurs at an explicit
+adapter milestone and must not weaken canonical crates.
+
 Before unsafe code is admitted:
 
 - create a separate module or adapter crate;
 - document every invariant, ownership rule, alignment/lifetime requirement,
-  concurrency assumption, and untrusted-data copy boundary;
+  buffer-length rule, concurrency assumption, cancellation/unplug/reset
+  behavior, and untrusted-data copy boundary;
+- isolate generated bindings, pin their source/generator, and reproduce them
+  byte-for-byte;
 - keep protocol parsing outside unsafe code;
-- add Miri, sanitizer, fault-injection, and platform tests where applicable;
+- use Miri for safe wrapper/ownership models, Kani for bounded arithmetic and
+  state machines, Loom for concurrency/order, and sanitizers/hardware fault
+  injection for native calls as applicable;
 - require an independent safety review and milestone pentest;
 - update this policy, the threat model, SBOM/dependencies, and release notes.
 

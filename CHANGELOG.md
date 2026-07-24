@@ -13,3 +13,6 @@ All notable changes to `navheim` are documented here.
 - Defined a one-way GNSS timing integration boundary: Navheim exposes complete
   dependency-free timing evidence, while downstream clock frameworks own their
   adapters, discipline, consensus, and holdover.
+- Integrated the architecture/security gap review into the existing roadmap as
+  targeted patch milestones, phase-specific technical acceptance criteria,
+  stronger canonical/timing contracts, and unambiguous RC/package provenance.

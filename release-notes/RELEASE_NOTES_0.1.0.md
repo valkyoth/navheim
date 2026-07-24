@@ -15,6 +15,13 @@ uncertainty, health, authentication, integrity, and provenance. Downstream
 clock frameworks may consume that API, but Navheim will not depend on them or
 perform generic clock discipline and holdover.
 
+The implementation and release plans also incorporate the initial
+architecture/security gap review without replacing Navheim's broader roadmap.
+They add explicit future stops for immutable artifacts and assessments, safe
+bounded storage, executable preflight receipts, deterministic DSP, correction
+anti-mixing, privacy/unsafe/platform evidence, strict release provenance, and
+exact standards traceability.
+
 ## Security
 
 - Both published crates are `no_std`, dependency-free, and forbid unsafe code.

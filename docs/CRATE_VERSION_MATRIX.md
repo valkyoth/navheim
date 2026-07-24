@@ -2,6 +2,11 @@
 
 Navheim crates use independent versions after the foundation release. A
 workspace milestone does not force unchanged support crates to be republished.
+Roadmap tags are program checkpoints, not a demand that every crate adopt the
+same version. A `v0.N.P` roadmap milestone is a bounded compatible
+implementation or remediation pass within that program train; any affected
+crate receives the independently reviewed SemVer change required by its own
+public API.
 
 ## v0.1.0 Candidate
 

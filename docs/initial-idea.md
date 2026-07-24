@@ -424,8 +424,18 @@ A provider’s current operational certification status is deployment metadata, 
 - version 1 and version 2 behavior;
 - HTTP transport through a tiny internal adapter;
 - optional TLS via `navheim-tls-rustls`;
-- credential redaction and bounded headers;
+- certificate/hostname validation with no TLS downgrade;
+- redirects disabled or constrained to the approved host/mountpoint policy;
+- bounded request/status/header/source-table/chunk sizes and reconnect rate;
+- compression disabled unless a separately bounded profile admits it;
+- explicit host/mountpoint allowlists and GGA-upload consent;
+- credentials outside URLs/errors with redacted diagnostics;
 - reconnect/backoff policy supplied by the application, not hidden threads.
+
+RTCM/correction caches use immutable session identities binding transport peer,
+provider/mountpoint, station/solution, frame/datum, antenna, authenticated peer,
+issue/epoch and generation. Incomplete SSR groups, stale data and cross-session
+mixing are rejected atomically.
 
 ### 6.2 Precise products
 
@@ -703,22 +713,24 @@ The data model is the most important compatibility surface in Navheim.
 
 ### 9.1 Extensible identifiers
 
-Avoid closed enums that require semver breaks for new signals:
+Avoid closed enums and unscoped integer spaces that require semver breaks or
+allow standards, vendors and experiments to collide:
 
 ```rust
-#[repr(transparent)]
-pub struct SystemId(pub u16);
-
-#[repr(transparent)]
-pub struct SignalId(pub u32);
+pub struct RegistryId {
+    authority: RegistryAuthority,
+    code: u32,
+}
 
 pub struct SatelliteId {
-    pub system: SystemId,
-    pub vehicle: u16,
+    system: RegistryId,
+    vehicle: u16,
 }
 ```
 
-Provide named constants such as `SystemId::GPS` and `SignalId::GALILEO_E1_C`, but preserve unknown numeric IDs.
+Provide named standard constants and versioned registry snapshots, but
+preserve unknown authority/code pairs. Public system/signal selections use
+bounded sets rather than fixed-width masks.
 
 ### 9.2 Units
 
@@ -727,64 +739,80 @@ Do not expose naked `f64` for semantically different quantities. `navheim-core` 
 - `Seconds`, `Nanoseconds`, `Hertz`, `Radians`, `Meters`, `MetersPerSecond`;
 - `CarrierCycles`, `Chips`, `Decibels`, `DbHz`;
 - `UtcOffset`, `ClockBias`, `ClockDrift`;
-- `Variance<T>` and `Covariance`.
+- interval/uncertainty types with asymmetric bounds;
+- covariance layouts that name state ordering, squared/cross units, frame and
+  reference epoch.
 
-Construction from raw values is explicit and checked when a physical range exists. Internal optimized kernels may use raw arrays behind private APIs.
+Tier 0 protocol/interchange values use exact scaled integers or reduced
+rationals. Construction is explicit and checked. Floating adapters reject
+non-finite values; optimized kernels may use raw arrays only behind private
+APIs with documented rounding, overflow and numerical backend behavior.
 
 ### 9.3 Time model
 
 ```rust
-pub struct GnssInstant {
-    pub scale: TimeScale,
-    pub era: i32,
-    pub week: i64,
-    pub nanos_of_week: u64,
+pub struct RawGnssTime {
+    scale: GnssTimeScale,
+    fields: RawTimeFields,
 }
 
-pub enum TimeScale {
-    Gps,
-    Galileo,
-    BeiDou,
-    Glonass,
-    Qzss,
-    Navic,
-    Tai,
-    Utc(UtcRealization),
-    Unknown(u16),
+pub struct ResolvedGnssTime {
+    scale: GnssTimeScale,
+    instant: NativeScaleInstant,
+    resolution: TimeResolutionEvidence,
+}
+
+pub struct TaiInstant {
+    seconds_from_epoch: i64,
+    fractional: FractionalSecond,
+}
+
+pub struct CaptureStamp<C> {
+    domain: CaptureClockDomainId,
+    generation: u32,
+    value: C,
 }
 ```
 
 Requirements:
 
+- raw, ambiguous, resolved native, atomic and UTC values are distinct types;
+- fields are private and constructed through checked APIs;
 - no implicit conversion through Unix time;
-- explicit leap-second table and provenance;
+- explicit leap/UTC model identity, activation, expiry and provenance;
 - exact integer representation before optional floating conversion;
-- rollover ambiguity represented as uncertainty, not guessed silently;
+- week/day/era alternatives and resolution context remain explicit;
 - receive time and transmit time kept separately;
-- monotonic host timestamp attached to every epoch;
+- capture clock domain and reset generation attached to every epoch;
+- different capture domains/generations are incomparable without an explicit
+  caller-provided mapping;
 - hardware timestamp/PPS relationship modeled explicitly.
 
 ### 9.4 Observation model
 
-```rust
-pub struct Observation {
-    pub satellite: SatelliteId,
-    pub signal: SignalId,
-    pub receive_time: GnssInstant,
-    pub pseudorange: Option<Measured<Meters>>,
-    pub carrier_phase: Option<Measured<CarrierCycles>>,
-    pub doppler: Option<Measured<Hertz>>,
-    pub cn0: Option<DbHz>,
-    pub lock: LockState,
-    pub half_cycle: HalfCycleState,
-    pub channel: Option<FrequencyChannel>,
-    pub auth: AuthenticationState,
-    pub integrity: ObservationIntegrity,
-    pub provenance: ProvenanceId,
-}
+The canonical pipeline never overwrites an earlier stage:
+
+```text
+IngressEnvelope
+  -> TrackingEstimate | RawProtocolRecord
+  -> RawSdrObservation | RawReceiverObservation | RawNavigationMessage
+  -> Observation | ValidatedNavigationMessage
+  -> CorrectedObservation + transactional NavigationState
+  -> ObservationEpoch
+  -> SolverInputEpoch
+  -> Solution
 ```
 
-A measurement carries value, variance/standard deviation, flags and derivation stage. Raw and corrected observations remain distinguishable.
+Every value is wrapped in an immutable `Artifact<T>` with an `ArtifactId`,
+bounded parent IDs and derivation algorithm/version. Correctness,
+navigation-message authentication, signal-authenticity evidence, integrity
+and policy decisions are separate immutable objects targeting artifact IDs.
+Delayed OSNMA/QZNMA results add assessments; they never mutate earlier facts.
+
+Important absence uses a reason-bearing `Availability<T, R>` rather than a
+bare `Option`. Stage-specific types prevent corrected/raw measurements,
+unresolved clocks, unavailable fixes and pending assessments from forming
+ambiguous combinations.
 
 ### 9.5 Ephemeris and corrections
 
@@ -793,7 +821,7 @@ Use constellation-specific raw structures plus a validated canonical orbit inter
 ```rust
 pub trait OrbitModel {
     fn validity(&self) -> TimeInterval;
-    fn state_at(&self, t: GnssInstant) -> Result<SatelliteState, OrbitError>;
+    fn state_at(&self, t: ResolvedGnssTime) -> Result<SatelliteState, OrbitError>;
     fn health(&self) -> HealthState;
     fn provenance(&self) -> ProvenanceId;
 }
@@ -811,30 +839,28 @@ Corrections contain:
 - authentication/provenance;
 - whether the correction has already been applied.
 
+Every correction also belongs to an immutable `CorrectionSessionId` binding
+transport peer, provider/mountpoint, station/solution, frame/datum, antenna,
+authenticated peer and session generation. Incomplete, stale or cross-session
+groups cannot partially update navigation or solver state.
+
 ### 9.6 Solution model
 
-A `Fix` must be more than coordinates:
+A solution artifact contains more than coordinates, but assessments remain
+separate:
 
 ```rust
-pub struct Fix {
-    pub time: GnssInstant,
-    pub position: Position,
-    pub velocity: Velocity,
-    pub clock: ReceiverClock,
-    pub covariance: StateCovariance,
-    pub mode: FixMode,
-    pub systems: SystemMask,
-    pub signals: SignalMask,
-    pub used: SatelliteSet,
-    pub excluded: ExclusionSet,
-    pub age: Duration,
-    pub integrity: IntegrityResult,
-    pub authentication: SolutionAuthentication,
-    pub provenance: ProvenanceId,
+pub enum SolutionEvent {
+    Available(Artifact<Solution>),
+    Unavailable(SolutionUnavailable),
+    Invalidated(TargetedInvalidation),
 }
 ```
 
-`FixMode` includes no-fix, time-only, 2D, standalone 3D, SBAS, DGPS, RTK float, RTK fixed, PPP converging, PPP, PPP-AR and dead-reckoned/coasted states.
+Time-only, 2D, standalone 3D, SBAS, DGPS and other completed solutions have
+explicit solution kinds. RTK/PPP convergence, fixed/float transitions,
+rollback and coasting are lifecycle artifacts. "No fix" is never represented
+as a valid fix.
 
 ---
 
@@ -843,21 +869,24 @@ pub struct Fix {
 ### 10.1 The simple application API
 
 ```rust
-use navheim::{Profile, Receiver, ReceiverEvent, Systems};
+use navheim::{Profile, ReceiverEvent, ReceiverPlan, Systems};
 
 fn main() -> Result<(), navheim::Error> {
-    let mut receiver = Receiver::builder()
-        .source(navheim::source::Auto::new())
+    let prepared = ReceiverPlan::navigation()
+        .source(source_config)
         .profile(Profile::Navigation)
         .systems(Systems::ALL_PUBLIC)
-        .build()?;
+        .prepare(&limits)?;
+
+    inspect(prepared.capabilities());
+    inspect(prepared.resources());
+
+    let mut receiver = prepared.open_and_build(&mut buffers, policy)?;
 
     while let Some(event) = receiver.next_event()? {
         match event {
-            ReceiverEvent::Fix(fix) => {
-                println!("{}", fix.position);
-                println!("integrity={:?}", fix.integrity.state);
-            }
+            ReceiverEvent::Solution(solution) => consume(solution),
+            ReceiverEvent::Assessment(assessment) => consume(assessment),
             ReceiverEvent::Security(alert) => eprintln!("{alert:?}"),
             _ => {}
         }
@@ -867,19 +896,21 @@ fn main() -> Result<(), navheim::Error> {
 }
 ```
 
-`Auto` may inspect OS providers, serial receivers and configured network sources. It never opens arbitrary devices or sends data over the network without policy permission.
+This friendly builder is Tier 2. Planning is side-effect free; devices,
+credentials, networking and threads are touched only after the complete
+immutable plan is accepted. Tier 0 remains caller-buffered and does not expose
+automatic discovery.
 
 ### 10.2 Explicit hardware-receiver API
 
 ```rust
-let port = navheim_io::serial::open("/dev/ttyACM0", 921_600)?;
-let protocol = navheim_receiver::ubx::Protocol::new();
-
-let mut receiver = navheim::Receiver::builder()
-    .source(navheim_receiver::FramedSource::new(port, protocol))
+let prepared = navheim::ReceiverPlan::survey()
+    .source(navheim_receiver::SerialConfig::ubx("/dev/ttyACM0", 921_600))
     .profile(Profile::Survey)
     .raw_observations(true)
-    .build()?;
+    .prepare(&limits)?;
+
+let mut receiver = prepared.open_and_build(&mut buffers, policy)?;
 ```
 
 The same source works on Windows COM ports and BSD/macOS device paths through `navheim-io`.
@@ -887,29 +918,31 @@ The same source works on Windows COM ports and BSD/macOS device paths through `n
 ### 10.3 SDR API with capability planning
 
 ```rust
-use navheim_sdr::{BandPlan, FrontEndSet, SignalSelection, SoftwareReceiver};
+use navheim_sdr::{DspPlan, SignalSelection, SoftwareReceiver};
 
 let requested = SignalSelection::all_public();
-let plan = BandPlan::builder()
+let plan = DspPlan::builder()
     .signals(requested)
     .simultaneous(true)
     .coherent(true)
-    .build()?;
+    .validate(front_end_capabilities, &limits)?;
 
-let front_ends = FrontEndSet::discover()?;
-let deployment = plan.deploy(&front_ends)?;
-
-println!("front ends: {}", deployment.front_end_count());
-println!("sample memory: {}", deployment.required_sample_bytes());
-println!("scratch memory: {}", deployment.required_scratch_bytes());
+println!("front ends: {}", plan.front_end_count());
+println!("sample memory: {}", plan.required_sample_bytes());
+println!("scratch memory: {}", plan.required_scratch_bytes());
 
 let mut receiver = SoftwareReceiver::builder()
-    .deployment(deployment)
+    .plan_receipt(plan)
     .buffers(&mut buffers)
     .build()?;
 ```
 
-A plan either succeeds completely or returns a structured explanation:
+A plan computes exact state, stack, scratch, queue, work, throughput and
+latency bounds with checked arithmetic. The immutable receipt accepts only
+matching sample blocks; untrusted hardware metadata is revalidated for every
+block. RF input cannot choose allocations, FFT plans, thread/channel counts,
+FEC iterations, candidate counts or queue growth. A plan either succeeds
+completely or returns a structured explanation:
 
 ```rust
 pub enum CapabilityFailure {
@@ -930,15 +963,19 @@ There is no implicit “degraded” mode for a plan marked `complete`. A user ma
 
 ```rust
 let mut parser = navheim_nmea::Parser::<256>::new();
+let mut input = uart_bytes;
 
-for byte in uart_bytes {
-    if let Some(sentence) = parser.push(byte)? {
+while !input.is_empty() {
+    let progress = parser.push(input)?;
+    input = &input[progress.consumed()..];
+    if let Some(sentence) = progress.borrowed_event() {
         consume(sentence);
     }
 }
 ```
 
-No allocation, I/O trait or async runtime is required.
+Every call consumes input or explicitly requests more. No allocation, I/O
+trait, global clock or async runtime is required.
 
 ### 10.5 Epoch solver API
 
@@ -1001,14 +1038,18 @@ let mut source = navheim_timing::ReceiverTimeSource::builder(receiver)
     .require_valid_utc_model(true)
     .maximum_uncertainty(Nanoseconds::new(500_000))
     .build()?;
+let mut slot = GnssTimeEventSlot::new(&mut event_storage);
 
-while let Some(event) = source.poll_time()? {
+while source.poll_time(&mut slot)?.is_ready() {
+    let event = slot.borrow();
     match event {
-        GnssTimeEvent::Observation(observation) => consume(observation),
-        GnssTimeEvent::Invalidated(reason) => withdraw_source(reason),
+        GnssTimeEvent::Artifact(observation) => consume(observation),
+        GnssTimeEvent::Assessment(assessment) => consume(assessment),
+        GnssTimeEvent::Invalidated(target) => withdraw_source(target),
         GnssTimeEvent::Security(alert) => handle_alert(alert),
         _ => {}
     }
+    source.acknowledge(event.sequence())?;
 }
 ```
 
@@ -1290,6 +1331,8 @@ The Galileo OSNMA implementation should include:
 - time/freshness checks;
 - cross-authentication state;
 - pending/verified/failed/expired result states;
+- trusted-time context, key-chain generation, trust-root version and optional
+  platform anti-rollback authority;
 - full evidence export without leaking secrets;
 - recorded-vector replay;
 - cryptographic backend traits.
@@ -1316,6 +1359,11 @@ Provide evidence producers, not a single magical boolean:
 - inertial/odometry inconsistency;
 - authenticated-message failure or delayed replay suspicion;
 - satellite visibility/terrain mismatch when a trusted environment model is supplied.
+
+Each evidence item targets bounded artifact IDs and records observation
+interval, prerequisites, algorithm/version, confidence/statistical assumptions,
+insufficient-data state and provenance. Absence of evidence is not evidence of
+authenticity.
 
 A policy engine combines evidence with configurable thresholds and hysteresis.
 
@@ -1356,13 +1404,15 @@ Components:
 
 - GNSS time-scale conversion;
 - leap-second and UTC realization database;
+- reason-bearing native/TAI/UTC availability;
 - time-only solution using one or more satellites with known position;
 - common-view/all-in-view time transfer primitives;
 - semantic pairing of caller-captured PPS edges with receiver time marks;
-- cable, antenna and receiver-delay calibration;
+- bounded named cable, antenna, receiver, capture and message-delay budgets;
 - receiver clock bias, drift, covariance and discontinuity estimates;
 - freshness, uncertainty growth and explicit invalidation of GNSS evidence;
-- time-authentication, signal-source and solution-integrity evidence;
+- immutable targeted time-authentication, signal-source and
+  solution-integrity assessments/evidence;
 - a stable dependency-free observation/event API for consumer-owned adapters.
 
 A GNSS timing observation includes:
@@ -1370,13 +1420,18 @@ A GNSS timing observation includes:
 - native GNSS and resolved atomic instants;
 - UTC realization, leap model and resolution provenance;
 - receiver clock bias, drift and covariance;
-- caller-owned monotonic capture timestamp;
-- PPS/time-mark correlation and calibrated delay;
-- bounded uncertainty and its contributors;
+- caller-owned capture value wrapped by clock domain and reset generation;
+- reason-bearing PPS/time-mark/frequency-output availability;
+- bounded asymmetric uncertainty, named delay contributors, confidence
+  semantics and correlation groups;
 - satellite, signal, message and receiver health;
-- authentication, integrity and spoofing evidence;
 - freshness deadline and explicit invalidation reasons;
 - complete provenance.
+
+Authentication, integrity and spoofing evidence are separate immutable objects
+targeting the observation artifact. Events carry sequence/source generation;
+mandatory targeted withdrawal must be acknowledged and cannot be dropped
+silently under queue pressure.
 
 Generic PPS device capture, comparison with NTP/NTS/PTP/radio/local clocks,
 clock discipline, system or PHC adjustment, oscillator servos and holdover are
@@ -1492,7 +1547,8 @@ Use structured, non-string errors:
 - `IoError` only in `std` crates;
 - `ResourceError` with required and available capacity.
 
-No parser panic is acceptable for any byte sequence.
+No input-dependent panic is acceptable under the parser's declared capacity
+and work limits.
 
 ### 19.2 Events
 
@@ -1512,7 +1568,10 @@ Events should cover:
 - resource pressure;
 - recording and replay checkpoints.
 
-Events include monotonic event time and provenance.
+Events include sequence, source generation, capture domain/time, target
+artifact where applicable and provenance. Mandatory invalidation/security
+events cannot be dropped silently; queue pressure stops, explicitly coalesces
+or forces resynchronization.
 
 ---
 
@@ -1529,9 +1588,15 @@ Every configuration should be able to answer before starting:
 - approximate scalar CPU cost;
 - availability of SIMD/FPGA acceleration;
 - solver state dimension;
-- maximum parser frame and correction cache sizes.
+- maximum parser frame and correction cache sizes;
+- stack, caller scratch, alignment and non-overlap requirements;
+- work tokens, candidate/event/output limits and queue depth;
+- maximum navigation/FEC assemblies and decoder iterations;
+- latency budget, recovery policy and forensic retention.
 
-The builder should reject impossible configurations before opening hardware.
+The builder returns a normalized immutable receipt and rejects impossible
+configurations before opening hardware. Execution accepts only inputs matching
+that receipt.
 
 Performance targets should be profile- and platform-specific, for example:
 
@@ -1568,13 +1633,15 @@ Document threats from:
 
 - bounded parsing and allocation;
 - checked arithmetic around lengths, epochs and bit offsets;
-- no panics across untrusted boundaries;
+- no input-dependent panic under declared resource limits;
 - exact CRC/parity/FEC status;
 - time and issue-of-data freshness checks;
 - correction provider/station/coordinate validation;
 - TLS certificate validation through Rustls adapter;
-- credential zeroization in integration crates;
-- no logs containing passwords, full authorization headers or precise location by default;
+- non-clone/non-serializable secret types, guarded exposure and reviewed
+  zeroization where owned buffers exist;
+- no logs containing passwords, authorization headers, precise location/time,
+  raw captures or globally correlatable provenance by default;
 - explicit network allow lists;
 - reproducible builds and locked toolchains;
 - dependency allow list for adapter crates;
@@ -1610,7 +1677,8 @@ Document threats from:
 
 Every version, even a small one, must pass:
 
-- clean build with stable Rust and pinned MSRV;
+- clean build with stable Rust and behavioral core tests at pinned MSRV once
+  behavior exists;
 - `no_std` builds for applicable crates;
 - all unit/property/conformance tests;
 - fuzz smoke run for touched parsers;
@@ -1902,61 +1970,108 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 ### Phase A — Foundation and contracts
 
 - **0.1.0** — workspace, licenses, security policy, MSRV, CI and `standards/manifest.toml`.
-- **0.2.0** — bounded collections, fixed-capacity strings and core error model.
-- **0.3.0** — physical unit types and checked conversions.
-- **0.4.0** — native GNSS time representations and raw/resolved state model with no leap conversion yet.
-- **0.5.0** — UTC/leap model with provenance and explicit era/week ambiguity.
+- **0.1.1** — metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and package-provenance validation.
+- **0.1.2** — exact standards-document, amendment, legal-access, implementation and test-traceability schema.
+- **0.2.0** — checked arithmetic, capacities and structured core error model.
+- **0.2.1** — safe fixed byte buffers and checked fixed-capacity UTF-8 strings.
+- **0.2.2** — safe bounded sequence/deque contracts with documented representation and cost.
+- **0.2.3** — caller-owned scratch-region and bounded-arena handles.
+- **0.3.0** — exact scaled-integer and reduced-rational numeric primitives.
+- **0.3.1** — physical unit types and checked conversions.
+- **0.3.2** — measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters.
+- **0.4.0** — raw native GNSS time fields and extensible scale identifiers.
+- **0.4.1** — resolved native instants with private fields and resolution evidence.
+- **0.4.2** — capture clock-domain/generation identifiers and exact sample timestamps.
+- **0.4.3** — truncated week/day/era ambiguity alternatives and resolution context.
+- **0.5.0** — exact TAI instant and explicit GNSS-scale conversion.
+- **0.5.1** — UTC realization and leap model with provenance, activation, freshness and expiry.
+- **0.5.2** — time rollback/freshness guard and platform persistence-authority contract.
+- **0.5.3** — reason-bearing time availability and targeted invalidation primitives.
 - **0.6.0** — coordinate types: geodetic, ECEF, ENU and NED.
+- **0.6.1** — body frames, velocity, acceleration, rotations, lever arms and sensor latency.
+- **0.6.2** — typed covariance layouts with state ordering, units, frame and epoch.
 - **0.7.0** — geodesic, ellipsoid and reference-frame primitives.
+- **0.7.1** — datum/reference-frame realization and Earth-orientation input contracts.
 - **0.8.0** — bit readers/writers, sign extension and reserved-bit preservation.
+- **0.8.1** — exact-consumption results and original-bit/canonical round-trip modes.
 - **0.9.0** — checksums, CRC framework and GNSS parity primitives.
+- **0.9.1** — named constellation parity/checksum families with authoritative vectors.
 - **0.10.0** — convolutional, BCH, Reed–Solomon and interleaving primitives required by the selected ICDs.
+- **0.10.1** — bounded soft decisions, path-metric saturation and interleaver capacity contracts.
 - **0.11.0** — LDPC/polar or other modern FEC kernels required by public signals, one verified family at a time.
+- **0.11.1** — fixed iteration/work limits and decoder resource receipts.
 - **0.12.0** — extensible system/satellite/signal identifiers and registry versioning.
+- **0.12.1** — namespaced registry authorities and bounded identifier sets without closed public masks.
 - **0.13.0** — canonical observation/epoch model with distinct transmit, receive and capture times.
+- **0.13.1** — immutable artifacts, bounded provenance parents and separate targeted assessment identifiers.
+- **0.13.2** — tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages.
 - **0.14.0** — ephemeris, almanac, health and satellite-clock model traits.
+- **0.14.1** — model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
 - **0.15.0** — correction and provenance models.
+- **0.15.1** — immutable correction sessions and ordered applied-correction ledger with anti-mixing policy.
 - **0.16.0** — event, source, sink and deterministic polling traits with explicit invalidation.
+- **0.16.1** — small push/poll/transform/reset vocabulary with borrowed or caller-provided output slots.
+- **0.16.2** — sequenced targeted invalidation, acknowledgement, queue pressure and resynchronization contracts.
 - **0.17.0** — capability negotiation and resource-planning contracts.
+- **0.17.1** — executable preflight schema and immutable normalized `PlanReceipt`.
+- **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
+- **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
 
 ### Phase B — File and byte-stream interoperability
 
 - **0.21.0** — NMEA 0183 framing, checksum and bounded recovery.
+- **0.21.1** — parser forward progress, exact consumption, deterministic chunks and structured offsets.
 - **0.22.0** — GNSS-relevant NMEA 0183 sentence models for the licensed baseline.
+- **0.22.1** — borrowed/visitor, owned, canonical and original-preserving NMEA APIs.
 - **0.23.0** — RTCM 3 framing and CRC.
+- **0.23.1** — raw frame, correctness assessment, semantic conversion and transactional insertion boundary.
 - **0.24.0** — RTCM station/antenna descriptor messages.
 - **0.25.0** — RTCM MSM observation decoding/encoding.
+- **0.25.1** — MSM provider/station/frame/session binding and cross-constellation round trips.
 - **0.26.0** — RTCM constellation ephemeris messages.
 - **0.27.0** — NTRIP source table and version 1 client.
 - **0.28.0** — NTRIP version 2 client/server/caster protocol core.
+- **0.28.1** — bounded redirects/reconnects/headers, credential redaction, GGA consent and downgrade policy.
 - **0.29.0** — RINEX 2 observation streaming parser/writer.
 - **0.30.0** — RINEX 3 observation and navigation support.
 - **0.31.0** — RINEX 4 generic navigation records and current additions.
+- **0.31.1** — cross-version canonical/original preservation and deterministic chunk-boundary audit.
 - **0.32.0** — SP3 orbit and precise clock products.
 - **0.33.0** — IONEX.
 - **0.34.0** — ANTEX.
 - **0.35.0** — SINEX and Bias-SINEX foundations.
 - **0.36.0** — deterministic raw-I/Q and observation replay container v0.
+- **0.36.1** — replay checkpoints, digests, corruption recovery and version compatibility.
+- **0.36.2** — cross-format canonical comparison and differential parser audit.
 
 ### Phase C — Native DSP reference implementation
 
 - **0.37.0** — complex/fixed-point types, NCO and oscillators.
+- **0.37.1** — fixed-point widening, narrowing, rounding, saturation and sticky-overflow replay contract.
 - **0.38.0** — FIR/IIR and decimation primitives.
 - **0.39.0** — polyphase resampling.
+- **0.39.1** — rational resampler timestamp and group-delay accounting.
 - **0.40.0** — scalar radix-2/radix-4 FFT.
+- **0.40.1** — accepted FFT size families, checked factorization and caller-scratch planning.
 - **0.41.0** — mixed-radix FFT and convolution.
+- **0.41.1** — floating numerical replay contract for FMA, denormals, finiteness and platform tolerances.
 - **0.42.0** — polyphase channelizer.
 - **0.43.0** — acquisition search framework and peak statistics.
+- **0.43.1** — acquisition work tokens, bounded candidates and named false-alarm assumptions.
 - **0.44.0** — DLL/FLL/PLL tracking-loop primitives.
+- **0.44.1** — loop coefficient/stability evidence and discontinuity/reacquisition lifecycle.
 - **0.45.0** — correlator banks, CN0 and lock estimators.
 - **0.46.0** — bit/symbol/secondary-code synchronization.
 - **0.47.0** — sample timestamp, gap and overrun model.
+- **0.47.1** — sample/host/hardware capture-domain mapping and per-block metadata validation.
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
+- **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
+- **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
 
 ### Phase D — GPS end-to-end
 
@@ -1964,11 +2079,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.52.0** — GPS L1 C/A acquisition.
 - **0.53.0** — GPS L1 C/A tracking and observables.
 - **0.54.0** — GPS LNAV parity/frame/subframe decode.
+- **0.54.1** — bounded multi-page assembly and atomic navigation-store transactions.
 - **0.55.0** — GPS LNAV ephemeris, almanac, UTC and ionosphere.
 - **0.56.0** — satellite state and clock computation.
 - **0.57.0** — pseudorange formation and transmit-time iteration.
 - **0.58.0** — standalone GPS weighted least-squares PVT.
+- **0.58.1** — typed solver covariance, rank/condition/non-finite checks and explicit unavailable events.
 - **0.59.0** — Doppler velocity and receiver clock drift.
+- **0.59.1** — recorded-I/Q-to-PVT independent receiver, resource and input-panic audit.
 - **0.60.0** — GPS L2C codes, acquisition and tracking.
 - **0.61.0** — GPS CNAV decode.
 - **0.62.0** — GPS L5 acquisition/tracking.
@@ -2041,11 +2159,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.117.0** — SBAS integrity and protection-level inputs.
 - **0.118.0** — DFMC SBAS signal/messages.
 - **0.119.0** — provider profiles and future-ID registry.
+- **0.119.1** — public GBAS/ABAS data-model, applicability and integrity-interface boundary.
 
 ### Phase I — Multi-GNSS solution quality
 
 - **0.120.0** — multi-constellation PVT and inter-system biases.
+- **0.120.1** — named solver state/covariance layout and explicit solution availability lifecycle.
 - **0.121.0** — robust estimation and fault exclusion.
+- **0.121.1** — square-root filtering and near-singular numerical failure evidence.
 - **0.122.0** — broadcast ionosphere/troposphere model suite.
 - **0.123.0** — dual/multi-frequency combinations and TEC.
 - **0.124.0** — carrier smoothing and multipath metrics.
@@ -2054,6 +2175,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.127.0** — RAIM.
 - **0.128.0** — ARAIM building blocks and assumptions API.
 - **0.129.0** — protection levels and integrity event model.
+- **0.129.1** — immutable targeted integrity assessments, exclusions and recovery lifecycle.
 
 ### Phase J — RTK and precise positioning
 
@@ -2063,13 +2185,16 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.133.0** — native integer ambiguity search.
 - **0.134.0** — ambiguity validation and partial fixing.
 - **0.135.0** — RTK fixed/float lifecycle and rollback.
+- **0.135.1** — explicit RTK convergence artifacts, withdrawal and superseded-state handling.
 - **0.136.0** — GLONASS FDMA RTK biases.
 - **0.137.0** — moving-base and dual-antenna heading.
 - **0.138.0** — network RTK standardized inputs.
 - **0.139.0** — RTCM SSR complete public baseline.
+- **0.139.1** — atomic SSR group completeness, expiry and correction-session anti-mixing.
 - **0.140.0** — IGS SSR profile.
 - **0.141.0** — post-processed PPP.
 - **0.142.0** — real-time PPP.
+- **0.142.1** — PPP convergence, product/frame/age validation, rollback and invalidation.
 - **0.143.0** — PPP ambiguity resolution.
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
 - **0.145.0** — static/rapid-static survey workflow.
@@ -2077,9 +2202,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 ### Phase K — Authentication and resilience
 
 - **0.146.0** — cryptographic backend traits and trust-store model.
+- **0.146.1** — trusted-time, trust-root generation and platform anti-rollback authority binding.
 - **0.147.0** — Galileo OSNMA framing/assembly.
 - **0.148.0** — OSNMA key-chain and tag verification.
 - **0.149.0** — OSNMA policy, renewal/revocation and evidence.
+- **0.149.1** — immutable delayed-authentication assessments targeting existing artifacts.
 - **0.150.0** — QZSS QZNMA decode and verification.
 - **0.151.0** — multi-constellation navigation conflict detector.
 - **0.152.0** — Doppler/motion/clock spoofing evidence.
@@ -2087,20 +2214,27 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.154.0** — meaconing/time-replay evidence.
 - **0.155.0** — multi-receiver and multi-antenna security inputs.
 - **0.156.0** — security policy engine and fail/degrade reactions.
+- **0.156.1** — versioned targeted policy decisions, hysteresis and ordered reevaluation.
 - **0.157.0** — signed forensic provenance stream.
+- **0.157.1** — sensitive forensic sinks, routine telemetry privacy and scoped correlation identifiers.
 
 ### Phase L — Timing and fusion
 
 - **0.158.0** — all GNSS time-scale conversions, UTC models and leap provenance.
+- **0.158.1** — reason-bearing time availability and explicit capture-domain/generation stamps.
 - **0.159.0** — external PPS/time-mark semantic correlation and calibrated-delay model.
+- **0.159.1** — bounded named delay/uncertainty contributions, confidence semantics and correlation groups.
 - **0.160.0** — validated time-only solution and stable GNSS timing observation/event API.
+- **0.160.1** — caller-provided bounded event slots and maximum event/queue resource contract.
 - **0.161.0** — satellite/receiver clock estimates and GNSS timing uncertainty budget.
 - **0.162.0** — GNSS timing freshness, discontinuity, outage and explicit invalidation.
+- **0.162.1** — targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchronization behavior.
 - **0.163.0** — authenticated/integrity-aware GNSS time evidence and consumer policy inputs.
 - **0.164.0** — inertial mechanization.
 - **0.165.0** — error-state EKF.
 - **0.166.0** — wheel/barometer/magnetometer inputs.
 - **0.167.0** — delayed/out-of-sequence fusion.
+- **0.167.1** — bounded delayed queues, deterministic update order and sensor clock/reset generations.
 - **0.168.0** — GNSS outage/dead-reckoning lifecycle.
 - **0.169.0** — multi-antenna attitude.
 
@@ -2114,19 +2248,27 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.175.0** — coherent multi-device clock/timestamp calibration.
 - **0.176.0** — portable serial backend.
 - **0.177.0** — native USB backend contracts and Linux implementation.
+- **0.177.1** — isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence.
 - **0.178.0** — Windows WinUSB/COM/location implementation.
+- **0.178.1** — Windows provider permission/mock/timestamp/accuracy metadata and no synthetic raw observations.
 - **0.179.0** — macOS IOKit/serial/Core Location implementation.
-- **0.180.0** — FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation.
+- **0.179.1** — iOS Core Location OS-derived fix adapter with explicit raw-measurement non-claim.
+- **0.180.0** — shared BSD serial, USB and socket I/O contracts.
+- **0.180.1** — FreeBSD I/O implementation and fault matrix.
+- **0.180.2** — OpenBSD I/O implementation and fault matrix.
+- **0.180.3** — NetBSD I/O implementation and fault matrix.
 - **0.181.0** — gpsd protocol adapter.
 - **0.182.0** — u-blox UBX adapter.
 - **0.183.0** — Septentrio SBF adapter.
 - **0.184.0** — NovAtel/public receiver adapter baseline.
-- **0.185.0** — additional stable public receiver protocols.
+- **0.185.0** — receiver-protocol admission gate; every additional protocol requires a named patch milestone.
 - **0.186.0** — Android raw GNSS measurement adapter.
 - **0.187.0** — OMA SUPL/ULP core.
 - **0.188.0** — 3GPP LPP assistance core.
 - **0.189.0** — Rustls network adapter and secure credential policy.
+- **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
+- **0.190.1** — CAN/J1939, fast-packet, address-claim and licensed PGN semantic separation.
 
 ### Phase N — Simulation, hardening and 1.0 stabilization
 
@@ -2138,22 +2280,29 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.196.0** — cross-constellation full replay suite.
 - **0.197.0** — long-duration resource-leak and rollover suite.
 - **0.198.0** — full parser fuzz corpus and coverage audit.
+- **0.198.1** — differential/chunk-boundary parser corpus and sensitive diagnostic snapshot audit.
 - **0.199.0** — numerical condition/precision audit.
+- **0.199.1** — fixed/floating cross-architecture replay and tolerance audit.
 - **0.200.0** — unsafe/FFI audit and device fault injection.
+- **0.200.1** — Miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit.
 - **0.201.0** — portable SIMD performance release.
 - **0.202.0** — fixed-point/embedded performance release.
 - **0.203.0** — WASM decoding/post-processing profile.
+- **0.203.1** — bare-metal and future Aesynx caller-buffer/work-budget conformance contract.
 - **0.204.0** — API naming and visibility freeze.
 - **0.205.0** — configuration/profile freeze.
 - **0.206.0** — file/wire round-trip compatibility freeze.
 - **0.207.0** — all-platform CI and hardware farm release.
+- **0.207.1** — MSRV behavioral core test suite and allocator-free target evidence.
 - **0.208.0** — independent receiver comparison campaign.
 - **0.209.0** — multi-band live-sky and simulator evidence release.
 - **0.210.0** — standards inventory refresh and 1.0 baseline freeze.
+- **0.210.1** — exact document/amendment/module/vector/adversarial-test traceability closure.
 - **0.211.0** — complete public-signal coverage audit.
 - **0.212.0** — complete correction/format/assistance coverage audit.
 - **0.213.0** — complete security/integrity/timing audit.
 - **0.214.0** — documentation, examples and migration audit.
+- **0.214.1** — capability-tier, side-effect, resource, privacy and failure-contract documentation audit.
 - **0.215.0** — external security audit fixes.
 - **0.216.0** — external GNSS/domain review fixes.
 - **0.217.0** — 1.0.0 release candidate 1.

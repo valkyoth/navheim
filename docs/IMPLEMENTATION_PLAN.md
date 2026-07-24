@@ -38,12 +38,22 @@ uncertainty, or provenance.
   only through explicit features.
 - No core crate starts threads, selects an async runtime, opens devices, or
   uses networking.
+- Side-effecting builders must first return an immutable reviewed plan receipt;
+  device, credential, network and thread authority begins only after acceptance.
+- Raw facts, normalized facts, corrections, assessments, evidence and policy
+  decisions are immutable, separately typed and connected by bounded artifact
+  identifiers. Later evidence never mutates an earlier fact.
 - Protocol, constellation, solver, and format crates forbid unsafe code.
 - Unsafe is isolated to reviewed FFI, DMA, or SIMD/platform modules with a
   safety contract, Miri evidence where applicable, and independent review.
 - Hand-maintained code files must stay at or below 500 lines.
+- Generated code records generator provenance and reproducibility; review also
+  limits function/state-machine complexity rather than relying on file length.
 - Every input length, offset, epoch, capacity, and resource calculation is
   checked.
+- No input-dependent panic is permitted under declared resource limits.
+- Untrusted input cannot select allocations, thread/channel counts, FFT plans,
+  FEC iterations, candidate counts, queue growth or other work bounds.
 - Every untrusted parser is bounded and receives unit, negative, property,
   conformance, and fuzz coverage.
 - Standards constants cite authoritative sections or tables.
@@ -61,6 +71,11 @@ uncertainty, or provenance.
 
 Each crate documents its default tier, optional promotions, worst-case stack,
 heap, scratch, input, and state capacity, and any floating-point assumptions.
+Enabling `std` must not change protocol/wire behavior. Tier 0 uses caller
+buffers, explicit work budgets and allocator-free target evidence. Tier 1
+documents every allocation point. Tier 2 documents threads, clocks, devices,
+files, sockets, cancellation and authority. Tier 3 documents dependencies,
+unsafe code, credentials, trust roots and platform guarantees.
 
 ## Crate Architecture
 
@@ -169,6 +184,69 @@ Implementation proceeds in this dependency order:
 RTK, PPP, and authentication do not become trusted surfaces until observation
 time/phase correctness is independently proven.
 
+## Canonical Artifact and Assessment Pipeline
+
+The public type graph follows this non-destructive order:
+
+```text
+ingress and capture facts
+  -> tracking estimates or raw protocol records
+  -> raw observations and raw navigation messages
+  -> validated messages and normalized observations
+  -> corrected epochs and transactional navigation state
+  -> solver input epochs
+  -> position/time/attitude solution artifacts
+       + targeted correctness assessments
+       + navigation-authentication assessments
+       + signal-authenticity evidence
+       + integrity assessments
+       + versioned policy decisions
+```
+
+Every derived value has an immutable artifact ID, bounded parent IDs and
+derivation algorithm/version. Authentication, signal-source authenticity,
+message correctness and solution integrity never collapse into one boolean.
+Delayed authentication creates a new assessment targeting the original
+artifact. No-fix/unavailable, convergence, rollback, withdrawal and coasting
+are explicit events or lifecycle artifacts rather than valid solution modes.
+
+Observation stages are separately typed: `TrackingEstimate`,
+`RawReceiverObservation`, `RawSdrObservation`, normalized `Observation`,
+`CorrectedObservation`, `ObservationEpoch` and `SolverInputEpoch`. Correction
+ledgers and navigation-store transactions preserve issue, provider, station,
+frame, session, generation, validity, uncertainty and provenance.
+
+## Resource, Progress, and Numerical Contracts
+
+Tier 0 uses a small caller-driven vocabulary: bounded `Push`, `Poll`,
+`Transform`, `Plan` and `Reset` contracts, with snapshot/restore only when the
+state format is explicitly versioned. Parsers report consumed length and
+either make progress or request more input. Large events use borrowed views or
+caller-provided bounded slots.
+
+Every execution pipeline is created from a checked immutable `PlanReceipt`
+covering state, stack, scratch, alignment, queues, work, output, throughput,
+latency and recovery. Each input block is checked against that receipt.
+Invalidation and security events have sequence, source generation, target
+artifact, effective interval and mandatory-withdrawal semantics. Queue
+pressure cannot silently discard them: the source stops, explicitly coalesces,
+or requires resynchronization.
+
+Because canonical crates forbid unsafe code, bounded collections use an honest
+safe representation such as initialized storage, `[Option<T>; N]`,
+caller-owned slices or domain-specific arrays. The API documents representation
+cost and does not promise a zero-overhead general `FixedVec` that its safety
+policy cannot implement.
+
+Tier 0 interchange values use exact scaled integers or reduced rationals.
+Floating APIs reject non-finite values. Each numerical algorithm names its
+backend, rounding/overflow behavior, state ordering and units, rank/condition
+tests, convergence, tolerance and failure behavior. Fixed-point kernels define
+bit-exact replay; floating kernels define numerical replay with explicit FMA,
+denormal and platform policy. Optimized kernels are compared against the
+normative scalar implementation. A broad public `Scalar` abstraction is not
+stabilized before concrete algorithms prove the required operations.
+
 ## GNSS Timing and Consumer APIs
 
 Navheim owns every step required to determine time from GNSS: native system
@@ -212,6 +290,12 @@ documents are not implementation claims. Before a feature starts:
 6. preserve unknown/reserved fields where the standard permits;
 7. update coverage and known limitations.
 
+Aggregate families are inventory leads, not implementation records. Before
+code begins, split them into exact documents, revisions, amendments, notices,
+assignment snapshots and legally retained vectors. Each implemented record
+maps crate/module, sections/tables/constants, official and independent vectors,
+adversarial tests, feature/profile, known limitations and legal-access class.
+
 Paid or restricted standards are never committed. New revisions create
 versioned conformance profiles rather than silently changing behavior.
 
@@ -232,6 +316,12 @@ Every release adds evidence at the lowest relevant layer:
 - platform, `no_std`, MSRV, Miri, sanitizer, Kani/model-checking, and
   performance evidence where applicable.
 
+Once behavioral core code exists, its tests run at the MSRV rather than only
+compiling there. Miri validates safe wrappers and ownership models, Kani
+validates bounded arithmetic/state machines, Loom validates concurrency and
+invalidation ordering, and sanitizers/hardware tests validate native adapters.
+No tool is credited for a boundary it cannot execute.
+
 Generated GNSS-like RF must never be radiated into an open environment.
 
 ## Platform Strategy
@@ -251,11 +341,48 @@ servers, files, local devices, time rollback, correction mixing, resource
 exhaustion, differential parsing, supply-chain compromise, FFI/DMA, credential
 exposure, and location privacy.
 
-Mandatory controls include bounded work, panic-free untrusted boundaries,
-freshness and issue-of-data validation, explicit trust, credential redaction,
-location-minimizing logs, network allowlists, reproducible inputs, locked
-tooling, SBOMs, fuzzing, changed-code pentests, and periodic full external
-security and GNSS-domain audits.
+Mandatory controls include bounded work, no input-dependent panic under
+declared resource limits, freshness and issue-of-data validation, explicit
+trust, credential redaction, location-minimizing logs, network allowlists,
+reproducible inputs, locked tooling, SBOMs, fuzzing, changed-code pentests, and
+periodic full external security and GNSS-domain audits.
+
+Correction caches bind transport peer, provider/mountpoint, station/solution,
+frame/datum, antenna, authenticated peer and generation. Secret types are not
+ordinarily cloneable, displayable or serializable; routine telemetry excludes
+precise position/time and globally correlatable provenance. Time rollback uses
+an explicit platform persistence authority rather than pretending `no_std`
+can provide rollback-resistant storage.
+
+## Gap-Driven Version Integration
+
+The architecture review has been incorporated without replacing the existing
+broader 1.0 roadmap:
+
+| Gap | Versioned implementation stops |
+| --- | --- |
+| Repository policy, strict tags, report-parent/package provenance | v0.1.1 |
+| Exact standards and test traceability schema | v0.1.2 and v0.210.1 |
+| Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
+| Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
+| Raw/resolved/atomic/UTC time, capture identity and rollback | v0.4.0-v0.5.3 |
+| Namespaced IDs, artifacts, staged observations and assessments | v0.12.0-v0.13.2 |
+| Correction sessions and anti-mixing | v0.15.1, v0.139.1 and v0.142.1 |
+| Borrowed progress, targeted invalidation and preflight receipts | v0.16.0-v0.17.2 |
+| Tiered facade and plan-before-side-effects | v0.20.1 |
+| Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
+| Deterministic bounded DSP/SDR execution | v0.37.1-v0.50.1 |
+| Typed solution/integrity lifecycle and numerical failure | v0.58.1, v0.120.1-v0.129.1 |
+| Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
+| Immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
+| Bounded GNSS timing adapter and withdrawal contract | v0.158.1-v0.162.1 |
+| Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.1 |
+| Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
+| Capability/resource/privacy documentation closure | v0.214.1 |
+
+These patch milestones are planned compatible implementation passes, not
+permission to bundle unrelated work. A breaking correction moves to the next
+minor milestone or inserts a new explicitly reviewed minor release.
 
 ## Release Discipline
 
@@ -266,3 +393,9 @@ work merely to reach 1.0 faster.
 Every milestone contains Status, Goal, Deliverables, Verification, and Exit
 criteria. Exit criteria end with the exact-commit pentest stop. No feature is
 postponed beyond 1.0 if it is part of the production claim.
+
+Before the first production candidate, all publishable manifests already
+declare `1.0.0`. The `v1.0.0-rc.N` repository tag and final `v1.0.0` tag point
+to the same approved source/package commit; crates.io publishes only the
+retained final-version archives. Report-only pentest commits must prove package
+file lists and checksums are identical to the reviewed implementation parent.

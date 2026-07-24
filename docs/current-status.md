@@ -20,6 +20,10 @@ Navheim currently provides repository and crate foundations only.
   implementation plan, and complete pre-1.0 release plan.
 - One-way GNSS timing API boundary: Navheim will produce complete satellite
   timing evidence without depending on generic clock frameworks.
+- Audit-strengthened roadmap with 300 pre-1.0 implementation milestones plus
+  the explicit production candidate and final release: targeted artifact/assessment, bounded
+  preflight, deterministic DSP, correction/security, platform and provenance
+  stops are integrated without reducing the original civil/open scope.
 
 ## Not Implemented
 

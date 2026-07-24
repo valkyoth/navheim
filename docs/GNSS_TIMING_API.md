@@ -83,9 +83,11 @@ Timing data progresses through explicit states:
 3. `GnssTimeSolution` applies satellite and receiver clock models and produces
    a time-only or position/time solution with an uncertainty budget.
 4. `GnssTimeObservation<C>` associates the solution with a caller-selected
-   capture timestamp `C` and all security evidence.
-5. `GnssTimeEvent<C>` reports observations, model changes, invalidations,
-   ambiguity, discontinuity, gaps, and security alerts.
+   capture timestamp `C` and GNSS timing facts.
+5. Separate immutable correctness, authentication, signal-authenticity and
+   integrity assessments target the observation's artifact ID.
+6. `GnssTimeEvent<C>` reports artifacts, assessments, model changes, targeted
+   invalidations, ambiguity, discontinuity, gaps, and security alerts.
 
 Raw, resolved, corrected, and accepted values are different types. A caller
 cannot accidentally treat a raw receiver field as validated time.
@@ -97,26 +99,63 @@ provisional shape. Fields should use checked constructors and read-only
 accessors rather than unrestricted public construction.
 
 ```rust
+pub enum Availability<T, R> {
+    Available(T),
+    Pending(R),
+    Unsupported(R),
+    Ambiguous(R),
+    Stale(R),
+    Rejected(R),
+    Failed(R),
+}
+
+pub struct CaptureStamp<C> {
+    domain: CaptureClockDomainId,
+    generation: u32,
+    value: C,
+}
+
 pub struct GnssTimeObservation<C> {
-    pub native: ResolvedGnssTime,
-    pub tai: Option<TaiInstant>,
-    pub utc: Option<ResolvedUtc>,
-    pub captured_at: C,
-    pub uncertainty: TimeUncertainty,
-    pub receiver_clock: Option<ReceiverClockEstimate>,
-    pub correlation: Option<PpsCorrelation>,
-    pub frequency: Option<GnssFrequencyObservation<C>>,
-    pub source: GnssTimeSource,
-    pub health: GnssTimeHealth,
-    pub authentication: TimeAuthentication,
-    pub integrity: GnssTimeIntegrity,
-    pub provenance: ProvenanceId,
+    native: ResolvedGnssTime,
+    tai: Availability<TaiInstant, TimeResolutionReason>,
+    utc: Availability<ResolvedUtc, UtcResolutionReason>,
+    captured_at: CaptureStamp<C>,
+    uncertainty: TimeUncertainty,
+    receiver_clock: Availability<ReceiverClockEstimate, ClockEstimateReason>,
+    correlation: Availability<PpsCorrelation, CorrelationReason>,
+    frequency: Availability<GnssFrequencyObservation<C>, FrequencyReason>,
+    source: GnssTimeSource,
+    health: GnssTimeHealth,
+    provenance: ProvenanceId,
 }
 ```
 
-`C` is opaque to Navheim's protocol core. It lets an adapter preserve the
-consumer's monotonic timestamp domain without Navheim depending on that
-consumer's time crate.
+`C` remains opaque to Navheim's protocol core, while `CaptureStamp<C>` carries
+the clock-domain identity and reset generation. Values from different domains
+or generations cannot be ordered or subtracted without an explicit
+consumer-provided mapping. This preserves foreign timestamp types without a
+dependency on the consumer's time crate.
+
+Authentication, signal authenticity and integrity are not fields of the
+observation. They are immutable targeted assessments:
+
+```rust
+pub struct NavigationAuthenticationAssessment {
+    target: ArtifactId,
+    state: AuthenticationState,
+    trust: AuthenticationProvenance,
+}
+
+pub struct IntegrityAssessment {
+    target: ArtifactId,
+    model: IntegrityModelId,
+    bounds: IntegrityBounds,
+    assumptions: BoundedAssumptions,
+}
+```
+
+Delayed authentication or later integrity evidence adds an assessment event;
+it does not mutate or silently upgrade an existing observation.
 
 The stable API must expose at least:
 
@@ -128,25 +167,29 @@ The stable API must expose at least:
 - constellation, signal, satellite, receiver, and message provenance;
 - receiver clock bias/drift and covariance when estimated;
 - navigation-data health and receiver timing validity;
-- cryptographic authentication state;
-- separate signal-source and solution-integrity evidence;
+- targeted cryptographic authentication assessments;
+- separate targeted signal-source and solution-integrity evidence;
 - freshness deadline and explicit invalidation reasons.
 
-Absence is not validity. `Option` only means that a value is unavailable; an
-explicit state explains whether it is unsupported, pending, ambiguous, stale,
-rejected, or failed.
+Absence is not validity. Important values use `Availability<T, R>` so callers
+can distinguish unsupported, pending, ambiguous, stale, rejected and failed.
+`Option` is reserved for semantically optional data whose absence needs no
+trust or failure interpretation.
 
 ## Time Representations
 
 Navheim provides its own dependency-free, exact representations:
 
 - `GnssTimeScale` for native satellite-system scales and unknown future IDs;
-- `GnssInstant` for an unambiguous native-scale instant;
+- `RawGnssTime` for protocol-native, truncated, or otherwise unresolved fields;
+- `ResolvedGnssTime` for one checked native-scale instant plus its resolution
+  evidence;
 - `TaiInstant` as the resolved continuous atomic result;
 - `UtcRealization` and `ResolvedUtc` for explicit UTC mappings;
 - `WeekResolution` and equivalent GLONASS day/era resolution evidence;
 - `ReceiverClockEstimate` for bias, drift, reference epoch, and covariance;
-- `TimeUncertainty` for bounds, contributors, and evidence quality.
+- `TimeUncertainty` for asymmetric bounds, confidence/coverage meaning, named
+  contributors, correlation groups and evidence quality.
 
 There is no implicit conversion through Unix/POSIX time and no silent selection
 of an era, leap table, UTC realization, or current wall clock. Unknown scales
@@ -160,20 +203,26 @@ meaning:
 
 ```rust
 pub struct PulseCapture<C> {
-    pub captured_at: C,
-    pub sequence: u64,
-    pub edge: PulseEdge,
-    pub capture_uncertainty: TimeUncertainty,
+    captured_at: CaptureStamp<C>,
+    sequence: u64,
+    edge: PulseEdge,
+    capture_uncertainty: TimeUncertainty,
 }
 
 pub struct PpsCorrelation {
-    pub represented_instant: GnssInstant,
-    pub time_mark: Option<ReceiverTimeMark>,
-    pub convention: PulseConvention,
-    pub calibrated_delay: SignedNanoseconds,
-    pub uncertainty: TimeUncertainty,
+    represented_instant: ResolvedGnssTime,
+    time_mark: Availability<ReceiverTimeMark, TimeMarkReason>,
+    convention: PulseConvention,
+    delay: DelayBudget,
+    uncertainty: TimeUncertainty,
 }
 ```
+
+`DelayBudget` is a bounded ordered set of antenna, cable, receiver, message,
+quantization/sawtooth, capture-path and user-calibration contributions. Every
+entry has sign convention, value/bounds, validity interval, provenance and
+correlation group. The combination algorithm is explicit; correlated terms
+are never blindly root-sum-squared.
 
 The concrete API must handle:
 
@@ -191,12 +240,12 @@ frequency outputs without capturing or steering them:
 
 ```rust
 pub struct GnssFrequencyObservation<C> {
-    pub nominal: Hertz,
-    pub captured_at: C,
-    pub receiver_error: Option<FrequencyError>,
-    pub lock: FrequencyLockState,
-    pub uncertainty: FrequencyUncertainty,
-    pub provenance: ProvenanceId,
+    nominal: Hertz,
+    captured_at: CaptureStamp<C>,
+    receiver_error: Availability<FrequencyError, FrequencyReason>,
+    lock: FrequencyLockState,
+    uncertainty: FrequencyUncertainty,
+    provenance: ProvenanceId,
 }
 ```
 
@@ -223,31 +272,45 @@ pub trait GnssTimingSource {
 
     fn poll_time(
         &mut self,
-    ) -> Result<Option<GnssTimeEvent<Self::Capture>>, Self::Error>;
+        output: &mut GnssTimeEventSlot<Self::Capture>,
+    ) -> Result<core::task::Poll<()>, Self::Error>;
+
+    fn acknowledge(
+        &mut self,
+        sequence: EventSequence,
+    ) -> Result<(), Self::Error>;
 }
 ```
 
-The final trait may use an explicit context or output slot to enforce resource
-bounds. It must not choose an async runtime, spawn a thread, open an arbitrary
-device, or perform a privileged clock change.
+The caller-provided slot has a documented maximum size and contains no hidden
+allocation. Every source documents maximum event size, queue depth and
+unacknowledged-event capacity. It must not choose an async runtime, spawn a
+thread, open an arbitrary device, or perform a privileged clock change.
 
-Events include invalidation and security transitions so a consumer cannot keep
-using a formerly valid sample after Navheim detects stale UTC parameters,
-authentication failure, a receiver reset, discontinuity, or spoofing evidence.
+Each event carries an event sequence and source generation. A targeted
+invalidation includes target artifact/model ID, optional replacement ID,
+reason, effective capture/GNSS interval and whether withdrawal is mandatory.
+Invalidation and security transitions cannot be dropped silently. Queue
+pressure stops production, performs a documented explicit coalescing, or
+forces source resynchronization. This prevents a consumer from retaining a
+formerly valid observation after stale UTC parameters, authentication failure,
+a receiver reset, discontinuity or spoofing evidence.
 
 ## Consumer Adapter Contract
 
 A companion adapter:
 
-1. consumes `GnssTimeEvent<C>`;
+1. consumes sequenced `GnssTimeEvent<C>` values through the bounded slot;
 2. rejects unresolved, stale, unhealthy, or policy-disallowed observations;
 3. converts Navheim's exact `TaiInstant` or native instant without truncation;
 4. maps uncertainty bounds without turning them into false precision;
 5. preserves capture-domain identity and PPS correlation;
 6. preserves frequency-reference status and error without steering it;
 7. preserves health, authentication, integrity, and provenance;
-8. emits explicit withdrawal when Navheim invalidates prior evidence;
-9. reports disagreements between Navheim and consumer time models.
+8. emits and acknowledges explicit withdrawal when Navheim invalidates prior
+   evidence;
+9. resets comparability when a capture domain generation changes;
+10. reports disagreements between Navheim and consumer time models.
 
 The adapter must not collapse authentication, signal-source authenticity,
 message correctness, and solution integrity into one trusted boolean.
@@ -256,12 +319,16 @@ message correctness, and solution integrity into one trusted boolean.
 
 - Receiver time, host wall time, and approximate user time are untrusted hints.
 - Era/week resolution requires explicit context and reports all ambiguity.
+- Every resolution records alternatives, anchor/context, model identity,
+  freshness and whether an untrusted hint influenced the result.
 - UTC or leap data is never accepted solely because a receiver emitted it.
 - Freshness is checked at the navigation model, observation, PPS, and adapter
   boundaries.
 - Every correction and delay has units, sign convention, validity, uncertainty,
   and provenance.
 - Time discontinuities and backward steps become events, never normalization.
+- Event reordering, replay, loss and unacknowledged mandatory withdrawal fail
+  closed or force resynchronization.
 - Authentication success does not prove that an authentic signal was not
   delayed or rebroadcast.
 - A consumer must be able to fail closed without parsing diagnostic strings.
@@ -276,6 +343,8 @@ Before the timing API is stable, tests must cover:
   context;
 - positive and negative cable/receiver delays and uncertainty accumulation;
 - PPS/message reordering, omission, duplication, latency, and reset behavior;
+- capture-domain mismatch, generation reset, event replay, queue pressure,
+  targeted withdrawal and acknowledgement loss;
 - frequency-output lock loss, discontinuity, correction, and uncertainty;
 - time-only solutions with unhealthy satellites and inconsistent systems;
 - authenticated, pending, unavailable, failed, and revoked states;
