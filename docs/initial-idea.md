@@ -554,9 +554,10 @@ The following crates have independently useful public APIs and should be publish
   fixed-capacity and caller-scratch linear algebra depending only on
   `navheim-math`; it does not expose a broad generic matrix ecosystem
   prematurely or reimplement scalar math.
-- **`navheim-geo`** — zero-third-party-dependency, `no_std` coordinate,
-  projection, geodesic and frame algorithms depending on representation-only
-  `navheim-core` plus `navheim-math`.
+- **`navheim-geo`** — zero-third-party-dependency, `no_std` mathematical
+  coordinate transformations, projections, ellipsoidal geodesics,
+  great-circle/rhumb primitives and frame transformations depending on
+  representation-only `navheim-core` plus `navheim-math`.
 - **`navheim-dsp`** — zero-third-party-dependency, `no_std` DSP algorithms
   depending on `navheim-math`: complex types, NCOs, filters, FFTs, resamplers,
   channelizers, acquisition and tracking-loop primitives.
@@ -588,7 +589,10 @@ Each constellation crate contains modules for code generation, acquisition hints
   PPS/time-mark meaning, receiver clock estimates, delay calibration,
   uncertainty, health, authentication, integrity and consumer-facing events.
 - **`navheim-security`** — navigation-message authentication protocols, anti-spoofing evidence, provenance and security policy. Cryptographic primitives are injected through traits.
-- **`navheim-navigation`** — waypoints, tracks, geofences, bearings, great-circle/rhumb calculations and local-frame navigation. It is intentionally not a road-map routing engine.
+- **`navheim-navigation`** — bounded waypoints, routes, tracks, geofences,
+  segment policies and navigation-facing wrappers composed from
+  `navheim-geo`; it depends on `navheim-geo`, never reimplements coordinate
+  mathematics and is intentionally not a road-map routing engine.
 - **`navheim-science`** — optional calibrated scintillation, reflectometry,
   space-weather and remote-sensing artifacts built from canonical observations;
   it does not turn exploratory metrics into operational scientific products.
@@ -612,6 +616,10 @@ These should be small, optional crates so external dependencies never leak into 
 
 - **`navheim-tls-rustls`** — Rustls-backed secure transport for NTRIP/SUPL/other network clients.
 - **`navheim-crypto-rustcrypto`** — audited cryptographic primitive backend for OSNMA/QZNMA when the selected algorithms are supported.
+- **`navheim-snapshot-protection`** — optional `std` bridge to
+  caller-provided external AEAD and platform-keystore authorities; it keeps
+  platform dependencies, key custody and encryption policy outside canonical
+  snapshot formats.
 - **`navheim-uhd`** — UHD adapter for Ettus/NI radios.
 - **`navheim-bladerf`** — libbladeRF or direct device adapter.
 - **`navheim-lime`** — LimeSuite or direct device adapter.
@@ -900,10 +908,13 @@ out-of-domain cases.
 
 `navheim-core` owns only coordinate, frame, datum, epoch and covariance
 representations plus dependency-free validation. `navheim-geo` depends on
-`navheim-core` and `navheim-math` for UTM/UPS, Transverse Mercator, geodesics
-and frame transformations. This prevents core from privately duplicating
-trigonometry/square root or acquiring platform math while keeping all physical
-coordinate APIs canonical.
+`navheim-core` and `navheim-math` and owns every mathematical coordinate
+transformation, projection, ellipsoidal geodesic, great-circle/rhumb primitive
+and frame transformation, including UTM/UPS and Transverse Mercator.
+`navheim-navigation` depends on `navheim-geo` and owns only waypoints, routes,
+tracks, geofences, segment policies and navigation-facing composition. This
+prevents core or navigation from privately duplicating trigonometry, square
+root or geodesic series while keeping all physical coordinate APIs canonical.
 
 ### 9.3 Time model
 
@@ -1016,18 +1027,31 @@ ambiguous combinations.
 #### 9.4.1 Opt-in algorithm-state snapshots
 
 Live state is not serializable by default. An explicitly admitted state type
-may implement a versioned bounded snapshot profile inside a canonical envelope
-carrying type/schema, algorithm, source/generation, creation epoch, validity/
-expiry, parent artifacts, model/calibration/product identities, required
-capabilities, byte/work bounds, corruption digest and explicit snapshot trust:
-`Untrusted`, `IntegrityChecked` or `AuthenticatedSealed`. An unkeyed digest
-detects corruption only. `AuthenticatedSealed` requires verification through
-an injected external sealing/MAC/signature authority bound to a rollback-
-resistant generation. Restore treats bytes as untrusted input, remaps
-provenance, checks compatibility and external anti-rollback authority,
-validates all numerical/state invariants, and commits atomically or not at all.
-Untrusted or merely integrity-checked state can only initialize or aid and
-must reacquire/reconverge as the profile requires.
+may implement a minimal, versioned and bounded snapshot profile inside a
+canonical envelope carrying type/schema, algorithm, source/generation,
+creation epoch, validity/expiry, parent artifacts, model/calibration/product
+identities, required capabilities, byte/work bounds and corruption digest.
+Authenticity and confidentiality are independent properties:
+`SnapshotAuthenticity::{Untrusted, IntegrityChecked, Authenticated}` and
+`SnapshotConfidentiality::{Plaintext, ExternallyEncrypted}`. An unkeyed digest
+detects corruption only. `Authenticated` requires verification through an
+injected external MAC/signature authority bound to a rollback-resistant
+generation. `ExternallyEncrypted` requires an injected external AEAD or
+platform-keystore authority and never follows merely from authentication.
+Restore treats bytes as untrusted input, remaps provenance, checks
+compatibility and external anti-rollback authority, validates all numerical/
+state invariants, and commits atomically or not at all. Untrusted or merely
+integrity-checked state can only initialize or aid and must reacquire/
+reconverge as the profile requires.
+
+Every admitted profile classifies fields by sensitivity, contains only the
+minimum state required for its stated restore outcome and declares storage/
+export consent plus retention policy. Snapshot contents never enter ordinary
+`Debug`, `Display`, errors or routine telemetry. Owned plaintext temporaries
+use the reviewed zeroization boundary where possible, while documentation
+states the limits imposed by copies, allocator/OS behavior and caller-owned
+buffers. Confidential storage remains a caller/platform policy rather than a
+hidden core-cryptography implementation.
 
 Restored authentication, signal-authenticity, correctness, integrity and
 policy assessments never regain authority merely from a valid snapshot,
@@ -1455,14 +1479,26 @@ It must expose why a signal was not searched or why a channel was evicted.
 
 Tier 0 and `navheim-dsp` remain thread-free and expose scalar polling/work
 units. The separate optional `navheim-executor` accepts caller-selected worker
-count, affinity/priority assumptions and bounded queues. Logical partitioning,
-merge order and event/invalidation ordering are deterministic. Wall-clock
-deadline, cancellation, scheduling and worker-failure observations are
-captured in a bounded `ExecutionTrace`; replay consumes that trace instead of
-consulting wall time. Floating reductions are bit-exact only where specified,
-otherwise they use published tolerances. Scalar comparison is required
-verification evidence, not duplicate production computation. Untrusted input
-cannot create workers or queues.
+count, affinity/priority assumptions and bounded queues. A validated
+`WorkPartition` produces ordered `ParallelWorkUnit`s with deterministic
+identity; immutable input and exclusively owned output/scratch; checked
+non-overlapping regions; scoped lifetimes for caller-owned buffers; explicit
+`Send` bounds; and no hidden shared mutable state. A stateful channel belongs
+to exactly one worker until deterministic handback. Cancellation joins or
+otherwise proves completion before borrowed storage is released: detached work
+cannot retain it. Result slots and merge failures are bounded and explicit.
+
+Logical partitioning, merge order and event/invalidation ordering are
+deterministic. `PlanReceipt` fixes `ExecutionTrace` capacity. The trace records
+only nondeterministic deadline, cancellation, scheduling and worker-failure
+facts that change semantics; replay consumes those facts instead of consulting
+wall time. Overflow stops execution, forces resynchronization or explicitly
+marks replay unavailable—never silently drops an event. Worker panic is a
+recoverable recorded failure only on an admitted unwind-capable profile;
+`panic = "abort"` is terminal and is never described as contained. Floating
+reductions are bit-exact only where specified, otherwise they use published
+tolerances. Scalar comparison is required verification evidence, not duplicate
+production computation. Untrusted input cannot create workers or queues.
 
 ### 11.6 Tracking channel state
 
@@ -1837,8 +1873,14 @@ cover signal enablement, output rates, time-pulse convention, correction
 input, dynamic model and protocol/baud transitions. Execution correlates
 ACK/NAK, uses bounded timeouts/retries, defines idempotency, survives
 reconnect/baud changes, detects partial application and verifies effective
-state by read-back. Capability matrices and logs redact location, credentials
-and sensitive configuration.
+state by read-back. These wire facts form a `ControlTransaction`; ACK and
+read-back are receiver assertions, not independent proof that the receiver
+behaves as configured. A separate `ConfigurationAssessment` compares observed
+output rate, enabled signals, protocol, time-pulse behavior and correction
+ingestion with the requested state. It reports `ReceiverAsserted` wherever
+behavior cannot be independently observed and reserves `Verified` for
+independent evidence. Capability matrices and logs redact location,
+credentials and sensitive configuration.
 
 Every applied change creates a `ReceiverConfigurationGeneration` bound to
 exact device/firmware identity and an effective epoch or transition interval.
@@ -1848,6 +1890,8 @@ correction sessions before rebinding. Commands are typed as volatile,
 persistent-flash or destructive/reset operations. Persistent writes have
 flash-wear budgets; persistent and destructive classes require separate
 authorization and cannot hide inside ordinary retry.
+Configuration assessments are invalidated on receiver reset, firmware change,
+device replacement or contradictory stream evidence.
 
 ### 17.2 OS-native I/O
 
@@ -1935,6 +1979,15 @@ correction sessions, calibration, provenance and epoch compatibility. Retry,
 failover and recovery are bounded caller-authorized policies with deterministic
 ordering and explicit decisions; the supervisor never silently lowers
 accuracy, integrity, authentication or trust requirements.
+
+Same-role replacement invalidates source-dependent receiver-clock and
+inter-system biases, antenna/lever-arm calibration, carrier ambiguities and
+cycle-slip continuity, correction ledgers, smoothing filters, timing/PPS
+mappings, and integrity/authenticity assessments by default. State survives
+only through an explicit handover transform carrying calibration, clock
+mapping, uncertainty growth and provenance. Outputs expose a gap,
+discontinuity, reconvergence or bounded coasting state during the handover;
+they never imply silent continuity.
 
 ---
 
@@ -2028,11 +2081,13 @@ Document threats from:
 - hostile RINEX/product/capture files;
 - compromised local devices;
 - time rollback and stale data;
-- stale, rolled-back, forged or misleadingly digest-valid algorithm snapshots;
+- stale, rolled-back, forged, privacy-exposing, misleadingly digest-valid or
+  authenticated-but-plaintext algorithm snapshots;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
-  unintended persistent/destructive transition;
-- nondeterministic parallel ordering or uncaptured runtime scheduling outcomes;
+  receiver-asserted false state, unintended persistent/destructive transition;
+- aliased/detached parallel work, trace overflow, nondeterministic ordering or
+  uncaptured runtime scheduling outcomes;
 - correction mixing across stations/frames;
 - resource exhaustion and decompression bombs;
 - parser differential behavior;
@@ -2048,12 +2103,14 @@ Document threats from:
 - exact CRC/parity/FEC status;
 - time and issue-of-data freshness checks;
 - correction provider/station/coordinate validation;
-- atomic versioned snapshot restore with explicit trust class, external seal/
+- atomic versioned snapshot restore with separate authenticity/confidentiality,
+  minimum sensitive profiles, consent/retention, external protection/
   anti-rollback checks and restored-assessment invalidation;
 - typed allowlisted receiver-control plans with configuration generations,
-  command-class authority, acknowledgement and read-back;
-- role-aware source withdrawal/composition/reselection and deterministic
-  logical parallel ordering with captured runtime traces;
+  command-class authority, transactional acknowledgement/read-back and
+  independently evidenced configuration assessment;
+- role-aware source withdrawal/composition/reselection, explicit solver-state
+  handover and deterministic, borrow-safe parallel work with bounded traces;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2460,13 +2517,13 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
 - **0.18.1** — versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti-rollback authority boundary.
-- **0.18.2** — snapshot trust classes, injected sealing-authority verification and restored-assessment invalidation policy.
+- **0.18.2** — orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
 - **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
 - **0.20.2** — all named facade profiles, versioned canonical expansion and capability-failure equivalence.
 - **0.20.3** — deterministic runtime source supervisor with explicit withdrawal, gap, authorized retry/failover and generation-safe reselection artifacts.
-- **0.20.4** — source-role composition/compatibility graph with logical-role replacement transitions and valid cross-role mixing evidence.
+- **0.20.4** — source-role composition/compatibility graph with solver-state-safe same-role handover and valid cross-role mixing evidence.
 
 ### Phase B — File and byte-stream interoperability
 
@@ -2531,7 +2588,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — separate `navheim-executor` Tier 2 multicore boundary with deterministic logical partition/merge and captured runtime execution traces.
+- **0.48.3** — separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and anti-rollback restore checks.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -2745,8 +2802,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.168.2** — deterministic fixed-rate fusion output at caller epochs with bounded interpolation, propagation, extrapolation, covariance growth and stale/coasting states.
 - **0.168.3** — versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and anti-rollback binding.
 - **0.169.0** — multi-antenna attitude.
-- **0.169.1** — geodesic distance, bearing, destination and cross-track calculations.
-- **0.169.2** — bounded waypoint, route and track models with explicit great-circle/rhumb semantics.
+- **0.169.1** — `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion without navigation-policy duplication.
+- **0.169.2** — `navheim-navigation` bounded waypoint, route and track models plus wrappers over `navheim-geo`.
 - **0.169.3** — geofence boundary, altitude and time-window evaluation.
 - **0.169.4** — local-frame navigation primitives and explicit road-network-routing non-claim.
 - **0.169.5** — calibrated multi-antenna angle-of-arrival and direction-consistency production with ambiguity, coherence, validity and expiry evidence.
@@ -2780,8 +2837,9 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.185.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
 - **0.185.2** — generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters.
 - **0.185.3** — evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
-- **0.185.4** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back verification.
+- **0.185.4** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence.
 - **0.185.5** — receiver-configuration generation barrier with effective intervals, queue draining, targeted invalidation, correction rebinding and persistent-command authorization.
+- **0.185.6** — receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback.
 - **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
 - **0.186.1** — Android fused/location-provider fix adapter and provenance.
 - **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
@@ -2794,6 +2852,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
+- **0.189.2** — optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
@@ -2883,8 +2942,9 @@ Navheim 1.0.0 is released only when all of the following are true:
 15. The facade can serve a beginner while lower crates expose every advanced stage.
 16. There is no silent degradation: capabilities, exclusions, authentication and integrity are visible.
 17. The 1.0 compatibility policy and deprecation process are published.
-18. `navheim-navigation` implements the promised geodesic, route/track,
-    geofence and local-frame primitives and clearly excludes road routing.
+18. `navheim-geo` owns all coordinate/geodesic/frame mathematics;
+    `navheim-navigation` depends on it for route/track, geofence, segment and
+    local-frame composition and clearly excludes road routing.
 19. Canonical assistance prevents rollback/cross-session mixing before SUPL,
     LPP, Android or receiver translation.
 20. PVT exposes typed DOP, age, satellite, residual, exclusion, fix,
@@ -2985,24 +3045,28 @@ Navheim 1.0.0 is released only when all of the following are true:
     format crates own versioned wire mappings, and facade composition creates
     no dependency inversion or forced all-constellation graph.
 51. Tier 0 remains thread-free; Tier 2 multicore execution and runtime source
-    supervision preserve deterministic logical ordering, captured runtime
-    traces, scalar verification, source roles, valid cross-role composition,
-    same-role transitions, withdrawal and caller-authorized no-downgrade
-    failover.
+    supervision preserve scoped exclusive work ownership, deterministic
+    logical ordering, lossless bounded runtime traces, scalar verification,
+    source roles, valid cross-role composition, solver-state-safe same-role
+    handover, withdrawal and caller-authorized no-downgrade failover.
 52. Receiver control is separate from read-only parsing and uses only planned
     allowlisted typed commands with firmware capabilities, ACK/NAK,
     idempotency, configuration generations, transition queue draining,
     invalidation/rebinding, volatile/persistent/destructive authority,
-    flash-wear budgets and read-back verification.
+    flash-wear budgets, receiver-asserted read-back and separately invalidated
+    independent behavioral assessments.
 53. Snapshot/restore is opt-in, versioned, bounded, atomic and provenance-
-    remapped; unkeyed digests imply only corruption detection, external seals
-    and anti-rollback generations establish authenticated state, restored
-    assessments are reverified/invalidated, correctly ordered state profiles
-    pass uninterrupted equivalence, and every other algorithm reports restore
+    remapped; authenticity and confidentiality are orthogonal, unkeyed digests
+    imply only corruption detection, external authentication and anti-rollback
+    generations establish authenticated state, external encryption protects
+    sensitive bytes, profiles are minimal/consent-bound, restored assessments
+    are reverified/invalidated, correctly ordered state profiles pass
+    uninterrupted equivalence, and every other algorithm reports restore
     unsupported.
 54. `navheim-dsp` depends on `navheim-math`; `navheim-geo` depends on
     representation-only `navheim-core` plus `navheim-math`; neither duplicates
-    platform/private math, and Tier 2 `navheim-executor` remains outside DSP.
+    platform/private math, `navheim-navigation` depends on `navheim-geo`, and
+    Tier 2 `navheim-executor` remains outside DSP.
 
 ---
 

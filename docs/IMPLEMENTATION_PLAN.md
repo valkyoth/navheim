@@ -99,8 +99,9 @@ undeclared edges and silent privilege or tier escalation.
 - `navheim-linalg`: zero-third-party-dependency `no_std` bounded
   fixed-capacity and caller-scratch linear algebra depending only on
   `navheim-math`, with narrow solver-facing APIs.
-- `navheim-geo`: zero-third-party-dependency `no_std` coordinate, projection,
-  geodesic and frame algorithms depending on representation-only
+- `navheim-geo`: zero-third-party-dependency `no_std` mathematical coordinate
+  transformations, projections, ellipsoidal geodesics, great-circle/rhumb
+  primitives and frame transformations depending on representation-only
   `navheim-core` plus `navheim-math`.
 - `navheim-dsp`: zero-third-party-dependency `no_std` complex/fixed-point
   values, filters, resampling, FFT, acquisition, tracking, synchronization and
@@ -142,9 +143,10 @@ fragmentation.
   10 MHz/frequency-output status, calibrated delay, uncertainty, health,
   authentication, integrity, and adapter-facing events.
 - `navheim-security`
-- `navheim-navigation`: geodesic/rhumb calculations, bounded
-  waypoint/route/track models, geofences and local-frame navigation; it does
-  not claim road-network routing.
+- `navheim-navigation`: bounded waypoint/route/track models, geofences,
+  segment policies and navigation-facing wrappers over `navheim-geo`; it
+  depends on `navheim-geo`, does not reimplement mathematical primitives and
+  does not claim road-network routing.
 - `navheim-science`: optional calibrated scintillation, reflectometry,
   space-weather and remote-sensing artifacts with explicit product maturity.
 
@@ -169,7 +171,8 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
 - `navheim-receiver`: read-only adapters by default; admitted control profiles
   use side-effect-free allowlisted command plans, ACK/NAK correlation,
   transition recovery, configuration generations, targeted invalidation,
-  persistent-write authority and read-back verification.
+  persistent-write authority, receiver-asserted read-back and separate
+  behavior-based configuration assessments.
 - `navheim-assist`: canonical trust/freshness/session model before SUPL, LPP,
   Android or receiver translations.
 - `navheim-io`
@@ -178,6 +181,9 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
 
 - `navheim-tls-rustls`
 - `navheim-crypto-rustcrypto`
+- `navheim-snapshot-protection`: optional `std` external AEAD and
+  platform-keystore authority bridge; canonical crates retain format and
+  policy ownership and never hold platform keys.
 - `navheim-uhd`
 - `navheim-bladerf`
 - `navheim-lime`
@@ -302,13 +308,18 @@ ordinary GNSS scales.
 
 Tier 0 uses a small caller-driven vocabulary: bounded `Push`, `Poll`,
 `Transform`, `Plan` and `Reset` contracts. Snapshot/restore is opt-in only
-through a versioned bounded envelope carrying algorithm/schema, source/
-generation, validity, provenance, model/calibration/product identities,
-capabilities, byte/work limits, corruption digest and `Untrusted`,
-`IntegrityChecked` or `AuthenticatedSealed` trust. Unkeyed digests provide no
-authenticity; sealed state requires an injected external sealing authority and
-rollback-resistant generation. Restore treats bytes as untrusted, checks
-compatibility, remaps provenance, validates invariants and commits atomically.
+through a minimal versioned bounded envelope carrying algorithm/schema,
+source/generation, validity, provenance, model/calibration/product identities,
+capabilities, byte/work limits and corruption digest. Authenticity is
+`Untrusted`, `IntegrityChecked` or `Authenticated`; confidentiality is
+independently `Plaintext` or `ExternallyEncrypted`. Unkeyed digests provide no
+authenticity; authentication requires an injected external MAC/signature
+authority and rollback-resistant generation, while confidentiality requires
+an external AEAD/platform-keystore authority. Profiles classify sensitive
+fields, minimize included state, require storage/export consent and retention,
+exclude contents from ordinary debug/error output and document owned-plaintext
+zeroization limits. Restore treats bytes as untrusted, checks compatibility,
+remaps provenance, validates invariants and commits atomically.
 Prior authentication, signal-authenticity, correctness, integrity and policy
 assessments are invalidated or reverified rather than restored as authoritative.
 Parsers report consumed length and
@@ -327,12 +338,19 @@ pressure cannot silently discard them: the source stops, explicitly coalesces,
 or requires resynchronization.
 
 Tier 0 and `navheim-dsp` remain thread-free. Separate `navheim-executor` takes
-a caller-chosen worker count and bounded queues. Logical partition/merge and
-event/invalidation order are deterministic. Wall-clock deadlines,
-cancellation, scheduling and worker failures become bounded execution-trace
-inputs to replay. Floating reductions are bit-exact only where specified,
-otherwise tolerance-bounded. Scalar equivalence is verification evidence, not
-mandatory duplicate production computation.
+a caller-chosen worker count and bounded queues. Validated partitions create
+deterministically identified ordered work units with immutable inputs,
+exclusive output/scratch, checked non-overlapping regions, scoped caller-buffer
+lifetimes, explicit `Send`, no hidden shared mutation and single-worker
+stateful-channel ownership until deterministic handback. Cancellation cannot
+detach work retaining borrowed storage; result slots and merge failures are
+bounded. Logical partition/merge and event/invalidation order are
+deterministic. `PlanReceipt` fixes trace capacity and only semantics-affecting
+nondeterministic facts enter replay. Overflow stops/resynchronizes or marks
+replay unavailable, never drops facts. Panic is recoverable only for admitted
+unwind profiles; abort is terminal. Floating reductions are bit-exact only
+where specified, otherwise tolerance-bounded. Scalar equivalence is
+verification evidence, not mandatory duplicate production computation.
 
 The facade source supervisor operates only on explicitly opened sources.
 Loss/change emits gap and withdrawal before bounded caller-authorized retry or
@@ -340,6 +358,19 @@ reselection. Same-role replacement generations cannot overlap without a
 declared transition. Different roles compose only through the checked
 role/clock/session/calibration/provenance/epoch compatibility graph. Failover
 cannot silently lower accuracy, integrity, authentication or trust policy.
+Same-role replacement invalidates receiver/inter-system clock biases,
+antenna/lever-arm calibration, carrier ambiguities/cycle-slip continuity,
+correction ledgers, smoothing filters, timing/PPS mappings and integrity/
+authenticity assessments by default. Survival requires an explicit calibrated
+handover transform with clock mapping, uncertainty growth and provenance;
+outputs expose gap, discontinuity, reconvergence or bounded coasting.
+
+Receiver control records command bytes, ACK/NAK, read-back and timing only in
+a `ControlTransaction`. A separate `ConfigurationAssessment` compares
+observable rate, signal, protocol, time-pulse and correction-ingestion behavior
+against the requested generation. Read-back alone is `ReceiverAsserted`, never
+high-trust `Verified`; reset, firmware/device identity change and contradictory
+stream evidence invalidate the assessment.
 
 Because canonical crates forbid unsafe code, bounded collections use an honest
 safe representation such as initialized storage, `[Option<T>; N]`,
@@ -538,11 +569,12 @@ future adapter target and does not alter core types.
 
 The threat model covers malicious RF, receivers, correction/assistance
 servers, files, local devices, time rollback, correction mixing, resource
-exhaustion, differential parsing, stale/hostile algorithm snapshots, source
-role/failover confusion, forged digest-valid state, receiver-control
-configuration/partial-application errors, uncaptured parallel runtime
-outcomes, supply-chain compromise, FFI/DMA, credential exposure, and location
-privacy.
+exhaustion, differential parsing, stale/hostile or privacy-exposing algorithm
+snapshots, source role/failover and solver-handover confusion, forged
+digest-valid or authenticated-plaintext state, receiver-asserted
+configuration/partial-application errors, aliased/detached parallel work,
+trace overflow, uncaptured runtime outcomes, supply-chain compromise,
+FFI/DMA, credential exposure, and location privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -571,7 +603,7 @@ broader 1.0 roadmap:
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
 | Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
-| Explicit linalg/DSP/geo math dependencies and executor isolation | v0.3.4, v0.7.2, v0.37.0 and v0.48.3 |
+| Explicit linalg/DSP/geo/navigation math dependencies and executor isolation | v0.3.4, v0.7.2, v0.37.0, v0.48.3 and v0.169.1-v0.169.2 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
 | UTC civil/POSIX/calendar and TT/UT1/EOP precision-time contracts | v0.5.5 and v0.7.3 |
 | Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
@@ -583,16 +615,16 @@ broader 1.0 roadmap:
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
-| Snapshot envelope, trust/sealing and correctly ordered state restore profiles | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3 and v0.168.3 |
+| Snapshot envelope, separate authenticity/confidentiality, minimal privacy profiles, external protection and ordered restore | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
-| Logical source-role composition and same-role generation transitions | v0.20.4 |
+| Logical source-role composition and solver-state-safe same-role handover | v0.20.4 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Separate Tier 2 multicore executor, captured runtime traces and scalar verification | v0.48.3 |
+| Separate Tier 2 multicore executor, scoped work ownership, lossless bounded traces and scalar verification | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
@@ -608,13 +640,13 @@ broader 1.0 roadmap:
 | Exact bounded GNSS timing slot/mapping/withdrawal contract | v0.158.1-v0.162.1 |
 | Common-view/all-in-view time transfer and CGGTTS V2E | v0.163.1 |
 | Full fusion calibration/mechanization, vector tracking, reacquisition and fixed-rate output | v0.164.1-v0.168.2 |
-| Navigation crate implementation, road-routing non-claim and native AoA producer | v0.169.1-v0.169.5 |
+| Geo-owned mathematics, navigation composition, road-routing non-claim and native AoA producer | v0.169.1-v0.169.5 |
 | FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1 |
-| Generic sources, evidence-gated receivers, safe control and configuration-generation barriers | v0.185.2-v0.185.5 |
+| Generic sources, evidence-gated receivers, safe control, configuration generations and behavioral assessments | v0.185.2-v0.185.6 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark tools | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |
-| Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.2 |
+| Unsafe/platform/mobile/privacy and external snapshot-protection boundaries | v0.177.1-v0.190.2 |
 | Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
 | Capability/resource/privacy documentation closure | v0.214.1 |
 | Packaging, service and deployment security freeze | v0.219.1 |

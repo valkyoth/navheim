@@ -34,7 +34,7 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 417 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 419 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
@@ -60,6 +60,12 @@ Navheim currently provides repository and crate foundations only.
   composition and lifecycle ordering; it added post-acquisition receipt/
   snapshot integration, semantic-store restore and receiver-configuration
   generation barriers with narrower replayable parallel guarantees.
+- Eighth gap review makes geo/navigation ownership non-overlapping, specifies
+  borrow-safe executor work units and lossless trace overflow behavior,
+  separates snapshot authenticity from confidentiality/privacy, invalidates
+  solver state during source handover by default, distinguishes receiver
+  transactions from observed behavior, and adds bounded receiver-assessment
+  and external snapshot-protection adapter stops.
 
 ## Not Implemented
 

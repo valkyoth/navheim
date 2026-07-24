@@ -398,12 +398,12 @@ MILESTONE_DETAILS.update(
             "Test short/long outages, biased return, clock reset, spoofed return, gating, rollback, monotonic evidence, and consumer visibility.",
         ),
         "0.169.1": (
-            "Implement ellipsoid-aware distance, initial/final bearing, destination, cross-track, and along-track calculations.",
-            "Compare GeographicLib-class references and test antipodes, poles, dateline, coincident points, invalid ellipsoids, and convergence failure.",
+            "Complete navheim-geo ellipsoidal distance, initial/final bearing, destination, cross-track, along-track, great-circle and rhumb primitives without navigation policy or duplicate mathematics.",
+            "Compare GeographicLib-class references and test crate dependency direction, antipodes, poles, dateline, coincident points, invalid ellipsoids, convergence failure and proof navheim-navigation contains no private geodesic implementation.",
         ),
         "0.169.2": (
-            "Define bounded Tier 0 waypoint, route, segment, and track models with explicit great-circle versus rhumb semantics.",
-            "Test zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, and no-allocation operation.",
+            "Define navheim-navigation bounded Tier 0 waypoint, route, segment and track models plus navigation-facing wrappers over navheim-geo with explicit geodesic/great-circle/rhumb selection.",
+            "Test dependency direction, wrapper equivalence, zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, no-allocation operation and absence of duplicated coordinate mathematics.",
         ),
         "0.169.3": (
             "Evaluate geofences with explicit boundary inclusion, horizontal model, altitude datum, time window, uncertainty, and hysteresis.",

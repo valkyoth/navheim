@@ -17,7 +17,7 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | GNSS time transfer | Common-view/all-in-view results and frozen CGGTTS V2E interoperability | Planned; clock discipline/consensus excluded |
 | Civil/geodetic time | UTC leap/calendar, POSIX ambiguity, Julian/MJD, TT and EOP-derived UT1 arguments | Planned; no implicit POSIX cast or leap-smear claim |
 | Numerical foundations | Bounded linear algebra plus admitted normal/chi-square kernels with conservative integrity rounding | Planned; first-party implementation, independent high-precision evidence |
-| Receiver sources/control | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, raw observations, and configuration-generation-safe allowlisted control | Planned; exact hardware/firmware evidence required, arbitrary commands excluded |
+| Receiver sources/control | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, raw observations, configuration-generation-safe allowlisted control and independent behavioral assessment | Planned; exact hardware/firmware evidence required, arbitrary commands excluded, ACK/read-back remains receiver-asserted |
 | GNSS science | Calibrated scintillation, reflectometry, space-weather and remote-sensing artifacts from frozen methods | Planned; optional research surface, no unvalidated operational-product claim |
 | SDR/accelerator I/O | Named SDR stacks plus bounded FPGA/GPU/external-DSP stage artifacts | Planned; accelerator output remains untrusted |
 | GitHub-only tools | Capture, CLI, daemon, caster, station, survey, inspector, viewer, lab, simulator, conformance, fuzz, bench, and deployment | Planned; never in crates.io graph |

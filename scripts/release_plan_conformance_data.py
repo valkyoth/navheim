@@ -46,16 +46,16 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test hostile bytes, versions, sizes, corruption checks, provenance remap, expired/rolled-back state, missing capabilities, incompatible identities, invariant failure, partial restore, atomic commit, and unsupported-state non-claims.",
     ),
     "0.18.2": (
-        "Define Untrusted, IntegrityChecked, and AuthenticatedSealed snapshot trust; require injected seal verification plus rollback-resistant generation for sealed state and prohibit an unkeyed digest from implying authenticity.",
-        "Test forged/resealed state, wrong/missing authority, key/authority rotation, rollback, trust downgrade, initializer-only behavior, reacquisition/reconvergence, and invalidation/reverification of restored authentication, correctness, signal-authenticity, integrity, and policy assessments.",
+        "Define orthogonal SnapshotAuthenticity and SnapshotConfidentiality, field sensitivity, minimal profiles, consent/retention and debug/error exclusion; require injected authentication/encryption authorities and prohibit digests or authentication from implying confidentiality.",
+        "Test every authenticity/confidentiality pairing, forged/re-encrypted state, wrong/missing authority, rotation, rollback, consent/retention denial, sensitive formatting, plaintext lifetime/zeroization limits, initializer-only behavior, reconvergence and restored-assessment invalidation.",
     ),
     "0.20.3": (
         "Supervise only explicitly opened sources through deterministic health, withdrawal, gaps, generation-safe reselection, and bounded caller-authorized retry/failover policies without trust/accuracy downgrade.",
         "Test source/provider loss and return, flapping, retry exhaustion, same-role generation replacement, policy changes, simultaneous failures, ordering, cancellation, backpressure, recovery, and explicit no-fallback outcomes.",
     ),
     "0.20.4": (
-        "Define logical source roles and an explicit composition/compatibility graph for same-role transitions and valid cross-role receiver/correction, GNSS/sensor, array, and security-comparator use.",
-        "Test clock mapping, correction session, calibration, provenance, epoch and generation compatibility; same-role overlap, declared handover, legitimate cross-role composition, role confusion, reset, and deterministic rejection reasons.",
+        "Define logical source roles and a composition graph; same-role replacement invalidates dependent clock/bias, calibration, ambiguity/slip, correction, smoothing, PPS/timing, integrity and authenticity state unless an explicit evidenced handover transform preserves it.",
+        "Test clock mapping, uncertainty growth, calibration, provenance, epochs and generations; default invalidation, transformed survival, gaps/discontinuities/reconvergence/coasting, legitimate cross-role composition, role confusion, reset and deterministic rejection reasons.",
     ),
     "0.1.3": (
         "Create a bidirectional ledger from architecture requirements and public claims to owners, milestones, sources, tests, status, and non-claims; make authored-file scope explicit.",
@@ -134,36 +134,44 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement separate navheim-executor Tier 2 workers with bounded queues and deterministic logical partition/merge plus bounded traces for wall-clock deadline, cancellation, scheduling and worker-failure observations.",
-        "Replay from captured traces; test worker counts, scheduling perturbations, queue limits, cancellation/deadline/failure traces, source reset, bit-exact or tolerance-defined reductions, scalar verification, and proof navheim-dsp/Tier 0 create no threads.",
+        "Implement scoped WorkPartition/ParallelWorkUnit ownership with deterministic identity/order, immutable input, exclusive non-overlapping output/scratch, Send bounds, single-worker state ownership, joined cancellation and bounded results/merge failures; fix semantics-only ExecutionTrace capacity in PlanReceipt.",
+        "Test overlap/alias rejection, non-static caller buffers, hidden sharing, handback, cancellation without detached borrows, result/trace overflow, replay-unavailable/resynchronization, unwind panic versus terminal abort, worker/schedule variation, reduction tolerances and thread-free DSP/Tier 0.",
     ),
     "0.48.4": (
-        "Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, trust class, provenance remap, and anti-rollback authority.",
-        "Test cold/warm/hot restore, trust classes, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, search equivalence, assessment invalidation, atomic failure, and safe cold-start fallback.",
+        "Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, authenticity/confidentiality, provenance remap, sensitivity and anti-rollback authority.",
+        "Test cold/warm/hot restore, authenticity/confidentiality pairings, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, privacy policy, search equivalence, assessment invalidation, atomic failure and safe cold-start fallback.",
     ),
     "0.54.2": (
-        "Implement separate versioned tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, trust, and anti-rollback evidence.",
-        "Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, provenance remap, assessment invalidation, atomic restore, reacquisition rules, and cold reconstruction equivalence.",
+        "Implement separate minimal tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, authenticity/confidentiality, sensitivity and anti-rollback evidence.",
+        "Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, assessment invalidation, atomic restore, reacquisition rules and cold reconstruction equivalence.",
     ),
     "0.55.1": (
-        "Implement the semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, trust, provenance and anti-rollback evidence.",
-        "Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, provenance remap, invalidation of restored assessments, atomic restore, and reconstruction equivalence.",
+        "Implement the minimal semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, authenticity/confidentiality, sensitivity, provenance and anti-rollback evidence.",
+        "Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, invalidation of restored assessments, atomic restore and reconstruction equivalence.",
     ),
     "0.144.3": (
         "Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.",
+        "Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.",
     ),
     "0.168.3": (
         "Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.",
+        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.",
     ),
     "0.185.4": (
-        "Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency, transitions, and read-back.",
-        "Test arbitrary-byte rejection, unsupported firmware, NAK/timeout/reorder, duplicate commands, partial application, baud/protocol reconnect, power loss, read-back mismatch, retry limits, redaction, and recovery to known state.",
+        "Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency and transitions; record command, ACK/NAK, read-back and timing facts in ControlTransaction.",
+        "Test arbitrary-byte rejection, unsupported firmware, NAK/timeout/reorder, duplicate commands, partial application, baud/protocol reconnect, power loss, read-back mismatch, receiver assertions, retry limits, redaction and recovery to known state.",
     ),
     "0.185.5": (
         "Create ReceiverConfigurationGeneration bound to device/firmware and effective epoch/interval; drain or stale queues, invalidate affected mappings/calibrations/observations, rebind corrections, and classify volatile/persistent/destructive commands.",
         "Test buffered old/new semantics, transition intervals, queue drain failure, targeted invalidation order, correction rebinding, device replacement, persistent authorization, flash-wear exhaustion, reset/destructive consent, rollback, and recovery.",
+    ),
+    "0.185.6": (
+        "Create ConfigurationAssessment separately from ControlTransaction by comparing observed rate, enabled signals, protocol, time-pulse and correction-ingestion behavior with the requested generation; label unobservable claims ReceiverAsserted rather than Verified.",
+        "Test false ACK/read-back, delayed or contradictory streams, partial observability, independent timing/rate/protocol evidence, reset, firmware change, device replacement, assessment invalidation, stale generations and refusal to infer high trust.",
+    ),
+    "0.189.2": (
+        "Implement the optional navheim-snapshot-protection bridge for caller/platform-owned AEAD and keystore handles, keeping keys, algorithms and storage policy outside canonical crates while enforcing consent, retention and bounded plaintext lifetime.",
+        "Test nonce/key/generation mismatch, tamper, rotation, rollback, locked/unavailable/revoked keystores, consent denial, retention expiry, plaintext debug/error leakage, cancellation, zeroization limits and platform capability absence.",
     ),
     "0.37.0": (
         "Make navheim-dsp depend only on navheim-math for runtime twiddles, coefficients, thresholds, CN0/estimators and admitted scalar functions; prohibit private duplicates and platform math.",

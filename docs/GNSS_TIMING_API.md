@@ -418,6 +418,14 @@ forces source resynchronization. This prevents a consumer from retaining a
 formerly valid observation after stale UTC parameters, authentication failure,
 a receiver reset, discontinuity or spoofing evidence.
 
+Replacing a timing source in the same logical role invalidates receiver-clock
+and inter-system biases, delay calibration, PPS/capture mappings, smoothing,
+integrity and authenticity assessments by default. State survives only through
+an explicit handover transform with source generations, clock mapping,
+calibration, uncertainty growth and provenance. During transition the API emits
+a gap, discontinuity, reconvergence or bounded coasting state; it never
+silently presents the replacement as continuous.
+
 Navheim `EventSequence` values and generations never wrap. They are distinct
 from receiver-protocol `PulseCounter` values, whose documented rollover is
 preserved as input evidence. Before an event sequence is exhausted,
@@ -486,6 +494,8 @@ Before the timing API is stable, tests must cover:
   exhaustion;
 - capture-domain mismatch, generation reset, event replay, queue pressure,
   targeted withdrawal and acknowledgement loss;
+- same-role source replacement with default timing-state invalidation,
+  evidenced handover, uncertainty growth, gaps and discontinuities;
 - exact TAI range endpoints, non-canonical fractions, every checked arithmetic
   overflow and lower-resolution rounding direction;
 - slot borrow/release/acknowledgement transitions, repeated acknowledgement,

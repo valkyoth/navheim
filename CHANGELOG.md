@@ -45,6 +45,13 @@ All notable changes to `navheim` are documented here.
   source-role composition, correctly ordered acquisition and semantic-store
   persistence, receiver-configuration generations, captured parallel runtime
   traces and exact Julian/MJD representation.
+- Integrated the eighth review without replacing earlier scope: geo owns all
+  coordinate mathematics while navigation composes it; executor work has
+  scoped exclusive ownership and lossless bounded traces; snapshot
+  authenticity, confidentiality and privacy are separate; source handover
+  invalidates dependent solver state by default; and receiver transactions,
+  observed configuration assessments and optional external snapshot
+  protection have explicit implementation stops.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

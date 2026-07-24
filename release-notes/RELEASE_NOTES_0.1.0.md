@@ -82,6 +82,16 @@ ordering plus captured runtime traces, moves executable acquisition receipts
 and snapshots after their state exists, separates raw and semantic store
 restore, and adds receiver-configuration generation barriers.
 
+The eighth coverage pass preserves those boundaries while making them
+implementation-safe: `navheim-geo` exclusively owns coordinate mathematics
+and `navheim-navigation` composes it; executor work units have scoped,
+non-overlapping ownership and lossless bounded traces; snapshot authenticity,
+confidentiality and privacy policy are orthogonal; same-role handover
+invalidates dependent solver state unless an evidenced transform preserves it;
+and receiver transactions are distinct from independently observed
+configuration assessments. Two bounded stops add behavioral receiver
+assessment and optional external AEAD/platform-keystore snapshot protection.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

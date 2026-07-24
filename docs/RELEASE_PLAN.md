@@ -3056,17 +3056,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.18.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.2 - Snapshot trust classes, injected sealing-authority verification and restored-assessme...
+### v0.18.2 - Orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injecte...
 
 Status: planned.
 
-Goal: deliver snapshot trust classes, injected sealing-authority verification and restored-assessment invalidation policy as one bounded,
+Goal: deliver orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- snapshot trust classes, injected sealing-authority verification and restored-assessment invalidation policy.
-- Define Untrusted, IntegrityChecked, and AuthenticatedSealed snapshot trust; require injected seal verification plus rollback-resistant generation for sealed state and prohibit an unkeyed digest from implying authenticity.
+- orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
+- Define orthogonal SnapshotAuthenticity and SnapshotConfidentiality, field sensitivity, minimal profiles, consent/retention and debug/error exclusion; require injected authentication/encryption authorities and prohibit digests or authentication from implying confidentiality.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -3084,7 +3084,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test forged/resealed state, wrong/missing authority, key/authority rotation, rollback, trust downgrade, initializer-only behavior, reacquisition/reconvergence, and invalidation/reverification of restored authentication, correctness, signal-authenticity, integrity, and policy assessments.
+- Test every authenticity/confidentiality pairing, forged/re-encrypted state, wrong/missing authority, rotation, rollback, consent/retention denial, sensitive formatting, plaintext lifetime/zeroization limits, initializer-only behavior, reconvergence and restored-assessment invalidation.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -3332,17 +3332,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.20.3 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.20.4 - Source-role composition/compatibility graph with logical-role replacement transitions...
+### v0.20.4 - Source-role composition/compatibility graph with solver-state-safe same-role handover...
 
 Status: planned.
 
-Goal: deliver source-role composition/compatibility graph with logical-role replacement transitions and valid cross-role mixing evidence as one bounded,
+Goal: deliver source-role composition/compatibility graph with solver-state-safe same-role handover and valid cross-role mixing evidence as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- source-role composition/compatibility graph with logical-role replacement transitions and valid cross-role mixing evidence.
-- Define logical source roles and an explicit composition/compatibility graph for same-role transitions and valid cross-role receiver/correction, GNSS/sensor, array, and security-comparator use.
+- source-role composition/compatibility graph with solver-state-safe same-role handover and valid cross-role mixing evidence.
+- Define logical source roles and a composition graph; same-role replacement invalidates dependent clock/bias, calibration, ambiguity/slip, correction, smoothing, PPS/timing, integrity and authenticity state unless an explicit evidenced handover transform preserves it.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -3360,7 +3360,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test clock mapping, correction session, calibration, provenance, epoch and generation compatibility; same-role overlap, declared handover, legitimate cross-role composition, role confusion, reset, and deterministic rejection reasons.
+- Test clock mapping, uncertainty growth, calibration, provenance, epochs and generations; default invalidation, transformed survival, gaps/discontinuities/reconvergence/coasting, legitimate cross-role composition, role confusion, reset and deterministic rejection reasons.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - Separate `navheim-executor` Tier 2 multicore boundary with deterministic logical part...
+### v0.48.3 - Separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping wor...
 
 Status: planned.
 
-Goal: deliver separate `navheim-executor` Tier 2 multicore boundary with deterministic logical partition/merge and captured runtime execution traces as one bounded,
+Goal: deliver separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- separate `navheim-executor` Tier 2 multicore boundary with deterministic logical partition/merge and captured runtime execution traces.
-- Implement separate navheim-executor Tier 2 workers with bounded queues and deterministic logical partition/merge plus bounded traces for wall-clock deadline, cancellation, scheduling and worker-failure observations.
+- separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces.
+- Implement scoped WorkPartition/ParallelWorkUnit ownership with deterministic identity/order, immutable input, exclusive non-overlapping output/scratch, Send bounds, single-worker state ownership, joined cancellation and bounded results/merge failures; fix semantics-only ExecutionTrace capacity in PlanReceipt.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Replay from captured traces; test worker counts, scheduling perturbations, queue limits, cancellation/deadline/failure traces, source reset, bit-exact or tolerance-defined reductions, scalar verification, and proof navheim-dsp/Tier 0 create no threads.
+- Test overlap/alias rejection, non-static caller buffers, hidden sharing, handback, cancellation without detached borrows, result/trace overflow, replay-unavailable/resynchronization, unwind panic versus terminal abort, worker/schedule variation, reduction tolerances and thread-free DSP/Tier 0.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6082,7 +6082,7 @@ reviewable release in Phase C (Native DSP reference implementation).
 Deliverables:
 
 - versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and anti-rollback restore checks.
-- Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, trust class, provenance remap, and anti-rollback authority.
+- Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, authenticity/confidentiality, provenance remap, sensitivity and anti-rollback authority.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6100,7 +6100,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test cold/warm/hot restore, trust classes, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, search equivalence, assessment invalidation, atomic failure, and safe cold-start fallback.
+- Test cold/warm/hot restore, authenticity/confidentiality pairings, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, privacy policy, search equivalence, assessment invalidation, atomic failure and safe cold-start fallback.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6540,7 +6540,7 @@ reviewable release in Phase D (GPS end-to-end).
 Deliverables:
 
 - versioned tracking-channel and raw page-assembly snapshot profiles with compatibility, provenance and calibration restore checks.
-- Implement separate versioned tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, trust, and anti-rollback evidence.
+- Implement separate minimal tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, authenticity/confidentiality, sensitivity and anti-rollback evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6558,7 +6558,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, provenance remap, assessment invalidation, atomic restore, reacquisition rules, and cold reconstruction equivalence.
+- Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, assessment invalidation, atomic restore, reacquisition rules and cold reconstruction equivalence.
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6632,7 +6632,7 @@ reviewable release in Phase D (GPS end-to-end).
 Deliverables:
 
 - versioned semantic navigation-store/ephemeris snapshot profile with issue, model, health, validity and assessment invalidation checks.
-- Implement the semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, trust, provenance and anti-rollback evidence.
+- Implement the minimal semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, authenticity/confidentiality, sensitivity, provenance and anti-rollback evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6650,7 +6650,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, provenance remap, invalidation of restored assessments, atomic restore, and reconstruction equivalence.
+- Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, invalidation of restored assessments, atomic restore and reconstruction equivalence.
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -12298,7 +12298,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.
+- Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14512,7 +14512,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.
+- Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14576,17 +14576,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.169.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.169.1 - Geodesic distance, bearing, destination and cross-track calculations
+### v0.169.1 - `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion witho...
 
 Status: planned.
 
-Goal: deliver geodesic distance, bearing, destination and cross-track calculations as one bounded,
+Goal: deliver `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion without navigation-policy duplication as one bounded,
 reviewable release in Phase L (Timing, fusion and navigation).
 
 Deliverables:
 
-- geodesic distance, bearing, destination and cross-track calculations.
-- Implement ellipsoid-aware distance, initial/final bearing, destination, cross-track, and along-track calculations.
+- `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion without navigation-policy duplication.
+- Complete navheim-geo ellipsoidal distance, initial/final bearing, destination, cross-track, along-track, great-circle and rhumb primitives without navigation policy or duplicate mathematics.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14604,7 +14604,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compare GeographicLib-class references and test antipodes, poles, dateline, coincident points, invalid ellipsoids, and convergence failure.
+- Compare GeographicLib-class references and test crate dependency direction, antipodes, poles, dateline, coincident points, invalid ellipsoids, convergence failure and proof navheim-navigation contains no private geodesic implementation.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14623,17 +14623,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.169.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.169.2 - Bounded waypoint, route and track models with explicit great-circle/rhumb semantics
+### v0.169.2 - `navheim-navigation` bounded waypoint, route and track models plus wrappers over `nav...
 
 Status: planned.
 
-Goal: deliver bounded waypoint, route and track models with explicit great-circle/rhumb semantics as one bounded,
+Goal: deliver `navheim-navigation` bounded waypoint, route and track models plus wrappers over `navheim-geo` as one bounded,
 reviewable release in Phase L (Timing, fusion and navigation).
 
 Deliverables:
 
-- bounded waypoint, route and track models with explicit great-circle/rhumb semantics.
-- Define bounded Tier 0 waypoint, route, segment, and track models with explicit great-circle versus rhumb semantics.
+- `navheim-navigation` bounded waypoint, route and track models plus wrappers over `navheim-geo`.
+- Define navheim-navigation bounded Tier 0 waypoint, route, segment and track models plus navigation-facing wrappers over navheim-geo with explicit geodesic/great-circle/rhumb selection.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14651,7 +14651,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, and no-allocation operation.
+- Test dependency direction, wrapper equivalence, zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, no-allocation operation and absence of duplicated coordinate mathematics.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16044,13 +16044,13 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back verification as one bounded,
+Goal: deliver capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back verification.
-- Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency, transitions, and read-back.
+- capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence.
+- Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency and transitions; record command, ACK/NAK, read-back and timing facts in ControlTransaction.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16068,7 +16068,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test arbitrary-byte rejection, unsupported firmware, NAK/timeout/reorder, duplicate commands, partial application, baud/protocol reconnect, power loss, read-back mismatch, retry limits, redaction, and recovery to known state.
+- Test arbitrary-byte rejection, unsupported firmware, NAK/timeout/reorder, duplicate commands, partial application, baud/protocol reconnect, power loss, read-back mismatch, receiver assertions, retry limits, redaction and recovery to known state.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16133,6 +16133,53 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.185.5 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.185.6 - Receiver control transactions separated from independently observed configuration ass...
+
+Status: planned.
+
+Goal: deliver receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback.
+- Create ConfigurationAssessment separately from ControlTransaction by comparing observed rate, enabled signals, protocol, time-pulse and correction-ingestion behavior with the requested generation; label unobservable claims ReceiverAsserted rather than Verified.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.185.6.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test false ACK/read-back, delayed or contradictory streams, partial observability, independent timing/rate/protocol evidence, reset, firmware change, device replacement, assessment invalidation, stale generations and refusal to infer high trust.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.185.6 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.186.0 - Android raw GNSS observation-fact adapter without assistance translation
 
@@ -16689,6 +16736,53 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.2 - Optional external AEAD/platform-keystore snapshot protection adapters with consent, r...
+
+Status: planned.
+
+Goal: deliver optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement.
+- Implement the optional navheim-snapshot-protection bridge for caller/platform-owned AEAD and keystore handles, keeping keys, algorithms and storage policy outside canonical crates while enforcing consent, retention and bounded plaintext lifetime.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test nonce/key/generation mismatch, tamper, rotation, rollback, locked/unavailable/revoked keystores, consent denial, retention expiry, plaintext debug/error leakage, cancellation, zeroization limits and platform capability absence.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.2 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.190.0 - NMEA 2000 transport/legal PGN baseline
 
