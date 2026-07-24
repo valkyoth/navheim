@@ -18,6 +18,8 @@ Navheim currently provides repository and crate foundations only.
 - Exact-commit pentest-before-tag release process.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
+- One-way GNSS timing API boundary: Navheim will produce complete satellite
+  timing evidence without depending on generic clock frameworks.
 
 ## Not Implemented
 

@@ -43,6 +43,10 @@ solution integrity.
 - staged/transactional navigation state updates;
 - explicit capability planning before hardware is opened;
 - caller-visible degradation, exclusion, uncertainty, and authentication state;
+- explicit timing invalidation/withdrawal events after stale models, receiver
+  resets, discontinuities, authentication failures, or new spoofing evidence;
+- separate navigation health, message authentication, signal-source evidence,
+  and solution integrity rather than one trusted-time boolean;
 - fail-closed policy options and forensic evidence;
 - no secret or precise-location logging by default;
 - first-party GNSS correctness with isolated reviewed TLS/crypto/FFI adapters;
@@ -56,9 +60,14 @@ attacker, receiver silicon backdoor, or every sophisticated coordinated
 multi-antenna RF attack. It does not provide safety certification merely
 because it exposes aviation or integrity research primitives.
 
+Generic PPS capture, NTP/NTS/PTP, local oscillator discipline, clock-family
+consensus, holdover after GNSS evidence expires, and privileged system/PHC
+adjustment are consumer responsibilities. Navheim provides GNSS timing
+evidence and never grants authority to steer a clock.
+
 ## Review Triggers
 
 Update this model before adding an input format, network role, device/OS
 adapter, unsafe/FFI module, cryptographic trust root, persistent format,
-automatic source selection, privileged clock steering, RF generation, or a
-new solution/integrity claim.
+automatic source selection, timing observation/withdrawal contract, RF
+generation, or a new solution/integrity claim.

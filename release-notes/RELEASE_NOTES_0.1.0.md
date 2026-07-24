@@ -9,6 +9,12 @@ dependency-free `navheim-core` crate, the dependency-free `navheim` facade, the
 standards inventory policy, repository security controls, cross-version Rust
 policy, CI, documentation, and audited publication tooling.
 
+The architecture now defines a stable direction for timing integration:
+Navheim will own GNSS time decoding, resolution, PPS/time-mark meaning,
+uncertainty, health, authentication, integrity, and provenance. Downstream
+clock frameworks may consume that API, but Navheim will not depend on them or
+perform generic clock discipline and holdover.
+
 ## Security
 
 - Both published crates are `no_std`, dependency-free, and forbid unsafe code.

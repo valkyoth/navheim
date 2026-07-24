@@ -3,9 +3,11 @@ set -eu
 
 mode="${1:-check}"
 if [ "$mode" != "check" ]; then
-    echo "usage: scripts/validate-modularity-policy.sh check" >&2
+    echo "usage: scripts/validate-modularity-policy.sh check [repository]" >&2
     exit 2
 fi
+repository="${2:-.}"
+cd "$repository"
 
 violations="$(
     find crates tools scripts -type f \
@@ -23,6 +25,11 @@ fi
 grep -q '"crates/navheim"' Cargo.toml
 grep -q '"crates/navheim-core"' Cargo.toml
 grep -q 'navheim-core.workspace = true' crates/navheim/Cargo.toml
+
+if grep -i -n 'mundilfari' Cargo.toml crates/*/Cargo.toml; then
+    echo "Navheim crates must not depend on Mundilfari; consumers depend on Navheim" >&2
+    exit 1
+fi
 
 if find tools -mindepth 2 -name Cargo.toml -type f -exec \
     grep -L '^publish = false$' {} + | grep .; then

@@ -86,6 +86,19 @@ Repository-only tools under `tools/`, fuzzing, labs, simulator/deployment
 artifacts, and large capture data are never included in the crates.io publish
 order unless a later milestone explicitly admits a stable library package.
 
+## GNSS Timing Consumer Boundary
+
+Navheim owns GNSS time decoding, resolution, satellite/receiver clock models,
+time-only solutions, PPS/time-mark meaning, uncertainty, health,
+authentication, integrity, and provenance. It exposes those results through
+its own dependency-free `no_std` API.
+
+Generic PPS capture, NTP/NTS/PTP, clock-family consensus, oscillator
+discipline, system/PHC adjustment, and holdover belong to consumers. A
+consumer-owned adapter may depend on Navheim; Navheim never depends on that
+adapter or consumer. Every affected milestone follows
+[GNSS_TIMING_API.md](GNSS_TIMING_API.md).
+
 ## Phase A: Foundation and contracts
 
 ### v0.1.0 - Workspace, licenses, security policy, MSRV, CI and `standards/manifest.toml`
@@ -196,16 +209,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.3.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.4.0 - GNSS/system time representation with no leap-second conversion yet
+### v0.4.0 - Native GNSS time representations and raw/resolved state model with no leap conversion...
 
 Status: planned.
 
-Goal: deliver gNSS/system time representation with no leap-second conversion yet as one bounded,
+Goal: deliver native GNSS time representations and raw/resolved state model with no leap conversion yet as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- GNSS/system time representation with no leap-second conversion yet.
+- native GNSS time representations and raw/resolved state model with no leap conversion yet.
+- Define checked, exact, `no_std` native-scale types; preserve unknown scales and keep raw, ambiguous, and resolved time in different types.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -218,6 +232,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test every constructor boundary, native epoch, invalid subsecond, unknown scale, and forbidden implicit Unix/wall-clock conversion.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -232,16 +247,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.4.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.5.0 - Leap-second/UTC realization model and explicit rollover ambiguity
+### v0.5.0 - UTC/leap model with provenance and explicit era/week ambiguity
 
 Status: planned.
 
-Goal: deliver leap-second/UTC realization model and explicit rollover ambiguity as one bounded,
+Goal: deliver uTC/leap model with provenance and explicit era/week ambiguity as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- leap-second/UTC realization model and explicit rollover ambiguity.
+- UTC/leap model with provenance and explicit era/week ambiguity.
+- Model UTC realization, offset/leap source, model identity, freshness, and era/week resolution evidence without consulting host wall time.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -254,6 +270,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test leap insertion/deletion, truncated weeks, stale/conflicting models, rollover, ambiguity, and serialization without trust upgrade.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -520,16 +537,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.12.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.13.0 - Canonical observation/epoch model
+### v0.13.0 - Canonical observation/epoch model with distinct transmit, receive and capture times
 
 Status: planned.
 
-Goal: deliver canonical observation/epoch model as one bounded,
+Goal: deliver canonical observation/epoch model with distinct transmit, receive and capture times as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- canonical observation/epoch model.
+- canonical observation/epoch model with distinct transmit, receive and capture times.
+- Keep satellite transmit time, receiver observation time, and caller capture time distinct and attach uncertainty plus provenance to each.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -542,6 +560,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test that missing or incomparable clock domains cannot be silently ordered, subtracted, or promoted to a resolved observation.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -556,16 +575,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.13.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.14.0 - Ephemeris, almanac, health and clock model traits
+### v0.14.0 - Ephemeris, almanac, health and satellite-clock model traits
 
 Status: planned.
 
-Goal: deliver ephemeris, almanac, health and clock model traits as one bounded,
+Goal: deliver ephemeris, almanac, health and satellite-clock model traits as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- ephemeris, almanac, health and clock model traits.
+- ephemeris, almanac, health and satellite-clock model traits.
+- Expose satellite clock state, health, validity, group/inter-signal delays, issue-of-data, uncertainty, and provenance through traits.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -578,6 +598,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test unhealthy, stale, mismatched issue-of-data, boundary-valid, and discontinuous clock models against independent references.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -628,16 +649,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.15.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.16.0 - Event, source, sink and deterministic polling traits
+### v0.16.0 - Event, source, sink and deterministic polling traits with explicit invalidation
 
 Status: planned.
 
-Goal: deliver event, source, sink and deterministic polling traits as one bounded,
+Goal: deliver event, source, sink and deterministic polling traits with explicit invalidation as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- event, source, sink and deterministic polling traits.
+- event, source, sink and deterministic polling traits with explicit invalidation.
+- Define the allocation-free `GnssTimingSource`-style event boundary for observations, model changes, gaps, invalidations, and alerts.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -650,6 +672,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Build a foreign capture-timestamp newtype adapter and prove reset, withdrawal, backpressure, and error paths are deterministic.
 - perform MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -5762,16 +5785,17 @@ Exit criteria:
 
 ## Phase L: Timing and fusion
 
-### v0.158.0 - All GNSS time-scale conversions and leap provenance
+### v0.158.0 - All GNSS time-scale conversions, UTC models and leap provenance
 
 Status: planned.
 
-Goal: deliver all GNSS time-scale conversions and leap provenance as one bounded,
+Goal: deliver all GNSS time-scale conversions, UTC models and leap provenance as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- all GNSS time-scale conversions and leap provenance.
+- all GNSS time-scale conversions, UTC models and leap provenance.
+- Return native GNSS, exact TAI, and explicit UTC results with model, leap, era, freshness, uncertainty, and provenance evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5784,7 +5808,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Cross-check every constellation conversion and disagreement path against independent timing references and frozen boundary vectors.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5798,16 +5823,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.158.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.159.0 - PPS/time-mark pairing and cable-delay model
+### v0.159.0 - External PPS/time-mark semantic correlation and calibrated-delay model
 
 Status: planned.
 
-Goal: deliver pPS/time-mark pairing and cable-delay model as one bounded,
+Goal: deliver external PPS/time-mark semantic correlation and calibrated-delay model as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- PPS/time-mark pairing and cable-delay model.
+- external PPS/time-mark semantic correlation and calibrated-delay model.
+- Accept caller-captured pulse events and correlate receiver time marks, edge convention, sequence, frequency-output status, calibrated delay, and uncertainty.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5820,7 +5846,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Test missing, duplicate, reordered, wrapped, reset, early/late, and leap-boundary pulse/message combinations, frequency lock loss, and signed delays.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5834,16 +5861,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.159.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.160.0 - Time-only solution and multi-source voting
+### v0.160.0 - Validated time-only solution and stable GNSS timing observation/event API
 
 Status: planned.
 
-Goal: deliver time-only solution and multi-source voting as one bounded,
+Goal: deliver validated time-only solution and stable GNSS timing observation/event API as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- time-only solution and multi-source voting.
+- validated time-only solution and stable GNSS timing observation/event API.
+- Freeze the GNSS timing observation/event API with time-only solution, opaque capture domain, explicit absence states, and invalidation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5856,7 +5884,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Implement a separate consumer fixture that maps the public API without decoding GNSS fields or depending back into Navheim.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5870,16 +5899,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.160.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.161.0 - Oscillator model and clock steering estimates
+### v0.161.0 - Satellite/receiver clock estimates and GNSS timing uncertainty budget
 
 Status: planned.
 
-Goal: deliver oscillator model and clock steering estimates as one bounded,
+Goal: deliver satellite/receiver clock estimates and GNSS timing uncertainty budget as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- oscillator model and clock steering estimates.
+- satellite/receiver clock estimates and GNSS timing uncertainty budget.
+- Expose satellite and receiver clock bias, drift, covariance, reference epoch, discontinuity, and a named GNSS timing error budget.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5892,7 +5922,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Validate covariance and uncertainty composition without emitting oscillator steering, servo, PHC, or system-clock actions.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5906,16 +5937,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.161.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.162.0 - Holdover and uncertainty growth
+### v0.162.0 - GNSS timing freshness, discontinuity, outage and explicit invalidation
 
 Status: planned.
 
-Goal: deliver holdover and uncertainty growth as one bounded,
+Goal: deliver gNSS timing freshness, discontinuity, outage and explicit invalidation as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- holdover and uncertainty growth.
+- GNSS timing freshness, discontinuity, outage and explicit invalidation.
+- Expire or invalidate GNSS evidence on stale models, gaps, resets, outages, backward steps, and unresolved discontinuities.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5928,7 +5960,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Prove Navheim never manufactures holdover observations after GNSS evidence expires and always emits the withdrawal transition.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5942,16 +5975,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.162.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.163.0 - Authenticated/integrity-aware time policy
+### v0.163.0 - Authenticated/integrity-aware GNSS time evidence and consumer policy inputs
 
 Status: planned.
 
-Goal: deliver authenticated/integrity-aware time policy as one bounded,
+Goal: deliver authenticated/integrity-aware GNSS time evidence and consumer policy inputs as one bounded,
 reviewable release in Phase L (Timing and fusion).
 
 Deliverables:
 
-- authenticated/integrity-aware time policy.
+- authenticated/integrity-aware GNSS time evidence and consumer policy inputs.
+- Expose authentication, navigation health, signal-source evidence, solution integrity, freshness, and policy reasons as separate states.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -5964,7 +5998,8 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- Test fail-closed consumer policies without collapsing evidence into a trusted boolean or treating authentication as anti-meaconing proof.
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6000,7 +6035,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6036,7 +6071,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6072,7 +6107,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6108,7 +6143,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6144,7 +6179,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6180,7 +6215,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons;
+- perform independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6556,16 +6591,16 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.179.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.180.0 - FreeBSD/OpenBSD/NetBSD I/O and PPS implementation
+### v0.180.0 - FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation
 
 Status: planned.
 
-Goal: deliver freeBSD/OpenBSD/NetBSD I/O and PPS implementation as one bounded,
+Goal: deliver freeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- FreeBSD/OpenBSD/NetBSD I/O and PPS implementation.
+- FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -7756,6 +7791,7 @@ reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
 Deliverables:
 
 - complete security/integrity/timing audit.
+- Audit the complete GNSS timing boundary against `docs/GNSS_TIMING_API.md` and verify dependency direction.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -7768,6 +7804,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Use an independently implemented external consumer adapter in the security/timing audit and retain disagreement/invalidation evidence.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
@@ -7792,6 +7829,7 @@ reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
 Deliverables:
 
 - documentation, examples and migration audit.
+- Document stable consumer integration without adding a Mundilfari or other clock-framework dependency to any Navheim crate.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -7804,6 +7842,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Compile and test the published timing examples with a foreign capture-time newtype and lossless observation mapping.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;

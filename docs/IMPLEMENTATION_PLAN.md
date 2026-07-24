@@ -29,6 +29,9 @@ uncertainty, or provenance.
   changes.
 - Foundational, constellation, signal, solver, integrity, and format behavior
   is first-party and must not depend on another GNSS implementation.
+- Navheim owns GNSS-derived time behavior and exposes it through its own
+  dependency-free API. It never depends on Mundilfari or another generic clock
+  framework; consumer-owned companion crates depend on Navheim.
 - TLS and modern cryptographic primitives use reviewed adapter crates; Navheim
   does not implement them from scratch.
 - Foundation and protocol crates are `no_std` by default and expose allocation
@@ -96,12 +99,19 @@ fragmentation.
 - `navheim-ppp`
 - `navheim-integrity`
 - `navheim-fusion`
-- `navheim-timing`
+- `navheim-timing`: GNSS time resolution, time-only solutions, receiver clock
+  estimates, time transfer, external PPS/time-mark semantic correlation,
+  10 MHz/frequency-output status, calibrated delay, uncertainty, health,
+  authentication, integrity, and adapter-facing events.
 - `navheim-security`
 - `navheim-navigation`
 
 Authentication, signal authenticity, message correctness, and solution
 integrity remain separate types and policies.
+
+`navheim-timing` does not implement generic PPS device capture, NTP/PTP,
+cross-family clock consensus, local oscillator discipline, generic holdover,
+or privileged clock adjustment. Those belong to consumers such as Mundilfari.
 
 ### Formats and interoperability
 
@@ -151,12 +161,42 @@ Implementation proceeds in this dependency order:
 10. GPS L1 C/A end-to-end as the first observable-to-fix path;
 11. remaining GPS and constellations;
 12. multi-GNSS solution quality, RTK, PPP, integrity, and authentication;
-13. timing, fusion, hardware, OS, assistance, and NMEA 2000;
+13. complete the stable GNSS timing observation/event API, then fusion,
+    hardware, OS, assistance, and NMEA 2000;
 14. simulation, fuzzing, audits, conformance, standards freeze, and release
     candidates.
 
 RTK, PPP, and authentication do not become trusted surfaces until observation
 time/phase correctness is independently proven.
+
+## GNSS Timing and Consumer APIs
+
+Navheim owns every step required to determine time from GNSS: native system
+times, transmitted UTC/leap models, rollover resolution, satellite and
+receiver clock corrections, receiver protocols, time-only solutions,
+PPS/time-mark and frequency-output meaning, delay calibration, uncertainty,
+health, authentication, integrity, and provenance.
+
+Navheim exposes dependency-free `no_std` timing types and a deterministic
+`GnssTimingSource`-style event boundary. Events include observations, model
+changes, ambiguity, gaps, discontinuities, invalidations, and security
+transitions. A valid sample can therefore be withdrawn without a consumer
+having to reinterpret GNSS protocols.
+
+Generic clock behavior stays outside Navheim: physical PPS capture, NTP/NTS,
+PTP, clock-family consensus, system/PHC adjustment, oscillator servos, and
+holdover after GNSS evidence expires. A consumer-owned companion crate, such
+as `mundilfari-navheim`, may depend on Navheim and map its exact timing evidence
+into the consumer's clock types. Navheim never depends on that adapter or
+consumer.
+
+One consumer adapter covers every constellation exposed by Navheim. Consumers
+must not recreate separate GPS, Galileo, GLONASS, BeiDou, QZSS, or NavIC time
+decoders around the same clock framework.
+
+The normative architectural contract, provisional type shapes, correlation
+model, security invariants, and adapter verification requirements are in
+[GNSS_TIMING_API.md](GNSS_TIMING_API.md).
 
 ## Standards Discipline
 

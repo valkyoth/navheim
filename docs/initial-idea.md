@@ -177,7 +177,8 @@ The API and crate boundaries should be justified by real user jobs, not by proto
 - Feed UART/SPI/CAN bytes into bounded parsers.
 - Use caller-provided buffers.
 - Fuse GNSS with IMU, odometry, wheel ticks, magnetometer and barometer.
-- Survive temporary GNSS outages through dead reckoning and holdover.
+- Survive temporary GNSS outages through dead reckoning and explicit coasting
+  state without inventing fresh GNSS evidence.
 - Produce fixed-rate state estimates.
 - Control computational budgets, memory use and signal selection.
 - Use deterministic fixed-point DSP on MCUs or FPGAs.
@@ -216,10 +217,13 @@ The API and crate boundaries should be justified by real user jobs, not by proto
 
 - Recover and validate GNSS system time.
 - Translate among GPS, GST, BDT, GLONASS time, UTC variants, TAI and Unix time.
-- Process PPS, 10 MHz and receiver time marks.
-- Discipline a local clock with explicit holdover state.
+- Interpret receiver PPS, 10 MHz and time marks using caller-provided capture
+  timestamps.
+- Expose clock-error, uncertainty, health, authentication and integrity
+  evidence without disciplining a local clock.
 - Detect leap-second, rollover, week ambiguity and time-spoofing conditions.
-- Feed NTP/PTP/time-daemon adapters without embedding those protocols in the GNSS core.
+- Feed consumer-owned NTP/PTP/time frameworks without embedding those
+  protocols or depending on those frameworks in the GNSS core.
 - Measure time-transfer uncertainty and cable/antenna delays.
 - Build Stratum-0/primary-reference appliances.
 
@@ -512,7 +516,9 @@ Each constellation crate contains modules for code generation, acquisition hints
 - **`navheim-ppp`** — precise product interpolation, PPP, PPP-AR and PPP-RTK/SSR state models.
 - **`navheim-integrity`** — RAIM/ARAIM building blocks, fault detection/exclusion, protection levels, consistency checks and integrity state.
 - **`navheim-fusion`** — IMU/odometry/barometer/magnetometer fusion, dead reckoning and multi-rate filters.
-- **`navheim-timing`** — system-time conversion, PPS/time marks, clock steering models, holdover and uncertainty.
+- **`navheim-timing`** — GNSS time resolution, time-only solutions,
+  PPS/time-mark meaning, receiver clock estimates, delay calibration,
+  uncertainty, health, authentication, integrity and consumer-facing events.
 - **`navheim-security`** — navigation-message authentication protocols, anti-spoofing evidence, provenance and security policy. Cryptographic primitives are injected through traits.
 - **`navheim-navigation`** — waypoints, tracks, geofences, bearings, great-circle/rhumb calculations and local-frame navigation. It is intentionally not a road-map routing engine.
 
@@ -526,7 +532,8 @@ Each constellation crate contains modules for code generation, acquisition hints
 - **`navheim-products`** — SP3, CLK, SINEX, Bias-SINEX, IONEX, ANTEX and related IGS products.
 - **`navheim-receiver`** — public hardware-receiver protocol adapters and auto-detection.
 - **`navheim-assist`** — common A-GNSS model, SUPL/LPP and mobile raw-measurement adapters.
-- **`navheim-io`** — `std` platform I/O for serial, native USB, sockets, files, PPS and OS location providers.
+- **`navheim-io`** — `std` platform I/O for serial, native USB, sockets, files
+  and OS location providers; generic PPS capture remains consumer-owned.
 
 #### Explicit integration adapters
 
@@ -990,19 +997,24 @@ The API distinguishes:
 ### 10.8 Timing API
 
 ```rust
-let mut clock = navheim_timing::Discipliner::builder()
-    .pps(pps_source)
-    .observations(receiver_time_source)
-    .oscillator(local_oscillator_model)
-    .holdover(navheim_timing::HoldoverPolicy::strict())
+let mut source = navheim_timing::ReceiverTimeSource::builder(receiver)
+    .require_valid_utc_model(true)
+    .maximum_uncertainty(Nanoseconds::new(500_000))
     .build()?;
 
-match clock.update()? {
-    navheim_timing::ClockEvent::Estimate(e) => steer_clock(e),
-    navheim_timing::ClockEvent::Unsafe(reason) => isolate_time_source(reason),
-    _ => {}
+while let Some(event) = source.poll_time()? {
+    match event {
+        GnssTimeEvent::Observation(observation) => consume(observation),
+        GnssTimeEvent::Invalidated(reason) => withdraw_source(reason),
+        GnssTimeEvent::Security(alert) => handle_alert(alert),
+        _ => {}
+    }
 }
 ```
+
+Navheim produces GNSS timing evidence; it does not steer a system clock.
+Consumer-owned adapters map this event stream into generic time frameworks.
+Navheim has no dependency on those frameworks.
 
 ---
 
@@ -1346,26 +1358,30 @@ Components:
 - leap-second and UTC realization database;
 - time-only solution using one or more satellites with known position;
 - common-view/all-in-view time transfer primitives;
-- PPS timestamp pairing;
+- semantic pairing of caller-captured PPS edges with receiver time marks;
 - cable, antenna and receiver-delay calibration;
-- oscillator model and Allan-deviation-related parameters;
-- steering estimates, not direct privileged clock modification;
-- holdover states and uncertainty growth;
-- multi-source voting;
-- time-authentication/security policy;
-- adapters for chrony, ntpd, PTP daemons and kernel PPS interfaces in GitHub tools or `navheim-io`.
+- receiver clock bias, drift, covariance and discontinuity estimates;
+- freshness, uncertainty growth and explicit invalidation of GNSS evidence;
+- time-authentication, signal-source and solution-integrity evidence;
+- a stable dependency-free observation/event API for consumer-owned adapters.
 
-A clock estimate includes:
+A GNSS timing observation includes:
 
-- offset;
-- frequency error;
-- drift;
-- covariance;
-- traceability source;
-- authentication state;
-- holdover duration;
-- estimated UTC uncertainty;
-- last trusted update.
+- native GNSS and resolved atomic instants;
+- UTC realization, leap model and resolution provenance;
+- receiver clock bias, drift and covariance;
+- caller-owned monotonic capture timestamp;
+- PPS/time-mark correlation and calibrated delay;
+- bounded uncertainty and its contributors;
+- satellite, signal, message and receiver health;
+- authentication, integrity and spoofing evidence;
+- freshness deadline and explicit invalidation reasons;
+- complete provenance.
+
+Generic PPS device capture, comparison with NTP/NTS/PTP/radio/local clocks,
+clock discipline, system or PHC adjustment, oscillator servos and holdover are
+outside Navheim. A project such as Mundilfari may provide a companion adapter
+that depends on Navheim. Navheim never depends on it.
 
 ---
 
@@ -1414,10 +1430,10 @@ Do not add a decoder based only on reverse-engineered fragments with no conforma
 
 `navheim-io` should expose portable traits and target-specific modules:
 
-- Linux: termios, usbfs/libusb adapter, sockets, `PPS`/timestamping, IIO where useful;
+- Linux: termios, usbfs/libusb adapter, sockets and IIO where useful;
 - Windows: COM, WinUSB, Winsock, location sensor interfaces and high-resolution clocks;
 - macOS: serial, IOKit USB, Network framework/standard sockets, Core Location adapter;
-- FreeBSD/OpenBSD/NetBSD: termios, ugen/libusb adapter, PPS and sockets;
+- FreeBSD/OpenBSD/NetBSD: termios, ugen/libusb adapter and sockets;
 - Android: raw GNSS measurements, location, USB host and network adapters;
 - iOS: Core Location-derived fixes; raw measurement access only if the platform exposes it;
 - WASM: files/buffers/web streams for decode and post-processing, no direct radio claim.
@@ -1888,8 +1904,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.1.0** — workspace, licenses, security policy, MSRV, CI and `standards/manifest.toml`.
 - **0.2.0** — bounded collections, fixed-capacity strings and core error model.
 - **0.3.0** — physical unit types and checked conversions.
-- **0.4.0** — GNSS/system time representation with no leap-second conversion yet.
-- **0.5.0** — leap-second/UTC realization model and explicit rollover ambiguity.
+- **0.4.0** — native GNSS time representations and raw/resolved state model with no leap conversion yet.
+- **0.5.0** — UTC/leap model with provenance and explicit era/week ambiguity.
 - **0.6.0** — coordinate types: geodetic, ECEF, ENU and NED.
 - **0.7.0** — geodesic, ellipsoid and reference-frame primitives.
 - **0.8.0** — bit readers/writers, sign extension and reserved-bit preservation.
@@ -1897,10 +1913,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.10.0** — convolutional, BCH, Reed–Solomon and interleaving primitives required by the selected ICDs.
 - **0.11.0** — LDPC/polar or other modern FEC kernels required by public signals, one verified family at a time.
 - **0.12.0** — extensible system/satellite/signal identifiers and registry versioning.
-- **0.13.0** — canonical observation/epoch model.
-- **0.14.0** — ephemeris, almanac, health and clock model traits.
+- **0.13.0** — canonical observation/epoch model with distinct transmit, receive and capture times.
+- **0.14.0** — ephemeris, almanac, health and satellite-clock model traits.
 - **0.15.0** — correction and provenance models.
-- **0.16.0** — event, source, sink and deterministic polling traits.
+- **0.16.0** — event, source, sink and deterministic polling traits with explicit invalidation.
 - **0.17.0** — capability negotiation and resource-planning contracts.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
 - **0.19.0** — allocated convenience layer.
@@ -2075,12 +2091,12 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 
 ### Phase L — Timing and fusion
 
-- **0.158.0** — all GNSS time-scale conversions and leap provenance.
-- **0.159.0** — PPS/time-mark pairing and cable-delay model.
-- **0.160.0** — time-only solution and multi-source voting.
-- **0.161.0** — oscillator model and clock steering estimates.
-- **0.162.0** — holdover and uncertainty growth.
-- **0.163.0** — authenticated/integrity-aware time policy.
+- **0.158.0** — all GNSS time-scale conversions, UTC models and leap provenance.
+- **0.159.0** — external PPS/time-mark semantic correlation and calibrated-delay model.
+- **0.160.0** — validated time-only solution and stable GNSS timing observation/event API.
+- **0.161.0** — satellite/receiver clock estimates and GNSS timing uncertainty budget.
+- **0.162.0** — GNSS timing freshness, discontinuity, outage and explicit invalidation.
+- **0.163.0** — authenticated/integrity-aware GNSS time evidence and consumer policy inputs.
 - **0.164.0** — inertial mechanization.
 - **0.165.0** — error-state EKF.
 - **0.166.0** — wheel/barometer/magnetometer inputs.
@@ -2100,7 +2116,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.177.0** — native USB backend contracts and Linux implementation.
 - **0.178.0** — Windows WinUSB/COM/location implementation.
 - **0.179.0** — macOS IOKit/serial/Core Location implementation.
-- **0.180.0** — FreeBSD/OpenBSD/NetBSD I/O and PPS implementation.
+- **0.180.0** — FreeBSD/OpenBSD/NetBSD serial, USB and socket I/O implementation.
 - **0.181.0** — gpsd protocol adapter.
 - **0.182.0** — u-blox UBX adapter.
 - **0.183.0** — Septentrio SBF adapter.
@@ -2212,6 +2228,8 @@ This produces useful releases early without changing or shrinking the final desi
 12. **Every release is small enough to threat-model, fuzz and pentest.**
 13. **1.0 means all publicly documented civil/open coverage—not classified promises.**
 14. **The beginner API is simple because the lower layers are rigorously designed, not because important state is hidden.**
+15. **Navheim determines GNSS time; consumer-owned adapters decide how to use
+    it and never become Navheim dependencies.**
 
 Navheim can become unusually valuable because it would join layers that are normally fragmented: raw SDR, receiver protocols, precise positioning, timing, authentication, integrity and portable Rust APIs. The strongest differentiator is not merely “written in Rust.” It is that the entire solution can explain **where each measurement came from, which standards governed it, how it was corrected, why it was trusted or rejected, and how it contributed to the final position or time result.**
 

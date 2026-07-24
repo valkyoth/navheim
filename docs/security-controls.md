@@ -32,4 +32,6 @@ commit, and explicit provenance/error reporting.
 Generated GNSS-like RF is restricted to conducted or shielded environments.
 Credentials and precise position are redacted by default. Device opening and
 network access are explicit policy actions. Privileged clock changes remain
-outside core timing estimates.
+outside Navheim. GNSS timing APIs expose bounded uncertainty, freshness,
+health, authentication, integrity, provenance, and invalidation so downstream
+clock frameworks can enforce their own policy without re-decoding GNSS.

@@ -36,6 +36,11 @@ depend inward; canonical crates never depend outward.
 The `navheim` facade depends on focused stable libraries. Focused libraries do
 not depend on the facade.
 
+GNSS timing consumers depend on Navheim, never the reverse. An adapter whose
+purpose is to convert Navheim timing evidence into Mundilfari or another
+generic clock framework belongs to that consumer's repository and publication
+graph. No Navheim manifest may depend on such a framework.
+
 ## GitHub-Only Code
 
 CLI, daemons, deployables, labs, simulators, conformance runners, fuzz

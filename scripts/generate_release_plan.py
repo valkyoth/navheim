@@ -24,7 +24,7 @@ PHASE_CHECKS = {
     "I": "independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases",
     "J": "independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons",
     "K": "official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests",
-    "L": "independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, holdover growth, outage replay, and sensor comparisons",
+    "L": "independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons",
     "M": "target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence",
     "N": "cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence",
 }
@@ -32,6 +32,89 @@ PHASE_CHECKS = {
 DESCRIPTION_OVERRIDES = {
     "0.217.0": "first complete production-candidate evidence rehearsal",
     "0.218.0": "second production-candidate rehearsal with blocker-only fixes",
+}
+
+MILESTONE_DETAILS = {
+    "0.4.0": (
+        "Define checked, exact, `no_std` native-scale types; preserve unknown "
+        "scales and keep raw, ambiguous, and resolved time in different types.",
+        "Test every constructor boundary, native epoch, invalid subsecond, "
+        "unknown scale, and forbidden implicit Unix/wall-clock conversion.",
+    ),
+    "0.5.0": (
+        "Model UTC realization, offset/leap source, model identity, freshness, "
+        "and era/week resolution evidence without consulting host wall time.",
+        "Test leap insertion/deletion, truncated weeks, stale/conflicting "
+        "models, rollover, ambiguity, and serialization without trust upgrade.",
+    ),
+    "0.13.0": (
+        "Keep satellite transmit time, receiver observation time, and caller "
+        "capture time distinct and attach uncertainty plus provenance to each.",
+        "Test that missing or incomparable clock domains cannot be silently "
+        "ordered, subtracted, or promoted to a resolved observation.",
+    ),
+    "0.14.0": (
+        "Expose satellite clock state, health, validity, group/inter-signal "
+        "delays, issue-of-data, uncertainty, and provenance through traits.",
+        "Test unhealthy, stale, mismatched issue-of-data, boundary-valid, and "
+        "discontinuous clock models against independent references.",
+    ),
+    "0.16.0": (
+        "Define the allocation-free `GnssTimingSource`-style event boundary "
+        "for observations, model changes, gaps, invalidations, and alerts.",
+        "Build a foreign capture-timestamp newtype adapter and prove reset, "
+        "withdrawal, backpressure, and error paths are deterministic.",
+    ),
+    "0.158.0": (
+        "Return native GNSS, exact TAI, and explicit UTC results with model, "
+        "leap, era, freshness, uncertainty, and provenance evidence.",
+        "Cross-check every constellation conversion and disagreement path "
+        "against independent timing references and frozen boundary vectors.",
+    ),
+    "0.159.0": (
+        "Accept caller-captured pulse events and correlate receiver time marks, "
+        "edge convention, sequence, frequency-output status, calibrated delay, "
+        "and uncertainty.",
+        "Test missing, duplicate, reordered, wrapped, reset, early/late, and "
+        "leap-boundary pulse/message combinations, frequency lock loss, and "
+        "signed delays.",
+    ),
+    "0.160.0": (
+        "Freeze the GNSS timing observation/event API with time-only solution, "
+        "opaque capture domain, explicit absence states, and invalidation.",
+        "Implement a separate consumer fixture that maps the public API "
+        "without decoding GNSS fields or depending back into Navheim.",
+    ),
+    "0.161.0": (
+        "Expose satellite and receiver clock bias, drift, covariance, reference "
+        "epoch, discontinuity, and a named GNSS timing error budget.",
+        "Validate covariance and uncertainty composition without emitting "
+        "oscillator steering, servo, PHC, or system-clock actions.",
+    ),
+    "0.162.0": (
+        "Expire or invalidate GNSS evidence on stale models, gaps, resets, "
+        "outages, backward steps, and unresolved discontinuities.",
+        "Prove Navheim never manufactures holdover observations after GNSS "
+        "evidence expires and always emits the withdrawal transition.",
+    ),
+    "0.163.0": (
+        "Expose authentication, navigation health, signal-source evidence, "
+        "solution integrity, freshness, and policy reasons as separate states.",
+        "Test fail-closed consumer policies without collapsing evidence into a "
+        "trusted boolean or treating authentication as anti-meaconing proof.",
+    ),
+    "0.213.0": (
+        "Audit the complete GNSS timing boundary against "
+        "`docs/GNSS_TIMING_API.md` and verify dependency direction.",
+        "Use an independently implemented external consumer adapter in the "
+        "security/timing audit and retain disagreement/invalidation evidence.",
+    ),
+    "0.214.0": (
+        "Document stable consumer integration without adding a Mundilfari or "
+        "other clock-framework dependency to any Navheim crate.",
+        "Compile and test the published timing examples with a foreign "
+        "capture-time newtype and lossless observation mapping.",
+    ),
 }
 
 
@@ -158,6 +241,19 @@ Repository-only tools under `tools/`, fuzzing, labs, simulator/deployment
 artifacts, and large capture data are never included in the crates.io publish
 order unless a later milestone explicitly admits a stable library package.
 
+## GNSS Timing Consumer Boundary
+
+Navheim owns GNSS time decoding, resolution, satellite/receiver clock models,
+time-only solutions, PPS/time-mark meaning, uncertainty, health,
+authentication, integrity, and provenance. It exposes those results through
+its own dependency-free `no_std` API.
+
+Generic PPS capture, NTP/NTS/PTP, clock-family consensus, oscillator
+discipline, system/PHC adjustment, and holdover belong to consumers. A
+consumer-owned adapter may depend on Navheim; Navheim never depends on that
+adapter or consumer. Every affected milestone follows
+[GNSS_TIMING_API.md](GNSS_TIMING_API.md).
+
 """
 
 
@@ -175,6 +271,9 @@ def milestone_block(
     sentence = clean_sentence(description)
     goal_text = description.rstrip(".")
     phase_checks = PHASE_CHECKS[phase]
+    detail = MILESTONE_DETAILS.get(version)
+    detail_deliverable = f"- {detail[0]}\n" if detail else ""
+    detail_verification = f"- {detail[1]}\n" if detail else ""
     return f"""### v{version} - {heading_title(description)}
 
 Status: {status}
@@ -185,7 +284,7 @@ reviewable release in Phase {phase} ({phase_title}).
 Deliverables:
 
 - {sentence}
-- Add or update only the focused crates and modules required by this outcome;
+{detail_deliverable}- Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
 - Update standards mappings, capability/coverage status, security analysis,
@@ -197,7 +296,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- perform {phase_checks};
+{detail_verification}- perform {phase_checks};
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
