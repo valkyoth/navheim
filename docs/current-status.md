@@ -80,6 +80,13 @@ Navheim currently provides repository and crate foundations only.
   Rollback resistance now requires a separately evidenced trusted monotonic
   compare/update authority; crash-consistent encrypted storage alone cannot
   claim it.
+- Eleventh gap review closes the remaining lifecycle ambiguity without adding
+  milestones: nonterminal owned executor handles now fail-stop on destruction
+  instead of blocking or detaching, SDR apply failures retain their cause and
+  bounded transition/rollback/reprobe evidence, and `CounterChecked` is
+  explicitly non-fresh diagnostic evidence. Rollback-resistant snapshot
+  sealing requires an atomic digest-bound compare-and-advance or exclusive
+  expiring reservation across seal, durable commit and monotonic advancement.
 
 ## Not Implemented
 

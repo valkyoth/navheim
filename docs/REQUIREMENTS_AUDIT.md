@@ -40,13 +40,13 @@ inside aggregate milestones. The following releases make each one auditable:
 | Safe decoder, algorithm and stage extensions | v0.12.2-v0.12.3 |
 | Core signal contracts, constellation physical fragments and format-owned wire mappings | v0.12.4 |
 | Artifact-ID lifecycle and deterministic model selection | v0.13.1 and v0.14.2 |
-| Snapshot envelope, orthogonal authenticity/confidentiality/freshness, cryptographic lifecycle and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
+| Snapshot envelope, narrow counter checks, transactional freshness, cryptographic lifecycle and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
 | Honest resource-evidence classification | v0.17.1 and v0.50.1 |
 | Runtime source supervision and authorized failover | v0.20.3 |
 | Logical source-role composition and solver-state-safe generation handover | v0.20.4 |
 | Early hints, receipt schema/integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Sound scoped-borrowed and owned-handle Tier 2 execution with explicit lease/unresponsive states | v0.48.3 |
-| Prepared SDR configuration, mutation-aware/coherent transactions, safe reads and adapter conformance | v0.50.3 and v0.170.0-v0.174.0 |
+| Sound scoped/owned Tier 2 execution with explicit completion, fail-stop destruction and lease/unresponsive states | v0.48.3 |
+| Prepared SDR configuration with cause-preserving mutation/coherence outcomes, safe reads and adapter conformance | v0.50.3 and v0.170.0-v0.174.0 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |
 | Conditional public NavIC messaging | v0.114.2 |

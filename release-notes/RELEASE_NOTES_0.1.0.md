@@ -115,6 +115,19 @@ three independent dimensions. Rollback resistance requires trusted external
 monotonic comparison and update, so authenticated counters and crash-consistent
 encrypted file replacement cannot silently imply freshness.
 
+The eleventh coverage pass resolves the remaining edge contracts inside those
+same releases. `ExecutionHandle` is must-use; explicit terminal-result,
+`join`, and `cancel_and_join` paths return ownership, while destruction of
+nonterminal work—including during unwinding—invokes a non-panicking fail-stop
+policy instead of joining or detaching. Front-end partial and state-unknown
+outcomes preserve their original cause plus bounded command, rollback and
+reprobe evidence; post-submission uncertainty or evidence overflow cannot be
+reported as no-mutation. `CounterChecked` is only diagnostic comparison with
+named non-rollback-resistant local state. Rollback-resistant sealing requires
+an atomic digest-bound compare-and-advance or an exclusive expiring writer
+reservation across seal, durable commit and monotonic advancement, with
+concurrent writers and every crash boundary tested.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned
