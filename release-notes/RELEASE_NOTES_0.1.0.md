@@ -155,7 +155,7 @@ finalization. Every crash point has exclusive recovery, and an authority-
 committed but unpromoted candidate is pending or unavailable—never a successful
 rollback-resistant snapshot.
 
-The fourteenth coverage pass resolves the final lifecycle details in those
+The fourteenth coverage pass resolves further lifecycle details in those
 same milestones. Dispatch and cancellation-before-dispatch contend on one CAS,
 so a cancellation winner proves the job cannot execute. Handle `Drop` performs
 only terminal retirement; sealed, bounded cleanup separately destroys or
@@ -164,6 +164,17 @@ generation before slot reuse. Snapshot recovery now freezes the restore,
 writer-blocking and recovery action for committed, pending, authority-
 committed, promoted-unfinalized and corrupt/unknown state, together with
 bounded candidates, retained bytes, retries and deterministic cleanup.
+
+The fifteenth coverage pass supplies the missing progress and privilege
+boundaries without creating parallel releases. Executor cleanup is explicitly
+caller-driven and bounded per poll and in total; admission reports
+`CleanupRequired` instead of doing surprising work, shutdown drains cleanup,
+and the executor is must-use. Safe state-owning payload storage is preferred;
+`ManuallyDrop` may only use safe extraction in the 1.0 executor, with Miri,
+Loom and Kani exactly-once evidence. Corrupt snapshot repair is a
+separate Tier 3 capability limited to exact-current recovery or durable
+namespace retirement followed by a fresh key/nonce/counter domain and explicit
+continuity break. It cannot revive old state or silently weaken freshness.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and

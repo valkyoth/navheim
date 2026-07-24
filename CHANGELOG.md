@@ -90,6 +90,12 @@ All notable changes to `navheim` are documented here.
   reuse, and exhausted generations cannot wrap. Protected snapshots now share
   an explicit restore/writer matrix across all durable states, with bounded
   pending artifacts, retention, retries and deterministic cleanup.
+- Integrated the fifteenth review into the same owners: executor cleanup is
+  caller-driven, budgeted and visible through admission backpressure, with no
+  hidden reaper; safe payload ownership is required and unsafe extraction is
+  excluded from the 1.0 executor. Snapshot repair is separately
+  authorized and cannot reset an in-namespace counter, accept older state,
+  reuse nonces or bypass a durable continuity break.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

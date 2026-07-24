@@ -360,8 +360,17 @@ linearization while blocking writers until resume/cancel; `AuthorityCommitted`
 forbids older restore and blocks writers until verified promotion/finalization
 or unavailability; `PromotedUnfinalized` is usable only after synchronous
 verification/finalization; and `CorruptOrUnknown` blocks restore and writers
-pending explicit repair. Receipts and profiles bound active namespaces, one
-writer transaction per namespace, pending records, staged/retained candidates,
+pending a separately enabled Tier 3 repair capability. Repair may only verify
+and recover the exact current authority-bound candidate through the normal
+state machine, or durably retire the namespace/key/counter and establish a
+fresh identity/key/nonce domain with an explicit continuity break. It cannot
+reset an in-namespace counter, accept older state, reuse reserved nonces,
+discard unresolved authority evidence or downgrade to `CounterChecked`;
+missing durable anti-revival proof makes repair unavailable. Repair emits
+security/invalidation evidence, invalidates restored assessments and requires
+affected algorithm reacquisition/reconvergence. Receipts and profiles bound
+active namespaces, one writer transaction per namespace, pending records,
+staged/retained candidates,
 retained bytes, retries and recovery work. Cancellation and supersession have
 deterministic cleanup rules, while ordinary cleanup cannot remove an
 authority-committed, promoted-unfinalized, corrupt or unknown candidate.
@@ -435,17 +444,38 @@ lease return, trace finalization and checked generation increment.
 No quarantine/reaper or executor-ownership-transfer profile is admitted for
 1.0.
 
-Registry payloads/results use internal `ManuallyDrop` storage and only sealed,
-reviewed first-party cleanup implementations may destroy them in-process.
-Extension-owned arbitrary destructors require an explicitly admitted isolated
-cleanup profile. Cleanup panic, failure or same-entry reentrancy is
-process-terminal; handle `Drop` remains only the retirement CAS.
+Cleanup is caller-driven through `poll_cleanup`, taking `&mut self` and a
+`CleanupBudget` and returning
+`Result<CleanupProgress, CleanupStartError>`; progress explicitly distinguishes
+complete from more-required and reports bounded counts/work without a hidden
+wakeup contract. Start errors are preflight-only and perform no mutation; once
+cleanup begins, failure is process-terminal. No hidden worker/reaper exists.
+The receipt bounds cleaning entries, total/per-poll work and trace capacity.
+Admission never cleans implicitly and returns
+`CleanupRequired` when only dirty slots remain. Consuming shutdown reconciles
+jobs and then drains bounded cleanup. Cleanup ordering, retirement and
+semantics-affecting outcomes enter the deterministic trace. `Executor` is
+`#[must_use]`; dropping it with any non-vacant payload-owning/cleaning entry
+uses the same fail-stop abort rule.
+
+Registry storage uses safe state-owning enums/`Option<T>`. `ManuallyDrop`, if
+retained for layout, may use safe `into_inner`; unsafe take/manual-drop payload
+extraction is excluded from the 1.0 executor. Any future unsafe layout requires
+a separate milestone and unsafe-policy amendment. Lifecycle and payload-
+initialization state cannot diverge and exactly one path
+extracts or destroys each payload. Only sealed first-party cleanup may destroy
+in-process payloads; arbitrary extension cleanup needs isolation. Admitted
+unwind builds catch cleanup panic and immediately abort without unwinding
+through registry invariants. Miri covers extraction/destruction/panic, Loom
+covers publication versus cleanup, and Kani proves bounded exactly-once
+ownership. Handle `Drop` remains only the retirement CAS.
 
 Forgetting/leaking a handle forfeits its result but leaves the entry, leases
 and capacity registered; completed unclaimed entries cannot be reused.
 Consuming executor shutdown cancels/joins every registered job, including
-forgotten handles, owns all remaining `ShutdownReclaimed` transitions, and an
-unresponsive job traps shutdown. Executor drop with registered work calls
+forgotten handles, owns all remaining `ShutdownReclaimed` transitions, drains
+cleanup, and an unresponsive job traps shutdown. Executor drop with any
+unreconciled or uncleaned entry calls
 `std::process::abort()` without allocation, formatting, panic or unwind;
 pre-abort in-memory reason is best-effort and not durable/emitted evidence.
 Forgetting the executor leaks all registered capacity until process
@@ -713,16 +743,19 @@ freshness-unchecked state, counter-checked state misrepresented as fresh,
 digest-type/noncanonical binding confusion, caller-time reservation expiry,
 partial cross-authority promotion/finalization, ambiguous restore eligibility,
 unbounded pending candidates/retries/retention, cleanup of authoritative state,
-competing recovery, nonce/suite/counter/
+unauthorized repair, old-namespace revival, same-namespace counter reset,
+nonce reuse or silent freshness downgrade, competing recovery,
+nonce/suite/counter/
 keystore lifecycle failures, receiver-asserted configuration/partial-
 application errors, no-command proof overstated as hardware stability, lost
 control lease/other-controller/autonomous changes, lost failure evidence,
 unplanned/unknown transitions, stale samples or false coherence, escaped
 borrowed work, forgotten/leaked handles or executors, dispatch/cancel and
 completion/drop/cleanup races, arbitrary or reentrant destructors in handle
-Drop, stale/ABA/exhausted job IDs, detached registry entries, hidden owned
-leases, unresponsive parallel work, premature capacity/buffer reuse,
-overstated pre-abort
+Drop, hidden/unbounded cleanup, admission starvation, lifecycle/payload-state
+divergence, duplicate extraction/destruction, stale/ABA/exhausted job IDs,
+detached registry entries, hidden owned leases, unresponsive parallel work,
+premature capacity/buffer reuse, overstated pre-abort
 diagnostics, trace overflow, uncaptured runtime outcomes, supply-chain
 compromise, FFI/DMA, credential exposure, and location privacy.
 
@@ -765,7 +798,7 @@ broader 1.0 roadmap:
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
-| Snapshot envelope, canonical transaction binding, explicit bounded restore/writer matrix, deterministic cleanup and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
+| Snapshot envelope, canonical binding, bounded restore/writer matrix, narrow repair authority, deterministic cleanup and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
 | Logical source-role composition and solver-state-safe same-role handover | v0.20.4 |
@@ -774,7 +807,7 @@ broader 1.0 roadmap:
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, destructor-free retirement, bounded cleanup, generation-safe slot reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, caller-driven cleanup/backpressure, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |

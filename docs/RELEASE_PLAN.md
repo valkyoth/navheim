@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-...
+### v0.48.3 - `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved pay...
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling.
-- Implement Vacant(g)->Registered dispatch/cancel CAS, Running or CancelledBeforeDispatch terminal publication, one claimed/discarded/shutdown winner, separately driven Cleaning, and Vacant(g+1) or permanent retirement with generation-bearing non-reused JobId. Handle Drop performs only the terminal-unclaimed discard CAS or aborts; sealed first-party cleanup owns result destruction, lease return and trace finalization.
+- `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
+- Implement Vacant(g)->Registered dispatch/cancel CAS, terminal ownership, caller-driven budgeted poll_cleanup with no hidden reaper, explicit CleanupRequired admission, shutdown cleanup drain, and Vacant(g+1) or permanent retirement. Executor and handles are must-use; handle Drop performs only retirement or abort. Require safe state-owning payload transitions; ManuallyDrop may use safe into_inner, while unsafe take/manual-drop extraction is excluded from the 1.0 executor.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use Loom/model and subprocess tests for dispatch versus pre-dispatch cancellation, proof that cancellation winner never executes, completion/drop/claim/shutdown/cleanup races, publication ordering, ABA/stale IDs, generation exhaustion/namespace renewal, duplicate retirement, every terminal kind, forgotten orphans, panicking and same-entry-reentrant cleanup/destructors, cleanup versus shutdown, unresponsive abort, exact observing/consuming APIs and non-durable pre-abort status.
+- Use Miri, Loom, Kani/model and subprocess tests for dispatch/cancel and proof its winner never executes, completion/drop/claim/shutdown/cleanup races, every terminal kind, per-poll/total cleanup bounds, no implicit admission cleanup, dirty-executor fail-stop, deterministic cleanup traces, publication ordering, ABA/stale/exhausted IDs and namespace renewal, duplicate retirement/extraction/destruction, forgotten orphans, panicking/reentrant cleanup converted to abort, cleanup versus shutdown, unresponsive abort, safe/unsafe storage invariants, exact observing/consuming/progress APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16794,17 +16794,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.2 - Canonical protected-snapshot binding plus bounded staged commit, explicit restore/wri...
+### v0.189.2 - Canonical protected-snapshot binding, bounded recovery matrix and narrowly authorized...
 
 Status: planned.
 
-Goal: deliver canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery as one bounded,
+Goal: deliver canonical protected-snapshot binding, bounded recovery matrix and narrowly authorized exact-recovery-or-continuity-break repair contract as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery.
-- Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Freeze the Committed/Pending/AuthorityCommitted/PromotedUnfinalized/CorruptOrUnknown restore-and-writer matrix plus bounded per-namespace transaction, candidate, retained-byte, retry and cleanup rules. Only finalization returns RollbackResistant evidence.
+- canonical protected-snapshot binding, bounded recovery matrix and narrowly authorized exact-recovery-or-continuity-break repair contract.
+- Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Freeze the bounded recovery matrix and a separate Tier 3 repair capability limited to exact current-candidate recovery or durable namespace/key/counter retirement plus fresh-domain continuity break. Only finalization returns RollbackResistant evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16822,7 +16822,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test binding self-exclusion, every state and crash edge, authority-commit/promotion/finalization failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, deterministic cancelled/superseded cleanup, cleanup interruption, resource exhaustion, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older-snapshot fallback.
+- Test binding self-exclusion, every state and crash edge, authority-commit/promotion/finalization failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, deterministic cancelled/superseded cleanup and interruption, resource exhaustion, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older fallback. Also test repair authorization, exact-current-candidate verification, permanent anti-revival retirement, fresh key/nonce/counter domains, continuity/security/invalidation artifacts and reacquisition; reject same-namespace reset, older state, nonce reuse, unresolved-evidence deletion, CounterChecked downgrade and repair without durable platform proof.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16841,17 +16841,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.3 - Linux/BSD protection/persistence profile with explicit transactional-freshness capabi...
+### v0.189.3 - Linux/BSD protection/persistence profile with transactional freshness, optional repai...
 
 Status: planned.
 
-Goal: deliver linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim as one bounded,
+Goal: deliver linux/BSD protection/persistence profile with transactional freshness, optional repair/anti-revival evidence and no-universal-keystore non-claim as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
-- Freeze Linux/BSD binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report CounterChecked/Unchecked.
+- Linux/BSD protection/persistence profile with transactional freshness, optional repair/anti-revival evidence and no-universal-keystore non-claim.
+- Freeze Linux/BSD binding, staging, promotion, recovery and optional repair primitives sufficient for the exact v0.189.2 matrix, bounds, cleanup and anti-revival continuity-break contract; otherwise report CounterChecked/Unchecked and repair unavailable.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16869,7 +16869,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test fsync/rename/directory and authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, cancellation, old-file restoration, namespace/exhaustion/migration, bounded records/candidates/retries/bytes and honest freshness unavailability.
+- Test fsync/rename/directory and authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, pre-commit cancellation, old-file restoration, namespace/exhaustion/migration and bounded records/candidates/retries/bytes. Also test current-candidate repair, authorization denial, durable old-namespace retirement, fresh domains, backup/old-file anti-revival and honest repair/freshness unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16888,17 +16888,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.3 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.4 - Windows snapshot-protection adapter with exact platform profile, transactional capabi...
+### v0.189.4 - Windows snapshot-protection adapter with exact transactional, optional repair/anti-re...
 
 Status: planned.
 
-Goal: deliver windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness as one bounded,
+Goal: deliver windows snapshot-protection adapter with exact transactional, optional repair/anti-revival and honest weaker-capability evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
-- Freeze Windows binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report weaker freshness.
+- Windows snapshot-protection adapter with exact transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- Freeze Windows binding, staging, promotion, recovery and optional repair primitives sufficient for the exact v0.189.2 matrix, bounds, cleanup and anti-revival continuity-break contract; otherwise report weaker freshness and repair unavailable.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16916,7 +16916,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test Windows storage/authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration, bounded retention/retries and CounterChecked rejection.
+- Test Windows storage/authority durability, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration, bounded retention/retries and CounterChecked rejection. Also test current-candidate repair, authorization/scope denial, durable old-namespace retirement, fresh domains, backup/old-state anti-revival and honest repair unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16935,17 +16935,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.4 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.5 - Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, trans...
+### v0.189.5 - Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto transactional,...
 
 Status: planned.
 
-Goal: deliver apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness as one bounded,
+Goal: deliver apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto transactional, optional repair/anti-revival and honest weaker-capability evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
-- Freeze Apple binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; preserve access/background semantics and report weaker freshness when any transition is unavailable.
+- Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- Freeze Apple binding, staging, promotion, recovery and optional repair primitives sufficient for the exact v0.189.2 matrix, bounds, cleanup and anti-revival continuity-break contract; preserve access/background semantics and report repair/freshness unavailable when any required transition is absent.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16963,7 +16963,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test storage/Keychain durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup/background interruption, reboot, pre-commit cancellation, lock/entitlement denial, backup restoration, bounded retention/retries, exhaustion/migration and unavailable hardware.
+- Test storage/Keychain durability, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup/background interruption, reboot, pre-commit cancellation, lock/entitlement denial, backup restoration, bounded retention/retries, exhaustion/migration and unavailable hardware. Also test current-candidate repair, explicit authorization denial, durable old-namespace retirement, fresh domains, backup anti-revival and honest repair unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16982,17 +16982,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.5 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.6 - Android snapshot-protection adapter with exact Keystore profile, transactional capabi...
+### v0.189.6 - Android snapshot-protection adapter with exact Keystore transactional, optional repai...
 
 Status: planned.
 
-Goal: deliver android snapshot-protection adapter with exact Keystore profile, transactional capability evidence and honest weaker freshness as one bounded,
+Goal: deliver android snapshot-protection adapter with exact Keystore transactional, optional repair/anti-revival and honest weaker-capability evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Android snapshot-protection adapter with exact Keystore profile, transactional capability evidence and honest weaker freshness.
-- Freeze Android binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any transition is unavailable.
+- Android snapshot-protection adapter with exact Keystore transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- Freeze Android binding, staging, promotion, recovery and optional repair primitives sufficient for the exact v0.189.2 matrix, bounds, cleanup and anti-revival continuity-break contract; keep API/hardware/StrongBox/invalidation evidence explicit and report repair/freshness unavailable when required transitions are absent.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -17010,7 +17010,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test storage/Keystore durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, bounded retention/retries, exhaustion/migration/invalidation and CounterChecked rejection.
+- Test storage/Keystore durability, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, bounded retention/retries, exhaustion/migration/invalidation and CounterChecked rejection. Also test current-candidate repair, authorization/key-invalidation denial, durable old-namespace retirement, fresh domains, backup/reinstall anti-revival and honest repair unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and

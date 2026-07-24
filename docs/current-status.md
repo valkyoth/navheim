@@ -107,6 +107,13 @@ Navheim currently provides repository and crate foundations only.
   recovery now has an explicit restore/writer/action matrix for every durable
   state plus bounded transaction, candidate, retention, retry and deterministic
   cleanup rules.
+- Fifteenth gap review makes those paths operable and privilege-bounded without
+  adding releases: v0.48.3 now owns caller-driven budgeted cleanup,
+  `CleanupRequired` admission backpressure, must-use shutdown and formally
+  coupled safe-only exactly-once payload storage with Miri/Loom/Kani evidence.
+  v0.189.2-v0.189.6 restrict corrupt-state repair to exact-current recovery or
+  durable namespace retirement plus a fresh-domain continuity break, with
+  anti-revival, security/invalidation and reacquisition requirements.
 
 ## Not Implemented
 

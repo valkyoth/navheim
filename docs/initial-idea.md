@@ -1124,7 +1124,7 @@ platform-specific shortcut:
 | `Pending` | The previously committed snapshot may restore only under the same namespace lock and pre-authority-commit linearization; the staged candidate cannot | Blocked | Resume or cancel the reservation and deterministically clean its candidate |
 | `AuthorityCommitted` | No older snapshot may restore; the committed candidate is not usable as rollback-resistant until recovery completes | Blocked | Verify the binding, promote and finalize, or report unavailable |
 | `PromotedUnfinalized` | Restore only after synchronous recovery verifies the promoted binding and finalizes `Committed` | Blocked | Verify and finalize, or report unavailable |
-| `CorruptOrUnknown` | No rollback-resistant restore | Blocked | Fail closed and require explicit repair/manual recovery |
+| `CorruptOrUnknown` | No rollback-resistant restore | Blocked | Fail closed; only the separate Tier 3 repair capability may act |
 
 Each `PlanReceipt` and authority profile bound active namespaces, one live
 writer transaction per namespace, pending records, staged candidates, retained
@@ -1135,6 +1135,20 @@ are deleted only after the replacement is finalized and its retention policy
 permits it. Ordinary cleanup never deletes an authority-committed,
 promoted-unfinalized, corrupt or unknown candidate. Cleanup interruption is
 itself recovered through the same bounded state machine.
+
+Snapshot repair is not an ordinary restore or writer operation. It is a
+separately enabled Tier 3 platform capability with explicit operator authority
+and audit evidence. It may either recover and verify the exact current
+authority-bound candidate, completing the normal state machine, or durably
+retire the damaged namespace/key/counter and create a fresh namespace with a
+typed continuity break. It can never reset a counter inside the same
+namespace, accept an older candidate, reuse a reserved nonce, erase unresolved
+authority evidence or downgrade freshness to `CounterChecked`. Namespace
+retirement and replacement require new identity/key/nonce domains and durable
+anti-revival evidence; if the platform cannot prove that boundary, repair
+remains unavailable. Every repair emits a security/invalidation artifact,
+invalidates restored assessments and forces affected algorithms to reacquire
+or reconverge before producing authoritative outputs.
 
 Key rotation has an explicit migration operation that never silently weakens
 the suite, namespace or generation. Outer lengths and resource limits are
@@ -1755,15 +1769,52 @@ Two execution modes make those lifetime rules representable:
   `PlanReceipt`. No hidden `Arc`, heap allocation, worker or lease capacity
   bypasses planning.
 
-Claim, discard and shutdown retirement feed a separately driven, bounded
-registry cleanup path before a slot becomes `Vacant`. Results and leases are
-held in internal `ManuallyDrop` storage and may be reclaimed in-process only
-through a sealed, reviewed first-party cleanup implementation; extension-owned
-arbitrary destructors are never invoked by handle `Drop` and require an
-explicitly admitted isolation/cleanup profile. Cleanup panic, failure or
-reentrant access to the same entry is process-terminal. The slot becomes
-reusable only after result transfer or destruction, lease return, trace
-finalization and a checked generation increment have all completed.
+Claim, discard and shutdown retirement feed a caller-driven, bounded registry
+cleanup path before a slot becomes `Vacant`; Navheim starts no hidden cleanup
+worker or reaper. The public progress contract is equivalent to:
+
+```rust
+pub fn poll_cleanup(
+    &mut self,
+    budget: CleanupBudget,
+) -> Result<CleanupProgress, CleanupStartError>;
+```
+
+`PlanReceipt` bounds `Cleaning` entries, total cleanup work, work per poll and
+trace capacity. `CleanupProgress` explicitly reports `Complete` or
+`MoreRequired` plus bounded cleaned/remaining/retired counts and work used;
+there is no hidden wakeup contract. Preflight rejects an invalid/zero budget
+without mutation.
+Once cleanup begins, failure, panic or same-entry reentrancy is
+process-terminal rather than a recoverable return. Admission never performs
+implicit cleanup: when no clean slot is available but dirty slots remain it
+returns `AdmissionError::CleanupRequired` with bounded progress information.
+`Executor::shutdown` first reconciles every job and then drains all cleanup;
+the receipt bounds total drain work. Cleanup order, slot retirement and every
+semantics-affecting result enter `ExecutionTrace` in deterministic order.
+
+`Executor` itself is `#[must_use]` because consuming shutdown is the normal
+lifecycle. Dropping it with any registered, running, terminal-unclaimed,
+claimed, discarded, shutdown-reclaimed or cleaning entry follows the existing
+allocation-free `std::process::abort()` rule. A clean all-vacant/retired
+executor may be destroyed without invoking payload cleanup.
+
+Registry payload/result storage prefers safe state-owning enums or `Option<T>`.
+The 1.0 executor admits only safe payload ownership transitions. If
+`ManuallyDrop` remains for layout, it may use safe
+`ManuallyDrop::into_inner`; unsafe `take`/manual-drop payload extraction is
+excluded. A future unsafe layout requires a separate roadmap stop and explicit
+unsafe-policy amendment rather than entering v0.48.3 implicitly. Atomic
+lifecycle and payload-initialization state cannot diverge, and exactly one
+transition may extract or destroy each payload. Only sealed, reviewed first-
+party cleanup may reclaim payloads in-process; extension-owned arbitrary
+destructors require an admitted isolation profile. On unwind-capable builds
+cleanup panic is caught and immediately converted to abort, never unwinding
+through registry invariants.
+The slot becomes reusable only after result transfer or destruction, lease
+return, trace finalization and a checked generation increment have completed.
+Miri covers extraction/destruction and panic paths, Loom covers publication
+versus cleanup, and Kani proves the bounded exactly-once ownership machine.
 
 `mem::forget`, `ManuallyDrop` or a leaked handle permanently forfeits that
 result but never unregisters or detaches the job. The entry, buffers and slot
@@ -1773,10 +1824,10 @@ cooperatively cancels and joins every registered entry, including lost-handle
 and completed-orphan entries; it owns remaining transitions to
 `ShutdownReclaimed` and returns only after all ownership is reconciled.
 Permanently unresponsive work traps that explicit shutdown.
-Dropping an executor with any registered entry is fail-stop. Forgetting the
-executor itself intentionally leaks its complete registry and all capacity
-until process termination, but cannot make storage reusable or violate memory
-soundness.
+Dropping an executor with any unreconciled or uncleaned entry is fail-stop.
+Forgetting the executor itself intentionally leaks its complete registry and
+all capacity until process termination, but cannot make storage reusable or
+violate memory soundness.
 
 The Tier 2 `std` profile's fatal path is concretely
 `std::process::abort()`: it is non-returning, performs no allocation or
@@ -2399,8 +2450,9 @@ Document threats from:
   encodings, caller-time reservation expiry, partially committed cross-
   authority promotion/finalization, ambiguous restore eligibility, unbounded
   pending candidates/retries/retention, cleanup of unresolved authoritative
-  state, competing recovery/writer state and platform-keystore lifecycle
-  failure;
+  state, unauthorized repair, old-namespace revival, same-namespace counter
+  reset, nonce reuse or silent freshness downgrade, competing recovery/writer
+  state and platform-keystore lifecycle failure;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
   receiver-asserted false state, unintended persistent/destructive transition;
@@ -2411,8 +2463,10 @@ Document threats from:
   asserted state;
 - aliased/detached/unresponsive parallel work, forgotten/leaked handles or
   executors, dispatch/cancel and completion/drop/cleanup races, arbitrary or
-  reentrant destructors in handle `Drop`, stale/ABA/exhausted job IDs, detached
-  registry entries, premature capacity/buffer reuse, overstated pre-abort
+  reentrant destructors in handle `Drop`, hidden/unbounded cleanup, admission
+  starvation, lifecycle/payload-state divergence, duplicate extraction or
+  destruction, stale/ABA/exhausted job IDs, detached registry entries,
+  premature capacity/buffer reuse, overstated pre-abort
   diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
   outcomes;
 - correction mixing across stations/frames;
@@ -2437,8 +2491,9 @@ Document threats from:
   recovery over a domain-separated canonical protected-snapshot binding where
   admitted, a common restore/writer/action state matrix, bounded candidates,
   retention/retries and deterministic cleanup, authority-clock reservation
-  expiry, narrow counter-checked semantics, honest freshness unavailability
-  and restored-assessment invalidation;
+  expiry, narrow counter-checked semantics, privileged repair limited to exact
+  current recovery or durable fresh-domain continuity break, honest repair/
+  freshness unavailability and restored-assessment invalidation;
 - prepared/reviewable SDR configuration plans with non-reusing generations,
   framework-issued pre-submission tokens, exclusive control leases,
   proof-carrying success/no-command outcomes and cause-carrying partial/unknown
@@ -2450,10 +2505,12 @@ Document threats from:
 - role-aware source withdrawal/composition/reselection, explicit solver-state
   handover and deterministic scoped-borrowed or owned-handle cooperative
   parallel work with authoritative executor registration, dispatch/cancel
-  linearization, destructor-free handle retirement, sealed bounded cleanup,
-  non-wrapping generation-safe slot reuse, leak-safe accounting, explicit
-  claim/shutdown/fail-stop rules, bounded traces and unresponsive lease
-  ownership;
+  linearization, destructor-free handle retirement, caller-driven receipt-
+  bounded cleanup/backpressure with no hidden reaper, coupled lifecycle/
+  payload state and safe-only 1.0 ownership transitions, non-wrapping
+  generation-safe slot reuse, leak-safe accounting,
+  explicit claim/shutdown/fail-stop rules, bounded traces and unresponsive
+  lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2931,7 +2988,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling.
+- **0.48.3** — `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -3196,11 +3253,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery.
-- **0.189.3** — Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
-- **0.189.4** — Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
-- **0.189.5** — Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
-- **0.189.6** — Android snapshot-protection adapter with exact Keystore profile, transactional capability evidence and honest weaker freshness.
+- **0.189.2** — canonical protected-snapshot binding, bounded recovery matrix and narrowly authorized exact-recovery-or-continuity-break repair contract.
+- **0.189.3** — Linux/BSD protection/persistence profile with transactional freshness, optional repair/anti-revival evidence and no-universal-keystore non-claim.
+- **0.189.4** — Windows snapshot-protection adapter with exact transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- **0.189.5** — Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- **0.189.6** — Android snapshot-protection adapter with exact Keystore transactional, optional repair/anti-revival and honest weaker-capability evidence.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
@@ -3401,7 +3458,11 @@ Navheim 1.0.0 is released only when all of the following are true:
     transitions, permanent retirement or namespace renewal at generation
     exhaustion, non-reusable forgotten-handle entries, exact observing versus
     consuming result APIs, destructor-free handle Drop, sealed bounded cleanup
-    with process-terminal panic/failure/reentrancy, slot reuse only after
+    with caller-driven budgeted progress, no hidden reaper or implicit
+    admission cleanup, explicit cleanup-required backpressure, must-use
+    executor lifecycle, process-terminal panic/failure/reentrancy, safe-only
+    payload ownership with unsafe extraction excluded from 1.0,
+    Miri/Loom/Kani exactly-once evidence, slot reuse only after
     result/lease/trace finalization, shutdown
     coverage of every orphan, concrete allocation-free/non-unwinding
     `std::process::abort()` on invalid handle/executor destruction, best-effort
@@ -3434,7 +3495,13 @@ Navheim 1.0.0 is released only when all of the following are true:
     corrupt-or-unknown states have one explicit restore/writer/action matrix,
     each namespace bounds transactions, candidates, retained bytes, retries
     and cleanup, cancellation/supersession cleanup is deterministic and cannot
-    delete authoritative unresolved state, all interpretive metadata is
+    delete authoritative unresolved state, corrupt/unknown repair is a
+    separate Tier 3 capability limited to exact current-candidate recovery or
+    durable namespace/key/counter retirement with a fresh-domain continuity
+    break and anti-revival proof, never in-namespace counter reset, older
+    restore, nonce reuse or freshness downgrade; repair emits security/
+    invalidation evidence and forces reacquisition/reconvergence, all
+    interpretive metadata is
     authenticated, nonce/key/rotation/
     counter state is crash-safe, platform adapters report unavailable freshness
     honestly, profiles are minimal/consent-bound, restored assessments are
