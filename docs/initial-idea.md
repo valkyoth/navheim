@@ -1775,10 +1775,22 @@ worker or reaper. The public progress contract is equivalent to:
 
 ```rust
 pub fn poll_cleanup(
-    &mut self,
+    &self,
     budget: CleanupBudget,
 ) -> Result<CleanupProgress, CleanupStartError>;
 ```
+
+The shared borrow is required so completed/discarded entries can be reclaimed
+while unrelated lifetime-bound handles remain live; it does not transfer
+executor ownership or introduce an `Arc`. Synchronized interior registry state
+contains an atomic single-cleaner guard. A cleanup call validates its budget,
+then acquires the guard by CAS; a concurrent call returns
+`CleanupStartError::Busy` before changing any entry, payload or admission
+state. The guard is private, non-cloneable and never returned as a capability,
+so callers cannot leak or forget it. Every normal return explicitly releases
+it; cleanup panic/failure aborts the process, so unwinding cannot strand it.
+The executor uses safe `std` synchronization and automatic trait bounds; the
+1.0 profile admits no handwritten unsafe `Sync` implementation.
 
 `PlanReceipt` bounds `Cleaning` entries, total cleanup work, work per poll and
 trace capacity. `CleanupProgress` explicitly reports `Complete` or
@@ -1792,6 +1804,11 @@ returns `AdmissionError::CleanupRequired` with bounded progress information.
 `Executor::shutdown` first reconciles every job and then drains all cleanup;
 the receipt bounds total drain work. Cleanup order, slot retirement and every
 semantics-affecting result enter `ExecutionTrace` in deterministic order.
+Each poll selects eligible entries by the lowest generation-bearing `JobId`;
+the receipt also bounds the deterministic scan. A `Busy` result performs no
+cleanup mutation; if caller behavior makes that contention semantically
+relevant, its bounded scheduling fact is recorded in the runtime trace before
+the caller proceeds.
 
 `Executor` itself is `#[must_use]` because consuming shutdown is the normal
 lifecycle. Dropping it with any registered, running, terminal-unclaimed,
@@ -1813,8 +1830,10 @@ cleanup panic is caught and immediately converted to abort, never unwinding
 through registry invariants.
 The slot becomes reusable only after result transfer or destruction, lease
 return, trace finalization and a checked generation increment have completed.
-Miri covers extraction/destruction and panic paths, Loom covers publication
-versus cleanup, and Kani proves the bounded exactly-once ownership machine.
+Miri covers extraction/destruction and panic paths. Loom covers cleanup against
+completion, claim, handle drop, admission, another cleanup call and shutdown,
+including single-cleaner exclusion and release/acquire publication. Kani
+proves the bounded exactly-once ownership machine.
 
 `mem::forget`, `ManuallyDrop` or a leaked handle permanently forfeits that
 result but never unregisters or detaches the job. The entry, buffers and slot
@@ -2464,8 +2483,10 @@ Document threats from:
 - aliased/detached/unresponsive parallel work, forgotten/leaked handles or
   executors, dispatch/cancel and completion/drop/cleanup races, arbitrary or
   reentrant destructors in handle `Drop`, hidden/unbounded cleanup, admission
-  starvation, lifecycle/payload-state divergence, duplicate extraction or
-  destruction, stale/ABA/exhausted job IDs, detached registry entries,
+  starvation from live-handle-exclusive cleanup, overlapping cleaners, leaked
+  cleanup authority, nondeterministic entry selection, lifecycle/payload-state
+  divergence, duplicate extraction or destruction, stale/ABA/exhausted job
+  IDs, detached registry entries,
   premature capacity/buffer reuse, overstated pre-abort
   diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
   outcomes;
@@ -2506,11 +2527,12 @@ Document threats from:
   handover and deterministic scoped-borrowed or owned-handle cooperative
   parallel work with authoritative executor registration, dispatch/cancel
   linearization, destructor-free handle retirement, caller-driven receipt-
-  bounded cleanup/backpressure with no hidden reaper, coupled lifecycle/
-  payload state and safe-only 1.0 ownership transitions, non-wrapping
-  generation-safe slot reuse, leak-safe accounting,
-  explicit claim/shutdown/fail-stop rules, bounded traces and unresponsive
-  lease ownership;
+  bounded shared-borrow cleanup/backpressure with no hidden reaper, internal
+  single-cleaner CAS, deterministic bounded selection and no caller-held
+  cleanup authority, coupled lifecycle/payload state and safe-only 1.0
+  ownership transitions, non-wrapping generation-safe slot reuse, leak-safe
+  accounting, explicit claim/shutdown/fail-stop rules, bounded traces and
+  unresponsive lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2988,7 +3010,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
+- **0.48.3** — `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -3459,7 +3481,9 @@ Navheim 1.0.0 is released only when all of the following are true:
     exhaustion, non-reusable forgotten-handle entries, exact observing versus
     consuming result APIs, destructor-free handle Drop, sealed bounded cleanup
     with caller-driven budgeted progress, no hidden reaper or implicit
-    admission cleanup, explicit cleanup-required backpressure, must-use
+    admission cleanup, shared-borrow progress usable beside live handles,
+    internal non-exported single-cleaner CAS, pre-mutation busy result, bounded
+    lowest-JobId selection, explicit cleanup-required backpressure, must-use
     executor lifecycle, process-terminal panic/failure/reentrancy, safe-only
     payload ownership with unsafe extraction excluded from 1.0,
     Miri/Loom/Kani exactly-once evidence, slot reuse only after

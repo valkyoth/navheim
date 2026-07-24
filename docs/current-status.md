@@ -114,6 +114,12 @@ Navheim currently provides repository and crate foundations only.
   v0.189.2-v0.189.6 restrict corrupt-state repair to exact-current recovery or
   durable namespace retirement plus a fresh-domain continuity break, with
   anti-revival, security/invalidation and reacquisition requirements.
+- Sixteenth gap review corrects the v0.48.3 cleanup API without weakening
+  lifetime-bound handles: cleanup uses a shared executor borrow, remains
+  available beside unrelated live jobs, and is serialized by an internal
+  non-exported single-cleaner CAS. Concurrent attempts return pre-mutation
+  `Busy`, selection is bounded and lowest-`JobId` deterministic, and Loom
+  covers cleanup against every competing executor transition.
 
 ## Not Implemented
 

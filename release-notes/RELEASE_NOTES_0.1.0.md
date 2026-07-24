@@ -176,6 +176,15 @@ separate Tier 3 capability limited to exact-current recovery or durable
 namespace retirement followed by a fresh key/nonce/counter domain and explicit
 continuity break. It cannot revive old state or silently weaken freshness.
 
+The sixteenth coverage pass corrects a Rust borrowing conflict in v0.48.3
+without weakening the lifetime-bound handle model. `poll_cleanup` takes a
+shared executor borrow, allowing cleanup while unrelated handles remain live.
+A private atomic guard admits one cleaner; concurrent calls return
+pre-mutation `Busy`, callers cannot leak the guard, and each bounded poll
+selects the lowest eligible generation-bearing job ID. Loom covers cleanup
+against completion, result claims, handle drop, admission, another cleanup
+caller and shutdown.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

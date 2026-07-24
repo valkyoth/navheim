@@ -96,6 +96,11 @@ All notable changes to `navheim` are documented here.
   excluded from the 1.0 executor. Snapshot repair is separately
   authorized and cannot reset an in-namespace counter, accept older state,
   reuse nonces or bypass a durable continuity break.
+- Integrated the sixteenth review into v0.48.3: `poll_cleanup` uses a shared
+  executor borrow so live handles do not prevent reclamation. An internal
+  non-exported single-cleaner CAS returns pre-mutation `Busy` on contention,
+  selects the lowest eligible generation-bearing job ID within bounded work,
+  and is tested against completion, claim, drop, admission and shutdown.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

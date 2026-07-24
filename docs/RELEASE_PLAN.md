@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved pay...
+### v0.48.3 - `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup,...
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with caller-driven cleanup progress, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
-- Implement Vacant(g)->Registered dispatch/cancel CAS, terminal ownership, caller-driven budgeted poll_cleanup with no hidden reaper, explicit CleanupRequired admission, shutdown cleanup drain, and Vacant(g+1) or permanent retirement. Executor and handles are must-use; handle Drop performs only retirement or abort. Require safe state-owning payload transitions; ManuallyDrop may use safe into_inner, while unsafe take/manual-drop extraction is excluded from the 1.0 executor.
+- `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
+- Implement Vacant(g)->Registered dispatch/cancel CAS, terminal ownership, caller-driven budgeted poll_cleanup(&self) usable beside live handles with no hidden reaper, an internal non-exported atomic single-cleaner guard with pre-mutation Busy, lowest-JobId deterministic selection, explicit CleanupRequired admission, shutdown cleanup drain, and Vacant(g+1) or permanent retirement. Require must-use executor/handles, handle Drop performing only retirement or abort, safe-only 1.0 payload transitions and no handwritten unsafe Sync implementation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use Miri, Loom, Kani/model and subprocess tests for dispatch/cancel and proof its winner never executes, completion/drop/claim/shutdown/cleanup races, every terminal kind, per-poll/total cleanup bounds, no implicit admission cleanup, dirty-executor fail-stop, deterministic cleanup traces, publication ordering, ABA/stale/exhausted IDs and namespace renewal, duplicate retirement/extraction/destruction, forgotten orphans, panicking/reentrant cleanup converted to abort, cleanup versus shutdown, unresponsive abort, safe/unsafe storage invariants, exact observing/consuming/progress APIs and non-durable pre-abort status.
+- Use compile/API, Miri, Loom, Kani/model and subprocess tests for cleanup with unrelated live handles; concurrent cleanup Busy and no entry/payload/admission mutation; unexposed/unforgettable guard and normal release; lowest-JobId selection and bounded scan/trace; cleanup versus completion, claim, drop, admission and shutdown; dispatch/cancel proof; every terminal kind; per-poll/total bounds and no implicit admission cleanup; dirty-executor fail-stop; publication ordering; ABA/stale/exhausted IDs and namespace renewal; safe storage and exactly-once retirement/extraction/destruction; forgotten orphans; panic/reentrancy abort; unresponsive abort; exact observing/consuming/progress APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
