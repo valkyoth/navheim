@@ -159,6 +159,11 @@ Navheim currently provides repository and crate foundations only.
   explicit queue backpressure, retention/retirement and shutdown rules; and an
   optional declared Tier 2 scheduler worker rather than a hidden cleanup
   thread.
+- Twenty-fourth gap review makes that shutdown API Rust-representable without
+  another milestone. Consuming `begin_shutdown` permanently moves `Running`
+  into `Draining`; claims and original completed results survive, bounded
+  shutdown turns reconcile only queued/active work as cancellation, failed
+  finish returns the full drainer, and unfinished destruction aborts.
 
 ## Not Implemented
 

@@ -246,6 +246,16 @@ stale/duplicate claims, forgotten IDs, replay-significant turn order, and
 shutdown reconciliation all have explicit behavior. A scheduler thread is
 permitted only as a declared, bounded Tier 2 worker—not a hidden reaper.
 
+The twenty-fourth coverage pass makes scheduler shutdown representable in safe
+Rust. `begin_shutdown` consumes `CleanupScheduler<Running>` into
+`CleanupScheduler<Draining>`, permanently ending admission while preserving
+request IDs, ready tokens and already completed results. Bounded shutdown turns
+materialize cancellation only for queued/active requests, finalize traces,
+close lanes/driver and drain executor cleanup. `finish_shutdown` either returns
+a generation-bound report or returns ownership of the still-draining scheduler;
+dropping unfinished state aborts. A declared scheduler thread follows the same
+drain and may join only after finalization.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

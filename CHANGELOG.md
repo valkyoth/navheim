@@ -134,6 +134,11 @@ All notable changes to `navheim` are documented here.
   invoked drive is bounded and nonblocking; request and turn IDs never reuse,
   queues reserve explicit capacity, completions persist until claim or
   deterministic retirement, and shutdown reconciles every request state.
+- Integrated the twenty-fourth review into v0.48.3 by making shutdown a
+  representable `Running -> Draining` typestate. Admission ends permanently
+  while completion claims remain available; bounded shutdown turns own
+  cancellation and finalization, failed finish returns the drainer, and
+  unfinished destruction is fail-stop.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.
