@@ -106,6 +106,11 @@ All notable changes to `navheim` are documented here.
   linearization point without changing cleanup or trace state. The supervisor
   records it against a logical call before semantic reaction, and replay uses
   that fact instead of observing live contention.
+- Integrated the eighteenth review into v0.48.3 by making the supervisor the
+  only public cleanup boundary. The receipt-producing executor primitive is
+  crate-private, so application code cannot ignore or forget an unrecorded
+  receipt; recording succeeds before `Busy` is observable, and replay is
+  consulted before a live CAS.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

@@ -1771,20 +1771,31 @@ Two execution modes make those lifetime rules representable:
 
 Claim, discard and shutdown retirement feed a caller-driven, bounded registry
 cleanup path before a slot becomes `Vacant`; Navheim starts no hidden cleanup
-worker or reaper. The public progress contract is equivalent to:
+worker or reaper. Replayable application code uses only the supervised public
+progress contract:
 
 ```rust
-pub fn poll_cleanup(
-    &self,
-    budget: CleanupBudget,
-) -> Result<CleanupProgress, CleanupStartError>;
+impl ExecutionSupervisor {
+    pub fn poll_cleanup(
+        &self,
+        executor: &Executor,
+        budget: CleanupBudget,
+    ) -> Result<CleanupProgress, SupervisedCleanupError>;
+}
 ```
 
 The shared borrow is required so completed/discarded entries can be reclaimed
 while unrelated lifetime-bound handles remain live; it does not transfer
-executor ownership or introduce an `Arc`. Synchronized interior registry state
-contains an atomic single-cleaner guard. A cleanup call validates its budget,
-then acquires the guard by CAS; a concurrent call returns
+executor ownership or introduce an `Arc`. `ExecutionSupervisor` is
+`#[must_use]`, non-cloneable and bound to one executor namespace,
+`PlanReceipt` and trace generation; mismatched or duplicate authority is
+rejected. Safe synchronized trace state permits concurrent shared supervisor
+calls without a handwritten unsafe `Sync` implementation.
+
+After mutation-free identity/budget validation, the supervisor allocates the
+next bounded caller-lane/logical-call sequence. In live mode it invokes a
+crate-private executor primitive. Synchronized interior registry state
+contains an atomic single-cleaner guard; a losing primitive call returns
 `CleanupStartError::Busy(CleanupContentionReceipt)` before changing any
 registry, payload, cleanup, admission or trace state. The failed CAS is the
 contention event's linearization point. All other validation/start errors are
@@ -1797,7 +1808,8 @@ implementation.
 
 `PlanReceipt` bounds `Cleaning` entries, supervisor-admitted cleanup logical-
 call sequences, total cleanup work, work per poll, contention events and trace
-capacity. `poll_cleanup` retains no receipt registration or outstanding-count
+capacity. The crate-private executor primitive retains no receipt registration
+or outstanding-count state; the supervisor owns the bounded logical-call/trace
 state. `CleanupProgress` explicitly reports
 `Complete` or `MoreRequired` plus bounded cleaned/remaining/retired counts and
 work used; there is no hidden wakeup contract. Preflight rejects an invalid or
@@ -1814,18 +1826,22 @@ the receipt also bounds the deterministic scan.
 
 `CleanupContentionReceipt` is bounded, opaque, `#[must_use]`, non-cloneable and
 privately constructed, with no public deserialization path. It binds the
-executor namespace, plan/trace generation and failed-CAS observation. The
-default replayable profile requires the caller's supervisor to consume it and
-atomically append it to `ExecutionTrace`, together with the deterministic
-caller lane and logical cleanup-call sequence, before the caller branches,
-retries or requests admission. Recording rejects stale, duplicate or misbound
-receipts. It is a separate trace mutation, not a mutation performed by
-`poll_cleanup`. Trace exhaustion follows the existing stop, resynchronize or
-replay-unavailable policy; a caller may not act on ordinary unrecorded `Busy`.
-Replay reproduces `Busy` at that logical call from the recorded receipt and
-never consults live cleaner contention. A profile may consume the receipt
-without recording only when `PlanReceipt` declares `Busy` semantically inert
-and proves caller-visible results, admission and ordering cannot depend on it.
+executor namespace, plan/trace generation and failed-CAS observation. The raw
+primitive and receipt type are crate-private and never cross the supervised
+recording boundary into application code. In the default replayable profile,
+the supervisor consumes the receipt and atomically appends it to
+`ExecutionTrace` at the allocated caller lane/logical call before returning
+observable `SupervisedCleanupError::Busy`. Recording rejects stale, duplicate
+or misbound receipts. Trace exhaustion returns `TraceUnavailable` or invokes
+the existing stop/resynchronize/replay-unavailable policy; it never leaks
+ordinary unrecorded `Busy`.
+
+In replay mode the supervisor consults the recorded logical call before
+invoking the executor. A recorded contention event reproduces `Busy` without a
+live CAS. A `PlanReceipt` may declare contention semantically inert only after
+proving caller-visible results, admission and ordering cannot depend on it;
+even that profile uses the supervisor, which may consume the internal receipt
+without recording. There is no public raw-cleanup escape hatch.
 
 `Executor` itself is `#[must_use]` because consuming shutdown is the normal
 lifecycle. Dropping it with any registered, running, terminal-unclaimed,
@@ -2502,9 +2518,11 @@ Document threats from:
   reentrant destructors in handle `Drop`, hidden/unbounded cleanup, admission
   starvation from live-handle-exclusive cleanup, overlapping cleaners, leaked
   cleanup authority, unrecorded or misbound cleanup contention, forged
-  contention receipts, contention-trace exhaustion, nondeterministic entry
-  selection, lifecycle/payload-state divergence, duplicate extraction or
-  destruction, stale/ABA/exhausted job IDs, detached registry entries,
+  contention receipts, public raw-receipt escape, ignored/forgotten receipts,
+  duplicate or mismatched supervisors, replay consulting live contention,
+  contention-trace exhaustion, nondeterministic entry selection,
+  lifecycle/payload-state divergence, duplicate extraction or destruction,
+  stale/ABA/exhausted job IDs, detached registry entries,
   premature capacity/buffer reuse, overstated pre-abort
   diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
   outcomes;
@@ -2546,11 +2564,12 @@ Document threats from:
   parallel work with authoritative executor registration, dispatch/cancel
   linearization, destructor-free handle retirement, caller-driven receipt-
   bounded shared-borrow cleanup/backpressure with no hidden reaper, internal
-  single-cleaner CAS, receipt-bound contention recording/replay, deterministic
-  bounded selection and no caller-held cleanup authority, coupled lifecycle/
-  payload state and safe-only 1.0 ownership transitions, non-wrapping
-  generation-safe slot reuse, leak-safe accounting, explicit claim/shutdown/
-  fail-stop rules, bounded traces and unresponsive lease ownership;
+  single-cleaner CAS, public supervisor-only contention recording/replay,
+  crate-private raw receipt boundary, deterministic bounded selection and no
+  caller-held cleanup authority, coupled lifecycle/payload state and safe-only
+  1.0 ownership transitions, non-wrapping generation-safe slot reuse, leak-
+  safe accounting, explicit claim/shutdown/fail-stop rules, bounded traces and
+  unresponsive lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -3028,7 +3047,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling.
+- **0.48.3** — `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -3502,10 +3521,12 @@ Navheim 1.0.0 is released only when all of the following are true:
     admission cleanup, shared-borrow progress usable beside live handles,
     internal non-exported single-cleaner CAS, pre-mutation busy result, bounded
     lowest-JobId selection, mutation-free bounded contention receipt, mandatory
-    logical-call trace binding before semantic reaction, trace-overflow policy
-    and replay without live contention, explicit cleanup-required backpressure,
-    must-use executor lifecycle, process-terminal panic/failure/reentrancy,
-    safe-only payload ownership with unsafe extraction excluded from 1.0,
+    supervisor-owned logical-call trace binding before `Busy` is observable,
+    crate-private raw primitive/receipt, trace-unavailable/overflow policy and
+    replay lookup before any live CAS, explicit cleanup-required backpressure,
+    must-use executor/supervisor lifecycle, process-terminal panic/failure/
+    reentrancy, safe-only payload ownership with unsafe extraction excluded
+    from 1.0,
     Miri/Loom/Kani exactly-once evidence, slot reuse only after
     result/lease/trace finalization, shutdown
     coverage of every orphan, concrete allocation-free/non-unwinding

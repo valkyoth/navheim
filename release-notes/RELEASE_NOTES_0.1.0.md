@@ -194,6 +194,14 @@ bounded trace before reacting. Trace exhaustion follows the existing
 fail-closed policy, and replay produces `Busy` from recorded evidence rather
 than live contention.
 
+The eighteenth coverage pass makes that ordering enforceable in safe Rust.
+Replayable applications call only `ExecutionSupervisor::poll_cleanup`; the raw
+executor primitive and contention receipt are crate-private, so callers cannot
+ignore or forget an unrecorded receipt. The supervisor binds one executor,
+plan and trace generation, allocates the logical call, records contention
+before returning observable `Busy`, and reports trace unavailability or stops
+if recording fails. Replay is consulted before any live cleaner CAS.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

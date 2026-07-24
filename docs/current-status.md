@@ -126,6 +126,11 @@ Navheim currently provides repository and crate foundations only.
   must bind the receipt to the caller lane/logical call before reacting;
   overflow follows the existing stop/resynchronize/unavailable policy, while
   replay reproduces the result without consulting live contention.
+- Eighteenth gap review makes that v0.48.3 policy enforceable in safe Rust:
+  applications receive only supervised cleanup, while the raw primitive and
+  receipt remain crate-private. The supervisor binds the executor/plan/trace,
+  allocates the logical call, records before exposing `Busy`, maps recording
+  failure to trace-unavailable/stop, and checks replay before any live CAS.
 
 ## Not Implemented
 

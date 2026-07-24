@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup,...
+### v0.48.3 - `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention rep...
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling.
-- Implement caller-driven bounded poll_cleanup(&self) beside live handles with no hidden reaper; a private single-cleaner CAS whose failed attempt returns an opaque must-use non-cloneable/non-deserializable CleanupContentionReceipt without registry/payload/cleanup/admission/trace mutation; consuming supervisor trace binding to caller lane/logical call before semantic reaction; replayed Busy without live contention; explicit inert-profile proof; deterministic lowest-JobId cleanup, CleanupRequired admission and shutdown drain. Preserve the complete generation-safe lifecycle, atomic-only handle Drop, must-use/fail-stop, safe-only ownership and no-unsafe-Sync contracts.
+- `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling.
+- Expose replayable cleanup only as ExecutionSupervisor::poll_cleanup(&self, &Executor, budget), with a must-use non-cloneable supervisor bound to one executor/PlanReceipt/trace generation. After mutation-free validation it allocates the logical call and invokes a crate-private receipt-producing primitive. Live contention is recorded before observable Busy; failure returns TraceUnavailable or stops/resynchronizes; replay consults the trace before any live CAS. Even inert profiles use the supervisor. Preserve bounded lowest-JobId cleanup, generation-safe lifecycle, atomic-only Drop, must-use/fail-stop, safe-only ownership and no-unsafe-Sync contracts.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use compile/API, Miri, Loom, Kani/model and subprocess tests for mutation-free validation errors; allocation/registration-free Busy receipt construction at the failed-CAS linearization point; receipt authenticity/namespace/plan/trace-generation binding; bounded supervisor call-ID/event exhaustion; mandatory pre-reaction recording; duplicate/misbound/forged receipt rejection; contention-trace overflow; exact logical-call replay and proved inert omission. Retain tests for live handles, overlapping cleaners, unexposed/unforgettable guard and normal release, bounded lowest-JobId scan/work, cleanup versus completion/claim/drop/admission/shutdown, dispatch/cancel, every terminal kind, no implicit cleanup, fail-stop, publication, ABA/exhaustion/renewal, safe exactly-once storage, forgotten orphans, panic/reentrancy/unresponsive abort, exact APIs and non-durable pre-abort status.
+- Use visibility/compile/API, Miri, Loom, Kani/model and subprocess tests proving applications cannot call raw cleanup or name/ignore/forget its receipt; supervisor namespace/receipt/trace-generation binding and duplicate/mismatch rejection; concurrent shared supervisor calls; mutation-free validation; bounded logical-call allocation; live receipt recording before Busy; trace failure never leaking Busy; exact replay without CAS; and proved inert omission through the supervisor. Retain failed-CAS receipt binding, exhaustion/forgery/duplicate tests, live handles, overlapping cleaners, guard release, bounded lowest-JobId scan/work, cleanup versus completion/claim/drop/admission/shutdown, dispatch/cancel, every terminal kind, no implicit cleanup, dirty-executor fail-stop, publication ordering, ABA/generation exhaustion/namespace renewal, safe exactly-once storage, forgotten orphans, panic/reentrancy/unresponsive abort, exact APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
