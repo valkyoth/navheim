@@ -26,8 +26,10 @@ All notable changes to `navheim` are documented here.
   platform work, bounded PER and post-protocol crypto milestones, and
   separating PVT facts from integrity assessments.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
-  publications, checksum/line-ending/read-only gates, lifecycle roles, and a
-  live-checked 210-errata drift snapshot.
+  publications, checksum/line-ending gates, an optional local read-only guard,
+  lifecycle roles, and a live-checked 210-errata drift snapshot.
+- Made shell syntax checks honor Bash versus POSIX-shell shebangs and replaced
+  the non-portable CI read-only-mode assertion with checksum/source identity.
 - Added the external standards acquisition inventory and secure local-only
   vault workflow: 34 authoritative source families, 17 allowlisted public
   downloads, local SHA-256 locking, official-page revision-marker review, and

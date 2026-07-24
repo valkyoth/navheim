@@ -27,9 +27,3 @@ fi
     cd standards/rfc
     sha256sum --check --strict SHA256SUMS
 )
-
-if find standards/rfc -maxdepth 1 -type f -name 'rfc*.txt' -perm /0222 \
-    -print -quit | grep -q .; then
-    echo "RFC reference copies must be locally read-only" >&2
-    exit 1
-fi

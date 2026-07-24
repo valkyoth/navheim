@@ -27,6 +27,10 @@ references for Navheim's HTTP, encoding, certificate, JSON and TLS boundaries,
 plus a live-checked errata drift snapshot. Legacy NTRIP HTTP references are
 explicitly separated from current secure behavior.
 
+RFC integrity is enforced through exact source lists and SHA-256 bytes. Git
+does not preserve general read-only permission bits, so CI does not require
+mode `0444`; developers may still apply the optional local read-only guard.
+
 The broader acquisition inventory covers 34 authoritative source families.
 Seventeen freely downloadable GPS, Galileo, NavIC and IGS documents can be
 fetched into an ignored local vault and protected by a local SHA-256 lock.

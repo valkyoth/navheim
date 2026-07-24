@@ -23,16 +23,19 @@ redistribution.
 - `SOURCES` is the reviewed exact-URL and role allowlist.
 - `SHA256SUMS` pins every byte of every tracked RFC.
 - `scripts/fetch-rfcs.sh` downloads only missing allowlisted RFC Editor text.
-- `scripts/verify-rfcs.sh` rejects changed, missing, extra, empty, or writable
-  RFC copies.
-- `scripts/lock-rfcs.sh` reapplies the local read-only guard.
+- `scripts/verify-rfcs.sh` rejects changed, missing, extra, or empty RFC
+  copies by source identity and SHA-256.
+- `scripts/lock-rfcs.sh` optionally reapplies a developer-local read-only
+  guard.
 - `scripts/test-rfc-sources.py` verifies the complete expected baseline.
 - `scripts/rfc_errata.py` validates the reviewed errata snapshot and can
   compare it with the RFC Editor.
 - `.gitattributes` prevents line-ending normalization.
 
-Checksums and review are authoritative because Git does not portably preserve
-read-only file permissions.
+Checksums, source identity and review are authoritative because Git preserves
+only the executable permission bit and restores ordinary files as writable on
+fresh checkouts. CI therefore never treats local read-only mode as a portable
+integrity property.
 
 ## Scope
 
