@@ -456,15 +456,21 @@ The crate must preserve source agency, creation epoch, solution center, update i
 
 `navheim-rinex` should support:
 
-- RINEX 2 for legacy archives;
+- RINEX 2 observation and navigation files for legacy archives;
 - RINEX 3 multi-GNSS observations/navigation;
-- RINEX 4 generic navigation records and current constellation additions;
+- RINEX 4 observations, picosecond timing fields, generic navigation records
+  and current constellation additions;
 - observation, navigation, meteorological and clock files where applicable;
 - Hatanaka/compact integration via a separate optional codec if legally and technically appropriate;
 - streaming parsing and writing;
 - lossless unknown-header preservation;
 - bounded line handling and explicit non-UTF-8 policy;
 - canonical output and original-format output modes.
+
+Any compact/Hatanaka adapter is bounded before admission: decompressed bytes,
+records, line length and expansion ratio are planned and enforced. A compact
+stream cannot bypass the ordinary RINEX parser's progress, resource and
+provenance contracts.
 
 ### 6.4 NMEA
 
@@ -476,7 +482,12 @@ The crate must preserve source agency, creation epoch, solution center, update i
 - partial-line and noisy-serial recovery;
 - no allocation operation.
 
-NMEA 2000 uses CAN and licensed parameter-group definitions. Implement transport and a legal, versioned PGN layer in `navheim-nmea2000`; do not copy protected tables from unofficial sources.
+NMEA 2000 uses CAN and licensed parameter-group definitions. Implement
+transport and a legal, versioned PGN layer in `navheim-nmea2000`; do not copy
+protected tables from unofficial sources. CAN frame sources/sinks and platform
+adapters own bus I/O, timestamp domains, address claiming and error states;
+the protocol crate owns bounded frame/fast-packet assembly and legal PGN
+semantics.
 
 ### 6.5 Assistance
 
@@ -487,6 +498,13 @@ NMEA 2000 uses CAN and licensed parameter-group definitions. Implement transport
 - Android raw measurement inputs;
 - receiver-provided aiding data;
 - application-injected approximate time, location and orbit assistance.
+
+The canonical model precedes every protocol adapter. Time, location, orbit and
+other assistance are immutable artifacts carrying source, generation,
+freshness, confidence, validity and whether they are receiver-provided or
+application-injected. Untrusted hints can narrow a search but cannot silently
+resolve time, position or trust. Rollback and cross-session mixing are rejected
+before SUPL, LPP, Android or receiver-specific translation.
 
 Transport security belongs in optional TLS/network adapters. ASN.1 PER encoding/decoding is a core protocol concern and should be implemented in a small reusable internal module rather than delegated to a GNSS library.
 
@@ -769,7 +787,7 @@ pub struct TaiInstant {
 
 pub struct CaptureStamp<C> {
     domain: CaptureClockDomainId,
-    generation: u32,
+    generation: CaptureGeneration,
     value: C,
 }
 ```
@@ -787,6 +805,13 @@ Requirements:
 - different capture domains/generations are incomparable without an explicit
   caller-provided mapping;
 - hardware timestamp/PPS relationship modeled explicitly.
+
+`TaiInstant`, `FractionalSecond` and duration types freeze an exact epoch,
+canonical fractional representation, supported range and granularity. Checked
+construction, addition, subtraction, difference and scale conversion report
+overflow; they never wrap, saturate or silently lose subsecond precision.
+Sequence and generation counters likewise define exhaustion and renewal rather
+than relying on accidental integer wrap.
 
 ### 9.4 Observation model
 
@@ -844,6 +869,13 @@ transport peer, provider/mountpoint, station/solution, frame/datum, antenna,
 authenticated peer and session generation. Incomplete, stale or cross-session
 groups cannot partially update navigation or solver state.
 
+A canonical correction ledger classifies broadcast TGD/BGD, differential and
+inter-frequency biases, Bias-SINEX products, antenna PCO/PCV, carrier phase
+wind-up, ionosphere and troposphere terms by physical target and application
+stage. Every applied term records its convention and source artifact. Mutually
+exclusive alternatives and already-applied terms are rejected so format
+translation cannot apply the same physical correction twice.
+
 ### 9.6 Solution model
 
 A solution artifact contains more than coordinates, but assessments remain
@@ -861,6 +893,12 @@ Time-only, 2D, standalone 3D, SBAS, DGPS and other completed solutions have
 explicit solution kinds. RTK/PPP convergence, fixed/float transitions,
 rollback and coasting are lifecycle artifacts. "No fix" is never represented
 as a valid fix.
+
+Public typed outputs include solution age, contributing and excluded satellite
+summaries, GDOP/PDOP/HDOP/VDOP/TDOP, residual and exclusion diagnostics, fix
+kind and convergence state. Ellipsoidal height and orthometric height are
+different types; an orthometric result always identifies its geoid or vertical
+datum model, epoch, interpolation method, validity and uncertainty.
 
 ---
 
@@ -1153,6 +1191,14 @@ Optimization layers:
 
 The scalar implementation is normative. Optimized implementations must be bit-exact where integer arithmetic is specified or remain within documented numerical tolerances.
 
+Front-end conditioning preserves sample encoding, signedness, endianness, I/Q
+ordering, scaling, gain/AGC and calibration provenance. It reports clipping,
+quantization, DC offset and I/Q gain/phase imbalance evidence. Optional bounded
+pulse blanking or notching emits distortion evidence and can never silently
+upgrade a mitigated block into a trustworthy observation. SIMD begins only
+after alignment, aliasing, feature-detection, fallback and unsafe contracts are
+specified and tested against the scalar path.
+
 ### 11.5 Acquisition scheduler
 
 The scheduler should combine:
@@ -1250,6 +1296,10 @@ Validation can compare health, issue-of-data, time, orbit continuity, authentica
 - outlier detection and satellite exclusion;
 - covariance and residual diagnostics.
 
+The sequential GNSS-only state estimator is distinct from multi-sensor fusion.
+Its state layout, process model, initialization, convergence, resets,
+measurement admission and unavailable lifecycle are public and testable.
+
 The solver never reports more precision than the measurement and model uncertainty support.
 
 ### 13.2 Carrier phase and RTK
@@ -1318,6 +1368,15 @@ Navheim must never conflate:
 4. **solution integrity** — probability/bounds that position or time is acceptably correct.
 
 OSNMA can authenticate selected Galileo navigation data; it does not by itself prove that a delayed authentic signal was not rebroadcast. Multi-sensor and RF-consistency defenses remain necessary.
+
+RAIM and ARAIM use explicit satellite, constellation-wide,
+correction-provider and common-mode fault hypotheses. Their contracts name
+integrity-risk allocation, alert limits, time-to-alert, continuity,
+availability, correlation assumptions, service-health/URA/SISA inputs,
+solution-separation or subset algorithms, exclusion exhaustion, recovery and
+re-admission. Missing assumptions produce an unavailable protection level,
+not a misleadingly large numeric value. SBAS-derived integrity is a separate
+targeted input and is never relabeled as RAIM or ARAIM evidence.
 
 ### 14.2 OSNMA engine
 
@@ -1447,6 +1506,9 @@ that depends on Navheim. Navheim never depends on it.
 Provide:
 
 - mechanization primitives in ECEF and local NED/ENU;
+- IMU bias, scale-factor, axis-misalignment, noise and temperature models;
+- coning and sculling compensation;
+- gravity, Earth-rate and transport-rate models;
 - configurable extended Kalman filter;
 - error-state EKF;
 - square-root variants for numerical robustness;
@@ -1462,6 +1524,11 @@ Provide:
 - re-acquisition smoothing without hiding jumps.
 
 Sensor timestamps and clock domains are first-class. Fusion must reject unsynchronized data rather than assuming arrival time equals measurement time.
+
+Reacquisition corrections and state discontinuities remain observable
+artifacts. The allocated factor-graph interface shares canonical measurement,
+calibration, clock and residual types with the bounded real-time filters but
+does not force allocation into Tier 0.
 
 ---
 
@@ -1987,6 +2054,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.5.1** — UTC realization and leap model with provenance, activation, freshness and expiry.
 - **0.5.2** — time rollback/freshness guard and platform persistence-authority contract.
 - **0.5.3** — reason-bearing time availability and targeted invalidation primitives.
+- **0.5.4** — exact TAI/duration epoch, representation, range, granularity and checked-arithmetic contract.
 - **0.6.0** — coordinate types: geodetic, ECEF, ENU and NED.
 - **0.6.1** — body frames, velocity, acceleration, rotations, lever arms and sensor latency.
 - **0.6.2** — typed covariance layouts with state ordering, units, frame and epoch.
@@ -2009,9 +2077,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.14.1** — model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
 - **0.15.0** — correction and provenance models.
 - **0.15.1** — immutable correction sessions and ordered applied-correction ledger with anti-mixing policy.
+- **0.15.2** — canonical physical correction/bias taxonomy and duplicate-application prevention.
 - **0.16.0** — event, source, sink and deterministic polling traits with explicit invalidation.
 - **0.16.1** — small push/poll/transform/reset vocabulary with borrowed or caller-provided output slots.
 - **0.16.2** — sequenced targeted invalidation, acknowledgement, queue pressure and resynchronization contracts.
+- **0.16.3** — sequence/generation exhaustion, renewal and non-wrapping replay-safety contract.
 - **0.17.0** — capability negotiation and resource-planning contracts.
 - **0.17.1** — executable preflight schema and immutable normalized `PlanReceipt`.
 - **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
@@ -2032,17 +2102,24 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.25.0** — RTCM MSM observation decoding/encoding.
 - **0.25.1** — MSM provider/station/frame/session binding and cross-constellation round trips.
 - **0.26.0** — RTCM constellation ephemeris messages.
+- **0.26.1** — RTCM legacy observation profiles retained by the frozen baseline.
+- **0.26.2** — RTCM surveying transformation and projection message profiles.
 - **0.27.0** — NTRIP source table and version 1 client.
 - **0.28.0** — NTRIP version 2 client/server/caster protocol core.
 - **0.28.1** — bounded redirects/reconnects/headers, credential redaction, GGA consent and downgrade policy.
 - **0.29.0** — RINEX 2 observation streaming parser/writer.
+- **0.29.1** — RINEX 2 navigation streaming parser/writer.
 - **0.30.0** — RINEX 3 observation and navigation support.
 - **0.31.0** — RINEX 4 generic navigation records and current additions.
 - **0.31.1** — cross-version canonical/original preservation and deterministic chunk-boundary audit.
+- **0.31.2** — RINEX meteorological and clock file profiles across supported revisions.
+- **0.31.3** — RINEX 4 observations and picosecond timing-field support.
+- **0.31.4** — bounded optional CRINEX/Hatanaka codec integration.
 - **0.32.0** — SP3 orbit and precise clock products.
 - **0.33.0** — IONEX.
 - **0.34.0** — ANTEX.
 - **0.35.0** — SINEX and Bias-SINEX foundations.
+- **0.35.1** — Earth-orientation and reference-frame product parsing with validity and provenance.
 - **0.36.0** — deterministic raw-I/Q and observation replay container v0.
 - **0.36.1** — replay checkpoints, digests, corruption recovery and version compatibility.
 - **0.36.2** — cross-format canonical comparison and differential parser audit.
@@ -2051,6 +2128,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 
 - **0.37.0** — complex/fixed-point types, NCO and oscillators.
 - **0.37.1** — fixed-point widening, narrowing, rounding, saturation and sticky-overflow replay contract.
+- **0.37.2** — native front-end sample normalization, DC/IQ correction and bounded interference conditioning.
 - **0.38.0** — FIR/IIR and decimation primitives.
 - **0.39.0** — polyphase resampling.
 - **0.39.1** — rational resampler timestamp and group-delay accounting.
@@ -2067,11 +2145,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.46.0** — bit/symbol/secondary-code synchronization.
 - **0.47.0** — sample timestamp, gap and overrun model.
 - **0.47.1** — sample/host/hardware capture-domain mapping and per-block metadata validation.
+- **0.47.2** — explicit capture-domain mapping validity, uncertainty, discontinuity and generation contract.
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
+- **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
+- **0.50.2** — independent signal/message vector admission gate required before each constellation implementation.
 
 ### Phase D — GPS end-to-end
 
@@ -2154,6 +2235,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.112.0** — NavIC S-band SPS.
 - **0.113.0** — NavIC L1 SPS.
 - **0.114.0** — NavIC time/orbit/clock and multi-band solution.
+- **0.114.1** — SBAS L1 code generation, acquisition, tracking and bounded GEO search.
 - **0.115.0** — generic legacy SBAS L1 framing/messages.
 - **0.116.0** — SBAS correction/degradation state machine.
 - **0.117.0** — SBAS integrity and protection-level inputs.
@@ -2165,17 +2247,24 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 
 - **0.120.0** — multi-constellation PVT and inter-system biases.
 - **0.120.1** — named solver state/covariance layout and explicit solution availability lifecycle.
+- **0.120.2** — typed DOP, solution-age, satellite-summary, fix-kind and convergence outputs.
+- **0.120.3** — typed residual, exclusion and measurement-contribution diagnostics.
 - **0.121.0** — robust estimation and fault exclusion.
 - **0.121.1** — square-root filtering and near-singular numerical failure evidence.
+- **0.121.2** — sequential GNSS-only PVT estimator with explicit initialization, reset and convergence lifecycle.
 - **0.122.0** — broadcast ionosphere/troposphere model suite.
 - **0.123.0** — dual/multi-frequency combinations and TEC.
 - **0.124.0** — carrier smoothing and multipath metrics.
 - **0.125.0** — antenna phase-center and phase-wind-up models.
 - **0.126.0** — Earth rotation, tides and reference-frame transforms.
+- **0.126.1** — geoid/vertical-datum models and typed orthometric-height results.
 - **0.127.0** — RAIM.
+- **0.127.1** — RAIM hypotheses, risk allocation, solution separation, alert, continuity and exclusion contract.
 - **0.128.0** — ARAIM building blocks and assumptions API.
+- **0.128.1** — ARAIM constellation/common-mode hypotheses, correlation, service-health and availability contract.
 - **0.129.0** — protection levels and integrity event model.
 - **0.129.1** — immutable targeted integrity assessments, exclusions and recovery lifecycle.
+- **0.129.2** — SBAS integrity-input separation and unavailable-protection-level semantics.
 
 ### Phase J — RTK and precise positioning
 
@@ -2203,6 +2292,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 
 - **0.146.0** — cryptographic backend traits and trust-store model.
 - **0.146.1** — trusted-time, trust-root generation and platform anti-rollback authority binding.
+- **0.146.2** — reviewed `navheim-crypto-rustcrypto` backend and end-to-end authentication vectors.
 - **0.147.0** — Galileo OSNMA framing/assembly.
 - **0.148.0** — OSNMA key-chain and tag verification.
 - **0.149.0** — OSNMA policy, renewal/revocation and evidence.
@@ -2218,7 +2308,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.157.0** — signed forensic provenance stream.
 - **0.157.1** — sensitive forensic sinks, routine telemetry privacy and scoped correlation identifiers.
 
-### Phase L — Timing and fusion
+### Phase L — Timing, fusion and navigation
 
 - **0.158.0** — all GNSS time-scale conversions, UTC models and leap provenance.
 - **0.158.1** — reason-bearing time availability and explicit capture-domain/generation stamps.
@@ -2226,17 +2316,30 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.159.1** — bounded named delay/uncertainty contributions, confidence semantics and correlation groups.
 - **0.160.0** — validated time-only solution and stable GNSS timing observation/event API.
 - **0.160.1** — caller-provided bounded event slots and maximum event/queue resource contract.
+- **0.160.2** — timing event-slot ownership, borrowing, release and idempotent acknowledgement state machine.
 - **0.161.0** — satellite/receiver clock estimates and GNSS timing uncertainty budget.
 - **0.162.0** — GNSS timing freshness, discontinuity, outage and explicit invalidation.
 - **0.162.1** — targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchronization behavior.
 - **0.163.0** — authenticated/integrity-aware GNSS time evidence and consumer policy inputs.
 - **0.164.0** — inertial mechanization.
+- **0.164.1** — IMU bias, scale-factor, axis-misalignment, noise and temperature models.
+- **0.164.2** — coning/sculling compensation plus gravity, Earth-rate and transport-rate models.
 - **0.165.0** — error-state EKF.
+- **0.165.1** — lever-arm and sensor time-offset calibration states.
+- **0.165.2** — square-root real-time fusion variant with numerical equivalence evidence.
+- **0.165.3** — bounded vector-tracking implementation with scalar loop fallback and observable discontinuities.
 - **0.166.0** — wheel/barometer/magnetometer inputs.
+- **0.166.1** — zero-velocity, known-motion and non-holonomic constraint updates.
 - **0.167.0** — delayed/out-of-sequence fusion.
 - **0.167.1** — bounded delayed queues, deterministic update order and sensor clock/reset generations.
+- **0.167.2** — allocated factor-graph interface sharing canonical fusion artifacts.
 - **0.168.0** — GNSS outage/dead-reckoning lifecycle.
+- **0.168.1** — GNSS reacquisition smoothing with explicit correction and discontinuity artifacts.
 - **0.169.0** — multi-antenna attitude.
+- **0.169.1** — geodesic distance, bearing, destination and cross-track calculations.
+- **0.169.2** — bounded waypoint, route and track models with explicit great-circle/rhumb semantics.
+- **0.169.3** — geofence boundary, altitude and time-window evaluation.
+- **0.169.4** — local-frame navigation primitives and explicit road-network-routing non-claim.
 
 ### Phase M — Hardware, OS and assistance
 
@@ -2263,12 +2366,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.184.0** — NovAtel/public receiver adapter baseline.
 - **0.185.0** — receiver-protocol admission gate; every additional protocol requires a named patch milestone.
 - **0.186.0** — Android raw GNSS measurement adapter.
+- **0.186.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
 - **0.187.0** — OMA SUPL/ULP core.
 - **0.188.0** — 3GPP LPP assistance core.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — CAN/J1939, fast-packet, address-claim and licensed PGN semantic separation.
+- **0.190.2** — CAN frame source/sink and platform-adapter ownership contract.
 
 ### Phase N — Simulation, hardening and 1.0 stabilization
 
@@ -2319,10 +2424,14 @@ The exact number may change, but features should not be collapsed merely to reac
 Navheim 1.0.0 is released only when all of the following are true:
 
 1. Every public civil/open signal in the frozen GPS, Galileo, GLONASS, BeiDou, QZSS, NavIC and SBAS baseline has a standards mapping.
-2. Every promised signal has code generation/acquisition/tracking, navigation decode and observation evidence where applicable.
+2. Every promised signal has code generation/acquisition/tracking, navigation
+   decode and observation evidence where applicable, with official plus
+   independent or externally sourced vectors admitted alongside it.
 3. Restricted signals are clearly labeled and never falsely decoded.
-4. Multi-GNSS PVT, RTK, PPP, integrity, timing and authentication paths have independent test evidence.
-5. NMEA, RTCM/NTRIP, RINEX and principal IGS product support match the frozen public/licensed baselines.
+4. Multi-GNSS PVT, RTK, PPP, integrity, timing, authentication and complete
+   fusion paths have independent test evidence and typed failure states.
+5. NMEA, RTCM/NTRIP, every promised RINEX file profile and principal IGS/Earth
+   orientation product support match the frozen public/licensed baselines.
 6. No foundational, constellation, solver or format crate depends on another GNSS implementation.
 7. Core crates build under `no_std`; heap and OS dependencies are explicit.
 8. TLS and cryptographic primitives are isolated in audited adapters.
@@ -2335,6 +2444,12 @@ Navheim 1.0.0 is released only when all of the following are true:
 15. The facade can serve a beginner while lower crates expose every advanced stage.
 16. There is no silent degradation: capabilities, exclusions, authentication and integrity are visible.
 17. The 1.0 compatibility policy and deprecation process are published.
+18. `navheim-navigation` implements the promised geodesic, route/track,
+    geofence and local-frame primitives and clearly excludes road routing.
+19. Canonical assistance prevents rollback/cross-session mixing before SUPL,
+    LPP, Android or receiver translation.
+20. PVT exposes typed DOP, age, satellite, residual, exclusion, fix,
+    convergence and vertical-datum outputs; unavailable values remain explicit.
 
 ---
 

@@ -22,6 +22,14 @@ bounded storage, executable preflight receipts, deterministic DSP, correction
 anti-mixing, privacy/unsafe/platform evidence, strict release provenance, and
 exact standards traceability.
 
+A second coverage pass preserves that sequence while closing promised-scope
+gaps with named releases for the navigation crate; RTCM, RINEX and
+Earth-orientation products; typed PVT/orthometric outputs; SDR conditioning;
+full inertial/fusion calibration and vector tracking; canonical assistance;
+implementable RAIM/ARAIM contracts; a concrete RustCrypto adapter; CAN I/O;
+independent signal vectors; and exact timing arithmetic, mapping and slot
+state machines.
+
 ## Security
 
 - Both published crates are `no_std`, dependency-free, and forbid unsafe code.

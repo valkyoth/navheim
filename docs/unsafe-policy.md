@@ -14,6 +14,11 @@ explicit crate-root `#![forbid(unsafe_code)]`. An adapter remains
 `sys`, `ffi`, `dma`, or `simd` module. This transition occurs at an explicit
 adapter milestone and must not weaken canonical crates.
 
+For SIMD, v0.48.2 freezes alignment, aliasing, ownership, feature-detection,
+length/tail and scalar-fallback contracts before v0.49.0 may add dispatch.
+Dispatch cannot retroactively define safety conditions under which it already
+runs.
+
 Before unsafe code is admitted:
 
 - create a separate module or adapter crate;

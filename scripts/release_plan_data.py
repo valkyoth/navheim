@@ -12,7 +12,7 @@ PHASE_CHECKS = {
     "I": "independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases",
     "J": "independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons",
     "K": "official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests",
-    "L": "independent timing/fusion references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, and sensor comparisons",
+    "L": "independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases",
     "M": "target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence",
     "N": "cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence",
 }
@@ -29,7 +29,7 @@ PHASE_DELIVERABLES = {
     "I": "Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.",
     "J": "Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.",
     "K": "Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.",
-    "L": "Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, and deterministic fusion queues.",
+    "L": "Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.",
     "M": "Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.",
     "N": "Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.",
 }
@@ -46,7 +46,7 @@ PHASE_EXIT_CHECKS = {
     "I": "non-finite, singular, ill-conditioned, unavailable, and excluded cases are explicit and never reported as valid solutions",
     "J": "stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state",
     "K": "delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation",
-    "L": "clock-domain changes, queue pressure, stale evidence, and invalidation cannot be silently lost or converted into fresh time",
+    "L": "clock-domain changes, queue pressure, stale evidence, invalidation, fusion discontinuities, and navigation boundary cases remain explicit",
     "M": "permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible",
     "N": "the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim",
 }
@@ -264,3 +264,162 @@ MILESTONE_DETAILS = {
         "authority, precision inflation, sensitive output, and missing limits.",
     ),
 }
+
+# Compatible implementation stops added by the second architecture coverage
+# review. They augment the established sequence instead of renumbering it.
+MILESTONE_DETAILS.update(
+    {
+        "0.5.4": (
+            "Freeze the TAI epoch, canonical attosecond representation, full range, and checked duration arithmetic.",
+            "Test range endpoints, non-canonical fractions, every overflow path, serialization, rounding, and forbidden implicit POSIX conversion.",
+        ),
+        "0.15.2": (
+            "Classify every correction by physical target, convention, source, and application stage in an ordered ledger.",
+            "Test mutually exclusive alternatives, translated duplicates, wrong signs, stale models, and double-application rejection.",
+        ),
+        "0.16.3": (
+            "Define non-wrapping source-generation, mapping-generation, and event-sequence exhaustion and renewal.",
+            "Model terminal counters, mandatory generation-end delivery, acknowledgement loss, identity reuse, replay, and fail-closed resynchronization.",
+        ),
+        "0.26.1": (
+            "Implement each frozen RTCM legacy observation profile with raw/original and canonical forms.",
+            "Use official and independent vectors for every admitted message and reject malformed scale, lock, ambiguity, and station contexts.",
+        ),
+        "0.26.2": (
+            "Implement frozen RTCM transformation and projection records without hiding frame, datum, epoch, or validity.",
+            "Compare forward/reverse examples, unknown methods, parameter ranges, unit errors, and unsupported transformations.",
+        ),
+        "0.29.1": (
+            "Stream RINEX 2 navigation records while preserving headers, raw fields, constellation/profile limits, and provenance.",
+            "Test frozen examples, mixed line endings, truncation, unknown records, exponent/range faults, chunk boundaries, and round trips.",
+        ),
+        "0.31.2": (
+            "Add separately typed RINEX meteorological and clock files for each frozen supported revision.",
+            "Test record families, epochs, units, missing/unknown values, ordering, chunk boundaries, and original/canonical output.",
+        ),
+        "0.31.3": (
+            "Implement RINEX 4 observation records and exact picosecond timing fields without precision loss.",
+            "Cross-check official examples and test sub-nanosecond round trips, range failures, unknown signals, and mixed-system epochs.",
+        ),
+        "0.31.4": (
+            "Integrate optional CRINEX/Hatanaka only through a receipt bounding bytes, records, lines, and expansion ratio.",
+            "Test compression bombs, truncated states, hostile deltas, limit edges, chunking, provenance, and parity with ordinary RINEX parsing.",
+        ),
+        "0.35.1": (
+            "Parse frozen Earth-orientation and reference-frame products with agency, epoch, validity, units, uncertainty, and provenance.",
+            "Compare independent products and test stale/missing epochs, frame mismatch, interpolation bounds, unknown fields, and malformed covariance.",
+        ),
+        "0.37.2": (
+            "Normalize sample format and calibration before DC/IQ correction or bounded blanking/notching, retaining distortion evidence.",
+            "Test encoding/order/scale variants, clipping, quantization, gain changes, imbalance, hostile metadata, mitigation limits, and replay.",
+        ),
+        "0.47.2": (
+            "Map capture domains only through explicit identities, reset generations, validity intervals, transforms, uncertainty, and discontinuities.",
+            "Test endpoints, stale mappings, reset races, discontinuities, composition, precision loss, and forbidden raw cross-domain comparison.",
+        ),
+        "0.48.2": (
+            "Specify SIMD alignment, aliasing, feature detection, fallback, ownership, and unsafe preconditions before dispatch exists.",
+            "Test misalignment, overlap, unsupported features, forced fallback, length tails, scalar equivalence, Miri-safe wrappers, and sanitizers.",
+        ),
+        "0.50.2": (
+            "Require official plus independent or externally sourced signal/message vectors before each constellation feature is admitted.",
+            "Reject self-generated-only evidence and test vector identity, provenance, corruption, negative cases, scalar replay, and receiver agreement.",
+        ),
+        "0.114.1": (
+            "Implement SBAS L1 codes, acquisition, tracking, symbol evidence, and bounded regional GEO search before message framing.",
+            "Use official and independent captures for GEO IDs, Doppler/code search limits, weak signals, false peaks, tracking loss, and reacquisition.",
+        ),
+        "0.120.2": (
+            "Expose typed GDOP/PDOP/HDOP/VDOP/TDOP, solution age, satellite summaries, fix kind, and convergence state.",
+            "Compare independent solvers and test rank loss, excluded satellites, stale epochs, unavailable DOP, transitions, and serialization.",
+        ),
+        "0.120.3": (
+            "Expose typed prefit/postfit residual, weighting, contribution, rejection, and exclusion diagnostics targeting solver artifacts.",
+            "Test bounded diagnostic capacity, redaction, reweighting, exclusion/re-admission, unavailable causes, and exact artifact linkage.",
+        ),
+        "0.121.2": (
+            "Implement a sequential GNSS-only estimator with named state/process model, initialization, convergence, reset, and unavailable lifecycle.",
+            "Compare batch/reference solutions and test outages, time gaps, clock jumps, state resets, singular covariance, and deterministic replay.",
+        ),
+        "0.126.1": (
+            "Return orthometric height only through an identified geoid or vertical-datum model, epoch, interpolation, validity, and uncertainty.",
+            "Test model boundaries, missing cells, datum mismatch, stale epochs, poles/seams, independent benchmarks, and ellipsoid/orthometric type separation.",
+        ),
+        "0.127.1": (
+            "Specify RAIM hypotheses, risk allocation, alert limits, time-to-alert, continuity, solution separation, exclusion, recovery, and re-admission.",
+            "Test satellite/common-mode faults, exhaustion, delayed detection, unavailable assumptions, alert timing, and independent reference cases.",
+        ),
+        "0.128.1": (
+            "Specify ARAIM constellation/common-mode hypotheses, correlations, URA/SISA/service health, risk allocation, continuity, and availability.",
+            "Exercise assumption withdrawal, constellation faults, correlation changes, service-health expiry, allocation bounds, and unavailable outcomes.",
+        ),
+        "0.129.2": (
+            "Consume SBAS integrity as separate targeted evidence and define when protection levels are unavailable rather than merely large.",
+            "Test SBAS expiry/conflict, missing hypotheses, alert-limit breach, RAIM/ARAIM separation, withdrawal ordering, and recovery.",
+        ),
+        "0.146.2": (
+            "Provide a reviewed optional RustCrypto adapter without moving authentication protocol or policy into the dependency crate.",
+            "Run OSNMA/QZNMA end-to-end vectors, algorithm mismatch, malformed keys/signatures, feature minima, dependency audit, and zeroization review.",
+        ),
+        "0.160.2": (
+            "Freeze vacant, occupied, borrowed, released, and acknowledged timing-slot transitions with idempotent acknowledgement.",
+            "Model every legal/illegal transition, wrong sequence/generation, repeated acknowledgement, consumer panic/drop, polling races, and recovery.",
+        ),
+        "0.164.1": (
+            "Model IMU bias, scale factor, axis misalignment, noise, temperature, calibration validity, and uncertainty explicitly.",
+            "Use independent sensor references and test calibration expiry, unit/frame mistakes, saturation, temperature sweeps, and unavailable parameters.",
+        ),
+        "0.164.2": (
+            "Implement coning/sculling compensation and named gravity, Earth-rate, and transport-rate models in ECEF and local frames.",
+            "Compare independent trajectories and test stationary/rotating/high-dynamic cases, poles, frame transitions, step size, and numerical drift.",
+        ),
+        "0.165.1": (
+            "Add observable lever-arm and sensor time-offset calibration states with priors, bounds, covariance, and lifecycle.",
+            "Test unobservable geometries, wrong clocks/frames, delayed data, reset, convergence, cross-correlation, and independent trajectories.",
+        ),
+        "0.165.2": (
+            "Implement a square-root real-time fusion variant preserving the same named states, evidence, and failure semantics.",
+            "Compare covariance-form results and test ill-conditioning, positive-definiteness, downdates, long runs, cross-architecture tolerance, and reset.",
+        ),
+        "0.165.3": (
+            "Implement bounded vector tracking across solver and channel loops with scalar-loop fallback and visible aiding/discontinuity artifacts.",
+            "Test weak-signal gains, bad-aid rejection, divergence, channel loss, fallback, reacquisition, spoof evidence, and deterministic work bounds.",
+        ),
+        "0.166.1": (
+            "Implement zero-velocity, known-motion, and non-holonomic updates with explicit detectors, assumptions, validity, and targeted residuals.",
+            "Test false constraints, slip/skid, stationary motion, detector hysteresis, delayed timestamps, rejection, and recovery.",
+        ),
+        "0.167.2": (
+            "Expose an allocated factor-graph interface reusing canonical measurements, clocks, calibration states, residuals, and provenance.",
+            "Compare real-time filters on frozen graphs and test malformed topology, duplicate factors, rank loss, robust loss, and bounded import.",
+        ),
+        "0.168.1": (
+            "Smooth GNSS reacquisition without hiding the correction, state jump, covariance change, source interval, or discontinuity.",
+            "Test short/long outages, biased return, clock reset, spoofed return, gating, rollback, monotonic evidence, and consumer visibility.",
+        ),
+        "0.169.1": (
+            "Implement ellipsoid-aware distance, initial/final bearing, destination, cross-track, and along-track calculations.",
+            "Compare GeographicLib-class references and test antipodes, poles, dateline, coincident points, invalid ellipsoids, and convergence failure.",
+        ),
+        "0.169.2": (
+            "Define bounded Tier 0 waypoint, route, segment, and track models with explicit great-circle versus rhumb semantics.",
+            "Test zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, and no-allocation operation.",
+        ),
+        "0.169.3": (
+            "Evaluate geofences with explicit boundary inclusion, horizontal model, altitude datum, time window, uncertainty, and hysteresis.",
+            "Test boundary equality, holes, dateline/poles, altitude/time limits, uncertain positions, entry/exit ordering, and resource exhaustion.",
+        ),
+        "0.169.4": (
+            "Provide local-frame navigation and progress primitives while explicitly excluding road-network search, maps, and turn-by-turn routing.",
+            "Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.",
+        ),
+        "0.186.1": (
+            "Define canonical assistance artifacts for approximate time/location/orbit with source, generation, freshness, confidence, trust, and validity.",
+            "Test untrusted hints, rollback, cross-session mixing, expiry, receiver/application origins, translation round trips, and search-only restrictions.",
+        ),
+        "0.190.2": (
+            "Define CAN frame source/sink and platform-adapter ownership for bus timing, address claim, errors, backpressure, and permissions.",
+            "Use virtual and hardware CAN tests for resets, timestamp domains, loss/reorder, bus-off, address conflict, fast packets, and bounded queues.",
+        ),
+    }
+)

@@ -111,7 +111,7 @@ pub enum Availability<T, R> {
 
 pub struct CaptureStamp<C> {
     domain: CaptureClockDomainId,
-    generation: u32,
+    generation: CaptureGeneration,
     value: C,
 }
 
@@ -194,6 +194,51 @@ Navheim provides its own dependency-free, exact representations:
 There is no implicit conversion through Unix/POSIX time and no silent selection
 of an era, leap table, UTC realization, or current wall clock. Unknown scales
 and identifiers remain representable.
+
+### Exact atomic representation
+
+`TaiInstant` uses the epoch `1970-01-01T00:00:00 TAI`. Its canonical storage is
+an `i64` count of whole SI seconds from that epoch and a `u64` attosecond field
+in `0..1_000_000_000_000_000_000`. The epoch is an atomic coordinate only; it
+does not imply that the same field values denote a POSIX/Unix instant.
+
+Signed exact durations use an `i128` count of attoseconds. Constructors,
+normalization, instant-plus-duration, instant-minus-duration, instant
+difference, negation and scale conversion are checked. They return a typed
+range or precision error instead of wrapping, saturating or truncating. The
+supported `TaiInstant` range is the full canonical `i64`-second range at
+one-attosecond granularity; narrower protocol or platform ranges remain
+explicit conversion errors. Serialization fixes field widths, endianness and
+canonical form and rejects non-canonical fractions.
+
+Floating and lower-resolution adapters state rounding direction and report
+lost precision. UTC and POSIX mappings additionally require an identified,
+valid leap/UTC model and cannot be implemented as numeric casts.
+
+### Capture-domain mapping
+
+Opaque capture values become comparable only through an explicit mapping:
+
+```rust
+pub struct CaptureDomainMapping<S, D> {
+    source: CaptureClockDomainId,
+    source_generation: CaptureGeneration,
+    destination: CaptureClockDomainId,
+    destination_generation: CaptureGeneration,
+    valid_source_interval: CaptureInterval<S>,
+    transform: CaptureTransform<S, D>,
+    uncertainty: TimeUncertainty,
+    discontinuity: Availability<DiscontinuityEvidence, MappingReason>,
+    mapping_generation: MappingGeneration,
+}
+```
+
+A checked mapping operation verifies both domain IDs, both reset generations,
+the validity interval and mapping generation, then returns a new destination
+stamp plus accumulated uncertainty and provenance. A discontinuity ends the
+mapping interval; it is never normalized away. Raw `C` values have no public
+cross-domain ordering/subtraction convenience API, and mappings cannot be
+silently chained without composing their intervals and uncertainties.
 
 ## PPS, Time Marks, and Frequency Outputs
 
@@ -287,6 +332,26 @@ allocation. Every source documents maximum event size, queue depth and
 unacknowledged-event capacity. It must not choose an async runtime, spawn a
 thread, open an arbitrary device, or perform a privileged clock change.
 
+The slot follows one explicit state machine:
+
+```text
+Vacant
+  -- source publishes --> Occupied(sequence)
+  -- consumer borrows --> Borrowed(sequence)
+  -- borrow released --> Released(sequence)
+  -- acknowledge --> Vacant
+```
+
+The source writes only a vacant slot. An occupied event is immutable and
+remains owned by the slot while borrowed. Polling, overwriting, or
+acknowledging a borrowed event fails without changing state. Releasing a
+borrow does not acknowledge it; acknowledgement is accepted only for the
+released sequence and vacates the slot. Repeating acknowledgement of the most
+recently acknowledged sequence is an idempotent success. A stale, future, or
+different-generation acknowledgement is a structured error. Drop-based
+borrow release may be offered by safe wrappers, but the state transition and
+recovery behavior remain testable without unwinding.
+
 Each event carries an event sequence and source generation. A targeted
 invalidation includes target artifact/model ID, optional replacement ID,
 reason, effective capture/GNSS interval and whether withdrawal is mandatory.
@@ -295,6 +360,15 @@ pressure stops production, performs a documented explicit coalescing, or
 forces source resynchronization. This prevents a consumer from retaining a
 formerly valid observation after stale UTC parameters, authentication failure,
 a receiver reset, discontinuity or spoofing evidence.
+
+Sequences and generations never wrap. Before an event sequence is exhausted,
+the source emits and obtains acknowledgement for a mandatory end-of-generation
+event, renews the source generation, and restarts sequencing only under that
+new identity. If the terminal transition cannot be delivered or acknowledged,
+the source fails closed and requires resynchronization. Generation exhaustion
+is terminal until a caller establishes a new, non-reused source identity.
+Persisted consumers compare `(source identity, generation, sequence)` and
+never infer freshness from integer ordering across different identities.
 
 ## Consumer Adapter Contract
 
@@ -345,6 +419,13 @@ Before the timing API is stable, tests must cover:
 - PPS/message reordering, omission, duplication, latency, and reset behavior;
 - capture-domain mismatch, generation reset, event replay, queue pressure,
   targeted withdrawal and acknowledgement loss;
+- exact TAI range endpoints, non-canonical fractions, every checked arithmetic
+  overflow and lower-resolution rounding direction;
+- slot borrow/release/acknowledgement transitions, repeated acknowledgement,
+  wrong sequence/generation and panic-free recovery;
+- sequence/generation terminal transitions and attempted wrap/reuse;
+- capture mappings at interval endpoints, discontinuities, stale generations,
+  uncertainty composition and forbidden direct cross-domain comparison;
 - frequency-output lock loss, discontinuity, correction, and uncertainty;
 - time-only solutions with unhealthy satellites and inconsistent systems;
 - authenticated, pending, unavailable, failed, and revoked states;

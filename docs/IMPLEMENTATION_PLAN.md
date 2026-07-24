@@ -109,17 +109,22 @@ fragmentation.
 
 ### Solving and application primitives
 
-- `navheim-pvt`
+- `navheim-pvt`: typed solution, DOP, age, contributing/excluded satellite,
+  residual, convergence, vertical-datum and availability outputs.
 - `navheim-rtk`
 - `navheim-ppp`
-- `navheim-integrity`
-- `navheim-fusion`
+- `navheim-integrity`: implementable RAIM/ARAIM hypotheses, risk allocation,
+  alert/continuity/availability, protection-level and exclusion contracts.
+- `navheim-fusion`: calibrated IMU models, mechanization, bounded real-time
+  filters, optional allocated factor graph and observable reacquisition.
 - `navheim-timing`: GNSS time resolution, time-only solutions, receiver clock
   estimates, time transfer, external PPS/time-mark semantic correlation,
   10 MHz/frequency-output status, calibrated delay, uncertainty, health,
   authentication, integrity, and adapter-facing events.
 - `navheim-security`
-- `navheim-navigation`
+- `navheim-navigation`: geodesic/rhumb calculations, bounded
+  waypoint/route/track models, geofences and local-frame navigation; it does
+  not claim road-network routing.
 
 Authentication, signal authenticity, message correctness, and solution
 integrity remain separate types and policies.
@@ -131,13 +136,17 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
 ### Formats and interoperability
 
 - `navheim-nmea`
-- `navheim-nmea2000`
-- `navheim-rtcm`
+- `navheim-nmea2000`: protocol/PGN semantics separated from CAN frame I/O.
+- `navheim-rtcm`: frozen legacy and modern observation, ephemeris,
+  correction, transformation and projection profiles.
 - `navheim-ntrip`
-- `navheim-rinex`
-- `navheim-products`
+- `navheim-rinex`: observation, navigation, meteorological and clock profiles
+  with separately bounded compact/Hatanaka integration.
+- `navheim-products`: precise products plus Earth-orientation/reference-frame
+  inputs.
 - `navheim-receiver`
-- `navheim-assist`
+- `navheim-assist`: canonical trust/freshness/session model before SUPL, LPP,
+  Android or receiver translations.
 - `navheim-io`
 
 ### External adapters
@@ -151,6 +160,10 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
 
 These crates are optional and may carry reviewed external dependencies. They
 must not redefine canonical GNSS behavior.
+
+`navheim-crypto-rustcrypto` is the reviewed concrete conformance backend for
+end-to-end OSNMA/QZNMA testing. Cryptographic policy and protocol behavior
+remain in first-party canonical crates.
 
 ### GitHub-only tools
 
@@ -173,11 +186,12 @@ Implementation proceeds in this dependency order:
 7. capabilities, resource plans, and deterministic source/sink polling;
 8. formats and deterministic replay;
 9. scalar native DSP and timestamp correctness;
-10. GPS L1 C/A end-to-end as the first observable-to-fix path;
+10. independent signal/message vector admission, then GPS L1 C/A end-to-end
+    as the first observable-to-fix path;
 11. remaining GPS and constellations;
 12. multi-GNSS solution quality, RTK, PPP, integrity, and authentication;
 13. complete the stable GNSS timing observation/event API, then fusion,
-    hardware, OS, assistance, and NMEA 2000;
+    navigation, hardware, OS, canonical assistance, and NMEA 2000;
 14. simulation, fuzzing, audits, conformance, standards freeze, and release
     candidates.
 
@@ -246,6 +260,32 @@ bit-exact replay; floating kernels define numerical replay with explicit FMA,
 denormal and platform policy. Optimized kernels are compared against the
 normative scalar implementation. A broad public `Scalar` abstraction is not
 stabilized before concrete algorithms prove the required operations.
+
+Format profiles are not aggregate claims. RTCM legacy observations and
+surveying transforms/projections, each RINEX observation/navigation/
+meteorological/clock generation, RINEX 4 picosecond fields, compact codecs and
+Earth-orientation products have separate versioned stops. Decompression
+receipts bound bytes, records, lines and expansion ratio before decoded data
+enters an ordinary parser.
+
+PVT exposes DOP families, solution age, contributing/excluded satellites,
+fix/convergence taxonomy, residuals and exclusions as typed results.
+Orthometric height requires an identified geoid/vertical-datum artifact and
+cannot be confused with ellipsoidal height. The sequential GNSS-only estimator
+is independent from multi-sensor fusion and has explicit initialization,
+convergence, reset and unavailable states.
+
+Native front-end conditioning validates encoding, byte/IQ order, scaling,
+clipping, quantization, calibration and AGC state before DC/IQ correction or
+bounded mitigation. Every blanking/notching action creates distortion
+evidence. SIMD is prohibited until its alignment, aliasing, feature-detection,
+fallback and unsafe contract is independently reviewed.
+
+RAIM/ARAIM contracts name fault hypotheses, integrity-risk allocation, alert
+limits, time-to-alert, continuity, availability, correlation assumptions,
+solution separation, exclusion exhaustion and re-admission. Missing required
+inputs produce unavailable protection levels. SBAS evidence stays a separate
+targeted input.
 
 ## GNSS Timing and Consumer APIs
 
@@ -365,18 +405,23 @@ broader 1.0 roadmap:
 | Exact standards and test traceability schema | v0.1.2 and v0.210.1 |
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
-| Raw/resolved/atomic/UTC time, capture identity and rollback | v0.4.0-v0.5.3 |
+| Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
 | Namespaced IDs, artifacts, staged observations and assessments | v0.12.0-v0.13.2 |
-| Correction sessions and anti-mixing | v0.15.1, v0.139.1 and v0.142.1 |
-| Borrowed progress, targeted invalidation and preflight receipts | v0.16.0-v0.17.2 |
+| Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
+| Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Tiered facade and plan-before-side-effects | v0.20.1 |
+| Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
-| Deterministic bounded DSP/SDR execution | v0.37.1-v0.50.1 |
-| Typed solution/integrity lifecycle and numerical failure | v0.58.1, v0.120.1-v0.129.1 |
+| Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
+| Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
+| Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.2 |
 | Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
-| Immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
-| Bounded GNSS timing adapter and withdrawal contract | v0.158.1-v0.162.1 |
-| Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.1 |
+| Concrete crypto backend and immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
+| Exact bounded GNSS timing slot/mapping/withdrawal contract | v0.158.1-v0.162.1 |
+| Full fusion calibration/mechanization, vector tracking and reacquisition | v0.164.1-v0.168.1 |
+| Navigation crate implementation and road-routing non-claim | v0.169.1-v0.169.4 |
+| Canonical assistance and CAN I/O ownership | v0.186.1 and v0.190.2 |
+| Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.2 |
 | Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
 | Capability/resource/privacy documentation closure | v0.214.1 |
 

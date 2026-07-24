@@ -42,8 +42,8 @@ def parse_milestones() -> list[tuple[str, str, str, str]]:
             version, description = release_match.groups()
             description = DESCRIPTION_OVERRIDES.get(version, description)
             milestones.append((phase, phase_title, version, description))
-    if len(milestones) != 301:
-        raise RuntimeError(f"expected 301 roadmap milestones, found {len(milestones)}")
+    if len(milestones) != 339:
+        raise RuntimeError(f"expected 339 roadmap milestones, found {len(milestones)}")
     return milestones
 
 
@@ -60,22 +60,28 @@ def goal_text(description: str) -> str:
     text = description.rstrip(".")
     preserved = (
         "3GPP",
+        "ARAIM",
         "BeiDou",
+        "CAN",
         "FreeBSD",
         "Galileo",
         "GLONASS",
         "GNSS",
         "GPS",
+        "IMU",
         "iOS",
         "macOS",
         "NavIC",
         "NetBSD",
         "NMEA",
         "OpenBSD",
+        "PVT",
         "QZSS",
+        "RAIM",
         "RINEX",
         "RTCM",
         "SBAS",
+        "SIMD",
         "TAI",
         "UTC",
         "WASM",

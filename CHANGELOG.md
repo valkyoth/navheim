@@ -16,3 +16,8 @@ All notable changes to `navheim` are documented here.
 - Integrated the architecture/security gap review into the existing roadmap as
   targeted patch milestones, phase-specific technical acceptance criteria,
   stronger canonical/timing contracts, and unambiguous RC/package provenance.
+- Closed the second planning coverage review with explicit implementation
+  stops for `navheim-navigation`, complete RTCM/RINEX/product profiles, typed
+  PVT and vertical-datum outputs, front-end conditioning, fusion calibration
+  and vector tracking, assistance, integrity, RustCrypto, CAN I/O, independent
+  conformance vectors, and exact timing state machines.

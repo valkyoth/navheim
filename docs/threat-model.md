@@ -42,9 +42,13 @@ solution integrity.
 | Jamming/interference | loss and degradation cannot become stale valid output | CW, chirp, pulse, broadband, AGC saturation and partial-band tests |
 | Time rollback | GNSS, host wall, capture, persisted watermark and trust-root time stay separate | cold boot, storage rollback, truncated week, stale leap and delayed-key tests |
 | Correction mixing | provider/station/frame/antenna/peer/issue/epoch stay session-bound | cross-session injection, replay, incomplete-group and atomic-transition tests |
+| Correction duplication | physical target, convention and application stage remain ledger-bound | translated TGD/BGD/bias/PCO/PCV/atmosphere duplicate and wrong-sign tests |
 | Parser differential | progress, exact consumption, normalization and recovery are deterministic | independent corpora, chunk variations, unknowns, duplicates and overlong inputs |
+| Decompression expansion | compact codecs cannot bypass parser resource receipts | CRINEX/Hatanaka byte, record, line and expansion-ratio boundary tests |
 | Resource exhaustion | accepted plans bound all state, work, queues and output | false acquisition, worst-case FEC, queue pressure and reconnect-storm tests |
 | Evidence rollback | later assessment or invalidation cannot be ignored silently | reordered/replayed events, acknowledgement loss and forced-resynchronization tests |
+| Integrity-model omission | missing fault hypotheses or assumptions yield unavailable protection | satellite/constellation/provider/common-mode faults, exclusion exhaustion and alert-timing tests |
+| Sensor miscalibration | calibration validity, frame, clock, temperature and observability remain explicit | biased/expired calibration, lever-arm, time-offset, thermal and unobservable-motion tests |
 | Credential/location leak | routine errors and telemetry exclude secrets and sensitive location/time | sentinel-secret and sensitive-diagnostic snapshot tests |
 | FFI/DMA/SIMD fault | unsafe code only transfers validated bounded values into safe ownership | hostile length/alignment, disconnect/reset, model-check and sanitizer evidence |
 
@@ -59,6 +63,10 @@ solution integrity.
   signal-authenticity, integrity and policy-decision objects;
 - immutable correction sessions binding peer, provider, station, frame, datum,
   antenna, issue, epoch and generation;
+- a physical correction ledger rejecting duplicate or mutually exclusive bias,
+  antenna, wind-up and atmosphere applications;
+- independently sourced signal/message vectors admitted alongside each
+  constellation feature rather than after implementation;
 - explicit capability planning before hardware is opened;
 - caller-visible degradation, exclusion, uncertainty, and authentication state;
 - explicit timing invalidation/withdrawal events after stale models, receiver
