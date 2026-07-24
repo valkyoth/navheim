@@ -15,6 +15,7 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | Exchange | NMEA 0183, legal NMEA 2000 boundary, RINEX 2/3/4, principal IGS products | Planned |
 | Assistance | OMA SUPL, 3GPP LPP, Android raw measurements, injected assistance | Planned |
 | GNSS time transfer | Common-view/all-in-view results and frozen CGGTTS V2E interoperability | Planned; clock discipline/consensus excluded |
+| Numerical foundations | Bounded linear algebra plus admitted normal/chi-square kernels with conservative integrity rounding | Planned; first-party implementation, independent high-precision evidence |
 | Receiver sources | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, and raw observations | Planned; exact hardware/firmware evidence required |
 | GNSS science | Calibrated scintillation, reflectometry, space-weather and remote-sensing artifacts from frozen methods | Planned; optional research surface, no unvalidated operational-product claim |
 | SDR/accelerator I/O | Named SDR stacks plus bounded FPGA/GPU/external-DSP stage artifacts | Planned; accelerator output remains untrusted |

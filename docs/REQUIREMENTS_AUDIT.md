@@ -34,8 +34,12 @@ inside aggregate milestones. The following releases make each one auditable:
 | Requirement/public-claim ownership and traceability | v0.1.3 and final closure v0.210.2 |
 | Machine-readable crate/capability dependency DAG | v0.1.4 |
 | Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
+| Bounded linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
 | Safe decoder, algorithm and stage extensions | v0.12.2-v0.12.3 |
+| Canonical constellation/format signal definitions | v0.12.4 |
+| Artifact-ID lifecycle and deterministic model selection | v0.13.1 and v0.14.2 |
 | Honest resource-evidence classification | v0.17.1 and v0.50.1 |
+| Early acquisition hints and late assistance translation | v0.42.1 and v0.185.1 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |
 | Conditional public NavIC messaging | v0.114.2 |
@@ -70,8 +74,9 @@ correction formats. The audit-added primary-source families now represent:
 - conditionally admitted public receiver protocols.
 - authoritative GNSS scintillation, reflectometry, space-weather,
   remote-sensing, calibration and validation methods.
+- Netlib LAPACK and NIST DLMF numerical/factorization/probability references.
 
-The catalog now covers 35 source families. It remains an acquisition inventory,
+The catalog now covers 36 source families. It remains an acquisition inventory,
 not a conformance claim. Every implementation release must freeze exact lawful
 documents, amendments, sections, vectors, hardware/firmware profiles and
 limitations in `standards/manifest.toml`.

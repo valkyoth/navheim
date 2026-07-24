@@ -548,8 +548,11 @@ The following crates have independently useful public APIs and should be publish
 - **`navheim`** — ergonomic facade, profiles, prelude, auto source selection and feature bundles.
 - **`navheim-core`** — zero-dependency common types: units, time, coordinates, IDs, observations, ephemerides, events, errors, capabilities, bounded collections, bit views, checksums, FEC primitives and stable traits.
 - **`navheim-math`** — zero-dependency, `no_std` deterministic elementary
-  floating math and narrowly scoped backend traits used by coordinates, DSP
-  and solvers.
+  floating math, admitted statistical kernels and narrowly scoped backend
+  traits used by coordinates, DSP and solvers.
+- **`navheim-linalg`** — zero-dependency, `no_std`, bounded fixed-capacity and
+  caller-scratch linear algebra used by solvers without exposing a broad
+  generic matrix ecosystem prematurely.
 - **`navheim-dsp`** — zero-dependency DSP algorithms: complex types, NCOs, filters, FFTs, resamplers, channelizers, acquisition and tracking-loop primitives.
 - **`navheim-sdr`** — source/front-end abstractions, band planning, sample metadata, coherent-array support and device adapter traits.
 
@@ -791,6 +794,18 @@ Provide named standard constants and versioned registry snapshots, but
 preserve unknown authority/code pairs. Public system/signal selections use
 bounded sets rather than fixed-width masks.
 
+### 9.1.1 Canonical signal definitions
+
+Constellation crates provide versioned definitions keyed by extensible signal
+IDs. A definition carries nominal or channel-dependent carrier frequency,
+including GLONASS FDMA formulas and applicable channel context; derived
+wavelength; chip/code/symbol rates; data/pilot/component identity; modulation
+and secondary-code properties; native time scale; constellation; observation
+applicability; frozen RINEX/RTCM mappings; revision; and provenance. Unknown or
+partially known definitions remain representable. Format crates translate
+through this interface and do not maintain conflicting frequency/signal
+tables.
+
 ### 9.2 Units
 
 Do not expose naked `f64` for semantically different quantities. `navheim-core` should provide transparent types:
@@ -835,6 +850,37 @@ Published Navheim crates use stable Rust only: scalar/auto-vectorized code and
 reviewed target-specific `core::arch` adapters with explicit feature detection
 and scalar fallback. A future portable-SIMD API is admitted only when stable
 on the MSRV or behind a separately raised MSRV, never by enabling nightly.
+
+### 9.2.2 Bounded linear algebra
+
+`navheim-linalg` owns fixed-capacity vectors, matrices and symmetric storage,
+plus caller-scratch runtime dimensions. Its admitted kernels include
+Householder/Givens QR, Cholesky and LDLT with definiteness checks, triangular
+solves, symmetric rank updates/downdates, square-root covariance/information
+updates, and rank/condition estimation. Dimensions and scratch arithmetic are
+checked; aliasing/non-overlap, state order, pivoting, rounding and work are
+explicit. Singular, indefinite, non-finite and badly scaled inputs have typed
+failure rather than plausible output.
+
+Production least squares uses a qualified stable factorization; it does not
+silently invert normal equations. Generic raw matrix APIs remain private or
+narrow until concrete solvers establish their required public abstraction.
+Every admitted kernel is compared with independent high-precision references,
+including adversarial scaling and update/downdate cases.
+
+### 9.2.3 Conservative statistical kernels
+
+`navheim-math` admits only the probability functions required by implemented
+GNSS algorithms: normal tail/CDF and inverse tail, chi-square CDF/tail/
+quantile, and their validated degrees-of-freedom/confidence domains. Very
+small risks use explicit log-probability paths. Each approximation publishes
+monotonicity, error bounds, validated range and unavailable behavior.
+
+Threshold APIs encode rounding direction. Integrity/protection calculations
+must remain conservative after approximation and rounding: error may not
+underestimate a protection level or make an acceptance test more permissive.
+Independent arbitrary-precision tables cover ordinary, tail, boundary and
+out-of-domain cases.
 
 ### 9.3 Time model
 
@@ -903,6 +949,14 @@ bounded parent IDs and derivation algorithm/version. Correctness,
 navigation-message authentication, signal-authenticity evidence, integrity
 and policy decisions are separate immutable objects targeting artifact IDs.
 Delayed OSNMA/QZNMA results add assessments; they never mutate earlier facts.
+
+Artifact and provenance IDs contain a source namespace, reset generation and
+non-wrapping local sequence with explicit exhaustion and renewal. IDs are
+never reused after reset. Replay/import remaps untrusted namespaces while
+preserving parent relationships; artifact identity remains distinct from an
+optional content digest. Canonical serialization defines duplicate/collision
+behavior, and routine formatting is privacy-safe rather than globally
+correlatable. External IDs never become globally authoritative by assertion.
 
 Important absence uses a reason-bearing `Availability<T, R>` rather than a
 bare `Option`. Stage-specific types prevent corrected/raw measurements,
@@ -1288,6 +1342,15 @@ specified and tested against the scalar path.
 
 ### 11.5 Acquisition scheduler
 
+Before acquisition, a dependency-free `SearchAid`/`AcquisitionHint` artifact
+may carry approximate time, location, velocity, orbit/almanac and Doppler
+windows; source/generation; validity; uncertainty; trust class; tracked-signal
+aiding; and reacquisition-memory identity/expiry. Every resulting search-space
+reduction is recorded in `PlanReceipt`. Poisoned, stale or conflicting hints
+fall back to a bounded blind search. Hints may reduce work but cannot resolve
+canonical time/position or establish trust. Later SUPL, LPP, Android and
+receiver assistance adapters translate into this early artifact.
+
 The scheduler should combine:
 
 - blind full search;
@@ -1359,6 +1422,16 @@ update.commit()?;
 ```
 
 Validation can compare health, issue-of-data, time, orbit continuity, authentication and independent sources.
+
+Solver queries name satellite, signal, model kind and requested transmit/
+receive epoch. Selection checks toe/toc, fit interval, issue-of-data, health,
+future/stale/expiry/discontinuity state and source/session/generation
+compatibility. Authentication assessments are inputs without becoming message
+correctness. Equivalent and conflicting healthy sources are handled
+deterministically through `Selected`, `Ambiguous`, `Unavailable` or `Rejected`
+outcomes. A selection artifact records every candidate and rejection reason;
+there is no ambient “latest wins.” Corrections and precise products use the
+same explicit applicability/selection pattern.
 
 ---
 
@@ -2190,6 +2263,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.3.1** — physical unit types and checked conversions.
 - **0.3.2** — measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters.
 - **0.3.3** — deterministic first-party `no_std` elementary math and stable backend contract.
+- **0.3.4** — bounded first-party linear algebra with fixed/caller-scratch storage, stable factorizations, rank/condition evidence and narrow solver-facing APIs.
+- **0.3.5** — admitted statistical kernels with bounded error, log-probability support and conservative integrity-threshold rounding.
 - **0.4.0** — raw native GNSS time fields and extensible scale identifiers.
 - **0.4.1** — resolved native instants with private fields and resolution evidence.
 - **0.4.2** — capture clock-domain/generation identifiers and exact sample timestamps.
@@ -2217,12 +2292,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.12.1** — namespaced registry authorities and bounded identifier sets without closed public masks.
 - **0.12.2** — bounded user-decoder registration and namespaced opaque-artifact boundary.
 - **0.12.3** — safe external algorithm and processing-stage extension contracts with preflight capabilities, resource limits, trust, provenance and reset isolation.
+- **0.12.4** — versioned canonical signal definitions for frequency, wavelength, rates, components, modulation, native time and format mappings.
 - **0.13.0** — canonical observation/epoch model with distinct transmit, receive and capture times.
 - **0.13.1** — immutable artifacts, bounded provenance parents and separate targeted assessment identifiers.
 - **0.13.2** — tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages.
 - **0.13.3** — typed horizontal/three-dimensional speed, course-over-ground and climb-rate observations with covariance, epoch and unavailable-state semantics.
 - **0.14.0** — ephemeris, almanac, health and satellite-clock model traits.
 - **0.14.1** — model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
+- **0.14.2** — deterministic navigation-model and correction/product applicability selection with explicit considered-candidate evidence.
 - **0.15.0** — correction and provenance models.
 - **0.15.1** — immutable correction sessions and ordered applied-correction ledger with anti-mixing policy.
 - **0.15.2** — canonical physical correction/bias taxonomy and duplicate-application prevention.
@@ -2287,6 +2364,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.41.0** — mixed-radix FFT and convolution.
 - **0.41.1** — floating numerical replay contract for FMA, denormals, finiteness and platform tolerances.
 - **0.42.0** — polyphase channelizer.
+- **0.42.1** — dependency-free search-aid and acquisition-hint artifacts with bounded fallback, expiry, trust and plan-reduction evidence.
 - **0.43.0** — acquisition search framework and peak statistics.
 - **0.43.1** — acquisition work tokens, bounded candidates and named false-alarm assumptions.
 - **0.44.0** — DLL/FLL/PLL tracking-loop primitives.
@@ -2711,6 +2789,23 @@ Navheim 1.0.0 is released only when all of the following are true:
 41. Caller-provided angle/direction evidence remains distinguished from the
     native calibrated multi-antenna producer, whose ambiguity, coherence,
     validity and expiry are independently tested.
+42. All solver/filter linear algebra uses bounded, independently verified
+    factorizations with dimension, scratch, rank, condition, definiteness,
+    finiteness and badly scaled failure evidence; production least squares
+    never relies on unqualified normal-equation inversion.
+43. Statistical kernels publish validated domains and approximation bounds;
+    integrity/protection thresholds use conservative rounding and cannot
+    become permissive because of numerical error.
+44. Artifact/provenance IDs have non-reusing namespace/generation/sequence,
+    exhaustion, renewal, import/remap, serialization, collision, parent and
+    privacy semantics; navigation selection records all candidates and never
+    uses ambient latest-wins behavior.
+45. Constellation crates provide canonical versioned signal definitions, and
+    format crates translate through them rather than duplicating frequency,
+    wavelength, rate, component, modulation, time-scale or mapping tables.
+46. Early acquisition hints are dependency-free, bounded, expiring and
+    provenance-rich; every work reduction is receipted, conflicting hints
+    fall back safely, and no hint resolves time, position or trust.
 
 ---
 
@@ -2778,6 +2873,9 @@ The standards manifest should continuously track at least:
 - in-force ITU-R/IGS and other authoritative GNSS scintillation,
   reflectometry, space-weather and remote-sensing methods selected by the
   science-profile freeze;
+- Netlib/LAPACK numerical stability and factorization references plus NIST
+  DLMF probability/special-function definitions selected by the numerical
+  profile freezes;
 - OMA SUPL and 3GPP LPP;
 - BIPM/CCTF CGGTTS V2E, current BDS-3 extensions and guidance, together with
   in-force ITU-R GNSS time-transfer terminology and recommendations;

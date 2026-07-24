@@ -48,6 +48,7 @@ REQUIRED = {
     "novatel-oem",
     "conditional-receiver-protocols",
     "gnss-science-methods",
+    "numerical-methods",
 }
 
 

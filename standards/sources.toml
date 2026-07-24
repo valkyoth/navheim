@@ -407,6 +407,17 @@ landing_url = "https://www.itu.int/rec/R-REC-P.531"
 documents = ["ITU-R P.531-16", "exact IGS ionosphere/science product and method documents selected by v0.124.1", "exact authoritative GNSS-R, calibration, algorithm, validation-dataset, and scientific-product records selected by v0.124.1"]
 first_release = "v0.124.1"
 
+[[source]]
+id = "numerical-methods"
+publisher = "Netlib LAPACK / United States National Institute of Standards and Technology"
+scope = "stable linear algebra factorizations, rank/condition evidence, normal/chi-square functions, tails, quantiles, and error analysis"
+status = "profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.netlib.org/lapack/explore-html/topics.html"
+documents = ["LAPACK 3.12.1 routine and accuracy/stability references selected by v0.3.4", "NIST DLMF Chapter 7 error functions and Chapter 8 incomplete gamma functions", "exact independent arbitrary-precision reference method/table records selected by v0.3.4-v0.3.5"]
+first_release = "v0.3.4"
+
 [[download]]
 source_id = "gps-sis"
 filename = "IS-GPS-200N.pdf"

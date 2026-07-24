@@ -19,9 +19,9 @@ Navheim currently provides repository and crate foundations only.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
 - Checksum-locked local copies of 25 applicable IETF RFCs, an RFC errata drift
-  snapshot, and a reviewed acquisition inventory spanning 35 GNSS, correction,
-  exchange, aviation, telecom, geodesy, security, timing, receiver, SDR, Rust,
-  and platform
+  snapshot, and a reviewed acquisition inventory spanning 36 GNSS, correction,
+  exchange, aviation, telecom, geodesy, security, timing, receiver, SDR,
+  numerical/scientific, Rust, and platform
   source families.
 - An ignored, locally checksum-locked standards vault with safe allowlisted
   fetching for public documents; paid, licensed, consent-gated,
@@ -34,7 +34,7 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 396 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 401 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
@@ -46,6 +46,10 @@ Navheim currently provides repository and crate foundations only.
   safe processing extensions, conditional NavIC messaging, complete DFMC/
   network-RTK/PPP matrices, optional GNSS science, fixed-rate fusion, native
   calibrated AoA, and full accelerator-stage equivalence.
+- Fifth gap review integrated without duplicating later solvers or assistance:
+  bounded linear algebra, conservative statistical kernels, canonical signal
+  definitions, artifact-ID lifecycle, deterministic model selection, and
+  early acquisition hints now have explicit foundation ownership.
 
 ## Not Implemented
 

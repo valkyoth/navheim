@@ -94,7 +94,10 @@ undeclared edges and silent privilege or tier escalation.
   bit/FEC/checksum primitives, observations, ephemerides, corrections, events,
   errors, provenance, resource planning, and stable traits.
 - `navheim-math`: dependency-free `no_std` deterministic elementary floating
-  math and narrowly scoped backend capabilities.
+  math, admitted conservative statistical kernels and narrowly scoped backend
+  capabilities.
+- `navheim-linalg`: dependency-free `no_std` bounded fixed-capacity and
+  caller-scratch linear algebra with narrow solver-facing APIs.
 - `navheim-dsp`: complex/fixed-point values, filters, resampling, FFT,
   acquisition, tracking, synchronization, and estimators.
 - `navheim-sdr`: front-end traits, sample metadata, coherent arrays, band
@@ -197,14 +200,16 @@ bypass canonical validation, evidence, privacy, or policy.
 Implementation proceeds in this dependency order:
 
 1. bounded collections, errors, and checked arithmetic;
-2. physical units, exact integer time, and deterministic `no_std` math;
+2. physical units, exact integer time, deterministic `no_std` math, bounded
+   linear algebra and admitted conservative statistical kernels;
 3. coordinates and reference frames;
 4. bit, checksum, parity, and FEC primitives;
-5. extensible identifiers and registries;
+5. extensible identifiers, canonical signal definitions and registries;
 6. observations, ephemerides, corrections, provenance, and events;
 7. capabilities, resource plans, and deterministic source/sink polling;
 8. formats and deterministic replay;
-9. scalar native DSP and timestamp correctness;
+9. scalar native DSP, dependency-free acquisition hints and timestamp
+   correctness;
 10. independent signal/message vector admission, then GPS L1 C/A end-to-end
     as the first observable-to-fix path;
 11. remaining GPS and constellations;
@@ -245,11 +250,24 @@ Delayed authentication creates a new assessment targeting the original
 artifact. No-fix/unavailable, convergence, rollback, withdrawal and coasting
 are explicit events or lifecycle artifacts rather than valid solution modes.
 
+Artifact/provenance IDs contain source namespace, reset generation and a
+non-wrapping local sequence with explicit exhaustion/renewal. Reset never
+reuses identity. Import/replay remaps untrusted namespaces while preserving
+parents; identity is distinct from an optional content digest. Canonical
+serialization, duplicate/collision handling and privacy-safe formatting are
+part of the lifecycle contract.
+
 Observation stages are separately typed: `TrackingEstimate`,
 `RawReceiverObservation`, `RawSdrObservation`, normalized `Observation`,
 `CorrectedObservation`, `ObservationEpoch` and `SolverInputEpoch`. Correction
 ledgers and navigation-store transactions preserve issue, provider, station,
 frame, session, generation, validity, uncertainty and provenance.
+Constellation crates provide the canonical versioned signal definitions;
+format crates translate through them instead of duplicating frequency,
+wavelength, rate, component, modulation, native-time or identifier tables.
+Navigation models, corrections and products are selected through explicit
+epoch/applicability queries returning considered-candidate evidence and
+`Selected`, `Ambiguous`, `Unavailable` or `Rejected`, never ambient latest-wins.
 
 ## Resource, Progress, and Numerical Contracts
 
@@ -294,6 +312,25 @@ versioned evidence. Platform math and target-specific `core::arch` paths are
 optional reviewed backends with scalar equivalence. Nightly
 `core::simd`/`std::simd`, OS `libm` assumptions and post-MSRV APIs are forbidden
 from the baseline.
+
+`navheim-linalg` admits only bounded solver-required storage, QR,
+Cholesky/LDLT, triangular solves, rank updates/downdates, square-root updates
+and rank/condition estimates. It rejects dimension/scratch overflow, aliasing,
+singular, indefinite, non-finite and badly scaled cases explicitly. Production
+least squares cannot silently use unqualified normal-equation inversion.
+
+Statistical kernels are limited to admitted normal and chi-square
+tails/CDFs/quantiles with explicit confidence/degrees-of-freedom domains,
+log-probability paths, monotonicity and approximation bounds. Integrity and
+protection thresholds round conservatively, so approximation error cannot
+understate risk or make acceptance more permissive.
+
+An early dependency-free `SearchAid`/`AcquisitionHint` carries bounded,
+expiring approximate time/location/velocity/orbit and Doppler windows with
+source, generation, uncertainty and trust class. Plan receipts record every
+search reduction; poisoned/conflicting hints fall back to bounded blind
+search. Late assistance protocols translate into this artifact and never use
+it to resolve canonical time, position or trust.
 
 Format profiles are not aggregate claims. RTCM legacy observations and
 surveying transforms/projections, each RINEX observation/navigation/
@@ -472,10 +509,14 @@ broader 1.0 roadmap:
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
+| Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
 | Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
 | External algorithm/stage capability, resource, trust and reset contract | v0.12.3 |
+| Canonical versioned signal definitions shared by constellation and format crates | v0.12.4 |
 | Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
+| Non-reusing artifact/provenance ID lifecycle and replay remapping | v0.13.1 |
+| Deterministic navigation/correction/product model selection evidence | v0.14.2 |
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
@@ -484,6 +525,7 @@ broader 1.0 roadmap:
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
+| Early bounded acquisition hints and late assistance translation | v0.42.1 and v0.185.1 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |

@@ -112,10 +112,10 @@ MILESTONE_DETAILS = {
         "ordered, subtracted, or promoted to a resolved observation.",
     ),
     "0.13.1": (
-        "Separate facts, correctness, authentication, signal authenticity, "
-        "integrity, and policy decisions through immutable target IDs.",
-        "Prove delayed assessments never mutate facts and bounded parent graphs "
-        "reject cycles, overflow, unknown derivations, and stale generations.",
+        "Separate facts and assessments through immutable IDs with source namespace, "
+        "generation, non-wrapping sequence, exhaustion/renewal, import remapping, canonical serialization, and optional distinct content digest.",
+        "Prove delayed assessments never mutate facts; test reset non-reuse, "
+        "exhaustion, collisions, duplicate imports, parent replay, hostile external IDs, privacy-safe formatting, cycles, and stale generations.",
     ),
     "0.13.2": (
         "Make every observation derivation stage a distinct type and preserve "
@@ -414,8 +414,8 @@ MILESTONE_DETAILS.update(
             "Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.",
         ),
         "0.185.1": (
-            "Define canonical assistance artifacts for approximate time/location/orbit with source, generation, freshness, confidence, trust, and validity.",
-            "Test untrusted hints, rollback, cross-session mixing, expiry, receiver/application origins, translation round trips, and search-only restrictions.",
+            "Define canonical late assistance with source, generation, freshness, confidence, trust, and validity, translated into the earlier SearchAid contract without creating a second hint model.",
+            "Test SUPL/LPP/mobile/receiver translations, untrusted hints, rollback, cross-session mixing, expiry, round trips, bounded fallback, and no time/position/trust resolution.",
         ),
         "0.190.2": (
             "Execute NMEA 2000/J1939 outgoing decisions through CAN I/O owning timestamps, bus errors, permissions, backpressure, and hardware lifecycle.",

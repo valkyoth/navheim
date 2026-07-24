@@ -5,6 +5,14 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Generate an acyclic crate/capability DAG covering normal, optional, build, and development edges plus features, tiers, alloc/std, unsafe, TLS, crypto, publication, and platforms.",
         "Test Cargo metadata equivalence, feature unification, cycles, undeclared edges, tier escalation, adapter isolation, and every supported feature combination.",
     ),
+    "0.3.4": (
+        "Implement narrow no_std fixed-capacity and caller-scratch vectors/matrices, symmetric storage, QR, Cholesky/LDLT, triangular solves, rank updates/downdates, square-root updates, and rank/condition estimates.",
+        "Compare arbitrary-precision and independent references for dimension/scratch limits, aliasing, deterministic pivots, singular/indefinite/non-finite inputs, bad scaling, downdate failure, and prohibition of unqualified normal-equation inversion.",
+    ),
+    "0.3.5": (
+        "Implement only admitted normal and chi-square tails/CDFs/quantiles with degrees-of-freedom, confidence, log-probability, validated range, monotonicity, bounded error, and conservative rounding semantics.",
+        "Compare arbitrary-precision tables across central/extreme tails and domain boundaries; prove integrity/protection rounding never underestimates risk or permits a looser threshold.",
+    ),
     "0.7.2": (
         "Implement bounded UTM/UPS and selected Transverse Mercator profiles with explicit zone/hemisphere, false offsets, datum, frame, epoch, convergence, distortion, and unknown IDs.",
         "Cross-check independent references and test forward/inverse round trips, polar and zone boundaries, antimeridian, invalid coordinates, and unsupported EPSG-database requests.",
@@ -13,9 +21,17 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Define static Tier 0 and isolated host extension contracts declaring capabilities, numerical backend, determinism, resources, artifacts, provenance, trust, reset, and invalidation.",
         "Test limit lies, nondeterminism, prohibited trust/correctness bypass, stale output, panic/failure isolation, reset, unregister, and canonical fallback.",
     ),
+    "0.12.4": (
+        "Define versioned canonical signal metadata for nominal/channel frequency, GLONASS FDMA context, wavelength, chip/code/symbol rates, components, modulation, secondary codes, native time, applicability, and frozen RINEX/RTCM mappings.",
+        "Cross-check every admitted constellation/format table and test unknown/partial definitions, FDMA channel bounds, revision conflicts, unit/rounding errors, format round trips, and rejection of duplicate private tables.",
+    ),
     "0.13.3": (
         "Define typed horizontal and three-dimensional speed, course over ground, and climb rate with frame, epoch, covariance, derivation, and reason-bearing availability.",
         "Test stationary/low-speed course, vertical-only motion, frame and epoch mismatch, covariance propagation, discontinuities, overflow, and independent trajectories.",
+    ),
+    "0.14.2": (
+        "Select navigation models, corrections, and products by named query epoch, satellite/signal/kind, issue, health, fit/validity, discontinuity, source/session/generation, and separate authentication assessment.",
+        "Test future/stale/expired models, equivalent/conflicting healthy sources, issue transitions, session mixing, late authentication, every Selected/Ambiguous/Unavailable/Rejected outcome, considered-candidate evidence, and no latest-wins path.",
     ),
     "0.1.3": (
         "Create a bidirectional ledger from architecture requirements and public claims to owners, milestones, sources, tests, status, and non-claims; make authored-file scope explicit.",
@@ -80,6 +96,10 @@ CONFORMANCE_MILESTONE_DETAILS = {
     "0.169.5": (
         "Produce calibrated multi-antenna angle-of-arrival and direction-consistency evidence with array geometry, phase bias, ambiguity set, coherence, clock, frame, validity, uncertainty, and expiry.",
         "Use surveyed/simulated arrays and test integer ambiguities, reflections, weak signals, incoherent clocks, geometry degeneracy, calibration expiry, spoof cases, reset, and unavailable output.",
+    ),
+    "0.42.1": (
+        "Define dependency-free SearchAid/AcquisitionHint artifacts for approximate time/location/velocity/orbit and Doppler windows, source/generation, validity, uncertainty, trust, cross-signal aiding, and reacquisition identity/expiry.",
+        "Test plan-reduction receipts, poisoned/conflicting/stale hints, bounded blind fallback, search equivalence, expiry/reset, work limits, and compile/runtime proof that hints cannot resolve canonical time, position, or trust.",
     ),
     "0.175.1": (
         "Version and bound FPGA/GPU/external-DSP FFT, channelizer, acquisition, candidate, correlator, and tracking artifacts with quantization, scaling, identity, clocks, calibration, build, reset, work, and trust provenance.",
