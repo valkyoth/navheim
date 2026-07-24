@@ -129,6 +129,11 @@ All notable changes to `navheim` are documented here.
   plan-bound permit. The application facade is ready-only and cannot expose
   driver, lane, permit or poll types, while shared driver calls retain
   distinct-lane concurrency.
+- Integrated the twenty-third review into v0.48.3 by defining the public
+  `CleanupScheduler` request/drive/ready-token/completion lifecycle. Caller-
+  invoked drive is bounded and nonblocking; request and turn IDs never reuse,
+  queues reserve explicit capacity, completions persist until claim or
+  deterministic retirement, and shutdown reconciles every request state.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

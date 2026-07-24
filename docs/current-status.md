@@ -151,8 +151,14 @@ Navheim currently provides repository and crate foundations only.
 - Twenty-second gap review makes that v0.48.3 surface enforceable:
   `ExecutionSupervisor` has no public poll method; a sealed, plan-bound
   permit is consumed to create the `ReplayDriver` that owns low-level polling,
-  and the application facade exposes only ready `CleanupCompletion` values.
+  and the application completion path exposes only ready values.
   Shared driver calls preserve concurrency across distinct mutable lanes.
+- Twenty-third gap review completes the caller-driven v0.48.3 facade:
+  `CleanupScheduler` has bounded request, drive, ready-token and completion-
+  claim operations; non-reusing request/turn IDs and deterministic turn traces;
+  explicit queue backpressure, retention/retirement and shutdown rules; and an
+  optional declared Tier 2 scheduler worker rather than a hidden cleanup
+  thread.
 
 ## Not Implemented
 

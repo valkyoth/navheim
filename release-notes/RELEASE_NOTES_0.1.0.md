@@ -232,8 +232,19 @@ The twenty-second coverage pass places that poll only on `ReplayDriver`.
 driver is created exactly once per scheduler generation by consuming a sealed
 plan-bound `SchedulerPermit`; its shared borrow retains concurrency across
 distinct mutable lanes. Application facade signatures expose none of the
-driver, lane, permit or poll types and emit only ready `CleanupCompletion`
-values. Custom scheduler access requires a separately reviewed permit/profile.
+driver, lane, permit or poll types, and the completion path emits only ready
+`CleanupCompletion` values. Custom scheduler access requires a separately
+reviewed permit/profile.
+
+The twenty-third coverage pass defines how applications drive that sealed
+boundary. A non-cloneable `CleanupScheduler` admits requests only after
+reserving request and completion capacity, advances them through bounded
+nonblocking caller-invoked turns, issues private ready tokens, and retains each
+completion until a consuming claim or deterministic recorded retirement.
+Request and turn IDs are generation-bearing and non-reusing; queue pressure,
+stale/duplicate claims, forgotten IDs, replay-significant turn order, and
+shutdown reconciliation all have explicit behavior. A scheduler thread is
+permitted only as a declared, bounded Tier 2 worker—not a hidden reaper.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
