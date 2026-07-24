@@ -186,13 +186,13 @@ against completion, result claims, handle drop, admission, another cleanup
 caller and shutdown.
 
 The seventeenth coverage pass separates cleanup mutation from trace mutation.
-Invalid requests remain wholly mutation-free. A failed single-cleaner CAS
-returns `Busy` with a bounded private contention receipt but changes no
-registry, payload, cleanup, admission or trace state. In replayable profiles,
-the supervisor must bind that receipt to a caller lane and logical call in the
-bounded trace before reacting. Trace exhaustion follows the existing
-fail-closed policy, and replay produces `Busy` from recorded evidence rather
-than live contention.
+Invalid requests remain wholly mutation-free. The crate-private primitive's
+failed single-cleaner CAS returns a bounded contention receipt but itself
+changes no registry, payload, cleanup, admission or trace state. In replayable
+profiles, the supervisor must bind `Busy` to a caller lane and logical call in
+the bounded trace before reacting. Trace exhaustion follows the existing fail-
+closed policy, and replay produces `Busy` from recorded evidence rather than
+live contention.
 
 The eighteenth coverage pass makes that ordering enforceable in safe Rust.
 Replayable applications call only `ExecutionSupervisor::poll_cleanup`; the raw
@@ -209,6 +209,14 @@ generation, carries a deterministic `CleanupLaneId`, and advances a checked
 non-wrapping sequence. Calls and replay use
 `(CleanupLaneId, CallSequence)`, never invocation arrival, CAS order, OS thread
 IDs or runtime-task identities.
+
+The twentieth coverage pass records successful cleanup ownership and results,
+not only `Busy`. The supervisor reserves worst-case call-event capacity before
+the cleaner CAS. A winning call receives a checked global `CleanupOrder`,
+records its grant before mutation, and finalizes exact selected/retired job
+IDs, work and progress before publishing reusable state or returning. Replay
+returns `Busy` without CAS and gates grants in their recorded global order;
+early calls remain on the same logical call through `ReplayPending`.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and

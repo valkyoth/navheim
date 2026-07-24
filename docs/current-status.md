@@ -121,11 +121,12 @@ Navheim currently provides repository and crate foundations only.
   `Busy`, selection is bounded and lowest-`JobId` deterministic, and Loom
   covers cleanup against every competing executor transition.
 - Seventeenth gap review removes the remaining v0.48.3 trace contradiction:
-  `Busy` returns a bounded contention receipt without mutating cleanup or trace
-  state, and the failed CAS is its linearization point. Replayable supervisors
-  must bind the receipt to the caller lane/logical call before reacting;
-  overflow follows the existing stop/resynchronize/unavailable policy, while
-  replay reproduces the result without consulting live contention.
+  the raw primitive returns a bounded contention receipt without mutating
+  cleanup or trace state, and the failed CAS is its linearization point.
+  Replayable supervisors must bind `Busy` to the caller lane/logical call
+  before reacting; overflow follows the existing
+  stop/resynchronize/unavailable policy, while replay reproduces the result
+  without consulting live contention.
 - Eighteenth gap review makes that v0.48.3 policy enforceable in safe Rust:
   applications receive only supervised cleanup, while the raw primitive and
   receipt remain crate-private. The supervisor binds the executor/plan/trace,
@@ -137,6 +138,11 @@ Navheim currently provides repository and crate foundations only.
   capabilities with deterministic IDs and checked per-lane sequences; replay
   keys `(CleanupLaneId, CallSequence)`, never call arrival, CAS order, OS
   thread IDs or runtime task identities.
+- Twentieth gap review completes the v0.48.3 concurrent-call trace protocol:
+  every live replay-relevant call reserves capacity for `Busy` or `Granted`
+  before CAS, successful grants carry a checked global order plus exact
+  bounded selection/work/progress evidence, and replay gates grants in that
+  recorded order rather than observing live cleaner timing.
 
 ## Not Implemented
 

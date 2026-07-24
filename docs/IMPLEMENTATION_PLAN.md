@@ -463,41 +463,69 @@ CAS order, OS thread IDs or async-runtime task identities. No hidden worker/
 reaper exists.
 
 After mutation-free lane/supervisor/executor/generation and budget validation,
-the supervisor checks and advances the lane sequence to form
-`(CleanupLaneId, CallSequence)`. Stale, duplicate, exhausted and cross-
-supervisor lanes fail before executor mutation. The supervisor then invokes a
-crate-private executor primitive in live mode. The shared executor borrow
-keeps cleanup usable while unrelated lifetime-bound handles remain live. An
-internal atomic single-cleaner CAS serializes cleanup; a loser returns
-`CleanupStartError::Busy(CleanupContentionReceipt)` before registry, payload,
-cleanup, admission or trace mutation; the failed CAS is its linearization
-point. Other validation/start errors are likewise wholly mutation-free. The
-guard is private, non-cloneable and never exposed/forgettable, and every
-normal return releases it explicitly. Safe `std` synchronization and automatic
-trait bounds are required; no handwritten unsafe `Sync` implementation is
-admitted.
-`PlanReceipt` bounds cleaning entries, lane count, calls per lane, non-wrapping
-lane exhaustion and fresh supervisor/lane/trace-generation renewal, total/per-
-poll work, contention events and trace capacity. Forgetting a lane only
-forfeits its bounded remaining calls; the executor primitive retains no
-receipt registration/count state, while the supervisor and lane capabilities
-own bounded logical-call/trace state.
+the supervisor forms the next `(CleanupLaneId, CallSequence)`. Live mode
+atomically reserves the worst-case bounded call-event record and moves the
+lane to that active call before CAS. Reservation covers either `Busy` or a
+successful grant and the maximum exact result evidence permitted by that
+budget. Reservation failure leaves the sequence unadvanced and returns
+`TraceUnavailable` before executor CAS/mutation. Replay mode instead retains
+the active key while reading the finalized event without trace mutation.
+Only completed `Busy`/`Granted` handling advances the sequence;
+`ReplayPending` does not. Stale, duplicate, exhausted and cross-supervisor
+lanes likewise fail before executor mutation.
+
+The supervisor then invokes a crate-private executor primitive in live mode.
+The shared executor borrow keeps cleanup usable while unrelated lifetime-bound
+handles remain live. An internal atomic single-cleaner CAS serializes cleanup;
+a loser returns `CleanupStartError::Busy(CleanupContentionReceipt)` before
+registry, payload, cleanup or admission mutation, and the raw primitive never
+mutates trace state. The failed CAS is its linearization point. A winner
+assigns the next checked non-wrapping global `CleanupOrder` and returns a
+private `CleanupGrantReceipt` while the sealed guard remains owned inside the
+supervisor call. The grant header is written into the reserved event before
+cleanup mutation. Neither receipt nor guard crosses the public boundary.
+Every normal return releases the guard explicitly. Safe `std` synchronization
+and automatic trait bounds are required; no handwritten unsafe `Sync`
+implementation is admitted.
+
+`PlanReceipt` bounds cleaning entries, lane count, calls per lane, successful-
+grant count/global order, lane/order exhaustion and fresh supervisor/lane/
+trace-generation renewal, total/per-poll work, exact selected/retired identity
+evidence, every replay-required call-event record and trace capacity.
+Forgetting a lane only forfeits its bounded remaining calls; the executor
+primitive retains no receipt registration/count state, while the supervisor
+and lane capabilities own bounded logical-call/trace state.
 Admission never cleans implicitly and returns
 `CleanupRequired` when only dirty slots remain. Consuming shutdown reconciles
 jobs and then drains bounded cleanup. Cleanup ordering, retirement and
 semantics-affecting outcomes enter the deterministic trace; each poll scans
 within its bound and chooses the lowest eligible generation-bearing `JobId`.
-The opaque, must-use, non-cloneable, non-deserializable receipt binds executor
-namespace, plan/trace generation and the failed-CAS observation. The primitive
-and receipt remain crate-private. In the default replayable profile, the
-supervisor consumes and records the receipt at its checked logical-call key
-`(CleanupLaneId, CallSequence)` before returning observable `Busy`; stale,
-duplicate and misbound lanes or receipts fail. Trace failure returns
-`TraceUnavailable` or stops/resynchronizes/marks replay unavailable, never
-unrecorded `Busy`. Replay consults that exact key first and reproduces
-contention without a live CAS, so concurrent callers cannot exchange results.
-A `PlanReceipt`-declared inert profile may omit the event but still uses the
-supervisor and a planned lane; no public raw escape hatch exists. `Executor`
+Every replay-relevant call finalizes one bounded `CleanupCallEvent` whose
+`Busy` or `Granted` disposition binds the lane/call key, normalized budget and
+executor/trace generations. `Granted` also binds global `CleanupOrder`, exact
+bounded selected/retired `JobId` lists, work used and `CleanupProgress`; a
+digest cannot replace exact identities. Selected entries remain non-reusable
+`Cleaning` until the reserved event is finalized, after which states/progress
+may be published and the guard released. Incomplete records are never
+replayable; post-grant recording corruption is fail-stop or makes the
+executor/trace generation unavailable, never ordinary unrecorded progress.
+
+The opaque, must-use, non-cloneable, non-deserializable contention/grant
+receipts bind executor namespace, plan/trace generation and their CAS
+observations. The primitive and receipts remain crate-private. A loser
+finalizes the reservation as `Busy` before returning observable `Busy`; stale,
+duplicate or misbound lanes, receipts and orders fail. Replay looks up the
+exact `(CleanupLaneId, CallSequence)` before any live CAS. `Busy` returns
+directly. `Granted` executes only at its recorded next global order under an
+ordered replay gate; an early call returns non-semantic `ReplayPending` while
+the lane retains the same active call for its next poll. Replay checks budget,
+predicted selection, exact selected/retired identities, work and progress
+before advancing its cursor. Missing, duplicate, exhausted, incomplete or
+contradictory events/orders make replay unavailable; post-mutation mismatch is
+fail-stop. Thus callers cannot exchange results under a different schedule.
+Only `Busy` may be omitted by a `PlanReceipt`-proved inert policy; successful
+grants/results remain recorded for replayable concurrency. Every profile still
+uses the supervisor and planned lane; no public raw escape exists. `Executor`
 is `#[must_use]`; dropping it with any non-vacant payload-owning/cleaning entry
 uses the same fail-stop abort rule.
 
@@ -802,12 +830,15 @@ leaked cleanup authority, unrecorded/misbound contention, forged contention
 receipts, public raw-receipt escape, ignored/forgotten receipts, duplicate or
 mismatched supervisors, implicit/arrival-ordered lanes, OS thread/task replay
 identity, cross-supervisor or concurrent same-lane use, lane sequence wrap/
-exhaustion, replay consulting live contention, contention-trace exhaustion,
-nondeterministic entry selection, duplicate extraction/destruction, stale/ABA/
-exhausted job IDs, detached registry entries, hidden owned leases, unresponsive
-parallel work, premature capacity/buffer reuse, overstated pre-abort
-diagnostics, trace overflow, uncaptured runtime outcomes, supply-chain
-compromise, FFI/DMA, credential exposure, and location privacy.
+exhaustion, unrecorded grants, reversed successful-cleanup order, live-CAS
+replay ownership, under-reserved/incomplete events, global-order wrap/
+exhaustion, grant/result mismatch, replay consulting live contention,
+contention-trace exhaustion, nondeterministic entry selection, duplicate
+extraction/destruction, stale/ABA/exhausted job IDs, detached registry entries,
+hidden owned leases, unresponsive parallel work, premature capacity/buffer
+reuse, overstated pre-abort diagnostics, trace overflow, uncaptured runtime
+outcomes, supply-chain compromise, FFI/DMA, credential exposure, and location
+privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -857,7 +888,7 @@ broader 1.0 roadmap:
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, supervisor-enforced deterministic cleanup lanes/contention replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, supervisor-enforced deterministic cleanup lanes and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |

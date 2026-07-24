@@ -102,10 +102,10 @@ All notable changes to `navheim` are documented here.
   selects the lowest eligible generation-bearing job ID within bounded work,
   and is tested against completion, claim, drop, admission and shutdown.
 - Integrated the seventeenth review into v0.48.3 by separating mutation
-  domains: `Busy` creates a bounded contention receipt at the failed-CAS
-  linearization point without changing cleanup or trace state. The supervisor
-  records it against a logical call before semantic reaction, and replay uses
-  that fact instead of observing live contention.
+  domains: the raw primitive creates a bounded contention receipt at the
+  failed-CAS linearization point without changing cleanup or trace state. The
+  supervisor records `Busy` against a logical call before semantic reaction,
+  and replay uses that fact instead of observing live contention.
 - Integrated the eighteenth review into v0.48.3 by making the supervisor the
   only public cleanup boundary. The receipt-producing executor primitive is
   crate-private, so application code cannot ignore or forget an unrecorded
@@ -116,6 +116,10 @@ All notable changes to `navheim` are documented here.
   lane has a deterministic ID and checked non-wrapping sequence, so replay
   keys exact lane/call pairs and cannot swap outcomes when call arrival or CAS
   order changes.
+- Integrated the twentieth review into v0.48.3 by recording successful cleanup
+  grants and results as well as contention. Worst-case event capacity is
+  reserved before the cleaner CAS, successful grants receive a checked global
+  order, and replay follows that order without using live CAS timing.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.
