@@ -128,6 +128,20 @@ an atomic digest-bound compare-and-advance or an exclusive expiring writer
 reservation across seal, durable commit and monotonic advancement, with
 concurrent writers and every crash boundary tested.
 
+The twelfth coverage pass makes those contracts sound even when Rust
+destructors do not run. Executor registration, not a handle, owns every
+submitted lease, result and capacity slot; forgotten or manually suppressed
+handles remain accounted and non-reusable until explicit shutdown. Invalid
+handle/executor destruction uses allocation-free, non-unwinding
+`std::process::abort()`, and memory soundness never relies on `Drop`.
+Front-end `Applied` and `RejectedNoMutation` results structurally carry bounded
+transaction evidence or private-construction proof, while remaining distinct
+from observed consistency. Snapshot rollback transactions use a separate
+suite-approved, domain-separated `SnapshotTransactionBinding` over the exact
+canonical protected envelope; corruption/artifact digests cannot substitute,
+and reservation expiry/reboot recovery uses authority monotonic and boot-
+generation evidence rather than caller time.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

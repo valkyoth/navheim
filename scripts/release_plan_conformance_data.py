@@ -134,12 +134,12 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement ExecutionScope/ScopedJob for non-escaping borrows and #[must_use] ExecutionHandle for planned owned leases with explicit terminal-result, join and cancel_and_join APIs. Terminal drop releases returned resources; nonterminal drop fail-stops through a non-panicking abort/trap, including unwinding, with no 1.0 quarantine/reaper.",
-        "Compile-fail escaping borrows and check must_use diagnostics; test completed/running/cancelled/failed/panicked/unresponsive handle destruction in subprocesses, explicit join/cancel recovery, unwind fail-stop, lease return, no detach/hidden capacity, scoped trap, trace overflow and abort profiles.",
+        "Register every job authoritatively before dispatch; registry/workers own leases, result and capacity independently of ExecutionHandle destructors. Lost handles retain non-reusable entries until consuming shutdown joins them; invalid handle/executor drop calls allocation-free non-unwinding std::process::abort().",
+        "Test mem::forget/ManuallyDrop and leaks for running/completed/cancelled/panicked/unresponsive jobs, orphan capacity exhaustion, shutdown of every orphan, forgotten executor leakage, executor drop/unwind abort in subprocesses, explicit recovery, registry/lease invariants and no destructor-dependent soundness.",
     ),
     "0.50.3": (
-        "Define cause-preserving Applied, RejectedNoMutation, PartiallyApplied and StateUnknown outcomes. No-mutation requires positive proof; post-submission uncertainty or evidence overflow is StateUnknown. Partial/unknown retires state, blocks reads and preserves bounded command/rollback/reprobe evidence.",
-        "Test local pre-submit rejection, timeout/disconnect/lost ACK/transport failure after every setting, partial devices, original-cause preservation, evidence-capacity overflow, failed rollback/reprobe, no generation/read, recovery, false coherence, calibration revalidation, safe reads and gaps.",
+        "Make every apply outcome structural: Applied carries configuration plus bounded AppliedTransitionEvidence; RejectedNoMutation carries cause plus private-construction NoMutationEvidence; partial/unknown carry cause/evidence. Applied evidence remains a device assertion, never independent consistency.",
+        "Test proof construction/binding and forgery prevention, local pre-submit rejection, complete single/coherent-device success evidence, ACK/read-back disagreement, timeout/disconnect/partial devices, evidence overflow to unknown, original cause, no false observed consistency, invalidation/reprobe and safe reads.",
     ),
     "0.48.4": (
         "Implement the acquisition/reacquisition-memory snapshot profile after scheduler integration with search/source identity, expiry, authenticity/confidentiality/freshness, provenance remap, sensitivity and explicit monotonic-authority evidence.",
@@ -174,24 +174,24 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test false ACK/read-back, delayed/contradictory streams, partial coverage, uncertainty, unverifiable fields, independent timing/rate/protocol evidence, reset, firmware/device replacement, invalidation, stale generations and refusal to broaden ObservedConsistent.",
     ),
     "0.189.2": (
-        "Define the protection bridge with authority identity/counter namespace and either atomic digest-bound compare-and-advance or an exclusive expiring writer reservation spanning seal, durable commit and monotonic advance. Separate compare/write/advance never yields RollbackResistant evidence.",
-        "Test two concurrent writers, CAS/reservation conflicts and expiry, counter exhaustion, cloned/restored authority state, crashes at every seal/durability/advance boundary, recovery and migration, stale replay, nonce reuse, tampered metadata, uniform failure and Aesynx-ready extension.",
+        "Define opaque SnapshotTransactionBinding from a suite-approved external hash/MAC over the exact canonical protected envelope, domain-separated by purpose/authority/namespace/suite/version/counter. Bind CAS/reservations only to this type; expiry uses authority monotonic state and boot generation.",
+        "Reject corruption/artifact digest substitution and noncanonical encodings; test changes to ciphertext/tag/AAD/domain fields, two writers, authority-clock expiry, reboot/boot-generation recovery, CAS/reservation conflict, exhaustion, cloned state, every crash boundary, migration, stale replay and Aesynx extension.",
     ),
     "0.189.3": (
-        "Freeze only admitted Linux/BSD AEAD, key-custody, persistence and optional transactional monotonic profiles; distinguish crash-consistent replacement from rollback resistance and report CounterChecked/Unchecked unless the v0.189.2 atomic/reservation contract is evidenced.",
-        "Test exact providers/OSes, concurrent writers, reservations/CAS where admitted, old-file restoration, every crash point, filesystem faults, authority identity/namespace changes, exhaustion, rotation/migration, bounded buffers and explicit freshness/feature unavailability.",
+        "Freeze Linux/BSD AEAD/key/persistence and optional transactional profiles including the exact SnapshotTransactionBinding primitive and authority monotonic/boot-generation reservation semantics; otherwise report CounterChecked/Unchecked.",
+        "Test exact providers/OSes, binding canonicality/domain separation, concurrent writers, authority-clock expiry/reboot, old-file restoration, every crash point, filesystem faults, namespace changes, exhaustion, migration, bounded buffers and freshness unavailability.",
     ),
     "0.189.4": (
-        "Freeze one exact Windows protection/key-custody profile and any documented v0.189.2 transactional monotonic capability; avoid handle leaks, algorithm widening and rollback-resistance claims when only separate or non-resistant state exists.",
-        "Test Windows/version/authority/namespace identities, two writers, CAS/reservation/crash boundaries where admitted, user/machine scope, old-state restoration, CounterChecked rejection, permission/service loss, exhaustion, rotation/migration and cancellation.",
+        "Freeze one Windows protection/key profile plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; avoid rollback-resistance claims when binding or atomic/reserved state is unavailable.",
+        "Test Windows/version/authority/namespace identity, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, CAS/reservation/crashes, user/machine scope, old-state restoration, CounterChecked rejection, exhaustion, migration and cancellation.",
     ),
     "0.189.5": (
-        "Freeze exact macOS/iOS Keychain/platform-cryptography profiles and any documented v0.189.2 transactional monotonic capability; preserve device/access/background semantics and report weaker freshness when atomic/reserved authority is unavailable.",
-        "Test OS/device/authority/namespace classes, two writers, reservation/CAS/crash boundaries where admitted, lock/entitlement denial, backup restoration, CounterChecked rejection, exhaustion, key loss/rotation, migration, cancellation and unavailable hardware.",
+        "Freeze macOS/iOS Keychain/crypto plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; preserve access/background semantics and report weaker freshness when any required binding/transaction property is absent.",
+        "Test OS/device/authority/namespace, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, reservation/CAS/crashes, lock/entitlement denial, backup restoration, CounterChecked rejection, exhaustion, migration and unavailable hardware.",
     ),
     "0.189.6": (
-        "Freeze an exact Android Keystore profile and any documented v0.189.2 transactional monotonic capability; keep API level, hardware/StrongBox and invalidation evidence explicit and report weaker freshness when atomic/reserved authority is unavailable.",
-        "Test API/device/authority/namespace matrices, two writers, reservation/CAS/crash boundaries where admitted, software/hardware keys, lock/auth, backup/reinstall restoration, CounterChecked rejection, exhaustion, invalidation/rotation and cancellation.",
+        "Freeze Android Keystore plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any required property is absent.",
+        "Test API/device/authority/namespace, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, reservation/CAS/crashes, software/hardware keys, backup/reinstall restoration, CounterChecked rejection, exhaustion, invalidation and cancellation.",
     ),
     "0.170.0": (
         "Implement recorded-I/Q and virtual sources against the v0.50.3 prepare/apply/generation/read contract, with deterministic transition simulation and no invented hardware acknowledgement or observed calibration.",

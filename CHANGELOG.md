@@ -73,6 +73,12 @@ All notable changes to `navheim` are documented here.
   policy. Rollback-resistant sealing now requires an atomic digest-bound
   compare-and-advance or exclusive writer reservation with concurrent-writer
   and crash-boundary verification.
+- Integrated the twelfth review without adding parallel releases: executor
+  accounting is authoritative even across `mem::forget`, `ManuallyDrop` and
+  leaks, with explicit orphan shutdown and concrete abort behavior; SDR apply
+  success and no-mutation results now carry structural evidence; and snapshot
+  freshness transactions use a distinct suite-approved binding over the exact
+  canonical protected envelope with authority-owned reservation time.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

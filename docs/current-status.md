@@ -87,6 +87,13 @@ Navheim currently provides repository and crate foundations only.
   explicitly non-fresh diagnostic evidence. Rollback-resistant snapshot
   sealing requires an atomic digest-bound compare-and-advance or exclusive
   expiring reservation across seal, durable commit and monotonic advancement.
+- Twelfth gap review removes destructor-dependent assumptions: executor
+  registration owns forgotten/leaked jobs and capacity until explicit
+  shutdown, invalid executor destruction uses concrete `std::process::abort()`,
+  and soundness survives destructor elision. SDR results structurally carry
+  success/no-mutation proof or failure cause/evidence. Protected-snapshot
+  transactions use their own suite-approved, domain-separated canonical
+  binding and authority-monotonic/boot-generation reservation expiry.
 
 ## Not Implemented
 

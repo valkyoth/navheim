@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - Separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit leas...
+### v0.48.3 - `navheim-executor` scoped/owned modes with authoritative job registration, leak-safe...
 
 Status: planned.
 
-Goal: deliver separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit lease states, fail-stop nonterminal destruction, cooperative cancellation and bounded traces as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with authoritative job registration, leak-safe capacity ownership, explicit shutdown and fail-stop destruction as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit lease states, fail-stop nonterminal destruction, cooperative cancellation and bounded traces.
-- Implement ExecutionScope/ScopedJob for non-escaping borrows and #[must_use] ExecutionHandle for planned owned leases with explicit terminal-result, join and cancel_and_join APIs. Terminal drop releases returned resources; nonterminal drop fail-stops through a non-panicking abort/trap, including unwinding, with no 1.0 quarantine/reaper.
+- `navheim-executor` scoped/owned modes with authoritative job registration, leak-safe capacity ownership, explicit shutdown and fail-stop destruction.
+- Register every job authoritatively before dispatch; registry/workers own leases, result and capacity independently of ExecutionHandle destructors. Lost handles retain non-reusable entries until consuming shutdown joins them; invalid handle/executor drop calls allocation-free non-unwinding std::process::abort().
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compile-fail escaping borrows and check must_use diagnostics; test completed/running/cancelled/failed/panicked/unresponsive handle destruction in subprocesses, explicit join/cancel recovery, unwind fail-stop, lease return, no detach/hidden capacity, scoped trap, trace overflow and abort profiles.
+- Test mem::forget/ManuallyDrop and leaks for running/completed/cancelled/panicked/unresponsive jobs, orphan capacity exhaustion, shutdown of every orphan, forgotten executor leakage, executor drop/unwind abort in subprocesses, explicit recovery, registry/lease invariants and no destructor-dependent soundness.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6303,17 +6303,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.50.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.50.3 - Side-effect-free front-end preparation, cause-preserving mutation-aware apply outcome...
+### v0.50.3 - Side-effect-free front-end preparation, proof/cause/evidence-carrying apply outcomes,...
 
 Status: planned.
 
-Goal: deliver side-effect-free front-end preparation, cause-preserving mutation-aware apply outcomes, coherent group transactions, configuration generations and safe reads as one bounded,
+Goal: deliver side-effect-free front-end preparation, proof/cause/evidence-carrying apply outcomes, coherent group transactions, generations and safe reads as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- side-effect-free front-end preparation, cause-preserving mutation-aware apply outcomes, coherent group transactions, configuration generations and safe reads.
-- Define cause-preserving Applied, RejectedNoMutation, PartiallyApplied and StateUnknown outcomes. No-mutation requires positive proof; post-submission uncertainty or evidence overflow is StateUnknown. Partial/unknown retires state, blocks reads and preserves bounded command/rollback/reprobe evidence.
+- side-effect-free front-end preparation, proof/cause/evidence-carrying apply outcomes, coherent group transactions, generations and safe reads.
+- Make every apply outcome structural: Applied carries configuration plus bounded AppliedTransitionEvidence; RejectedNoMutation carries cause plus private-construction NoMutationEvidence; partial/unknown carry cause/evidence. Applied evidence remains a device assertion, never independent consistency.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6331,7 +6331,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test local pre-submit rejection, timeout/disconnect/lost ACK/transport failure after every setting, partial devices, original-cause preservation, evidence-capacity overflow, failed rollback/reprobe, no generation/read, recovery, false coherence, calibration revalidation, safe reads and gaps.
+- Test proof construction/binding and forgery prevention, local pre-submit rejection, complete single/coherent-device success evidence, ACK/read-back disagreement, timeout/disconnect/partial devices, evidence overflow to unknown, original cause, no false observed consistency, invalidation/reprobe and safe reads.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16794,17 +16794,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.2 - Common snapshot-protection envelope, authenticated metadata, atomic/reserved freshnes...
+### v0.189.2 - Common snapshot-protection envelope, domain-separated canonical transaction binding,...
 
 Status: planned.
 
-Goal: deliver common snapshot-protection envelope, authenticated metadata, atomic/reserved freshness transactions, nonce/key/rotation/counter lifecycle and authority bridge as one bounded,
+Goal: deliver common snapshot-protection envelope, domain-separated canonical transaction binding, authority-clock reservations and cryptographic lifecycle as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- common snapshot-protection envelope, authenticated metadata, atomic/reserved freshness transactions, nonce/key/rotation/counter lifecycle and authority bridge.
-- Define the protection bridge with authority identity/counter namespace and either atomic digest-bound compare-and-advance or an exclusive expiring writer reservation spanning seal, durable commit and monotonic advance. Separate compare/write/advance never yields RollbackResistant evidence.
+- common snapshot-protection envelope, domain-separated canonical transaction binding, authority-clock reservations and cryptographic lifecycle.
+- Define opaque SnapshotTransactionBinding from a suite-approved external hash/MAC over the exact canonical protected envelope, domain-separated by purpose/authority/namespace/suite/version/counter. Bind CAS/reservations only to this type; expiry uses authority monotonic state and boot generation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16822,7 +16822,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test two concurrent writers, CAS/reservation conflicts and expiry, counter exhaustion, cloned/restored authority state, crashes at every seal/durability/advance boundary, recovery and migration, stale replay, nonce reuse, tampered metadata, uniform failure and Aesynx-ready extension.
+- Reject corruption/artifact digest substitution and noncanonical encodings; test changes to ciphertext/tag/AAD/domain fields, two writers, authority-clock expiry, reboot/boot-generation recovery, CAS/reservation conflict, exhaustion, cloned state, every crash boundary, migration, stale replay and Aesynx extension.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16851,7 +16851,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
-- Freeze only admitted Linux/BSD AEAD, key-custody, persistence and optional transactional monotonic profiles; distinguish crash-consistent replacement from rollback resistance and report CounterChecked/Unchecked unless the v0.189.2 atomic/reservation contract is evidenced.
+- Freeze Linux/BSD AEAD/key/persistence and optional transactional profiles including the exact SnapshotTransactionBinding primitive and authority monotonic/boot-generation reservation semantics; otherwise report CounterChecked/Unchecked.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16869,7 +16869,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test exact providers/OSes, concurrent writers, reservations/CAS where admitted, old-file restoration, every crash point, filesystem faults, authority identity/namespace changes, exhaustion, rotation/migration, bounded buffers and explicit freshness/feature unavailability.
+- Test exact providers/OSes, binding canonicality/domain separation, concurrent writers, authority-clock expiry/reboot, old-file restoration, every crash point, filesystem faults, namespace changes, exhaustion, migration, bounded buffers and freshness unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16898,7 +16898,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
-- Freeze one exact Windows protection/key-custody profile and any documented v0.189.2 transactional monotonic capability; avoid handle leaks, algorithm widening and rollback-resistance claims when only separate or non-resistant state exists.
+- Freeze one Windows protection/key profile plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; avoid rollback-resistance claims when binding or atomic/reserved state is unavailable.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16916,7 +16916,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test Windows/version/authority/namespace identities, two writers, CAS/reservation/crash boundaries where admitted, user/machine scope, old-state restoration, CounterChecked rejection, permission/service loss, exhaustion, rotation/migration and cancellation.
+- Test Windows/version/authority/namespace identity, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, CAS/reservation/crashes, user/machine scope, old-state restoration, CounterChecked rejection, exhaustion, migration and cancellation.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16945,7 +16945,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
-- Freeze exact macOS/iOS Keychain/platform-cryptography profiles and any documented v0.189.2 transactional monotonic capability; preserve device/access/background semantics and report weaker freshness when atomic/reserved authority is unavailable.
+- Freeze macOS/iOS Keychain/crypto plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; preserve access/background semantics and report weaker freshness when any required binding/transaction property is absent.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16963,7 +16963,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test OS/device/authority/namespace classes, two writers, reservation/CAS/crash boundaries where admitted, lock/entitlement denial, backup restoration, CounterChecked rejection, exhaustion, key loss/rotation, migration, cancellation and unavailable hardware.
+- Test OS/device/authority/namespace, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, reservation/CAS/crashes, lock/entitlement denial, backup restoration, CounterChecked rejection, exhaustion, migration and unavailable hardware.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16992,7 +16992,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Android snapshot-protection adapter with exact Keystore profile, transactional capability evidence and honest weaker freshness.
-- Freeze an exact Android Keystore profile and any documented v0.189.2 transactional monotonic capability; keep API level, hardware/StrongBox and invalidation evidence explicit and report weaker freshness when atomic/reserved authority is unavailable.
+- Freeze Android Keystore plus exact SnapshotTransactionBinding and authority-monotonic/boot-generation transaction capabilities; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any required property is absent.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -17010,7 +17010,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test API/device/authority/namespace matrices, two writers, reservation/CAS/crash boundaries where admitted, software/hardware keys, lock/auth, backup/reinstall restoration, CounterChecked rejection, exhaustion, invalidation/rotation and cancellation.
+- Test API/device/authority/namespace, binding canonicality/domain separation, two writers, authority-clock expiry/reboot, reservation/CAS/crashes, software/hardware keys, backup/reinstall restoration, CounterChecked rejection, exhaustion, invalidation and cancellation.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
