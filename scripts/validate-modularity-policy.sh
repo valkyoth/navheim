@@ -30,4 +30,21 @@ if find tools -mindepth 2 -name Cargo.toml -type f -exec \
     exit 1
 fi
 
+for manifest in crates/*/Cargo.toml; do
+    [ -f "$manifest" ] || continue
+    if grep -q '^publish = false$' "$manifest"; then
+        continue
+    fi
+
+    package_dir="${manifest%/Cargo.toml}"
+    if ! grep -q '^readme = "README.md"$' "$manifest"; then
+        echo "Published crate must declare its package README: $manifest" >&2
+        exit 1
+    fi
+    if [ ! -f "$package_dir/README.md" ]; then
+        echo "Published crate package README is missing: $package_dir/README.md" >&2
+        exit 1
+    fi
+done
+
 echo "modularity policy passed"

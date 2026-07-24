@@ -15,6 +15,18 @@ publication value, or a reason to remain GitHub-only.
 Do not create one crate per signal or tiny helper. Constellation crates group
 their public signals so versions and dependency graphs remain manageable.
 
+## README Scope
+
+Every package published to crates.io has its own package README with the shared
+Navheim header style and package-specific purpose, features, compatibility, and
+usage documentation. The `navheim` facade README remains identical to the
+repository README.
+
+GitHub-only packages and tools do not require separate crate-style READMEs.
+They use normal repository documentation and may rely on the repository README
+when that is clearer. Add a local README only when it helps explain that
+component; do not duplicate documentation merely to mirror crates.io packages.
+
 ## Dependency Direction
 
 Foundation crates cannot depend on constellation, format, solver, I/O, TLS,

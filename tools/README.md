@@ -16,3 +16,7 @@ They must not leak those dependencies into published canonical crates. Moving a
 tool or library to crates.io requires an explicit release-plan milestone,
 stable public API, package README, dependency review, tests, security review,
 and publish-order update.
+
+GitHub-only packages use ordinary repository documentation. They need a local
+README only when it adds useful component-specific guidance; the shared
+crates.io package header is reserved for packages that are actually published.
