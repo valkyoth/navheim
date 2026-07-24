@@ -5,14 +5,14 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | Family | 1.0 target | Current status |
 | --- | --- | --- |
 | GPS | All publicly documented civil L1/L2/L5 signals and messages in frozen baseline | Planned |
-| Galileo | Public E1/E5/E6, I/NAV, F/NAV, HAS, OSNMA, SAR/RLS, timing, and stabilized public additions | Planned |
+| Galileo | Public E1/E5/E6, I/NAV, F/NAV, HAS SIS/IDD, OSNMA SIS/IDD/PKI, SAR/RLS, timing, service state, and stabilized public additions | Planned |
 | GLONASS | Public FDMA and officially documented public CDMA services | Planned |
 | BeiDou | Public B1/B2/B3 signals, navigation, PPP-B2b, BDSBAS, and conditional public SAR/short-message interfaces | Planned; messaging requires stable open specification |
 | QZSS | Public L1/L2/L5/L6, SLAS, CLAS, MADOCA, and QZNMA services | Planned |
 | NavIC | Public L1/L5/S SPS signals/navigation and conditionally documented public messaging | Planned; messaging requires stable open specification |
 | SBAS | Provider-neutral legacy and DFMC protocol plus exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, SouthPAN and admitted African provider profiles | Planned |
-| Corrections | RTCM OSR/SSR, network RTK, IGS SSR | Planned |
-| Exchange | NMEA 0183, legal NMEA 2000 boundary, RINEX 2/3/4, principal IGS products | Planned |
+| Corrections | RTCM OSR/SSR, network RTK, IGS SSR, and SPARTN 2.0.3 framing/corrections/protection adapters | Planned |
+| Exchange | NMEA 0183, legal NMEA 2000 boundary, RINEX 2/3/4, principal IGS products, SINEX-TRO, ORBEX, long filenames, and site logs | Planned |
 | Assistance | OMA SUPL, 3GPP LPP, Android raw measurements, injected assistance | Planned |
 | GNSS time transfer | Common-view/all-in-view results and frozen CGGTTS V2E interoperability | Planned; clock discipline/consensus excluded |
 | Civil/geodetic time | UTC leap/calendar, POSIX ambiguity, Julian/MJD, TT and EOP-derived UT1 arguments | Planned; no implicit POSIX cast or leap-smear claim |
@@ -21,6 +21,8 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | Receiver sources/control | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, raw observations, configuration-generation-safe allowlisted control and interval-scoped behavioral assessment | Planned; exact hardware/firmware evidence required, arbitrary commands excluded, ACK/read-back remains receiver-asserted |
 | GNSS science | Calibrated scintillation, reflectometry, space-weather and remote-sensing artifacts from frozen methods | Planned; optional research surface, no unvalidated operational-product claim |
 | SDR/accelerator I/O | Prepared plans, linear pre-submit/transport state, control-lease-bounded proof, coherent outcomes and safe reads for named stacks | Planned; device read-back and accelerator output remain assertions |
+| Antenna arrays | Calibrated geometry/covariance evidence and bounded civil beamforming/null steering | Planned; no certified anti-jam claim |
+| Operational/authentication feeds | Constellation service advisories, HAS/OSNMA distribution state, and conditionally admitted stable GPS civil authentication | Planned; experimental CHIMERA/NTS-3 is unavailable and unclaimed |
 | GitHub-only tools | Capture, CLI, daemon, caster, station, survey, inspector, viewer, lab, simulator, conformance, fuzz, bench, and deployment | Planned; never in crates.io graph |
 | Aviation integrity | Public SBAS/GBAS/ABAS data models and research interfaces | Planned; no certification claim |
 | Restricted services | Identifier/metadata preservation and RF measurement only | Planned; no decoding claim |

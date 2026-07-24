@@ -3211,8 +3211,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.3.1** — physical unit types and checked conversions.
 - **0.3.2** — measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters.
 - **0.3.3** — deterministic first-party `no_std` elementary math and stable backend contract.
-- **0.3.4** — bounded first-party linear algebra with fixed/caller-scratch storage, stable factorizations, rank/condition evidence and narrow solver-facing APIs.
-- **0.3.5** — admitted statistical kernels with bounded error, log-probability support and conservative integrity-threshold rounding.
+- **0.3.4** — bounded first-party matrix/vector storage, checked indexing and scalar kernels over fixed or caller-owned scratch.
+- **0.3.5** — stable first-party factorizations with dimension, definiteness, finiteness, rank and condition evidence.
+- **0.3.6** — narrow solver-facing linear solve and least-squares APIs with qualified decomposition selection.
+- **0.3.7** — admitted statistical kernels with bounded error, log-probability support and conservative integrity-threshold rounding.
 - **0.4.0** — raw native GNSS time fields and extensible scale identifiers.
 - **0.4.1** — resolved native instants with private fields and resolution evidence.
 - **0.4.2** — capture clock-domain/generation identifiers and exact sample timestamps.
@@ -3222,14 +3224,17 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.5.2** — time rollback/freshness guard and platform persistence-authority contract.
 - **0.5.3** — reason-bearing time availability and targeted invalidation primitives.
 - **0.5.4** — exact TAI/duration epoch, representation, range, granularity and checked-arithmetic contract.
-- **0.5.5** — UTC civil/calendar labels, leap insertion/deletion, POSIX ambiguity/loss and exact-range Gregorian/ordinal/Julian/MJD conversion contracts.
+- **0.5.5** — UTC civil labels, leap insertion/deletion and explicit POSIX ambiguity/loss contracts.
+- **0.5.6** — exact-range proleptic Gregorian and ordinal calendar conversion.
+- **0.5.7** — exact integer-day-plus-fraction Julian Date and Modified Julian Date conversion.
 - **0.6.0** — coordinate types: geodetic, ECEF, ENU and NED.
 - **0.6.1** — body frames, velocity, acceleration, rotations, lever arms and sensor latency.
 - **0.6.2** — typed covariance layouts with state ordering, units, frame and epoch.
 - **0.7.0** — geodesic, ellipsoid and reference-frame primitives.
 - **0.7.1** — datum/reference-frame realization and Earth-orientation input contracts.
-- **0.7.2** — `navheim-geo` bounded UTM/UPS and Transverse Mercator projected-coordinate profiles with explicit zone, frame, epoch, convergence and distortion evidence.
-- **0.7.3** — TT and UT1/EOP-derived precision-geodesy time arguments with revision, validity, uncertainty and explicit separation from GNSS scales.
+- **0.7.2** — `navheim-geo` bounded Transverse Mercator kernel with convergence, scale and distortion evidence.
+- **0.7.3** — `navheim-geo` UTM/UPS zone, boundary, frame and epoch profiles over reviewed projection kernels.
+- **0.7.4** — TT and UT1/EOP-derived precision-geodesy time arguments with revision, validity, uncertainty and explicit separation from GNSS scales.
 - **0.8.0** — bit readers/writers, sign extension and reserved-bit preservation.
 - **0.8.1** — exact-consumption results and original-bit/canonical round-trip modes.
 - **0.9.0** — checksums, CRC framework and GNSS parity primitives.
@@ -3250,6 +3255,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.14.0** — ephemeris, almanac, health and satellite-clock model traits.
 - **0.14.1** — model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
 - **0.14.2** — deterministic navigation-model and correction/product applicability selection with explicit considered-candidate evidence.
+- **0.14.3** — operator service-advisory and constellation-status artifacts with targeting, validity, provenance, conflict and withdrawal semantics.
 - **0.15.0** — correction and provenance models.
 - **0.15.1** — immutable correction sessions and ordered applied-correction ledger with anti-mixing policy.
 - **0.15.2** — canonical physical correction/bias taxonomy and duplicate-application prevention.
@@ -3262,13 +3268,16 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
 - **0.18.1** — versioned bounded algorithm-state snapshot envelope, opt-in restore contract and external freshness-authority boundary.
-- **0.18.2** — orthogonal snapshot authenticity/confidentiality/freshness, narrow counter-checked semantics, minimal sensitive profiles and restored-assessment invalidation policy.
+- **0.18.2** — orthogonal snapshot corruption, authenticity and confidentiality evidence taxonomy and envelope bindings.
+- **0.18.3** — snapshot freshness, narrow counter-checked semantics and external monotonic-authority contract.
+- **0.18.4** — minimum sensitive snapshot profiles, privacy/retention policy and restored-assessment invalidation.
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
 - **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
 - **0.20.2** — all named facade profiles, versioned canonical expansion and capability-failure equivalence.
 - **0.20.3** — deterministic runtime source supervisor with explicit withdrawal, gap, authorized retry/failover and generation-safe reselection artifacts.
-- **0.20.4** — source-role composition/compatibility graph with solver-state-safe same-role handover and valid cross-role mixing evidence.
+- **0.20.4** — source-role composition/compatibility graph and valid cross-role mixing evidence.
+- **0.20.5** — solver-state-safe same-role source handover, generation transition and withdrawal lifecycle.
 
 ### Phase B — File and byte-stream interoperability
 
@@ -3300,6 +3309,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.34.0** — ANTEX.
 - **0.35.0** — SINEX and Bias-SINEX foundations.
 - **0.35.1** — Earth-orientation and reference-frame product parsing with validity and provenance.
+- **0.35.2** — SINEX-TRO 2.00 troposphere and meteorological product streaming profile.
+- **0.35.3** — ORBEX satellite-attitude quaternion product streaming profile.
+- **0.35.4** — IGS long product filename identity, interval, sampling and content-code profile.
+- **0.35.5** — IGS site-log 2.0 station/receiver/antenna metadata history profile.
 - **0.36.0** — deterministic raw-I/Q and observation replay container v0.
 - **0.36.1** — replay checkpoints, digests, corruption recovery and version compatibility.
 - **0.36.2** — cross-format canonical comparison and differential parser audit.
@@ -3318,8 +3331,9 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.41.0** — mixed-radix FFT and convolution.
 - **0.41.1** — floating numerical replay contract for FMA, denormals, finiteness and platform tolerances.
 - **0.42.0** — polyphase channelizer.
-- **0.42.1** — dependency-free search-aid and acquisition-hint artifacts with bounded fallback, expiry, trust and plan-reduction evidence.
-- **0.42.2** — immutable search-execution/decision receipt type, serialization and bounded schema contract.
+- **0.42.1** — dependency-free search-aid and acquisition-hint artifacts with identity, expiry, uncertainty and trust.
+- **0.42.2** — bounded hint validation, immutable plan reduction and deterministic blind-fallback policy.
+- **0.42.3** — immutable search-execution/decision receipt type, serialization and bounded schema contract.
 - **0.43.0** — acquisition search framework and peak statistics.
 - **0.43.1** — acquisition work tokens, bounded candidates and named false-alarm assumptions.
 - **0.43.2** — acquisition integration for executable search-decision receipts, dynamic hints, bounded fallback and deterministic replay.
@@ -3333,13 +3347,23 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with a caller-driven request/drive/completion facade and phased typestate shutdown, sealed replay-driver boundary, deterministic cleanup lanes, scheduler-internal pending, globally ordered grant/result replay and live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling.
-- **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
+- **0.48.3** — `navheim-executor` scoped-borrowed and owned-handle modes with authoritative registry and safe payload ownership.
+- **0.48.4** — executor dispatch/cancel linearization, terminal publication/claim and nonterminal-handle fail-stop behavior.
+- **0.48.5** — caller-driven bounded executor cleanup, single-cleaner exclusion, admission backpressure and generation-safe slot recycling.
+- **0.48.6** — supervised cleanup contention receipts, crate-private raw boundary and fail-closed trace publication.
+- **0.48.7** — plan-issued deterministic cleanup lanes and stable concurrent-call replay identity.
+- **0.48.8** — pre-CAS trace reservation, global cleanup-grant order and exact result replay.
+- **0.48.9** — sealed permit-created replay driver with scheduler-only side-effect-free pending.
+- **0.48.10** — caller-driven cleanup request/drive/ready-token/completion facade with bounded queues and deterministic turns.
+- **0.48.11** — phased `Running -> Draining` scheduler shutdown with ownership-preserving finish and fail-stop destruction.
+- **0.48.12** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
 - **0.50.2** — independent signal/message vector admission gate required before each constellation implementation.
-- **0.50.3** — side-effect-free front-end preparation, linear pre-submission/transport state, control-lease-bounded proofs, coherent transactions and safe reads.
+- **0.50.3** — side-effect-free front-end preparation and linear pre-submission-to-command-transport ownership.
+- **0.50.4** — control-lease-bounded apply outcomes with complete, no-mutation, partial and unknown evidence.
+- **0.50.5** — coherent multi-device front-end transactions and initialized-count safe reads.
 
 ### Phase D — GPS end-to-end
 
@@ -3348,7 +3372,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.53.0** — GPS L1 C/A tracking and observables.
 - **0.54.0** — GPS LNAV parity/frame/subframe decode.
 - **0.54.1** — bounded multi-page assembly and atomic navigation-store transactions.
-- **0.54.2** — versioned tracking-channel and raw page-assembly snapshot profiles with compatibility, provenance and calibration restore checks.
+- **0.54.2** — versioned tracking-channel snapshot profile with loop, calibration, provenance and restore checks.
+- **0.54.3** — versioned raw page-assembly snapshot profile with issue, completeness and compatibility checks.
 - **0.55.0** — GPS LNAV ephemeris, almanac, UTC and ionosphere.
 - **0.55.1** — versioned semantic navigation-store/ephemeris snapshot profile with issue, model, health, validity and assessment invalidation checks.
 - **0.56.0** — satellite state and clock computation.
@@ -3377,6 +3402,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.74.0** — Galileo AltBOC component and full-band processing.
 - **0.75.0** — Galileo E6 acquisition/tracking.
 - **0.76.0** — Galileo HAS message and correction model.
+- **0.76.1** — Galileo HAS Internet Data Distribution, service-status and correction-source equivalence profile.
 - **0.77.0** — Galileo SAR/RLS public message support.
 - **0.78.0** — Galileo Timing Service Message.
 - **0.79.0** — Galileo EWSS/public emergency-message support.
@@ -3431,10 +3457,19 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.116.0** — SBAS correction/degradation state machine.
 - **0.117.0** — SBAS integrity and protection-level inputs.
 - **0.118.0** — DFMC SBAS signal/messages.
-- **0.118.1** — complete DFMC code, acquisition, tracking, symbol/FEC, frame, correction, GEO mode and message acceptance matrix.
+- **0.118.1** — DFMC code, bounded GEO acquisition, tracking and symbol/FEC acceptance matrix.
+- **0.118.2** — DFMC frame, message, correction, integrity and GEO-mode acceptance matrix.
 - **0.119.0** — provider profiles and future-ID registry.
 - **0.119.1** — public GBAS/ABAS data-model, applicability and integrity-interface boundary.
-- **0.119.2** — exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, SouthPAN and African SBAS provider/service profile matrix.
+- **0.119.2** — exact WAAS provider/service profile and applicability matrix.
+- **0.119.3** — exact EGNOS provider/service profile and applicability matrix.
+- **0.119.4** — exact MSAS provider/service profile and applicability matrix.
+- **0.119.5** — exact GAGAN provider/service profile and applicability matrix.
+- **0.119.6** — exact SDCM provider/service profile and applicability matrix.
+- **0.119.7** — exact BDSBAS provider/service profile and applicability matrix.
+- **0.119.8** — exact KASS provider/service profile and applicability matrix.
+- **0.119.9** — exact SouthPAN provider/service profile and applicability matrix.
+- **0.119.10** — named African SBAS provider profiles admitted only from exact public operational service definitions.
 
 ### Phase I — Multi-GNSS solution quality
 
@@ -3485,14 +3520,19 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.139.0** — RTCM SSR complete public baseline.
 - **0.139.1** — atomic SSR group completeness, expiry and correction-session anti-mixing.
 - **0.140.0** — IGS SSR profile.
+- **0.140.1** — SPARTN 2.0.3 framing, headers, CRC and opaque protected-payload envelope.
+- **0.140.2** — SPARTN orbit/clock/bias, atmosphere and geographic-area correction semantics.
+- **0.140.3** — SPARTN encryption/authentication-support messages and audited key/primitive adapter boundary.
 - **0.141.0** — post-processed PPP.
 - **0.142.0** — real-time PPP.
 - **0.142.1** — PPP convergence, product/frame/age validation, rollback and invalidation.
 - **0.143.0** — PPP ambiguity resolution.
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
 - **0.144.1** — PPP tide/loading, wet-delay/gradient and meteorological-input acceptance matrix.
-- **0.144.2** — complete PPP state-layout, observation-combination, bias, interpolation, discontinuity, convergence and rollback matrix.
-- **0.144.3** — versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and independent authenticity/confidentiality/freshness evidence.
+- **0.144.2** — complete PPP state-layout and observation-combination acceptance matrix.
+- **0.144.3** — PPP bias, product interpolation and discontinuity acceptance matrix.
+- **0.144.4** — PPP convergence, mode transition, invalidation and rollback acceptance matrix.
+- **0.144.5** — versioned admitted PPP state snapshot/restore profile with product, frame, calibration, expiry and protection evidence.
 - **0.145.0** — static/rapid-static survey workflow.
 
 ### Phase K — Authentication and resilience
@@ -3504,8 +3544,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.148.0** — OSNMA key-chain and tag verification.
 - **0.149.0** — OSNMA policy, renewal/revocation and evidence.
 - **0.149.1** — immutable delayed-authentication assessments targeting existing artifacts.
+- **0.149.2** — OSNMA Internet Data Distribution, PKI material and in-force service-state ingestion.
 - **0.150.0** — QZSS QZNMA decode and verification.
 - **0.150.1** — RustCrypto-backed OSNMA/QZNMA end-to-end integration vectors.
+- **0.150.2** — conditional GPS civil-authentication/CHIMERA admission gate with explicit experimental and unavailable non-claims.
 - **0.151.0** — multi-constellation navigation conflict detector.
 - **0.152.0** — Doppler/motion/clock spoofing evidence.
 - **0.153.0** — correlation/power/interference evidence.
@@ -3538,7 +3580,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.165.1** — lever-arm and sensor time-offset calibration states.
 - **0.165.2** — square-root real-time fusion variant with numerical equivalence evidence.
 - **0.165.3** — bounded vector-tracking implementation with scalar loop fallback and observable discontinuities.
-- **0.166.0** — wheel/barometer/magnetometer inputs.
+- **0.166.0** — wheel-speed/odometer, barometer and magnetometer inputs.
 - **0.166.1** — zero-velocity, known-motion and non-holonomic constraint updates.
 - **0.167.0** — delayed/out-of-sequence fusion.
 - **0.167.1** — bounded delayed queues, deterministic update order and sensor clock/reset generations.
@@ -3553,6 +3595,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.169.3** — geofence boundary, altitude and time-window evaluation.
 - **0.169.4** — local-frame navigation composition over `navheim-geo` ENU/NED/body transformations and explicit road-network-routing non-claim.
 - **0.169.5** — calibrated multi-antenna angle-of-arrival and direction-consistency production with ambiguity, coherence, validity and expiry evidence.
+- **0.169.6** — calibrated antenna-array geometry, steering-vector and spatial-covariance evidence artifacts.
+- **0.169.7** — bounded civil adaptive beamforming/null-steering producer with scalar fallback and no certified anti-jam claim.
 
 ### Phase M — Hardware, OS and assistance
 
@@ -3562,7 +3606,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.173.0** — USRP/UHD adapter.
 - **0.174.0** — LimeSDR adapter.
 - **0.175.0** — coherent multi-device clock/timestamp calibration.
-- **0.175.1** — bounded FPGA/GPU/external-DSP FFT, channelizer, acquisition, candidate, correlator and tracking boundary plus GitHub-only `navheim-fpga` host/artifact contract.
+- **0.175.1** — common bounded FPGA/GPU/external-DSP capability, plan, timestamp and scalar-equivalence boundary.
+- **0.175.2** — external FFT and channelizer stage contract with exact buffer/work/result evidence.
+- **0.175.3** — external acquisition and candidate-selection stage contract with deterministic fallback.
+- **0.175.4** — external correlator and tracking stage contract with discontinuity and ownership evidence.
+- **0.175.5** — GitHub-only `navheim-fpga` host, bitstream/firmware and artifact-provenance contract.
 - **0.176.0** — portable serial backend.
 - **0.177.0** — native USB backend contracts and Linux implementation.
 - **0.177.1** — isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence.
@@ -3582,10 +3630,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.185.0** — receiver-protocol admission gate; every additional protocol requires a named patch milestone.
 - **0.185.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
 - **0.185.2** — generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters.
-- **0.185.3** — evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
-- **0.185.4** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence.
-- **0.185.5** — receiver-configuration generation barrier with effective intervals, queue draining, targeted invalidation, correction rebinding and persistent-command authorization.
-- **0.185.6** — receiver control transactions separated from interval-scoped `ObservedConsistent` configuration assessments and receiver-asserted fallback.
+- **0.185.3** — evidence-gated public receiver-profile admission matrix and common adapter contract.
+- **0.185.4** — exact SkyTraq receiver/firmware profile and admitted adapter.
+- **0.185.5** — exact SiRF receiver/firmware profile and admitted adapter.
+- **0.185.6** — exact MediaTek/PMTK receiver/firmware profile and admitted adapter.
+- **0.185.7** — exact Trimble public receiver/firmware profile and admitted adapter; every other vendor requires a named patch.
+- **0.185.8** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence.
+- **0.185.9** — receiver-configuration generation barrier with effective intervals, queue draining, targeted invalidation, correction rebinding and persistent-command authorization.
+- **0.185.10** — receiver control transactions separated from interval-scoped `ObservedConsistent` configuration assessments and receiver-asserted fallback.
 - **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
 - **0.186.1** — Android fused/location-provider fix adapter and provenance.
 - **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
@@ -3598,11 +3650,15 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — canonical protected-snapshot binding, bounded recovery matrix and narrowly authorized exact-recovery-or-continuity-break repair contract.
-- **0.189.3** — Linux/BSD protection/persistence profile with transactional freshness, optional repair/anti-revival evidence and no-universal-keystore non-claim.
-- **0.189.4** — Windows snapshot-protection adapter with exact transactional, optional repair/anti-revival and honest weaker-capability evidence.
-- **0.189.5** — Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto transactional, optional repair/anti-revival and honest weaker-capability evidence.
-- **0.189.6** — Android snapshot-protection adapter with exact Keystore transactional, optional repair/anti-revival and honest weaker-capability evidence.
+- **0.189.2** — canonical domain-separated protected-snapshot binding and suite/version contract.
+- **0.189.3** — durable pending/authority-commit/promotion/finalization transaction and bounded crash-recovery matrix.
+- **0.189.4** — narrowly authorized exact-current-recovery or fresh-domain continuity-break repair capability.
+- **0.189.5** — Linux snapshot-protection/persistence adapter with transactional freshness and honest authority evidence.
+- **0.189.6** — BSD snapshot-protection/persistence adapter family with explicit per-OS capability evidence.
+- **0.189.7** — Windows snapshot-protection adapter with exact transactional and honest weaker-capability evidence.
+- **0.189.8** — macOS snapshot-protection adapter with exact Keychain/crypto transactional evidence.
+- **0.189.9** — iOS snapshot-protection adapter with exact Keychain/crypto transactional evidence.
+- **0.189.10** — Android snapshot-protection adapter with exact Keystore transactional evidence.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
@@ -3660,7 +3716,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.217.0** — 1.0.0 release candidate 1.
 - **0.218.0** — release candidate 2 and only blocker fixes.
 - **0.219.0** — final reproducibility, packaging and provenance rehearsal.
-- **0.219.1** — GitHub-only packages, service units, containers and deployment configuration security/reproducibility freeze.
+- **0.219.1** — GitHub-only native package/archive/install artifact reproducibility freeze.
+- **0.219.2** — GitHub-only service-unit lifecycle, sandbox and least-authority freeze.
+- **0.219.3** — GitHub-only container image, runtime and provenance reproducibility freeze.
+- **0.219.4** — GitHub-only deployment configuration, secret and secure-default freeze.
 - **1.0.0** — frozen, documented and independently tested public civil/open GNSS/PNT platform.
 
 The exact number may change, but features should not be collapsed merely to reach 1.0 sooner.

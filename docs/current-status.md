@@ -19,7 +19,7 @@ Navheim currently provides repository and crate foundations only.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
 - Checksum-locked local copies of 25 applicable IETF RFCs, an RFC errata drift
-  snapshot, and a reviewed acquisition inventory spanning 36 GNSS, correction,
+  snapshot, and a reviewed acquisition inventory spanning 37 GNSS, correction,
   exchange, aviation, telecom, geodesy, security, timing, receiver, SDR,
   numerical/scientific, Rust, and platform
   source families.
@@ -34,7 +34,7 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 424 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 483 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
@@ -107,63 +107,70 @@ Navheim currently provides repository and crate foundations only.
   recovery now has an explicit restore/writer/action matrix for every durable
   state plus bounded transaction, candidate, retention, retry and deterministic
   cleanup rules.
-- Fifteenth gap review makes those paths operable and privilege-bounded without
-  adding releases: v0.48.3 now owns caller-driven budgeted cleanup,
+- Fifteenth gap review makes those paths operable and privilege-bounded:
+  v0.48.3-v0.48.5 own scoped execution, linearized cancellation and bounded cleanup,
   `CleanupRequired` admission backpressure, must-use shutdown and formally
   coupled safe-only exactly-once payload storage with Miri/Loom/Kani evidence.
-  v0.189.2-v0.189.6 restrict corrupt-state repair to exact-current recovery or
+  v0.189.2-v0.189.10 restrict corrupt-state repair to exact-current recovery or
   durable namespace retirement plus a fresh-domain continuity break, with
   anti-revival, security/invalidation and reacquisition requirements.
-- Sixteenth gap review corrects the v0.48.3 cleanup API without weakening
+- Sixteenth gap review corrects the v0.48.5 cleanup API without weakening
   lifetime-bound handles: cleanup uses a shared executor borrow, remains
   available beside unrelated live jobs, and is serialized by an internal
   non-exported single-cleaner CAS. Concurrent attempts return pre-mutation
   `Busy`, selection is bounded and lowest-`JobId` deterministic, and Loom
   covers cleanup against every competing executor transition.
-- Seventeenth gap review removes the remaining v0.48.3 trace contradiction:
+- Seventeenth gap review removes the remaining v0.48.6 trace contradiction:
   the raw primitive returns a bounded contention receipt without mutating
   cleanup or trace state, and the failed CAS is its linearization point.
   Replayable supervisors must bind `Busy` to the caller lane/logical call
   before reacting; overflow follows the existing
   stop/resynchronize/unavailable policy, while replay reproduces the result
   without consulting live contention.
-- Eighteenth gap review makes that v0.48.3 policy enforceable in safe Rust:
+- Eighteenth gap review makes that v0.48.6 policy enforceable in safe Rust:
   applications receive only supervised cleanup, while the raw primitive and
   receipt remain crate-private. The supervisor binds the executor/plan/trace,
   advances the planned lane call, records before exposing `Busy`, maps
   recording failure to trace-unavailable/stop, and checks replay before any
   live CAS.
-- Nineteenth gap review gives concurrent cleanup calls stable v0.48.3 replay
+- Nineteenth gap review gives concurrent cleanup calls stable v0.48.7 replay
   identity. `PlanReceipt` issues bounded non-cloneable `CleanupLane`
   capabilities with deterministic IDs and checked per-lane sequences; replay
   keys `(CleanupLaneId, CallSequence)`, never call arrival, CAS order, OS
   thread IDs or runtime task identities.
-- Twentieth gap review completes the v0.48.3 concurrent-call trace protocol:
+- Twentieth gap review completes the v0.48.8 concurrent-call trace protocol:
   every live replay-relevant call reserves capacity for `Busy` or `Granted`
   before CAS, successful grants carry a checked global order plus exact
   bounded selection/work/progress evidence, and replay gates grants in that
   recorded order rather than observing live cleaner timing.
-- Twenty-first gap review keeps normal replay backpressure out of v0.48.3
+- Twenty-first gap review keeps normal replay backpressure out of v0.48.9
   application errors. The low-level scheduler sees side-effect-free
   `SupervisedCleanupPoll::Pending` while retaining the same active lane call;
   controlled drivers expose only ready recorded outcomes or genuine errors,
   and the base executor neither blocks nor spins.
-- Twenty-second gap review makes that v0.48.3 surface enforceable:
+- Twenty-second gap review makes that v0.48.9 surface enforceable:
   `ExecutionSupervisor` has no public poll method; a sealed, plan-bound
   permit is consumed to create the `ReplayDriver` that owns low-level polling,
   and the application completion path exposes only ready values.
   Shared driver calls preserve concurrency across distinct mutable lanes.
-- Twenty-third gap review completes the caller-driven v0.48.3 facade:
+- Twenty-third gap review completes the caller-driven v0.48.10 facade:
   `CleanupScheduler` has bounded request, drive, ready-token and completion-
   claim operations; non-reusing request/turn IDs and deterministic turn traces;
   explicit queue backpressure, retention/retirement and shutdown rules; and an
   optional declared Tier 2 scheduler worker rather than a hidden cleanup
   thread.
 - Twenty-fourth gap review makes that shutdown API Rust-representable without
-  another milestone. Consuming `begin_shutdown` permanently moves `Running`
+  weakening it; v0.48.11 consumes `begin_shutdown` and moves `Running`
   into `Draining`; claims and original completed results survive, bounded
   shutdown turns reconcile only queued/active work as cancellation, failed
   finish returns the full drainer, and unfinished destruction aborts.
+- Final roadmap sizing and coverage review splits every independently
+  testable provider, platform adapter, transaction phase and state machine
+  into bounded patch releases. It adds explicit SPARTN 2.0.3, current IGS
+  exchange products, Galileo HAS/OSNMA distribution state, constellation
+  service advisories, conditional GPS civil authentication and antenna-array
+  processing stops. A generator-enforced coarse size alarm now complements
+  mandatory semantic scope review.
 
 ## Not Implemented
 

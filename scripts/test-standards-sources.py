@@ -30,6 +30,7 @@ REQUIRED = {
     "nmea-2000-j1939",
     "igs-rinex",
     "igs-products",
+    "spartn-corrections",
     "iers-iau-geodesy",
     "oma-supl",
     "3gpp-lpp",

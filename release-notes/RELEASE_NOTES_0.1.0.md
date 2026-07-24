@@ -31,7 +31,7 @@ RFC integrity is enforced through exact source lists and SHA-256 bytes. Git
 does not preserve general read-only permission bits, so CI does not require
 mode `0444`; developers may still apply the optional local read-only guard.
 
-The broader acquisition inventory covers 36 authoritative source families.
+The broader acquisition inventory covers 37 authoritative source families.
 Seventeen freely downloadable GPS, Galileo, NavIC and IGS documents can be
 fetched into an ignored local vault and protected by a local SHA-256 lock.
 Paid, licensed, consent-gated, registration-gated and vendor-profile material
@@ -45,6 +45,14 @@ full inertial/fusion calibration and vector tracking; canonical assistance;
 implementable RAIM/ARAIM contracts; a concrete RustCrypto adapter; CAN I/O;
 independent signal vectors; and exact timing arithmetic, mapping and slot
 state machines.
+
+The final sizing review expands the roadmap to 483 bounded pre-1.0
+implementation stops. Independent state machines, provider profiles, platform
+adapters, transaction phases and deployment artifacts no longer share
+oversized passes. It also closes explicit source/API ownership for SPARTN
+2.0.3, current IGS exchange products, HAS/OSNMA distribution state, operator
+advisories, conditional GPS civil authentication and antenna-array processing.
+Mechanical plan-size alarms now complement mandatory semantic review.
 
 The third coverage pass resolves acknowledgement and CAN address-claim
 ownership contradictions and makes the stable-Rust numerical strategy
@@ -176,7 +184,7 @@ separate Tier 3 capability limited to exact-current recovery or durable
 namespace retirement followed by a fresh key/nonce/counter domain and explicit
 continuity break. It cannot revive old state or silently weaken freshness.
 
-The sixteenth coverage pass corrects a Rust borrowing conflict in v0.48.3
+The sixteenth coverage pass corrects a Rust borrowing conflict in v0.48.5
 without weakening the lifetime-bound handle model. `poll_cleanup` takes a
 shared executor borrow, allowing cleanup while unrelated handles remain live.
 A private atomic guard admits one cleaner; concurrent calls return

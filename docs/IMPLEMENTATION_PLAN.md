@@ -21,6 +21,14 @@ uncertainty, or provenance.
 
 ## Non-Negotiable Engineering Rules
 
+- Each release owns one primary state machine, provider profile, platform
+  adapter, artifact layer, or independently reviewable algorithm family.
+  Work that can fail, roll back, freeze standards, or complete its test matrix
+  independently receives a separate patch release. Splitting never weakens
+  predecessor guarantees; the contracts accumulate.
+- The release-plan generator enforces coarse description and
+  specific-acceptance size ceilings as a regression alarm. Passing the
+  mechanical gate never replaces semantic scope review.
 - Publishable crates use edition 2024, resolver 3, MSRV Rust `1.90.0`, and
   remain compatible through pinned stable Rust `1.97.1`.
 - Repository-only tools may require Rust `1.97.1`.
@@ -205,11 +213,11 @@ artifacts, packaging, service units, and deployments remain under `tools/`,
 `fuzz/`, or other repository-only paths until separately admitted. They set
 `publish = false` and may use Rust `1.97.1`.
 
-Their named implementation stops are v0.36.3 (`navheim-capture`), v0.175.1
+Their named implementation stops are v0.36.3 (`navheim-capture`), v0.175.1-v0.175.5
 (`navheim-fpga`), v0.190.3-v0.190.11 (tool foundation, CLI, daemon,
 caster/station/survey, inspector/viewer and lab), v0.196.1-v0.196.2
 (`navheim-sim` and external data), v0.198.2-v0.198.3 (fuzz and conformance),
-v0.201.1 (benchmarks), and v0.219.1 (packaging/deployment). A tool may reuse
+v0.201.1 (benchmarks), and v0.219.1-v0.219.4 (packaging/deployment). A tool may reuse
 published crates; it may not introduce a parallel GNSS implementation or
 bypass canonical validation, evidence, privacy, or policy.
 
@@ -1012,10 +1020,10 @@ broader 1.0 roadmap:
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
-| Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
+| Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.7 |
 | Explicit linalg/DSP/geo/navigation math dependencies and executor isolation | v0.3.4, v0.7.2, v0.37.0, v0.48.3 and v0.169.1-v0.169.4 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
-| UTC civil/POSIX/calendar and TT/UT1/EOP precision-time contracts | v0.5.5 and v0.7.3 |
+| UTC civil/POSIX/calendar and TT/UT1/EOP precision-time contracts | v0.5.5-v0.5.7 and v0.7.4 |
 | Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
 | External algorithm/stage capability, resource, trust and reset contract | v0.12.3 |
 | Core signal contracts, constellation physical fragments and format-owned mappings | v0.12.4 |
@@ -1025,22 +1033,22 @@ broader 1.0 roadmap:
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
-| Snapshot envelope, canonical binding, bounded restore/writer matrix, narrow repair authority, deterministic cleanup and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
+| Snapshot envelope, canonical binding, bounded restore/writer matrix, narrow repair authority, deterministic cleanup and platform protection | v0.18.1-v0.18.4, v0.48.12, v0.54.2-v0.55.1, v0.144.5, v0.168.3 and v0.189.2-v0.189.10 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
-| Logical source-role composition and solver-state-safe same-role handover | v0.20.4 |
+| Logical source-role composition and solver-state-safe same-role handover | v0.20.4-v0.20.5 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
-| Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
+| Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.5 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, caller-driven request/drive/completion facade, phased typestate shutdown, sealed replay-driver boundary, deterministic cleanup lanes, scheduler-only pending and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, caller-driven request/drive/completion facade, phased typestate shutdown, sealed replay-driver boundary, deterministic cleanup lanes, scheduler-only pending and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3-v0.48.11 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
-| RTK validation, exact network profiles and complete PPP acceptance matrices | v0.135.3, v0.138.1 and v0.144.1-v0.144.2 |
+| RTK validation, exact network profiles and complete PPP acceptance matrices | v0.135.3, v0.138.1 and v0.144.1-v0.144.4 |
 | Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
-| DFMC implementation matrix and exact named SBAS provider/service profiles including SouthPAN | v0.118.1-v0.119.2 |
+| DFMC implementation matrix and exact named SBAS provider/service profiles including SouthPAN | v0.118.1-v0.119.10 |
 | Conditional public BeiDou SAR/short-message boundary | v0.103.1 |
 | Conditional public NavIC messaging boundary | v0.114.2 |
 | Calibrated science artifacts, scintillation, reflectometry and space weather | v0.124.1-v0.124.4 |
@@ -1051,15 +1059,17 @@ broader 1.0 roadmap:
 | Common-view/all-in-view time transfer and CGGTTS V2E | v0.163.1 |
 | Full fusion calibration/mechanization, vector tracking, reacquisition and fixed-rate output | v0.164.1-v0.168.2 |
 | Geo-owned transformations/mathematics, navigation-only composition, road-routing non-claim and native AoA | v0.169.1-v0.169.5 |
-| FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1 |
-| Generic sources, evidence-gated receivers, safe control, configuration generations and interval-scoped behavioral assessments | v0.185.2-v0.185.6 |
+| SPARTN, current IGS exchange additions and operational/authentication distribution feeds | v0.35.2-v0.35.5, v0.76.1, v0.140.1-v0.140.3 and v0.149.2-v0.150.2 |
+| Antenna-array evidence and bounded civil beamforming/null steering | v0.169.6-v0.169.7 |
+| FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1-v0.175.5 |
+| Generic sources, evidence-gated receivers, safe control, configuration generations and interval-scoped behavioral assessments | v0.185.2-v0.185.10 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark tools | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |
 | Unsafe/platform/mobile/privacy and separately admitted snapshot-protection adapters | v0.177.1-v0.190.2 |
 | Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
 | Capability/resource/privacy documentation closure | v0.214.1 |
-| Packaging, service and deployment security freeze | v0.219.1 |
+| Packaging, service and deployment security freeze | v0.219.1-v0.219.4 |
 
 These patch milestones are planned compatible implementation passes, not
 permission to bundle unrelated work. A breaking correction moves to the next

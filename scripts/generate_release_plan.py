@@ -20,6 +20,9 @@ from release_plan_review_data import REVIEW_MILESTONE_DETAILS
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs" / "initial-idea.md"
 TARGET = ROOT / "docs" / "RELEASE_PLAN.md"
+EXPECTED_MILESTONES = 484
+MAX_ROADMAP_DESCRIPTION_CHARS = 200
+MAX_SPECIFIC_ACCEPTANCE_CHARS = 650
 
 
 def clean_sentence(text: str) -> str:
@@ -44,8 +47,31 @@ def parse_milestones() -> list[tuple[str, str, str, str]]:
             version, description = release_match.groups()
             description = DESCRIPTION_OVERRIDES.get(version, description)
             milestones.append((phase, phase_title, version, description))
-    if len(milestones) != 425:
-        raise RuntimeError(f"expected 425 roadmap milestones, found {len(milestones)}")
+    if len(milestones) != EXPECTED_MILESTONES:
+        raise RuntimeError(
+            f"expected {EXPECTED_MILESTONES} roadmap milestones, "
+            f"found {len(milestones)}"
+        )
+    versions = [version for _, _, version, _ in milestones]
+    if len(versions) != len(set(versions)):
+        raise RuntimeError("roadmap milestone versions must be unique")
+    for _, _, version, description in milestones:
+        if len(description) > MAX_ROADMAP_DESCRIPTION_CHARS:
+            raise RuntimeError(
+                f"{version} roadmap description has {len(description)} characters; "
+                "split the release or shorten it"
+            )
+        specific = (
+            MILESTONE_DETAILS.get(version, ())
+            + CONFORMANCE_MILESTONE_DETAILS.get(version, ())
+            + REVIEW_MILESTONE_DETAILS.get(version, ())
+        )
+        specific_chars = sum(len(item) for item in specific)
+        if specific_chars > MAX_SPECIFIC_ACCEPTANCE_CHARS:
+            raise RuntimeError(
+                f"{version} has {specific_chars} characters of specific acceptance; "
+                "perform a semantic scope review and split independent concerns"
+            )
     return milestones
 
 
@@ -119,6 +145,14 @@ The list is not a maximum. Split a milestone or add patch releases whenever
 one safe review pass is no longer enough. Production-scope work is completed
 before 1.0.0; post-1.0 releases may add newly published standards and optional
 ecosystem extensions, not defer the stated 1.0 baseline.
+
+A release should own one primary state machine, provider profile, platform
+adapter, artifact layer, or independently reviewable algorithm family. Split
+work when parts can fail, roll back, freeze standards, or complete their test
+matrices independently. A split never weakens earlier requirements: guarantees
+accumulate through the sequence. The generator enforces coarse description and
+specific-acceptance size ceilings as a regression alarm; passing those limits
+does not replace semantic scope review.
 
 Tags use:
 

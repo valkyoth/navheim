@@ -197,13 +197,25 @@ review_markers = ["RINEX 4.02"]
 [[source]]
 id = "igs-products"
 publisher = "International GNSS Service"
-scope = "precise orbit/clock, ionosphere, antenna, reference-frame, and bias products"
+scope = "precise orbit/clock, ionosphere, troposphere, attitude, antenna, reference-frame, bias, filename, and station-metadata products"
 status = "verify-before-implementation"
 acquisition = "automatic"
 redistribution = "local-only"
 landing_url = "https://igs.org/formats-and-standards/"
-documents = ["SP3-d", "IONEX 1.1", "ANTEX 2.0", "SINEX 2.02", "Bias-SINEX 1.00", "IGS SSR format", "current IGS product conventions"]
+documents = ["SP3-d", "IONEX 1.1", "ANTEX 2.0", "SINEX 2.02", "SINEX-TRO 2.00", "Bias-SINEX 1.00", "ORBEX 0.09/current", "IGS SSR format", "IGS long product filename convention 2.0", "IGS site log 2.0", "current IGS product conventions"]
 first_release = "v0.32.0"
+
+[[source]]
+id = "spartn-corrections"
+publisher = "SPARTN / u-blox and participating industry members"
+scope = "SPARTN 2.0.3 framing, correction semantics, encryption and authentication-support messages"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.spartnformat.org/"
+documents = ["SPARTN Interface Control Document 2.0.3, November 2025", "applicable public implementation guidance and vectors"]
+first_release = "v0.140.1"
+review_markers = ["SPARTN 2.0.3"]
 
 [[source]]
 id = "iers-iau-geodesy"
@@ -415,7 +427,7 @@ status = "profile-freeze-required"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://www.netlib.org/lapack/explore-html/topics.html"
-documents = ["LAPACK 3.12.1 routine and accuracy/stability references selected by v0.3.4", "NIST DLMF Chapter 7 error functions and Chapter 8 incomplete gamma functions", "exact independent arbitrary-precision reference method/table records selected by v0.3.4-v0.3.5"]
+documents = ["LAPACK 3.12.1 routine and accuracy/stability references selected by v0.3.4-v0.3.6", "NIST DLMF Chapter 7 error functions and Chapter 8 incomplete gamma functions", "exact independent arbitrary-precision reference method/table records selected by v0.3.4-v0.3.7"]
 first_release = "v0.3.4"
 
 [[download]]

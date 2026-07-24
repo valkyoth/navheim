@@ -13,6 +13,7 @@ python3 scripts/standards-sources.py check
 python3 scripts/test-standards-sources.py
 scripts/check_release_plan.sh
 scripts/test-release-plan.sh
+python3 scripts/test-release-plan-scope.py
 scripts/generate_release_plan.py --check
 scripts/test-check-latest-tools.sh
 

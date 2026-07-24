@@ -35,7 +35,7 @@ frozen into `manifest.toml`.
 The latest human acquisition review is
 [`reviews/2026-07-24.md`](reviews/2026-07-24.md).
 
-The 36-family inventory covers the present 1.0 roadmap, including GNSS
+The 37-family inventory covers the present 1.0 roadmap, including GNSS
 protocols, time transfer, receiver/SDR hardware, Rust and operating-system
 contracts, numerical foundations, and the methods needed to freeze optional
 scientific profiles. It is not a claim to cover every possible future

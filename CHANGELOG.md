@@ -4,6 +4,16 @@ All notable changes to `navheim` are documented here.
 
 ## Unreleased
 
+- Completed the final roadmap sizing and independent coverage review. The
+  plan now has 483 bounded pre-1.0 implementation stops; oversized executor,
+  snapshot, SDR, SBAS, PPP, accelerator, receiver, platform and deployment
+  passes were split without dropping guarantees.
+- Added explicit plan/source ownership for SPARTN 2.0.3, current IGS
+  troposphere/attitude/filename/site metadata, Galileo HAS and OSNMA
+  distribution state, operator advisories, conditional GPS civil
+  authentication and bounded antenna-array processing.
+- Added generator-enforced coarse milestone-size alarms alongside mandatory
+  semantic scope review.
 - Initialized the Rust workspace with dependency-free `navheim-core` and
   `navheim` facade crates.
 - Added the standards, security, release, supply-chain, CI, and documentation
@@ -96,45 +106,45 @@ All notable changes to `navheim` are documented here.
   excluded from the 1.0 executor. Snapshot repair is separately
   authorized and cannot reset an in-namespace counter, accept older state,
   reuse nonces or bypass a durable continuity break.
-- Integrated the sixteenth review into v0.48.3: `poll_cleanup` uses a shared
+- Integrated the sixteenth review into v0.48.5: `poll_cleanup` uses a shared
   executor borrow so live handles do not prevent reclamation. An internal
   non-exported single-cleaner CAS returns pre-mutation `Busy` on contention,
   selects the lowest eligible generation-bearing job ID within bounded work,
   and is tested against completion, claim, drop, admission and shutdown.
-- Integrated the seventeenth review into v0.48.3 by separating mutation
+- Integrated the seventeenth review into v0.48.6 by separating mutation
   domains: the raw primitive creates a bounded contention receipt at the
   failed-CAS linearization point without changing cleanup or trace state. The
   supervisor records `Busy` against a logical call before semantic reaction,
   and replay uses that fact instead of observing live contention.
-- Integrated the eighteenth review into v0.48.3 by making the supervisor the
+- Integrated the eighteenth review into v0.48.6 by making the supervisor the
   only public cleanup boundary. The receipt-producing executor primitive is
   crate-private, so application code cannot ignore or forget an unrecorded
   receipt; recording succeeds before `Busy` is observable, and replay is
   consulted before a live CAS.
-- Integrated the nineteenth review into v0.48.3 by replacing ambient
+- Integrated the nineteenth review into v0.48.7 by replacing ambient
   concurrent-call identity with plan-issued `CleanupLane` capabilities. Each
   lane has a deterministic ID and checked non-wrapping sequence, so replay
   keys exact lane/call pairs and cannot swap outcomes when call arrival or CAS
   order changes.
-- Integrated the twentieth review into v0.48.3 by recording successful cleanup
+- Integrated the twentieth review into v0.48.8 by recording successful cleanup
   grants and results as well as contention. Worst-case event capacity is
   reserved before the cleaner CAS, successful grants receive a checked global
   order, and replay follows that order without using live CAS timing.
-- Integrated the twenty-first review into v0.48.3 by making early replay order
+- Integrated the twenty-first review into v0.48.9 by making early replay order
   a scheduler-only `SupervisedCleanupPoll::Pending`, not an application error.
   Pending preserves the same active call without state/result transitions;
   controlled drivers hide it and the base executor never blocks or busy-spins.
-- Integrated the twenty-second review into v0.48.3 by moving low-level polling
+- Integrated the twenty-second review into v0.48.9 by moving low-level polling
   from `ExecutionSupervisor` to a `ReplayDriver` created by consuming a sealed
   plan-bound permit. The application facade is ready-only and cannot expose
   driver, lane, permit or poll types, while shared driver calls retain
   distinct-lane concurrency.
-- Integrated the twenty-third review into v0.48.3 by defining the public
+- Integrated the twenty-third review into v0.48.10 by defining the public
   `CleanupScheduler` request/drive/ready-token/completion lifecycle. Caller-
   invoked drive is bounded and nonblocking; request and turn IDs never reuse,
   queues reserve explicit capacity, completions persist until claim or
   deterministic retirement, and shutdown reconciles every request state.
-- Integrated the twenty-fourth review into v0.48.3 by making shutdown a
+- Integrated the twenty-fourth review into v0.48.11 by making shutdown a
   representable `Running -> Draining` typestate. Admission ends permanently
   while completion claims remain available; bounded shutdown turns own
   cancellation and finalization, failed finish returns the drainer, and
@@ -145,7 +155,7 @@ All notable changes to `navheim` are documented here.
 - Made shell syntax checks honor Bash versus POSIX-shell shebangs and replaced
   the non-portable CI read-only-mode assertion with checksum/source identity.
 - Added the external standards acquisition inventory and secure local-only
-  vault workflow: 36 authoritative source families, 17 allowlisted public
+  vault workflow: 37 authoritative source families, 17 allowlisted public
   downloads, local SHA-256 locking, official-page revision-marker review, and
   enforced exclusion of restricted document bytes from Git and crates.
 - Completed a repository-wide requirement/specification audit, corrected the

@@ -191,3 +191,15 @@ license_class = "public-reference"
 local_copy = false
 implemented_by = []
 tests = []
+
+[[document]]
+id = "spartn-2.0.3"
+title = "SPARTN Interface Control Document"
+revision = "2.0.3-candidate"
+publisher = "SPARTN"
+retrieved = "2026-07-24"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
