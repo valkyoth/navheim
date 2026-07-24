@@ -97,6 +97,13 @@ For these, Navheim may provide:
 
 It must not publish speculative decoders or imply military capability.
 
+User decoders register only through a bounded, namespaced extension contract
+that declares identifiers, accepted framing, maximum input/output, scratch,
+work and progress behavior. Registration cannot override a standard decoder,
+claim authentication/integrity, access devices or networking, or mutate
+canonical state directly. It returns opaque or separately namespaced artifacts
+until an explicit caller policy translates them.
+
 ### 2.3 Future and experimental PNT
 
 The architecture must reserve identifiers and plugin points for:
@@ -485,9 +492,12 @@ provenance contracts.
 NMEA 2000 uses CAN and licensed parameter-group definitions. Implement
 transport and a legal, versioned PGN layer in `navheim-nmea2000`; do not copy
 protected tables from unofficial sources. CAN frame sources/sinks and platform
-adapters own bus I/O, timestamp domains, address claiming and error states;
-the protocol crate owns bounded frame/fast-packet assembly and legal PGN
-semantics.
+adapters own bus I/O, timestamp domains, permissions, backpressure, bus-off
+recovery and hardware lifecycle. The protocol crate owns bounded
+frame/fast-packet assembly, legal PGN semantics and the pure J1939
+address-claim state machine: NAME ordering, conflicts, commanded addresses and
+outgoing-frame decisions. An adapter executes those decisions but never
+defines address-claim semantics.
 
 ### 6.5 Assistance
 
@@ -508,6 +518,14 @@ before SUPL, LPP, Android or receiver-specific translation.
 
 Transport security belongs in optional TLS/network adapters. ASN.1 PER encoding/decoding is a core protocol concern and should be implemented in a small reusable internal module rather than delegated to a GNSS library.
 
+The first-party PER core admits only the aligned/unaligned profiles required
+by the frozen SUPL/LPP matrices. It bounds constrained/semi-constrained
+integers, length determinants, extension bitmaps, open types, recursion,
+nesting, allocation, records and bit work; preserves unknown extensions; and
+provides partial streaming, exact consumption and canonical encoding.
+Generated schemas record source revision, generator version and reproducible
+output provenance.
+
 ---
 
 ## 7. Repository and crate architecture
@@ -522,6 +540,9 @@ The following crates have independently useful public APIs and should be publish
 
 - **`navheim`** — ergonomic facade, profiles, prelude, auto source selection and feature bundles.
 - **`navheim-core`** — zero-dependency common types: units, time, coordinates, IDs, observations, ephemerides, events, errors, capabilities, bounded collections, bit views, checksums, FEC primitives and stable traits.
+- **`navheim-math`** — zero-dependency, `no_std` deterministic elementary
+  floating math and narrowly scoped backend traits used by coordinates, DSP
+  and solvers.
 - **`navheim-dsp`** — zero-dependency DSP algorithms: complex types, NCOs, filters, FFTs, resamplers, channelizers, acquisition and tracking-loop primitives.
 - **`navheim-sdr`** — source/front-end abstractions, band planning, sample metadata, coherent-array support and device adapter traits.
 
@@ -614,6 +635,7 @@ navheim/
 ├── crates/
 │   ├── navheim/
 │   ├── navheim-core/
+│   ├── navheim-math/
 │   ├── navheim-dsp/
 │   ├── navheim-sdr/
 │   ├── navheim-gps/
@@ -765,6 +787,35 @@ Tier 0 protocol/interchange values use exact scaled integers or reduced
 rationals. Construction is explicit and checked. Floating adapters reject
 non-finite values; optimized kernels may use raw arrays only behind private
 APIs with documented rounding, overflow and numerical backend behavior.
+
+### 9.2.1 `no_std` elementary math
+
+`navheim-math` provides the normative first-party pure-Rust scalar
+implementations required by the roadmap: square root/hypot, reciprocal square
+root where justified, sine/cosine, `atan2`, logarithm/exponential and the
+small derived functions actually used by admitted algorithms. Each function
+defines domain, exceptional inputs, signed zero, subnormal policy, argument
+reduction, rounding and maximum absolute/relative/ULP error against
+high-precision independent references.
+
+Tier 0 always has deterministic scalar math without `std`, an allocator,
+nightly features, OS `libm`, or a third-party dependency. Algorithms accept a
+narrow reviewed math-backend capability where acceleration is useful; callers
+cannot substitute an unbounded or semantically weaker backend silently.
+Platform-native implementations must identify their behavior and pass the
+same domain/error corpus before selection.
+
+Fixed-size FFT twiddles and coefficients may be audited constants. Runtime
+FFT twiddles, geodesic series and loop/filter coefficients are created during
+side-effect-free planning into caller-provided storage, recorded in the plan
+receipt and reused during execution. No real-time stage computes unplanned
+tables or performs hidden allocation.
+
+As of the Rust 1.97.1 baseline, `core::simd`/`std::simd` remains nightly-only.
+Published Navheim crates use stable Rust only: scalar/auto-vectorized code and
+reviewed target-specific `core::arch` adapters with explicit feature detection
+and scalar fallback. A future portable-SIMD API is admitted only when stable
+on the MSRV or behind a separately raised MSRV, never by enabling nightly.
 
 ### 9.3 Time model
 
@@ -1020,11 +1071,21 @@ trait, global clock or async runtime is required.
 ```rust
 let mut solver = navheim_pvt::Solver::<64>::builder()
     .algorithm(navheim_pvt::Algorithm::RobustWeightedLeastSquares)
-    .integrity(navheim_integrity::Policy::navigation())
+    .admission(navheim_pvt::AdmissionPolicy::navigation())
     .build()?;
 
 let solution = solver.solve(&epoch, &navigation_store, approximate_state)?;
+
+let integrity = navheim_integrity::Assessor::<64>::builder()
+    .policy(navheim_integrity::Policy::navigation())
+    .build()?;
+let assessment = integrity.assess(&epoch, &solution)?;
 ```
+
+Measurement admission may exclude structurally invalid or policy-disallowed
+inputs, but it does not label the resulting solution integrity-approved.
+Integrity consumes the immutable solution plus residual/exclusion artifacts
+and emits a separate targeted `IntegrityAssessment`.
 
 ### 10.6 RTK rover API
 
@@ -1079,15 +1140,18 @@ let mut source = navheim_timing::ReceiverTimeSource::builder(receiver)
 let mut slot = GnssTimeEventSlot::new(&mut event_storage);
 
 while source.poll_time(&mut slot)?.is_ready() {
-    let event = slot.borrow();
-    match event {
-        GnssTimeEvent::Artifact(observation) => consume(observation),
-        GnssTimeEvent::Assessment(assessment) => consume(assessment),
-        GnssTimeEvent::Invalidated(target) => withdraw_source(target),
-        GnssTimeEvent::Security(alert) => handle_alert(alert),
-        _ => {}
-    }
-    source.acknowledge(event.sequence())?;
+    let sequence = {
+        let event = slot.borrow()?;
+        match event.value() {
+            GnssTimeEvent::Artifact(observation) => consume(observation),
+            GnssTimeEvent::Assessment(assessment) => consume(assessment),
+            GnssTimeEvent::Invalidated(target) => withdraw_source(target),
+            GnssTimeEvent::Security(alert) => handle_alert(alert),
+            _ => {}
+        }
+        event.sequence()
+    };
+    source.acknowledge(&mut slot, sequence)?;
 }
 ```
 
@@ -1302,7 +1366,22 @@ measurement admission and unavailable lifecycle are public and testable.
 
 The solver never reports more precision than the measurement and model uncertainty support.
 
-### 13.2 Carrier phase and RTK
+### 13.2 Code-differential GNSS
+
+`navheim-rtk` also owns pseudorange/code differential positioning:
+
+- reference-station position, observation and correction artifacts;
+- satellite/issue/frequency/common-view epoch matching;
+- correction age, validity and station/session identity;
+- code-differential covariance and quality propagation;
+- a separately typed `Dgps` solution, never an alias for RTK float;
+- ordered `RtkFixed` → `RtkFloat` → `Dgps` → `Standalone` → `Unavailable`
+  degradation and recovery policy with visible reasons.
+
+Each transition is a new lifecycle artifact. A stale or incompatible base
+cannot silently leave a code correction applied.
+
+### 13.3 Carrier phase and RTK
 
 `navheim-rtk` should include:
 
@@ -1322,7 +1401,7 @@ The solver never reports more precision than the measurement and model uncertain
 
 An `RtkFixed` result always carries the validation method and metrics.
 
-### 13.3 PPP
+### 13.4 PPP
 
 `navheim-ppp` should provide:
 
@@ -1339,7 +1418,7 @@ An `RtkFixed` result always carries the validation method and metrics.
 - PPP-RTK regional atmospheric corrections;
 - product-age and reference-frame validation.
 
-### 13.4 Atmospheric models
+### 13.5 Atmospheric models
 
 Support simple through scientific tiers:
 
@@ -1423,6 +1502,12 @@ Each evidence item targets bounded artifact IDs and records observation
 interval, prerequisites, algorithm/version, confidence/statistical assumptions,
 insufficient-data state and provenance. Absence of evidence is not evidence of
 authenticity.
+
+The acceptance matrix covers multi-frequency ionosphere inconsistency,
+common-mode code/carrier behavior, impossible AGC/CN0 changes, trusted-terrain
+visibility and every explicit insufficient-data path. A producer that lacks
+its prerequisite data emits `Unavailable`/`InsufficientData`; it never emits
+benign evidence.
 
 A policy engine combines evidence with configurable thresholds and hysteresis.
 
@@ -1562,6 +1647,13 @@ Do not add a decoder based only on reverse-engineered fragments with no conforma
 
 The direct system-call/FFI backend may remain zero third-party dependencies. A separately feature-gated libusb or platform-binding backend may improve maintenance without contaminating core crates.
 
+Android raw measurements and fused/location-provider fixes are different
+artifacts. OS-derived fixes preserve provider, permission, mock state, elapsed
+realtime/capture domain, accuracy and reset provenance and never manufacture
+raw observations. USB-host adapters model permission intents, attach/detach,
+endpoint cancellation and identity reuse. Network adapters expose Android
+connectivity/background/throttling failures without hidden retries or threads.
+
 ### 17.3 Device discovery
 
 Device discovery returns candidates and evidence, not an automatically trusted device:
@@ -1577,7 +1669,17 @@ pub struct DeviceCandidate {
 }
 ```
 
-Opening a candidate is an explicit action. Auto-detection sends only bounded, documented probes and can be disabled.
+Candidate enumeration is bounded and records transport identity, evidence,
+permission and hotplug generation. Opening a candidate is always a separate
+explicit action. Each protocol probe receives independent byte, work, response
+and elapsed-time budgets and isolated parser state; one failed probe cannot
+pollute another.
+
+Deterministic source ranking returns a `SelectionExplanation` containing every
+candidate, disqualifying capability/policy reason, score component and tie
+break. Users can disable discovery and configure transport/device/protocol
+allowlists. Hotplug, removal and path/identifier reuse create new generations
+and invalidate prior evidence. Discovery never opens a device automatically.
 
 ---
 
@@ -1596,6 +1698,12 @@ The facade should provide safe profiles that are merely documented configuration
 - `Profile::Replay` — deterministic, no wall-clock dependence.
 
 Every profile can be expanded to a printable canonical configuration so there are no hidden defaults.
+
+Profile defaults are versioned data. Expansion is side-effect free and either
+produces one complete canonical configuration/plan input or a structured
+capability/resource failure; it never silently falls back. Tests compare each
+profile against the equivalent explicit configuration and prove that profiles
+select no alternative implementations or hidden algorithms.
 
 ---
 
@@ -2046,6 +2154,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.3.0** — exact scaled-integer and reduced-rational numeric primitives.
 - **0.3.1** — physical unit types and checked conversions.
 - **0.3.2** — measurement intervals, asymmetric uncertainty, typed covariance and finite floating adapters.
+- **0.3.3** — deterministic first-party `no_std` elementary math and stable backend contract.
 - **0.4.0** — raw native GNSS time fields and extensible scale identifiers.
 - **0.4.1** — resolved native instants with private fields and resolution evidence.
 - **0.4.2** — capture clock-domain/generation identifiers and exact sample timestamps.
@@ -2070,6 +2179,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.11.1** — fixed iteration/work limits and decoder resource receipts.
 - **0.12.0** — extensible system/satellite/signal identifiers and registry versioning.
 - **0.12.1** — namespaced registry authorities and bounded identifier sets without closed public masks.
+- **0.12.2** — bounded user-decoder registration and namespaced opaque-artifact boundary.
 - **0.13.0** — canonical observation/epoch model with distinct transmit, receive and capture times.
 - **0.13.1** — immutable artifacts, bounded provenance parents and separate targeted assessment identifiers.
 - **0.13.2** — tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages.
@@ -2089,6 +2199,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
 - **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
+- **0.20.2** — all named facade profiles, versioned canonical expansion and capability-failure equivalence.
 
 ### Phase B — File and byte-stream interoperability
 
@@ -2249,6 +2360,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.120.1** — named solver state/covariance layout and explicit solution availability lifecycle.
 - **0.120.2** — typed DOP, solution-age, satellite-summary, fix-kind and convergence outputs.
 - **0.120.3** — typed residual, exclusion and measurement-contribution diagnostics.
+- **0.120.4** — complete PVT initializer, state-mode and measurement-weighting acceptance matrix.
 - **0.121.0** — robust estimation and fault exclusion.
 - **0.121.1** — square-root filtering and near-singular numerical failure evidence.
 - **0.121.2** — sequential GNSS-only PVT estimator with explicit initialization, reset and convergence lifecycle.
@@ -2265,6 +2377,9 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.129.0** — protection levels and integrity event model.
 - **0.129.1** — immutable targeted integrity assessments, exclusions and recovery lifecycle.
 - **0.129.2** — SBAS integrity-input separation and unavailable-protection-level semantics.
+- **0.129.3** — code-differential corrections, reference-station geometry and common-view epoch matching.
+- **0.129.4** — DGPS solution, covariance, correction-age and quality propagation.
+- **0.129.5** — PVT fact and integrity-assessment pipeline separation.
 
 ### Phase J — RTK and precise positioning
 
@@ -2275,6 +2390,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.134.0** — ambiguity validation and partial fixing.
 - **0.135.0** — RTK fixed/float lifecycle and rollback.
 - **0.135.1** — explicit RTK convergence artifacts, withdrawal and superseded-state handling.
+- **0.135.2** — explicit RTK fixed/float, DGPS, standalone and unavailable transition policy.
+- **0.135.3** — RTK pivot, fix-and-hold, ratio, success-probability and residual acceptance matrix.
 - **0.136.0** — GLONASS FDMA RTK biases.
 - **0.137.0** — moving-base and dual-antenna heading.
 - **0.138.0** — network RTK standardized inputs.
@@ -2286,23 +2403,26 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.142.1** — PPP convergence, product/frame/age validation, rollback and invalidation.
 - **0.143.0** — PPP ambiguity resolution.
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
+- **0.144.1** — PPP tide/loading, wet-delay/gradient and meteorological-input acceptance matrix.
 - **0.145.0** — static/rapid-static survey workflow.
 
 ### Phase K — Authentication and resilience
 
 - **0.146.0** — cryptographic backend traits and trust-store model.
 - **0.146.1** — trusted-time, trust-root generation and platform anti-rollback authority binding.
-- **0.146.2** — reviewed `navheim-crypto-rustcrypto` backend and end-to-end authentication vectors.
+- **0.146.2** — reviewed `navheim-crypto-rustcrypto` primitive/backend conformance.
 - **0.147.0** — Galileo OSNMA framing/assembly.
 - **0.148.0** — OSNMA key-chain and tag verification.
 - **0.149.0** — OSNMA policy, renewal/revocation and evidence.
 - **0.149.1** — immutable delayed-authentication assessments targeting existing artifacts.
 - **0.150.0** — QZSS QZNMA decode and verification.
+- **0.150.1** — RustCrypto-backed OSNMA/QZNMA end-to-end integration vectors.
 - **0.151.0** — multi-constellation navigation conflict detector.
 - **0.152.0** — Doppler/motion/clock spoofing evidence.
 - **0.153.0** — correlation/power/interference evidence.
 - **0.154.0** — meaconing/time-replay evidence.
 - **0.155.0** — multi-receiver and multi-antenna security inputs.
+- **0.155.1** — complete spoofing/jamming evidence and insufficient-data acceptance matrix.
 - **0.156.0** — security policy engine and fail/degrade reactions.
 - **0.156.1** — versioned targeted policy decisions, hysteresis and ordered reevaluation.
 - **0.157.0** — signed forensic provenance stream.
@@ -2360,20 +2480,28 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.180.1** — FreeBSD I/O implementation and fault matrix.
 - **0.180.2** — OpenBSD I/O implementation and fault matrix.
 - **0.180.3** — NetBSD I/O implementation and fault matrix.
+- **0.180.4** — bounded device discovery, isolated probing, deterministic ranking and hotplug identity.
 - **0.181.0** — gpsd protocol adapter.
 - **0.182.0** — u-blox UBX adapter.
 - **0.183.0** — Septentrio SBF adapter.
 - **0.184.0** — NovAtel/public receiver adapter baseline.
 - **0.185.0** — receiver-protocol admission gate; every additional protocol requires a named patch milestone.
-- **0.186.0** — Android raw GNSS measurement adapter.
-- **0.186.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
+- **0.185.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
+- **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
+- **0.186.1** — Android fused/location-provider fix adapter and provenance.
+- **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
+- **0.186.3** — Android network, background, throttling and provider-reset integration.
+- **0.186.4** — Android-to-canonical-assistance translation.
+- **0.186.5** — bounded first-party aligned/unaligned ASN.1 PER core.
 - **0.187.0** — OMA SUPL/ULP core.
+- **0.187.1** — exact SUPL/ULP message, role and PER profile matrix.
 - **0.188.0** — 3GPP LPP assistance core.
+- **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
-- **0.190.1** — CAN/J1939, fast-packet, address-claim and licensed PGN semantic separation.
-- **0.190.2** — CAN frame source/sink and platform-adapter ownership contract.
+- **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
+- **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
 
 ### Phase N — Simulation, hardening and 1.0 stabilization
 
@@ -2390,7 +2518,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.199.1** — fixed/floating cross-architecture replay and tolerance audit.
 - **0.200.0** — unsafe/FFI audit and device fault injection.
 - **0.200.1** — Miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit.
-- **0.201.0** — portable SIMD performance release.
+- **0.201.0** — stable-Rust cross-architecture SIMD performance release with scalar fallback.
 - **0.202.0** — fixed-point/embedded performance release.
 - **0.203.0** — WASM decoding/post-processing profile.
 - **0.203.1** — bare-metal and future Aesynx caller-buffer/work-budget conformance contract.
@@ -2450,6 +2578,15 @@ Navheim 1.0.0 is released only when all of the following are true:
     LPP, Android or receiver translation.
 20. PVT exposes typed DOP, age, satellite, residual, exclusion, fix,
     convergence and vertical-datum outputs; unavailable values remain explicit.
+21. Deterministic `no_std` math covers every required operation with published
+    error bounds, MSRV evidence and no nightly or implicit OS-math dependency.
+22. Code DGPS has independent evidence and cannot be confused with RTK float;
+    every fixed/float/DGPS/standalone/unavailable transition is observable.
+23. Every facade profile expands canonically, and discovery/probing/source
+    ranking remains bounded, explainable, disabled/allowlisted and side-effect
+    free until explicit open.
+24. Android location/USB/network and SUPL/LPP PER matrices meet their named
+    platform, provenance, lifecycle, interoperability and resource contracts.
 
 ---
 
@@ -2458,7 +2595,8 @@ Navheim 1.0.0 is released only when all of the following are true:
 While the architecture targets the complete laboratory, start development in this order:
 
 1. Create `navheim-core`, the standards manifest and security policy.
-2. Implement integer time, units, bit access and bounded parsing.
+2. Implement integer time, units, deterministic `no_std` math, bit access and
+   bounded parsing.
 3. Build the RTL2832U sample source and a deterministic capture format.
 4. Implement scalar complex DSP, resampling and FFT.
 5. Implement GPS L1 C/A acquisition against generated and recorded vectors.
@@ -2514,6 +2652,8 @@ The standards manifest should continuously track at least:
 - NMEA 0183 and NMEA 2000;
 - IGS RINEX, SP3, SINEX, IONEX, ANTEX and SSR standards;
 - OMA SUPL and 3GPP LPP;
+- official Rust stable/MSRV documentation for `core` floating math,
+  target-specific `core::arch` and portable-SIMD stabilization status;
 - official receiver protocol specifications used by adapters.
 
 ## Appendix B — Key 2026 research observations

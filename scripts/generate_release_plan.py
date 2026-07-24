@@ -14,6 +14,7 @@ from release_plan_data import (
     PHASE_DELIVERABLES,
     PHASE_EXIT_CHECKS,
 )
+from release_plan_review_data import REVIEW_MILESTONE_DETAILS
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "docs" / "initial-idea.md"
@@ -42,8 +43,8 @@ def parse_milestones() -> list[tuple[str, str, str, str]]:
             version, description = release_match.groups()
             description = DESCRIPTION_OVERRIDES.get(version, description)
             milestones.append((phase, phase_title, version, description))
-    if len(milestones) != 339:
-        raise RuntimeError(f"expected 339 roadmap milestones, found {len(milestones)}")
+    if len(milestones) != 359:
+        raise RuntimeError(f"expected 359 roadmap milestones, found {len(milestones)}")
     return milestones
 
 
@@ -61,8 +62,11 @@ def goal_text(description: str) -> str:
     preserved = (
         "3GPP",
         "ARAIM",
+        "ASN.1",
         "BeiDou",
         "CAN",
+        "CRINEX",
+        "DGPS",
         "FreeBSD",
         "Galileo",
         "GLONASS",
@@ -70,18 +74,26 @@ def goal_text(description: str) -> str:
         "GPS",
         "IMU",
         "iOS",
+        "J1939",
+        "LPP",
         "macOS",
         "NavIC",
         "NetBSD",
         "NMEA",
+        "NTRIP",
         "OpenBSD",
+        "OSNMA",
+        "PPP",
         "PVT",
         "QZSS",
         "RAIM",
         "RINEX",
         "RTCM",
+        "RTK",
+        "RustCrypto",
         "SBAS",
         "SIMD",
+        "SUPL",
         "TAI",
         "UTC",
         "WASM",
@@ -133,6 +145,9 @@ Every release requires:
 
 Core GNSS correctness stays first-party. TLS, modern cryptographic primitives,
 platform APIs, and vendor stacks enter only through explicit reviewed adapters.
+Deterministic elementary math is first-party and `no_std`; published crates use
+stable Rust only and never disguise a nightly portable-SIMD requirement as a
+portable implementation.
 
 ## Required Milestone Format
 
@@ -220,6 +235,8 @@ def milestone_block(
     phase_deliverable = clean_sentence(PHASE_DELIVERABLES[phase])
     phase_exit = PHASE_EXIT_CHECKS[phase]
     detail = MILESTONE_DETAILS.get(version)
+    if detail is None:
+        detail = REVIEW_MILESTONE_DETAILS.get(version)
     detail_deliverable = f"- {detail[0]}\n" if detail else ""
     detail_verification = f"- {detail[1]}\n" if detail else ""
     return f"""### v{version} - {heading_title(description)}

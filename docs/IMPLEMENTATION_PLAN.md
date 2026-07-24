@@ -86,6 +86,8 @@ unsafe code, credentials, trust roots and platform guarantees.
 - `navheim-core`: bounded collections, units, time, coordinates, identifiers,
   bit/FEC/checksum primitives, observations, ephemerides, corrections, events,
   errors, provenance, resource planning, and stable traits.
+- `navheim-math`: dependency-free `no_std` deterministic elementary floating
+  math and narrowly scoped backend capabilities.
 - `navheim-dsp`: complex/fixed-point values, filters, resampling, FFT,
   acquisition, tracking, synchronization, and estimators.
 - `navheim-sdr`: front-end traits, sample metadata, coherent arrays, band
@@ -178,7 +180,7 @@ artifacts, packaging, service units, and deployments remain under `tools/`,
 Implementation proceeds in this dependency order:
 
 1. bounded collections, errors, and checked arithmetic;
-2. physical units and exact integer time;
+2. physical units, exact integer time, and deterministic `no_std` math;
 3. coordinates and reference frames;
 4. bit, checksum, parity, and FEC primitives;
 5. extensible identifiers and registries;
@@ -261,6 +263,16 @@ denormal and platform policy. Optimized kernels are compared against the
 normative scalar implementation. A broad public `Scalar` abstraction is not
 stabilized before concrete algorithms prove the required operations.
 
+`navheim-math` is the normative pure-Rust scalar source for `sqrt`/`hypot`,
+trigonometry, `atan2`, logarithm/exponential and admitted derived functions.
+It specifies domains, exceptional values, subnormals, argument reduction,
+rounding and error bounds against high-precision references. Runtime
+twiddles/coefficients are planned into caller storage; audited fixed tables are
+versioned evidence. Platform math and target-specific `core::arch` paths are
+optional reviewed backends with scalar equivalence. Nightly
+`core::simd`/`std::simd`, OS `libm` assumptions and post-MSRV APIs are forbidden
+from the baseline.
+
 Format profiles are not aggregate claims. RTCM legacy observations and
 surveying transforms/projections, each RINEX observation/navigation/
 meteorological/clock generation, RINEX 4 picosecond fields, compact codecs and
@@ -286,6 +298,19 @@ limits, time-to-alert, continuity, availability, correlation assumptions,
 solution separation, exclusion exhaustion and re-admission. Missing required
 inputs produce unavailable protection levels. SBAS evidence stays a separate
 targeted input.
+
+The PVT solver emits solution, residual and exclusion facts under measurement
+admission policy. A separate integrity assessor consumes those immutable
+artifacts and emits targeted assessments; solver configuration never makes an
+ordinary solution integrity-approved. Code DGPS is a distinct typed solution
+and cannot be inferred from RTK-float state.
+
+Profiles expand to versioned printable canonical configuration and fail on
+missing capability. Discovery enumerates bounded candidates, isolates probes,
+ranks deterministically with explanations and never opens devices. Assistance
+is canonical before Android/SUPL/LPP translation; PER parsing has independent
+bit/work/nesting receipts. NMEA 2000 owns pure address-claim decisions while
+platform I/O only executes frames and lifecycle actions.
 
 ## GNSS Timing and Consumer APIs
 
@@ -405,22 +430,26 @@ broader 1.0 roadmap:
 | Exact standards and test traceability schema | v0.1.2 and v0.210.1 |
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
+| Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
-| Namespaced IDs, artifacts, staged observations and assessments | v0.12.0-v0.13.2 |
+| Namespaced IDs, bounded extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
-| Tiered facade and plan-before-side-effects | v0.20.1 |
+| Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
-| Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.2 |
+| PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
+| Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
+| RTK validation and PPP scientific-model acceptance matrices | v0.135.3 and v0.144.1 |
 | Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
 | Concrete crypto backend and immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
+| Post-protocol crypto and complete resilience evidence matrices | v0.150.1 and v0.155.1 |
 | Exact bounded GNSS timing slot/mapping/withdrawal contract | v0.158.1-v0.162.1 |
 | Full fusion calibration/mechanization, vector tracking and reacquisition | v0.164.1-v0.168.1 |
 | Navigation crate implementation and road-routing non-claim | v0.169.1-v0.169.4 |
-| Canonical assistance and CAN I/O ownership | v0.186.1 and v0.190.2 |
+| Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.2 |
 | Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
 | Capability/resource/privacy documentation closure | v0.214.1 |

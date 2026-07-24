@@ -45,12 +45,15 @@ solution integrity.
 | Correction duplication | physical target, convention and application stage remain ledger-bound | translated TGD/BGD/bias/PCO/PCV/atmosphere duplicate and wrong-sign tests |
 | Parser differential | progress, exact consumption, normalization and recovery are deterministic | independent corpora, chunk variations, unknowns, duplicates and overlong inputs |
 | Decompression expansion | compact codecs cannot bypass parser resource receipts | CRINEX/Hatanaka byte, record, line and expansion-ratio boundary tests |
+| ASN.1 expansion | PER lengths, open types, extensions and nesting stay within a bit/work receipt | boundary integers/lengths, recursive extensions, unknown open types and malformed canonical encodings |
 | Resource exhaustion | accepted plans bound all state, work, queues and output | false acquisition, worst-case FEC, queue pressure and reconnect-storm tests |
+| Device-probe side effects | discovery cannot open devices or share corrupted probe state | hostile descriptors/responses, probe budget, permission, hotplug and identity-reuse tests |
 | Evidence rollback | later assessment or invalidation cannot be ignored silently | reordered/replayed events, acknowledgement loss and forced-resynchronization tests |
 | Integrity-model omission | missing fault hypotheses or assumptions yield unavailable protection | satellite/constellation/provider/common-mode faults, exclusion exhaustion and alert-timing tests |
 | Sensor miscalibration | calibration validity, frame, clock, temperature and observability remain explicit | biased/expired calibration, lever-arm, time-offset, thermal and unobservable-motion tests |
 | Credential/location leak | routine errors and telemetry exclude secrets and sensitive location/time | sentinel-secret and sensitive-diagnostic snapshot tests |
 | FFI/DMA/SIMD fault | unsafe code only transfers validated bounded values into safe ownership | hostile length/alignment, disconnect/reset, model-check and sanitizer evidence |
+| Math backend drift | scalar domains/error bounds and optimized equivalence remain explicit | high-precision corpus, exceptional/subnormal inputs, MSRV/no_std and scalar/backend differential tests |
 
 ## Mandatory Mitigations
 
@@ -68,6 +71,10 @@ solution integrity.
 - independently sourced signal/message vectors admitted alongside each
   constellation feature rather than after implementation;
 - explicit capability planning before hardware is opened;
+- deterministic discovery explanations, isolated bounded probes and explicit
+  open authority;
+- canonical assistance before Android/SUPL/LPP translation and independently
+  bounded PER decoding;
 - caller-visible degradation, exclusion, uncertainty, and authentication state;
 - explicit timing invalidation/withdrawal events after stale models, receiver
   resets, discontinuities, authentication failures, or new spoofing evidence;

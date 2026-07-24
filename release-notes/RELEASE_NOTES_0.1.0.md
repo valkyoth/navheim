@@ -30,6 +30,14 @@ implementable RAIM/ARAIM contracts; a concrete RustCrypto adapter; CAN I/O;
 independent signal vectors; and exact timing arithmetic, mapping and slot
 state machines.
 
+The third coverage pass resolves acknowledgement and CAN address-claim
+ownership contradictions and makes the stable-Rust numerical strategy
+explicit. It adds future stops for first-party deterministic `no_std` math,
+bounded extension registration, all facade profiles, DGPS and ordered
+degradation, solver/integrity separation, platform-complete Android support,
+isolated discovery probes, bounded ASN.1 PER, exact SUPL/LPP matrices and
+post-protocol RustCrypto integration.
+
 ## Security
 
 - Both published crates are `no_std`, dependency-free, and forbid unsafe code.

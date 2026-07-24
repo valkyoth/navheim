@@ -21,3 +21,7 @@ All notable changes to `navheim` are documented here.
   PVT and vertical-datum outputs, front-end conditioning, fusion calibration
   and vector tracking, assistance, integrity, RustCrypto, CAN I/O, independent
   conformance vectors, and exact timing state machines.
+- Closed the third coverage review by repairing timing-slot and CAN ownership,
+  adding deterministic `no_std` math, DGPS, profiles/discovery, full Android
+  platform work, bounded PER and post-protocol crypto milestones, and
+  separating PVT facts from integrity assessments.

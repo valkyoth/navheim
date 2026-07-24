@@ -1,7 +1,7 @@
 """Technical acceptance data used by the Navheim release-plan generator."""
 
 PHASE_CHECKS = {
-    "A": "MSRV and pinned-stable builds, no_std checks, boundary tests, metadata checks, and deterministic policy tests",
+    "A": "MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests",
     "B": "official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke",
     "C": "independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence",
     "D": "official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay",
@@ -9,16 +9,16 @@ PHASE_CHECKS = {
     "F": "official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison",
     "G": "official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison",
     "H": "official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison",
-    "I": "independent high-precision references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases",
+    "I": "independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases",
     "J": "independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons",
     "K": "official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests",
     "L": "independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases",
-    "M": "target builds, device/OS fault injection, permission and disconnect handling, bounded probes, transport security, and platform/hardware smoke evidence",
+    "M": "target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence",
     "N": "cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence",
 }
 
 PHASE_DELIVERABLES = {
-    "A": "Use private checked representations, explicit availability/failure states, bounded provenance, and executable capacity/resource contracts.",
+    "A": "Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.",
     "B": "Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.",
     "C": "Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.",
     "D": "Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.",
@@ -26,16 +26,16 @@ PHASE_DELIVERABLES = {
     "F": "Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.",
     "G": "Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.",
     "H": "Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.",
-    "I": "Name solver state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.",
+    "I": "Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.",
     "J": "Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.",
     "K": "Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.",
     "L": "Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.",
-    "M": "Plan before side effects, isolate unsafe/FFI, validate every device report, expose platform limitations, and keep sensitive data redacted.",
+    "M": "Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.",
     "N": "Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.",
 }
 
 PHASE_EXIT_CHECKS = {
-    "A": "invalid states and undeclared resource use are unrepresentable or rejected before state mutation",
+    "A": "invalid states, undeclared resource use, and unavailable math capabilities are rejected before state mutation",
     "B": "all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence",
     "C": "execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract",
     "D": "GPS outputs remain traceable to immutable raw artifacts and independent signal/receiver references",
@@ -47,7 +47,7 @@ PHASE_EXIT_CHECKS = {
     "J": "stale, incomplete, replayed, or cross-session corrections cannot enter or partially update solver state",
     "K": "delayed or changed evidence never mutates facts and can trigger ordered withdrawal or versioned policy reevaluation",
     "L": "clock-domain changes, queue pressure, stale evidence, invalidation, fusion discontinuities, and navigation boundary cases remain explicit",
-    "M": "permission, reset, disconnect, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible",
+    "M": "permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible",
     "N": "the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim",
 }
 
@@ -358,12 +358,12 @@ MILESTONE_DETAILS.update(
             "Test SBAS expiry/conflict, missing hypotheses, alert-limit breach, RAIM/ARAIM separation, withdrawal ordering, and recovery.",
         ),
         "0.146.2": (
-            "Provide a reviewed optional RustCrypto adapter without moving authentication protocol or policy into the dependency crate.",
-            "Run OSNMA/QZNMA end-to-end vectors, algorithm mismatch, malformed keys/signatures, feature minima, dependency audit, and zeroization review.",
+            "Conform the optional RustCrypto adapter's primitives, algorithm negotiation, key parsing, feature minima, and secret handling.",
+            "Run primitive/backend vectors, algorithm mismatch, malformed keys/signatures, dependency audit, feature combinations, and zeroization review.",
         ),
         "0.160.2": (
-            "Freeze vacant, occupied, borrowed, released, and acknowledged timing-slot transitions with idempotent acknowledgement.",
-            "Model every legal/illegal transition, wrong sequence/generation, repeated acknowledgement, consumer panic/drop, polling races, and recovery.",
+            "Acknowledge with exclusive source and slot references after the event borrow ends; retain no hidden slot pointer or shared state.",
+            "Model every slot transition, wrong sequence/generation, repeat acknowledgement, cancellation, source reset, mandatory invalidation, and recovery.",
         ),
         "0.164.1": (
             "Model IMU bias, scale factor, axis misalignment, noise, temperature, calibration validity, and uncertainty explicitly.",
@@ -413,13 +413,13 @@ MILESTONE_DETAILS.update(
             "Provide local-frame navigation and progress primitives while explicitly excluding road-network search, maps, and turn-by-turn routing.",
             "Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.",
         ),
-        "0.186.1": (
+        "0.185.1": (
             "Define canonical assistance artifacts for approximate time/location/orbit with source, generation, freshness, confidence, trust, and validity.",
             "Test untrusted hints, rollback, cross-session mixing, expiry, receiver/application origins, translation round trips, and search-only restrictions.",
         ),
         "0.190.2": (
-            "Define CAN frame source/sink and platform-adapter ownership for bus timing, address claim, errors, backpressure, and permissions.",
-            "Use virtual and hardware CAN tests for resets, timestamp domains, loss/reorder, bus-off, address conflict, fast packets, and bounded queues.",
+            "Execute NMEA 2000/J1939 outgoing decisions through CAN I/O owning timestamps, bus errors, permissions, backpressure, and hardware lifecycle.",
+            "Use virtual/hardware CAN tests for reset, timestamp domains, loss/reorder, bus-off, permissions, decision execution, and bounded queues.",
         ),
     }
 )

@@ -19,6 +19,12 @@ length/tail and scalar-fallback contracts before v0.49.0 may add dispatch.
 Dispatch cannot retroactively define safety conditions under which it already
 runs.
 
+The Rust 1.90.0–1.97.1 line does not use nightly portable SIMD. Optimized
+implementations use stable target-specific `core::arch` behind reviewed
+modules or compiler auto-vectorization, always with a deterministic scalar
+fallback. A future portable API cannot enter until it is stable on the MSRV or
+the project deliberately raises the MSRV.
+
 Before unsafe code is admitted:
 
 - create a separate module or adapter crate;

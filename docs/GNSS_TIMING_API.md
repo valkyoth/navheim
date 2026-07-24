@@ -249,7 +249,7 @@ meaning:
 ```rust
 pub struct PulseCapture<C> {
     captured_at: CaptureStamp<C>,
-    sequence: u64,
+    receiver_pulse_counter: Availability<PulseCounter, PulseCounterReason>,
     edge: PulseEdge,
     capture_uncertainty: TimeUncertainty,
 }
@@ -273,7 +273,8 @@ The concrete API must handle:
 
 - leading/trailing-edge and beginning/end-of-second conventions;
 - receiver message before/after pulse behavior;
-- sequence gaps, duplicate pulses, reordered messages, and wraparound;
+- receiver pulse-counter gaps, duplicate pulses, reordered messages, and
+  protocol-declared counter rollover;
 - receiver time-mark identifiers and message latency;
 - antenna, cable, receiver, and capture delay with sign and provenance;
 - quantization, sawtooth, and receiver time-pulse correction data;
@@ -322,6 +323,7 @@ pub trait GnssTimingSource {
 
     fn acknowledge(
         &mut self,
+        output: &mut GnssTimeEventSlot<Self::Capture>,
         sequence: EventSequence,
     ) -> Result<(), Self::Error>;
 }
@@ -339,18 +341,28 @@ Vacant
   -- source publishes --> Occupied(sequence)
   -- consumer borrows --> Borrowed(sequence)
   -- borrow released --> Released(sequence)
-  -- acknowledge --> Vacant
+  -- acknowledge(&mut source, &mut slot, sequence) --> Vacant
+  -- discard_after_reset(&mut slot, reset_evidence) --> Vacant + ResyncRequired
 ```
 
 The source writes only a vacant slot. An occupied event is immutable and
 remains owned by the slot while borrowed. Polling, overwriting, or
-acknowledging a borrowed event fails without changing state. Releasing a
-borrow does not acknowledge it; acknowledgement is accepted only for the
-released sequence and vacates the slot. Repeating acknowledgement of the most
-recently acknowledged sequence is an idempotent success. A stale, future, or
-different-generation acknowledgement is a structured error. Drop-based
-borrow release may be offered by safe wrappers, but the state transition and
-recovery behavior remain testable without unwinding.
+acknowledging a borrowed event fails without changing state. Dropping or
+explicitly releasing the safe borrow changes `Borrowed` to `Released`;
+acknowledgement then receives `&mut source` and `&mut slot`, validates the
+event identity in both, records source progress, and vacates the slot. The
+source never retains a slot pointer or mutates caller storage without that
+exclusive reference.
+
+Repeating acknowledgement of the most recently acknowledged sequence against
+the now-vacant slot is an idempotent success. A stale, future, occupied,
+borrowed, or different-generation acknowledgement is a structured error.
+Consumer cancellation releases the borrow without acknowledging. Source reset
+does not clear the slot: after the borrow ends, a caller may present typed
+reset evidence to `discard_after_reset`, which records the unacknowledged
+identity and forces consumer resynchronization. It is not reported as an
+acknowledgement. All transitions are safe Rust and mechanically testable
+without shared state, hidden pointers, or unwinding.
 
 Each event carries an event sequence and source generation. A targeted
 invalidation includes target artifact/model ID, optional replacement ID,
@@ -361,7 +373,9 @@ forces source resynchronization. This prevents a consumer from retaining a
 formerly valid observation after stale UTC parameters, authentication failure,
 a receiver reset, discontinuity or spoofing evidence.
 
-Sequences and generations never wrap. Before an event sequence is exhausted,
+Navheim `EventSequence` values and generations never wrap. They are distinct
+from receiver-protocol `PulseCounter` values, whose documented rollover is
+preserved as input evidence. Before an event sequence is exhausted,
 the source emits and obtains acknowledgement for a mandatory end-of-generation
 event, renews the source generation, and restarts sequencing only under that
 new identity. If the terminal transition cannot be delivered or acknowledged,
@@ -417,6 +431,8 @@ Before the timing API is stable, tests must cover:
   context;
 - positive and negative cable/receiver delays and uncertainty accumulation;
 - PPS/message reordering, omission, duplication, latency, and reset behavior;
+- receiver pulse-counter rollover independently from Navheim event-sequence
+  exhaustion;
 - capture-domain mismatch, generation reset, event replay, queue pressure,
   targeted withdrawal and acknowledgement loss;
 - exact TAI range endpoints, non-canonical fractions, every checked arithmetic
