@@ -1861,12 +1861,22 @@ Every version, even a small one, must pass:
 - sanitizer runs for FFI tools;
 - zero undocumented panic paths on untrusted input;
 - benchmark comparison with an explicit regression budget;
-- standards manifest update;
+- source-first review of exact authoritative revisions, amendments, errata,
+  sections/tables, legal access and independent references before code;
+- standards/requirements mappings from source to implementation and tests;
+- all applicable positive, negative, boundary, malformed, adversarial,
+  conformance, differential, resource, fuzz, platform and regression tests in
+  the same milestone, with reasons for every not-applicable class;
+- standards manifest update; an implemented record cannot have empty
+  `implemented_by` or `tests` mappings;
 - changed-code security review;
 - public API and migration notes;
 - at least one negative/adversarial test for the new surface.
 
-A tag is created only after the release-specific threat review passes. This fits a “pentest from previous tag to HEAD” workflow while periodic full-project audits remain mandatory.
+Missing or ambiguous authoritative evidence stops implementation rather than
+being filled from memory or unofficial summaries. A tag is created only after
+the release-specific threat review passes. This fits a “pentest from previous
+tag to HEAD” workflow while periodic full-project audits remain mandatory.
 
 ### 22.3 Fuzz targets
 

@@ -24,6 +24,8 @@ fi
 scripts/validate-release-metadata.sh
 scripts/validate-modularity-policy.sh check
 scripts/test-validate-modularity-policy.sh
+scripts/validate-implementation-evidence-policy.sh
+scripts/test-implementation-evidence-policy.sh
 scripts/validate-security-policy.sh
 scripts/check_dependency_policy.sh
 scripts/release_crates.py --check

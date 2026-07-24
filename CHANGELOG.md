@@ -40,3 +40,5 @@ All notable changes to `navheim` are documented here.
   generic and conditional receiver families, every named GitHub-only tool,
   external evidence data, deployment artifacts, and full requirement/claim
   traceability.
+- Made source-first review and same-milestone testing a fail-closed,
+  repository-validated rule for every behavioral implementation.

@@ -19,7 +19,7 @@ also inspected for repository/README consistency.
 | Dependency policy | Core GNSS behavior remains first-party. TLS, modern cryptography, platform APIs and vendor stacks are isolated adapters. Navheim never depends on Mundilfari or another GNSS implementation. |
 | Crate/readme policy | Every publishable crate has a package README; the facade README is identical to the GitHub README. GitHub-only components use normal documentation and remain `publish = false`. |
 | Source size | The 500-line gate now scans hand-maintained Rust, Python and shell files across the whole repository, including tests, fuzzing and future paths, while excluding only explicit generated/private/build paths. |
-| Testing and security | CI, deny/audit/SBOM gates, negative checker tests, exact-commit pentest stops, threat/security/unsafe/secrets/supply-chain policies and CodeQL default-setup guidance are present. |
+| Testing and security | CI, deny/audit/SBOM gates, negative checker tests, exact-commit pentest stops, threat/security/unsafe/secrets/supply-chain policies and CodeQL default-setup guidance are present. Source-first review and same-milestone testing are fail-closed invariants in every implementation release. |
 | Documentation | Architecture, implementation/release plans, current status, release notes, security policies, standards coverage and publication tooling are present. Markdown-link validation now covers every tracked documentation path, including crates and `.github`. |
 | Platforms | The plan has explicit Linux, Windows, macOS, FreeBSD, OpenBSD, NetBSD, Android, iOS, WASM, bare-metal and future Aesynx stops or contracts. |
 | Standards storage | Exact redistributable RFC text is immutable and checksum locked. All other external documents default to an ignored local-only vault with legal/access metadata. |
@@ -65,6 +65,12 @@ The catalog now covers 34 source families. It remains an acquisition inventory,
 not a conformance claim. Every implementation release must freeze exact lawful
 documents, amendments, sections, vectors, hardware/firmware profiles and
 limitations in `standards/manifest.toml`.
+
+The repository validator rejects any document changed to `implemented` unless
+its revision is frozen and its section, implementation, test, vector and
+limitation mappings are non-empty. It also verifies that every generated
+implementation milestone retains the source-first and same-milestone test
+rules.
 
 ## Remaining Planned Work
 

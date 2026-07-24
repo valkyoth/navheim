@@ -65,6 +65,14 @@ Linux/BSD, Microsoft and Apple platform I/O, NovAtel, and conditional receiver
 protocols. Their bytes remain local-only and exact profiles must be frozen
 before implementation.
 
+Behavioral implementation is now governed by a fail-closed evidence policy.
+Exact authoritative revisions, amendments, errata and sections are reviewed
+before code; implementation and test mappings are mandatory; applicable
+positive, negative, boundary, malformed, adversarial, conformance,
+differential, resource, fuzz, platform and regression tests ship in the same
+milestone. Missing or ambiguous evidence stops implementation rather than
+being guessed.
+
 ## Security
 
 - Both published crates are `no_std`, dependency-free, and forbid unsafe code.

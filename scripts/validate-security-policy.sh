@@ -16,6 +16,7 @@ grep -q 'CodeQL analysis default setup is active' docs/github-security-settings.
 test -f docs/secret-handling-policy.md
 test -f docs/threat-model.md
 test -f docs/GNSS_TIMING_API.md
+test -f docs/implementation-evidence-policy.md
 test -f standards/manifest.toml
 test -f standards/licensing.md
 test ! -f .github/workflows/codeql.yml

@@ -9,7 +9,9 @@
 - locked Rust and Cargo tool versions;
 - dependency allowlist and unknown-source denial;
 - committed SPDX SBOM with semantic drift validation;
-- release metadata and exact-commit pentest validation.
+- release metadata and exact-commit pentest validation;
+- fail-closed source-first implementation review and same-milestone mapped
+  positive, negative, boundary, adversarial and conformance testing.
 
 ## Code Controls
 

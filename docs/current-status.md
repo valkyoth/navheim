@@ -31,6 +31,9 @@ Navheim currently provides repository and crate foundations only.
 - Repository-wide requirements audit covering every tracked artifact class,
   correcting the MIT donor notice and expanding code-size/document-link gates
   to all applicable repository paths.
+- Fail-closed implementation evidence policy: exact authoritative documents
+  and sections are reviewed before code, and mapped tests ship in the same
+  milestone; missing or ambiguous evidence blocks implementation.
 - Audit-strengthened roadmap with 382 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,

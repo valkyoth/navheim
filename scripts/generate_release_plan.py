@@ -134,7 +134,10 @@ v1.0.0        unchanged promotion of the approved candidate
 Every release requires:
 
 - one bounded outcome and explicit non-claims;
-- authoritative standards/source evidence for affected behavior;
+- source-first implementation: review and freeze exact authoritative
+  revisions, amendments, errata, sections/tables, legal access, and independent
+  references before code; stop rather than guess when evidence is missing;
+- bidirectional source/requirement-to-implementation-and-test mappings;
 - unit, negative, adversarial, conformance, and fuzz evidence appropriate to
   the surface;
 - MSRV behavioral tests once behavior exists, plus `no_std`, platform,
@@ -256,6 +259,10 @@ Deliverables:
 {detail_deliverable}- Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase {phase} contract: {phase_deliverable}
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_{version}.md`.
@@ -267,6 +274,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 {detail_verification}- perform {phase_checks};
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and

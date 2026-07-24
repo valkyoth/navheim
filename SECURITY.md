@@ -25,6 +25,11 @@ privately and include:
 
 Do not transmit GNSS-like RF outside a conducted or shielded environment.
 
+All behavioral work follows the fail-closed
+[Implementation Evidence Policy](docs/implementation-evidence-policy.md):
+review exact authoritative material before code and ship mapped positive,
+negative, boundary, adversarial and conformance tests in the same milestone.
+
 ## Routine Checks
 
 Run regularly and before releases:

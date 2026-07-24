@@ -26,7 +26,10 @@ v1.0.0        unchanged promotion of the approved candidate
 Every release requires:
 
 - one bounded outcome and explicit non-claims;
-- authoritative standards/source evidence for affected behavior;
+- source-first implementation: review and freeze exact authoritative
+  revisions, amendments, errata, sections/tables, legal access, and independent
+  references before code; stop rather than guess when evidence is missing;
+- bidirectional source/requirement-to-implementation-and-test mappings;
 - unit, negative, adversarial, conformance, and fuzz evidence appropriate to
   the surface;
 - MSRV behavioral tests once behavior exists, plus `no_std`, platform,
@@ -124,6 +127,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.1.0.md`.
@@ -135,6 +142,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -163,6 +173,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.1.1.md`.
@@ -175,6 +189,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test malformed tags, future workspace crates, tier violations, stale pentest parents, and package drift across report-only commits.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -203,6 +220,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.1.2.md`.
@@ -215,6 +236,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Reject aggregate implemented claims, missing revisions, unmapped tests, silent revision changes, and disallowed retained documents.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -243,6 +267,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.1.3.md`.
@@ -255,6 +283,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Reject missing, duplicate, stale, circular, aggregate, ownerless, testless, or unsupported mappings and scan every repository path covered by the source-size and documentation policies.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -282,6 +313,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.2.0.md`.
@@ -293,6 +328,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -320,6 +358,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.2.1.md`.
@@ -331,6 +373,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -359,6 +404,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.2.2.md`.
@@ -371,6 +420,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test zero/full capacity, drop behavior, wraparound, large element alignment, and representation-size contracts without unsafe code.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -398,6 +450,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.2.3.md`.
@@ -409,6 +465,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -436,6 +495,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.3.0.md`.
@@ -447,6 +510,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -474,6 +540,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.3.1.md`.
@@ -485,6 +555,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -512,6 +585,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.3.2.md`.
@@ -523,6 +600,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -551,6 +631,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.3.3.md`.
@@ -563,6 +647,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare high-precision references across domains, argument reduction, signed zero, subnormal, exceptional, rounding, MSRV, and no_std cases.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -591,6 +678,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.4.0.md`.
@@ -603,6 +694,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test every constructor boundary, native epoch, invalid subsecond, unknown scale, and forbidden implicit Unix/wall-clock conversion.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -631,6 +725,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.4.1.md`.
@@ -643,6 +741,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Prove equivalent instants have one canonical representation and no ambiguous or invalid native value can use the resolved type.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -671,6 +772,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.4.2.md`.
@@ -683,6 +788,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Prove cross-domain/generation values cannot be ordered or subtracted without an explicit mapping and reset invalidates comparability.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -710,6 +818,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.4.3.md`.
@@ -721,6 +833,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -749,6 +864,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.5.0.md`.
@@ -761,6 +880,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test every epoch, offset boundary, out-of-range value, and forbidden implicit Unix/wall-clock conversion.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -788,6 +910,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.5.1.md`.
@@ -799,6 +925,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -826,6 +955,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.5.2.md`.
@@ -837,6 +970,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -865,6 +1001,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.5.3.md`.
@@ -877,6 +1017,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test pending, unsupported, ambiguous, stale, rejected, failed, replayed, reordered, replaced, and mandatory-withdrawal states.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -905,6 +1048,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.5.4.md`.
@@ -917,6 +1064,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test range endpoints, non-canonical fractions, every overflow path, serialization, rounding, and forbidden implicit POSIX conversion.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -944,6 +1094,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.6.0.md`.
@@ -955,6 +1109,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -982,6 +1139,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.6.1.md`.
@@ -993,6 +1154,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1020,6 +1184,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.6.2.md`.
@@ -1031,6 +1199,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1058,6 +1229,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.7.0.md`.
@@ -1069,6 +1244,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1096,6 +1274,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.7.1.md`.
@@ -1107,6 +1289,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1134,6 +1319,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.8.0.md`.
@@ -1145,6 +1334,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1172,6 +1364,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.8.1.md`.
@@ -1183,6 +1379,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1210,6 +1409,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.9.0.md`.
@@ -1221,6 +1424,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1248,6 +1454,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.9.1.md`.
@@ -1259,6 +1469,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1286,6 +1499,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.10.0.md`.
@@ -1297,6 +1514,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1324,6 +1544,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.10.1.md`.
@@ -1335,6 +1559,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1362,6 +1589,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.11.0.md`.
@@ -1373,6 +1604,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1400,6 +1634,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.11.1.md`.
@@ -1411,6 +1649,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1438,6 +1679,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.12.0.md`.
@@ -1449,6 +1694,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1476,6 +1724,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.12.1.md`.
@@ -1487,6 +1739,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1515,6 +1770,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.12.2.md`.
@@ -1527,6 +1786,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test duplicate/unknown IDs, capacity/work/output limits, progress, opaque artifacts, prohibited trust claims, isolation, and unregister/reset.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1555,6 +1817,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.13.0.md`.
@@ -1567,6 +1833,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test that missing or incomparable clock domains cannot be silently ordered, subtracted, or promoted to a resolved observation.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1595,6 +1864,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.13.1.md`.
@@ -1607,6 +1880,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Prove delayed assessments never mutate facts and bounded parent graphs reject cycles, overflow, unknown derivations, and stale generations.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1635,6 +1911,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.13.2.md`.
@@ -1647,6 +1927,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compile-fail impossible stage mixing and test raw-to-solver provenance, unavailable solutions, correction order, and epoch consistency.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1674,6 +1957,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.14.0.md`.
@@ -1685,6 +1972,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1712,6 +2002,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.14.1.md`.
@@ -1723,6 +2017,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1750,6 +2047,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.15.0.md`.
@@ -1761,6 +2062,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1788,6 +2092,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.15.1.md`.
@@ -1799,6 +2107,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1827,6 +2138,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.15.2.md`.
@@ -1839,6 +2154,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test mutually exclusive alternatives, translated duplicates, wrong signs, stale models, and double-application rejection.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1867,6 +2185,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.16.0.md`.
@@ -1879,6 +2201,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Build a foreign capture-timestamp newtype adapter and prove reset, withdrawal, backpressure, and error paths are deterministic.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1906,6 +2231,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.16.1.md`.
@@ -1917,6 +2246,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1945,6 +2277,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.16.2.md`.
@@ -1957,6 +2293,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Model event replay/reorder/loss, acknowledgement failure, coalescing, producer stop, consumer lag, reset, and forced resynchronization.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -1985,6 +2324,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.16.3.md`.
@@ -1997,6 +2340,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Model terminal counters, mandatory generation-end delivery, acknowledgement loss, identity reuse, replay, and fail-closed resynchronization.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2024,6 +2370,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.17.0.md`.
@@ -2035,6 +2385,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2063,6 +2416,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.17.1.md`.
@@ -2075,6 +2432,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test arithmetic overflow, overlap/alignment, mismatched blocks, hostile metadata, maximum plans, and execution attempts beyond the receipt.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2102,6 +2462,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.17.2.md`.
@@ -2113,6 +2477,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2140,6 +2507,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.18.0.md`.
@@ -2151,6 +2522,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2178,6 +2552,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.19.0.md`.
@@ -2189,6 +2567,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2216,6 +2597,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.20.0.md`.
@@ -2227,6 +2612,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2254,6 +2642,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.20.1.md`.
@@ -2265,6 +2657,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2293,6 +2688,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.20.2.md`.
@@ -2305,6 +2704,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Prove profile/explicit equivalence, deterministic output, structured capability failure, no silent fallback, and no alternative hidden algorithm.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2334,6 +2736,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.21.0.md`.
@@ -2345,6 +2751,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2372,6 +2781,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.21.1.md`.
@@ -2383,6 +2796,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2410,6 +2826,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.22.0.md`.
@@ -2421,6 +2841,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2448,6 +2871,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.22.1.md`.
@@ -2459,6 +2886,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2486,6 +2916,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.23.0.md`.
@@ -2497,6 +2931,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2524,6 +2961,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.23.1.md`.
@@ -2535,6 +2976,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2562,6 +3006,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.24.0.md`.
@@ -2573,6 +3021,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2600,6 +3051,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.25.0.md`.
@@ -2611,6 +3066,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2638,6 +3096,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.25.1.md`.
@@ -2649,6 +3111,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2676,6 +3141,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.26.0.md`.
@@ -2687,6 +3156,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2715,6 +3187,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.26.1.md`.
@@ -2727,6 +3203,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use official and independent vectors for every admitted message and reject malformed scale, lock, ambiguity, and station contexts.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2755,6 +3234,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.26.2.md`.
@@ -2767,6 +3250,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare forward/reverse examples, unknown methods, parameter ranges, unit errors, and unsupported transformations.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2794,6 +3280,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.27.0.md`.
@@ -2805,6 +3295,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2832,6 +3325,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.28.0.md`.
@@ -2843,6 +3340,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2870,6 +3370,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.28.1.md`.
@@ -2881,6 +3385,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2908,6 +3415,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.29.0.md`.
@@ -2919,6 +3430,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2947,6 +3461,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.29.1.md`.
@@ -2959,6 +3477,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test frozen examples, mixed line endings, truncation, unknown records, exponent/range faults, chunk boundaries, and round trips.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -2986,6 +3507,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.30.0.md`.
@@ -2997,6 +3522,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3024,6 +3552,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.0.md`.
@@ -3035,6 +3567,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3062,6 +3597,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.1.md`.
@@ -3073,6 +3612,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3101,6 +3643,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.2.md`.
@@ -3113,6 +3659,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test record families, epochs, units, missing/unknown values, ordering, chunk boundaries, and original/canonical output.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3141,6 +3690,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.3.md`.
@@ -3153,6 +3706,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Cross-check official examples and test sub-nanosecond round trips, range failures, unknown signals, and mixed-system epochs.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3181,6 +3737,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.31.4.md`.
@@ -3193,6 +3753,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test compression bombs, truncated states, hostile deltas, limit edges, chunking, provenance, and parity with ordinary RINEX parsing.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3220,6 +3783,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.32.0.md`.
@@ -3231,6 +3798,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3258,6 +3828,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.33.0.md`.
@@ -3269,6 +3843,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3296,6 +3873,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.34.0.md`.
@@ -3307,6 +3888,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3334,6 +3918,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.35.0.md`.
@@ -3345,6 +3933,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3373,6 +3964,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.35.1.md`.
@@ -3385,6 +3980,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent products and test stale/missing epochs, frame mismatch, interpolation bounds, unknown fields, and malformed covariance.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3412,6 +4010,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.36.0.md`.
@@ -3423,6 +4025,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3450,6 +4055,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.36.1.md`.
@@ -3461,6 +4070,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3489,6 +4101,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.36.2.md`.
@@ -3501,6 +4117,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Vary every chunk boundary and test duplicate, unknown, malformed, overlong, reordered, recovery, and differential-result cases.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3529,6 +4148,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.36.3.md`.
@@ -3541,6 +4164,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test malformed streams, interruption, overwrite refusal, path traversal, device reset, disk exhaustion, metadata redaction, deterministic output, and round trips.
 - perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3570,6 +4196,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.37.0.md`.
@@ -3581,6 +4211,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3608,6 +4241,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.37.1.md`.
@@ -3619,6 +4256,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3647,6 +4287,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.37.2.md`.
@@ -3659,6 +4303,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test encoding/order/scale variants, clipping, quantization, gain changes, imbalance, hostile metadata, mitigation limits, and replay.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3686,6 +4333,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.38.0.md`.
@@ -3697,6 +4348,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3724,6 +4378,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.39.0.md`.
@@ -3735,6 +4393,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3762,6 +4423,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.39.1.md`.
@@ -3773,6 +4438,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3800,6 +4468,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.40.0.md`.
@@ -3811,6 +4483,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3838,6 +4513,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.40.1.md`.
@@ -3849,6 +4528,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3876,6 +4558,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.41.0.md`.
@@ -3887,6 +4573,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3914,6 +4603,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.41.1.md`.
@@ -3925,6 +4618,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3952,6 +4648,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.42.0.md`.
@@ -3963,6 +4663,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -3990,6 +4693,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.43.0.md`.
@@ -4001,6 +4708,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4028,6 +4738,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.43.1.md`.
@@ -4039,6 +4753,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4066,6 +4783,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.44.0.md`.
@@ -4077,6 +4798,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4104,6 +4828,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.44.1.md`.
@@ -4115,6 +4843,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4142,6 +4873,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.45.0.md`.
@@ -4153,6 +4888,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4180,6 +4918,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.46.0.md`.
@@ -4191,6 +4933,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4218,6 +4963,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.47.0.md`.
@@ -4229,6 +4978,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4256,6 +5008,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.47.1.md`.
@@ -4267,6 +5023,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4295,6 +5054,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.47.2.md`.
@@ -4307,6 +5070,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test endpoints, stale mappings, reset races, discontinuities, composition, precision loss, and forbidden raw cross-domain comparison.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4334,6 +5100,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.48.0.md`.
@@ -4345,6 +5115,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4372,6 +5145,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.48.1.md`.
@@ -4383,6 +5160,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4411,6 +5191,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.48.2.md`.
@@ -4423,6 +5207,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test misalignment, overlap, unsupported features, forced fallback, length tails, scalar equivalence, Miri-safe wrappers, and sanitizers.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4450,6 +5237,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.49.0.md`.
@@ -4461,6 +5252,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4488,6 +5282,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.50.0.md`.
@@ -4499,6 +5297,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4527,6 +5328,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.50.1.md`.
@@ -4539,6 +5344,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Exercise maximum channels/candidates/FEC/FFT/scratch/work, gap/overrun, metadata lies, throughput failure, and deterministic eviction.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4567,6 +5375,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.50.2.md`.
@@ -4579,6 +5391,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Reject self-generated-only evidence and test vector identity, provenance, corruption, negative cases, scalar replay, and receiver agreement.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4608,6 +5423,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.51.0.md`.
@@ -4619,6 +5438,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4646,6 +5468,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.52.0.md`.
@@ -4657,6 +5483,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4684,6 +5513,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.53.0.md`.
@@ -4695,6 +5528,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4722,6 +5558,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.54.0.md`.
@@ -4733,6 +5573,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4760,6 +5603,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.54.1.md`.
@@ -4771,6 +5618,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4798,6 +5648,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.55.0.md`.
@@ -4809,6 +5663,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4836,6 +5693,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.56.0.md`.
@@ -4847,6 +5708,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4874,6 +5738,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.57.0.md`.
@@ -4885,6 +5753,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4912,6 +5783,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.58.0.md`.
@@ -4923,6 +5798,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4950,6 +5828,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.58.1.md`.
@@ -4961,6 +5843,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -4988,6 +5873,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.59.0.md`.
@@ -4999,6 +5888,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5026,6 +5918,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.59.1.md`.
@@ -5037,6 +5933,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5064,6 +5963,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.60.0.md`.
@@ -5075,6 +5978,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5102,6 +6008,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.61.0.md`.
@@ -5113,6 +6023,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5140,6 +6053,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.62.0.md`.
@@ -5151,6 +6068,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5178,6 +6098,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.63.0.md`.
@@ -5189,6 +6113,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5216,6 +6143,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.64.0.md`.
@@ -5227,6 +6158,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5254,6 +6188,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.65.0.md`.
@@ -5265,6 +6203,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5292,6 +6233,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase D contract: Preserve raw GPS artifacts and targeted assessments through navigation-state transactions, observations, solutions, and explicit unavailable results.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.66.0.md`.
@@ -5303,6 +6248,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5332,6 +6280,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.67.0.md`.
@@ -5343,6 +6295,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5370,6 +6325,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.68.0.md`.
@@ -5381,6 +6340,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5408,6 +6370,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.69.0.md`.
@@ -5419,6 +6385,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5446,6 +6415,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.70.0.md`.
@@ -5457,6 +6430,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5484,6 +6460,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.71.0.md`.
@@ -5495,6 +6475,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5522,6 +6505,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.72.0.md`.
@@ -5533,6 +6520,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5560,6 +6550,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.73.0.md`.
@@ -5571,6 +6565,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5598,6 +6595,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.74.0.md`.
@@ -5609,6 +6610,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5636,6 +6640,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.75.0.md`.
@@ -5647,6 +6655,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5674,6 +6685,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.76.0.md`.
@@ -5685,6 +6700,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5712,6 +6730,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.77.0.md`.
@@ -5723,6 +6745,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5750,6 +6775,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.78.0.md`.
@@ -5761,6 +6790,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5788,6 +6820,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.79.0.md`.
@@ -5799,6 +6835,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5826,6 +6865,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase E contract: Apply the canonical artifact, health, time, authentication, resource, and transaction contracts to every admitted Galileo surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.80.0.md`.
@@ -5837,6 +6880,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official Galileo vectors, generated and recorded signals, receiver comparison, FEC/page faults, time checks, and end-to-end replay;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5866,6 +6912,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.81.0.md`.
@@ -5877,6 +6927,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5904,6 +6957,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.82.0.md`.
@@ -5915,6 +6972,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5942,6 +7002,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.83.0.md`.
@@ -5953,6 +7017,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -5980,6 +7047,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.84.0.md`.
@@ -5991,6 +7062,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6018,6 +7092,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.85.0.md`.
@@ -6029,6 +7107,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6056,6 +7137,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.86.0.md`.
@@ -6067,6 +7152,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6094,6 +7182,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.87.0.md`.
@@ -6105,6 +7197,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6132,6 +7227,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.88.0.md`.
@@ -6143,6 +7242,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6170,6 +7272,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.89.0.md`.
@@ -6181,6 +7287,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6208,6 +7317,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase F contract: Apply the canonical artifact, channel, health, time, bias, resource, and transaction contracts to every admitted GLONASS surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.90.0.md`.
@@ -6219,6 +7332,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official GLONASS vectors, FDMA/CDMA channel cases, generated and recorded signals, bias/time faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6248,6 +7364,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.91.0.md`.
@@ -6259,6 +7379,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6286,6 +7409,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.92.0.md`.
@@ -6297,6 +7424,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6324,6 +7454,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.93.0.md`.
@@ -6335,6 +7469,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6362,6 +7499,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.94.0.md`.
@@ -6373,6 +7514,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6400,6 +7544,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.95.0.md`.
@@ -6411,6 +7559,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6438,6 +7589,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.96.0.md`.
@@ -6449,6 +7604,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6476,6 +7634,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.97.0.md`.
@@ -6487,6 +7649,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6514,6 +7679,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.98.0.md`.
@@ -6525,6 +7694,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6552,6 +7724,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.99.0.md`.
@@ -6563,6 +7739,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6590,6 +7769,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.100.0.md`.
@@ -6601,6 +7784,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6628,6 +7814,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.101.0.md`.
@@ -6639,6 +7829,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6666,6 +7859,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.102.0.md`.
@@ -6677,6 +7874,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6704,6 +7904,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.103.0.md`.
@@ -6715,6 +7919,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6743,6 +7950,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.103.1.md`.
@@ -6755,6 +7966,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test unknown identifiers, malformed content, regional/service applicability, privacy-sensitive payload handling, expiry, and the no-specification non-claim path.
 - perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6784,6 +7998,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.104.0.md`.
@@ -6795,6 +8013,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6822,6 +8043,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.105.0.md`.
@@ -6833,6 +8058,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6860,6 +8088,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.106.0.md`.
@@ -6871,6 +8103,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6898,6 +8133,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.107.0.md`.
@@ -6909,6 +8148,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6936,6 +8178,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.108.0.md`.
@@ -6947,6 +8193,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -6974,6 +8223,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.109.0.md`.
@@ -6985,6 +8238,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7012,6 +8268,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.110.0.md`.
@@ -7023,6 +8283,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7050,6 +8313,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.111.0.md`.
@@ -7061,6 +8328,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7088,6 +8358,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.112.0.md`.
@@ -7099,6 +8373,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7126,6 +8403,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.113.0.md`.
@@ -7137,6 +8418,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7164,6 +8448,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.114.0.md`.
@@ -7175,6 +8463,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7203,6 +8494,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.114.1.md`.
@@ -7215,6 +8510,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use official and independent captures for GEO IDs, Doppler/code search limits, weak signals, false peaks, tracking loss, and reacquisition.
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7242,6 +8540,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.115.0.md`.
@@ -7253,6 +8555,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7280,6 +8585,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.116.0.md`.
@@ -7291,6 +8600,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7318,6 +8630,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.117.0.md`.
@@ -7329,6 +8645,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7356,6 +8675,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.118.0.md`.
@@ -7367,6 +8690,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7394,6 +8720,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.119.0.md`.
@@ -7405,6 +8735,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7432,6 +8765,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.119.1.md`.
@@ -7443,6 +8780,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7471,6 +8811,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.119.2.md`.
@@ -7483,6 +8827,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use provider and independent vectors for every admitted matrix cell; test region/profile confusion, future GEO IDs, expiry, conflicting providers, and unsupported profiles.
 - perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7512,6 +8859,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.0.md`.
@@ -7523,6 +8874,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7550,6 +8904,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.1.md`.
@@ -7561,6 +8919,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7589,6 +8950,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.2.md`.
@@ -7601,6 +8966,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent solvers and test rank loss, excluded satellites, stale epochs, unavailable DOP, transitions, and serialization.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7629,6 +8997,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.3.md`.
@@ -7641,6 +9013,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test bounded diagnostic capacity, redaction, reweighting, exclusion/re-admission, unavailable causes, and exact artifact linkage.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7669,6 +9044,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.120.4.md`.
@@ -7681,6 +9060,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent solvers for every mode and test initialization failure, mixed weighting, rank loss, state transitions, and unavailable outputs.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7708,6 +9090,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.121.0.md`.
@@ -7719,6 +9105,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7746,6 +9135,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.121.1.md`.
@@ -7757,6 +9150,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7785,6 +9181,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.121.2.md`.
@@ -7797,6 +9197,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare batch/reference solutions and test outages, time gaps, clock jumps, state resets, singular covariance, and deterministic replay.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7824,6 +9227,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.122.0.md`.
@@ -7835,6 +9242,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7862,6 +9272,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.123.0.md`.
@@ -7873,6 +9287,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7900,6 +9317,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.124.0.md`.
@@ -7911,6 +9332,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7938,6 +9362,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.125.0.md`.
@@ -7949,6 +9377,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -7976,6 +9407,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.126.0.md`.
@@ -7987,6 +9422,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8015,6 +9453,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.126.1.md`.
@@ -8027,6 +9469,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test model boundaries, missing cells, datum mismatch, stale epochs, poles/seams, independent benchmarks, and ellipsoid/orthometric type separation.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8054,6 +9499,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.127.0.md`.
@@ -8065,6 +9514,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8093,6 +9545,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.127.1.md`.
@@ -8105,6 +9561,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test satellite/common-mode faults, exhaustion, delayed detection, unavailable assumptions, alert timing, and independent reference cases.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8132,6 +9591,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.128.0.md`.
@@ -8143,6 +9606,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8171,6 +9637,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.128.1.md`.
@@ -8183,6 +9653,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Exercise assumption withdrawal, constellation faults, correlation changes, service-health expiry, allocation bounds, and unavailable outcomes.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8210,6 +9683,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.0.md`.
@@ -8221,6 +9698,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8249,6 +9729,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.1.md`.
@@ -8261,6 +9745,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test unavailable assumptions, exclusion exhaustion, late evidence, withdrawal, recovery, and independence from authentication state.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8289,6 +9776,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.2.md`.
@@ -8301,6 +9792,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test SBAS expiry/conflict, missing hypotheses, alert-limit breach, RAIM/ARAIM separation, withdrawal ordering, and recovery.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8329,6 +9823,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.3.md`.
@@ -8341,6 +9839,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test station/session mismatch, satellite/frequency mismatch, stale/reordered corrections, base uncertainty, partial views, and atomic expiry.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8369,6 +9870,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.4.md`.
@@ -8381,6 +9886,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent DGPS references and test age limits, covariance propagation, degraded geometry, unavailable base, and label separation from RTK float.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8409,6 +9917,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase I contract: Name solver and DGPS state ordering, units, frames, epochs, covariance meaning, numerical backend, rank/condition checks, and unavailable outcomes.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.129.5.md`.
@@ -8421,6 +9933,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compile-fail coupled APIs and test fact stability, residual/exclusion linkage, late integrity, unavailable assumptions, reassessment, and withdrawal.
 - perform independent high-precision and DGPS references, randomized geometry, degenerate/rank-deficient inputs, cross-architecture tolerances, and fault exclusion cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8450,6 +9965,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.130.0.md`.
@@ -8461,6 +9980,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8488,6 +10010,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.131.0.md`.
@@ -8499,6 +10025,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8526,6 +10055,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.132.0.md`.
@@ -8537,6 +10070,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8564,6 +10100,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.133.0.md`.
@@ -8575,6 +10115,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8602,6 +10145,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.134.0.md`.
@@ -8613,6 +10160,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8640,6 +10190,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.135.0.md`.
@@ -8651,6 +10205,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8678,6 +10235,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.135.1.md`.
@@ -8689,6 +10250,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8717,6 +10281,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.135.2.md`.
@@ -8729,6 +10297,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test stale base/phase/code data, ambiguity loss, correction return, hysteresis, rollback, consumer ordering, and no RTK-float-as-DGPS relabeling.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8757,6 +10328,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.135.3.md`.
@@ -8769,6 +10344,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use independent RTK cases for pivot loss, false fix, correlated ambiguities, rollback, threshold boundaries, and deterministic candidate limits.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8796,6 +10374,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.136.0.md`.
@@ -8807,6 +10389,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8834,6 +10419,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.137.0.md`.
@@ -8845,6 +10434,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8872,6 +10464,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.138.0.md`.
@@ -8883,6 +10479,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8910,6 +10509,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.139.0.md`.
@@ -8921,6 +10524,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8949,6 +10555,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.139.1.md`.
@@ -8961,6 +10571,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Inject cross-session, incomplete, stale, replayed, conflicting, and issue-transition groups and prove no partial solver update.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -8988,6 +10601,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.140.0.md`.
@@ -8999,6 +10616,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9026,6 +10646,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.141.0.md`.
@@ -9037,6 +10661,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9064,6 +10691,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.142.0.md`.
@@ -9075,6 +10706,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9102,6 +10736,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.142.1.md`.
@@ -9113,6 +10751,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9140,6 +10781,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.143.0.md`.
@@ -9151,6 +10796,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9178,6 +10826,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.144.0.md`.
@@ -9189,6 +10841,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9217,6 +10872,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.144.1.md`.
@@ -9229,6 +10888,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare scientific references and test absent/stale loading, frame/site mismatch, met units/age, gradient observability, and model double application.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9256,6 +10918,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase J contract: Bind every correction and precise product to an immutable session, provider, station, frame, issue, epoch, validity, and provenance context.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.145.0.md`.
@@ -9267,6 +10933,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9296,6 +10965,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.146.0.md`.
@@ -9307,6 +10980,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9334,6 +11010,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.146.1.md`.
@@ -9345,6 +11025,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9373,6 +11056,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.146.2.md`.
@@ -9385,6 +11072,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Run primitive/backend vectors, algorithm mismatch, malformed keys/signatures, dependency audit, feature combinations, and zeroization review.
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9412,6 +11102,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.147.0.md`.
@@ -9423,6 +11117,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9450,6 +11147,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.148.0.md`.
@@ -9461,6 +11162,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9488,6 +11192,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.149.0.md`.
@@ -9499,6 +11207,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9527,6 +11238,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.149.1.md`.
@@ -9539,6 +11254,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test delayed/reordered keys, root transitions, persistence rollback, expiry, revocation, reassessment, and meaconed authentic signals.
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9566,6 +11284,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.150.0.md`.
@@ -9577,6 +11299,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9605,6 +11330,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.150.1.md`.
@@ -9617,6 +11346,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Replay official/independent end-to-end vectors, delayed keys, malformed tags/signatures, algorithm mismatch, revocation, and backend failure.
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9644,6 +11376,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.151.0.md`.
@@ -9655,6 +11391,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9682,6 +11421,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.152.0.md`.
@@ -9693,6 +11436,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9720,6 +11466,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.153.0.md`.
@@ -9731,6 +11481,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9758,6 +11511,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.154.0.md`.
@@ -9769,6 +11526,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9796,6 +11556,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.155.0.md`.
@@ -9807,6 +11571,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9835,6 +11602,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.155.1.md`.
@@ -9847,6 +11618,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test every prerequisite absence, benign/adversarial scenario, confidence bound, targeted artifact, false alarm, expiry, and unavailable state.
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9874,6 +11648,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.156.0.md`.
@@ -9885,6 +11663,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9912,6 +11693,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.156.1.md`.
@@ -9923,6 +11708,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9950,6 +11738,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.157.0.md`.
@@ -9961,6 +11753,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -9988,6 +11783,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase K contract: Produce immutable targeted assessments and evidence; keep authentication, signal authenticity, integrity, and versioned policy decisions separate.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.157.1.md`.
@@ -9999,6 +11798,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform official authentication vectors, delayed/reordered/missing/expired data, trust-root transitions, spoof/jam evidence scenarios, and policy-state tests;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10029,6 +11831,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.158.0.md`.
@@ -10041,6 +11847,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Cross-check every constellation conversion and disagreement path against independent timing references and frozen boundary vectors.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10068,6 +11877,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.158.1.md`.
@@ -10079,6 +11892,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10107,6 +11923,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.159.0.md`.
@@ -10119,6 +11939,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test missing, duplicate, reordered, wrapped, reset, early/late, and leap-boundary pulse/message combinations, frequency lock loss, and signed delays.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10146,6 +11969,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.159.1.md`.
@@ -10157,6 +11984,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10185,6 +12015,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.160.0.md`.
@@ -10197,6 +12031,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Implement a separate consumer fixture that maps the public API without decoding GNSS fields or depending back into Navheim.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10225,6 +12062,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.160.1.md`.
@@ -10237,6 +12078,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test undersized slots, consumer stalls, maximum events, assessment bursts, invalidation priority, no allocation, and resynchronization.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10265,6 +12109,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.160.2.md`.
@@ -10277,6 +12125,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Model every slot transition, wrong sequence/generation, repeat acknowledgement, cancellation, source reset, mandatory invalidation, and recovery.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10305,6 +12156,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.161.0.md`.
@@ -10317,6 +12172,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Validate covariance and uncertainty composition without emitting oscillator steering, servo, PHC, or system-clock actions.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10345,6 +12203,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.162.0.md`.
@@ -10357,6 +12219,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Prove Navheim never manufactures holdover observations after GNSS evidence expires and always emits the withdrawal transition.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10385,6 +12250,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.162.1.md`.
@@ -10397,6 +12266,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test lost/reordered/replayed withdrawal, replacement races, source generation reset, queue exhaustion, and consumer disagreement.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10425,6 +12297,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.163.0.md`.
@@ -10437,6 +12313,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test fail-closed consumer policies without collapsing evidence into a trusted boolean or treating authentication as anti-meaconing proof.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10465,6 +12344,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.163.1.md`.
@@ -10477,6 +12360,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Cross-check independent BIPM-compatible results and test missing common satellites, mixed scales, station/calibration errors, malformed records, track boundaries, leap events, and explicit exclusion of discipline/consensus.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10504,6 +12390,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.164.0.md`.
@@ -10515,6 +12405,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10543,6 +12436,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.164.1.md`.
@@ -10555,6 +12452,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use independent sensor references and test calibration expiry, unit/frame mistakes, saturation, temperature sweeps, and unavailable parameters.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10583,6 +12483,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.164.2.md`.
@@ -10595,6 +12499,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent trajectories and test stationary/rotating/high-dynamic cases, poles, frame transitions, step size, and numerical drift.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10622,6 +12529,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.165.0.md`.
@@ -10633,6 +12544,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10661,6 +12575,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.165.1.md`.
@@ -10673,6 +12591,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test unobservable geometries, wrong clocks/frames, delayed data, reset, convergence, cross-correlation, and independent trajectories.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10701,6 +12622,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.165.2.md`.
@@ -10713,6 +12638,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare covariance-form results and test ill-conditioning, positive-definiteness, downdates, long runs, cross-architecture tolerance, and reset.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10741,6 +12669,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.165.3.md`.
@@ -10753,6 +12685,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test weak-signal gains, bad-aid rejection, divergence, channel loss, fallback, reacquisition, spoof evidence, and deterministic work bounds.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10780,6 +12715,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.166.0.md`.
@@ -10791,6 +12730,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10819,6 +12761,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.166.1.md`.
@@ -10831,6 +12777,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test false constraints, slip/skid, stationary motion, detector hysteresis, delayed timestamps, rejection, and recovery.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10858,6 +12807,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.167.0.md`.
@@ -10869,6 +12822,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10896,6 +12852,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.167.1.md`.
@@ -10907,6 +12867,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10935,6 +12898,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.167.2.md`.
@@ -10947,6 +12914,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare real-time filters on frozen graphs and test malformed topology, duplicate factors, rank loss, robust loss, and bounded import.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -10974,6 +12944,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.168.0.md`.
@@ -10985,6 +12959,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11013,6 +12990,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.168.1.md`.
@@ -11025,6 +13006,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test short/long outages, biased return, clock reset, spoofed return, gating, rollback, monotonic evidence, and consumer visibility.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11052,6 +13036,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.0.md`.
@@ -11063,6 +13051,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11091,6 +13082,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.1.md`.
@@ -11103,6 +13098,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare GeographicLib-class references and test antipodes, poles, dateline, coincident points, invalid ellipsoids, and convergence failure.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11131,6 +13129,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.2.md`.
@@ -11143,6 +13145,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test zero/full capacity, segment transitions, dateline/poles, timestamps, simplification non-claims, serialization, and no-allocation operation.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11171,6 +13176,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.3.md`.
@@ -11183,6 +13192,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test boundary equality, holes, dateline/poles, altitude/time limits, uncertain positions, entry/exit ordering, and resource exhaustion.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11211,6 +13223,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.169.4.md`.
@@ -11223,6 +13239,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11252,6 +13271,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.170.0.md`.
@@ -11263,6 +13286,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11290,6 +13316,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.171.0.md`.
@@ -11301,6 +13331,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11328,6 +13361,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.172.0.md`.
@@ -11339,6 +13376,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11366,6 +13406,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.173.0.md`.
@@ -11377,6 +13421,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11404,6 +13451,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.174.0.md`.
@@ -11415,6 +13466,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11442,6 +13496,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.175.0.md`.
@@ -11453,6 +13511,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11481,6 +13542,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.175.1.md`.
@@ -11493,6 +13558,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare every accepted accelerated artifact with scalar vectors and test hostile lengths/metadata, stale generations, overruns, firmware mismatch, partial transfer, disconnect, and fallback.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11520,6 +13588,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.176.0.md`.
@@ -11531,6 +13603,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11558,6 +13633,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.177.0.md`.
@@ -11569,6 +13648,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11597,6 +13679,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.177.1.md`.
@@ -11609,6 +13695,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Reproduce bindings and run wrapper models, sanitizers, short/stale transfer, alignment, cancellation, disconnect, and reset cases.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11636,6 +13725,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.178.0.md`.
@@ -11647,6 +13740,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11674,6 +13770,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.178.1.md`.
@@ -11685,6 +13785,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11712,6 +13815,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.179.0.md`.
@@ -11723,6 +13830,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11750,6 +13860,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.179.1.md`.
@@ -11761,6 +13875,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11788,6 +13905,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.0.md`.
@@ -11799,6 +13920,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11826,6 +13950,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.1.md`.
@@ -11837,6 +13965,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11864,6 +13995,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.2.md`.
@@ -11875,6 +14010,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11902,6 +14040,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.3.md`.
@@ -11913,6 +14055,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11941,6 +14086,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.180.4.md`.
@@ -11953,6 +14102,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test permissions, disabled discovery, allowlists, malicious probes, time/work/byte limits, hotplug/removal, identity reuse, ties, and no implicit open.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -11980,6 +14132,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.181.0.md`.
@@ -11991,6 +14147,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12018,6 +14177,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.182.0.md`.
@@ -12029,6 +14192,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12056,6 +14222,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.183.0.md`.
@@ -12067,6 +14237,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12094,6 +14267,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.184.0.md`.
@@ -12105,6 +14282,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12132,6 +14312,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.185.0.md`.
@@ -12143,6 +14327,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12171,6 +14358,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.185.1.md`.
@@ -12183,6 +14374,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test untrusted hints, rollback, cross-session mixing, expiry, receiver/application origins, translation round trips, and search-only restrictions.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12211,6 +14405,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.185.2.md`.
@@ -12223,6 +14421,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Replay each source independently and test capability absence, mixed sessions, reset, duplicate data, stale epochs, provenance loss, backpressure, and canonical equivalence.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12251,6 +14452,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.185.3.md`.
@@ -12263,6 +14468,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test every admitted profile on named hardware plus recorded vectors and prove undocumented, reverse-engineered-only, stale-firmware, ambiguous, and untested profiles remain rejected or experimental.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12290,6 +14498,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.0.md`.
@@ -12301,6 +14513,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12329,6 +14544,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.1.md`.
@@ -12341,6 +14560,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test provider changes, mock state, denied/revoked permission, stale fixes, capture resets, throttling, and raw-observation non-claims.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12369,6 +14591,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.2.md`.
@@ -12381,6 +14607,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test permission races, denial, short/stale transfers, detach/reset, identity reuse, cancellation, hostile descriptors, and bounded ownership.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12409,6 +14638,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.3.md`.
@@ -12421,6 +14654,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test network loss/change, background transitions, throttling, captive failure, reset, cancellation, credential redaction, and bounded reconnect policy.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12449,6 +14685,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.4.md`.
@@ -12461,6 +14701,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test raw-observation separation, untrusted search hints, rollback, cross-session mixing, expiry, unknown fields, and canonical round trips.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12489,6 +14732,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.186.5.md`.
@@ -12501,6 +14748,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test integer/length boundaries, unknown extensions, recursion/nesting/record/bit limits, truncation, alternate encodings, and generated provenance.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12528,6 +14778,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.187.0.md`.
@@ -12539,6 +14793,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12567,6 +14824,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.187.1.md`.
@@ -12579,6 +14840,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use licensed/independent interoperability cases for every matrix cell, unknown extensions, state order, timeout, malformed PER, and resource limits.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12606,6 +14870,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.188.0.md`.
@@ -12617,6 +14885,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12645,6 +14916,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.188.1.md`.
@@ -12657,6 +14932,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use standards/independent vectors for every matrix cell, unknown extensions, partial assistance, state order, malformed PER, and resource limits.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12684,6 +14962,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.189.0.md`.
@@ -12695,6 +14977,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12723,6 +15008,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.189.1.md`.
@@ -12735,6 +15024,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Send sentinel secrets through every redirect, TLS, reconnect, parse, debug, error, and logging path and verify reviewed zeroization claims.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12762,6 +15054,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.0.md`.
@@ -12773,6 +15069,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12801,6 +15100,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.1.md`.
@@ -12813,6 +15116,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test simultaneous claims, equal/invalid NAME, address exhaustion, commanded changes, reset, lost/reordered frames, and deterministic decisions.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12841,6 +15147,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.2.md`.
@@ -12853,6 +15163,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use virtual/hardware CAN tests for reset, timestamp domains, loss/reorder, bus-off, permissions, decision execution, and bounded queues.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12881,6 +15194,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.3.md`.
@@ -12893,6 +15210,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Inspect Cargo metadata and packages and test accidental publication, privilege escalation, unsafe defaults, secret/location logging, config expansion, cancellation, and library-boundary bypass.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12921,6 +15241,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.4.md`.
@@ -12933,6 +15257,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test every command and output mode, hostile paths/stdin, overwrite consent, broken pipes, redaction, deterministic replay, unavailable capabilities, and non-zero failure status.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -12961,6 +15288,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.5.md`.
@@ -12973,6 +15304,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test unauthorized peers, socket/path races, request/queue limits, slow clients, restart/reset, revoked permissions, secret redaction, and clean shutdown.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13001,6 +15335,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.6.md`.
@@ -13013,6 +15351,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test cross-tenant leakage, replay, downgrade, redirect, slowloris, reconnect storms, stale corrections, credential logs, load limits, and atomic configuration reload.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13041,6 +15382,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.7.md`.
@@ -13053,6 +15398,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test bad coordinates/antenna metadata, survey rollback, source loss, stale epochs, clock reset, correction interruption, permission loss, and restart continuity.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13081,6 +15429,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.8.md`.
@@ -13093,6 +15445,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compare independent survey results and test mixed projects/frames, stale products, interrupted writes, privacy exports, unavailable quality, and audit reconstruction.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13121,6 +15476,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.9.md`.
@@ -13133,6 +15492,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test hostile streams, terminal escapes, high-rate backpressure, resize/input races, disconnect, bounded history, export consent, and redacted snapshots.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13161,6 +15523,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.10.md`.
@@ -13173,6 +15539,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test malicious labels/files, browser boundaries, location/time leakage, stale views, unavailable state, large tracks, export consent, and deterministic rendering data.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13201,6 +15570,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.190.11.md`.
@@ -13213,6 +15586,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test absent/bypassed interlocks, unauthorized transmit requests, region/config errors, stale devices, limit overflow, disconnect, emergency stop, and receive-only safe default.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13242,6 +15618,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.191.0.md`.
@@ -13253,6 +15633,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13280,6 +15663,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.192.0.md`.
@@ -13291,6 +15678,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13318,6 +15708,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.193.0.md`.
@@ -13329,6 +15723,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13356,6 +15753,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.194.0.md`.
@@ -13367,6 +15768,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13394,6 +15798,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.195.0.md`.
@@ -13405,6 +15813,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13432,6 +15843,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.196.0.md`.
@@ -13443,6 +15858,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13471,6 +15889,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.196.1.md`.
@@ -13483,6 +15905,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test seeded reproducibility, scenario-schema limits, impossible states, cross-constellation time, resource exhaustion, safety labeling, and scalar component equivalence.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13511,6 +15936,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.196.2.md`.
@@ -13523,6 +15952,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test checksum substitution, partial downloads, unauthorized sensitive data, license mismatch, corpus drift, deletion/retention policy, offline replay, and provenance closure.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13550,6 +15982,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.197.0.md`.
@@ -13561,6 +15997,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13588,6 +16027,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.198.0.md`.
@@ -13599,6 +16042,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13626,6 +16072,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.198.1.md`.
@@ -13637,6 +16087,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13665,6 +16118,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.198.2.md`.
@@ -13677,6 +16134,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test target discovery, stale corpora, nondeterministic reproducers, secret/location scrubbing, timeout/memory limits, malformed artifacts, and fixed-crash regression promotion.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13705,6 +16165,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.198.3.md`.
@@ -13717,6 +16181,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test missing/licensed vectors, wrong revisions, false pass, skipped cells, corrupt evidence, tool/version drift, offline mode, and complete machine-readable reports.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13744,6 +16211,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.199.0.md`.
@@ -13755,6 +16226,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13782,6 +16256,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.199.1.md`.
@@ -13793,6 +16271,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13820,6 +16301,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.200.0.md`.
@@ -13831,6 +16316,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13859,6 +16347,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.200.1.md`.
@@ -13871,6 +16363,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Audit each unsafe module's evidence matrix and reject unsupported claims such as treating mocked Miri tests as real driver evidence.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13899,6 +16394,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.201.0.md`.
@@ -13911,6 +16410,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test MSRV builds, feature detection, unsupported CPUs, subnormal policy, every fallback, scalar equivalence, and cross-architecture tolerances.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13939,6 +16441,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.201.1.md`.
@@ -13951,6 +16457,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Test scalar/optimized selection, noisy and throttled hosts, changed inputs, false improvements, threshold edges, output reproducibility, and no benchmark-only unsafe shortcut.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -13978,6 +16487,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.202.0.md`.
@@ -13989,6 +16502,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14016,6 +16532,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.203.0.md`.
@@ -14027,6 +16547,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14054,6 +16577,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.203.1.md`.
@@ -14065,6 +16592,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14092,6 +16622,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.204.0.md`.
@@ -14103,6 +16637,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14130,6 +16667,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.205.0.md`.
@@ -14141,6 +16682,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14168,6 +16712,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.206.0.md`.
@@ -14179,6 +16727,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14206,6 +16757,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.207.0.md`.
@@ -14217,6 +16772,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14244,6 +16802,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.207.1.md`.
@@ -14255,6 +16817,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14282,6 +16847,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.208.0.md`.
@@ -14293,6 +16862,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14320,6 +16892,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.209.0.md`.
@@ -14331,6 +16907,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14358,6 +16937,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.210.0.md`.
@@ -14369,6 +16952,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14397,6 +16983,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.210.1.md`.
@@ -14409,6 +16999,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Machine-check full bidirectional traceability and reject aggregate, orphaned, stale, legally ambiguous, or evidence-free records.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14437,6 +17030,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.210.2.md`.
@@ -14449,6 +17046,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Machine-check all frozen records and reject orphaned requirements, unowned tools, unsupported claims, incomplete conditional decisions, stale statuses, and evidence outside the reviewed baseline.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14476,6 +17076,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.211.0.md`.
@@ -14487,6 +17091,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14514,6 +17121,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.212.0.md`.
@@ -14525,6 +17136,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14553,6 +17167,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.213.0.md`.
@@ -14565,6 +17183,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Use an independently implemented external consumer adapter in the security/timing audit and retain disagreement/invalidation evidence.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14593,6 +17214,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.214.0.md`.
@@ -14605,6 +17230,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Compile and test the published timing examples with a foreign capture-time newtype and lossless observation mapping.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14633,6 +17261,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.214.1.md`.
@@ -14645,6 +17277,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Audit rustdoc/examples/config expansion for silent fallback, hidden authority, precision inflation, sensitive output, and missing limits.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14672,6 +17307,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.215.0.md`.
@@ -14683,6 +17322,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14710,6 +17352,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.216.0.md`.
@@ -14721,6 +17367,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14748,6 +17397,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.217.0.md`.
@@ -14759,6 +17412,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14786,6 +17442,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.218.0.md`.
@@ -14797,6 +17457,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14824,6 +17487,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.219.0.md`.
@@ -14835,6 +17502,9 @@ Verification:
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and
@@ -14863,6 +17533,10 @@ Deliverables:
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
 - Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
 - Update standards mappings, capability/coverage status, security analysis,
   public documentation, migration notes, and `RELEASE_NOTES_0.219.1.md`.
@@ -14875,6 +17549,9 @@ Verification:
   advisory, SBOM, MSRV, and applicable platform gates;
 - Build from clean environments and test non-root operation, read-only filesystems, dropped capabilities, secret injection, hostile configuration, rollback, shutdown, SBOM/signature identity, and default-deny exposure.
 - perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
 - add at least one negative or adversarial regression for every new untrusted
   boundary and confirm no input can panic or partially commit state;
 - review changed code, standards provenance, claims, resource bounds, and

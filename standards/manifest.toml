@@ -9,6 +9,11 @@ rfc_baseline = "standards/rfc/SOURCES"
 
 [policy]
 implementation_requires_verified_revision = true
+implementation_requires_source_review_before_code = true
+implementation_requires_section_mapping = true
+implementation_requires_tests_in_same_milestone = true
+implementation_requires_negative_and_adversarial_tests = true
+implementation_requires_independent_evidence = true
 paid_documents_committed = false
 unknown_fields_preserved_when_safe = true
 silent_revision_updates = false

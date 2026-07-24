@@ -24,6 +24,7 @@ test -f docs/RELEASE_PLAN.md
 test -f docs/current-status.md
 test -f docs/CRATE_VERSION_MATRIX.md
 test -f docs/release-checklist.md
+test -f docs/implementation-evidence-policy.md
 test -f standards/manifest.toml
 test -f standards/coverage.md
 test -f standards/licensing.md
@@ -35,6 +36,8 @@ for script in \
     scripts/generate_release_plan.py \
     scripts/release_crates.py \
     scripts/release_0_1_gate.sh \
+    scripts/validate-implementation-evidence-policy.sh \
+    scripts/validate_implementation_evidence.py \
     scripts/validate-release-readiness.sh; do
     test -x "$script"
 done

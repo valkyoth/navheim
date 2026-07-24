@@ -26,11 +26,20 @@ scripts/checks.sh
 - Do not add unsafe code to core, constellation, solver, or format crates.
 - Do not add a third-party crate without the dependency review required by
   `SECURITY.md` and `docs/supply-chain-security.md`.
-- Cite the normative document section/table for protocol constants.
-- Add negative and adversarial tests for every untrusted input surface.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section, table and legal-access
+  condition. Stop rather than guess when the required material is unavailable
+  or ambiguous.
+- Map the governing evidence to the implementation and its tests.
+- Add applicable positive, negative, boundary, malformed, adversarial,
+  conformance, differential, resource and regression tests in the same
+  milestone. Record why a test class is not applicable.
 - Do not claim support until standards mapping and independent evidence exist.
 - Never radiate generated or replayed GNSS-like RF outside a shielded or
   conducted test environment.
+
+The complete fail-closed rule is
+[Implementation Evidence Policy](../docs/implementation-evidence-policy.md).
 
 ## Security-Sensitive Changes
 

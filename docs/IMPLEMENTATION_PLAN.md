@@ -377,6 +377,14 @@ assignment snapshots and legally retained vectors. Each implemented record
 maps crate/module, sections/tables/constants, official and independent vectors,
 adversarial tests, feature/profile, known limitations and legal-access class.
 
+Tests ship in the same milestone as behavior. Every applicable positive,
+negative, boundary, malformed, adversarial, conformance, differential,
+resource, fuzz, platform and regression class is mapped to the implementation;
+a not-applicable class requires a recorded reason. Missing or ambiguous
+authoritative material blocks implementation and support claims. The
+fail-closed rule is normative in
+[implementation-evidence-policy.md](implementation-evidence-policy.md).
+
 Paid, consent-gated, registration-gated, personalized, or redistribution-
 unclear standards are never committed. Builds and tests never download
 standards. New revisions create versioned conformance profiles rather than
