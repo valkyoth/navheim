@@ -4,6 +4,11 @@ set -eu
 cargo fmt --all --check
 scripts/check_shell_syntax.sh
 scripts/check_doc_links.sh
+scripts/verify-rfcs.sh
+python3 scripts/test-rfc-sources.py
+python3 scripts/rfc_errata.py
+python3 scripts/standards-sources.py check
+python3 scripts/test-standards-sources.py
 scripts/check_release_plan.sh
 scripts/test-release-plan.sh
 scripts/generate_release_plan.py --check

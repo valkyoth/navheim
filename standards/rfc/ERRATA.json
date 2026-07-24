@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "checked_at": "2026-07-24",
+  "source": "https://errata.rfc-editor.org/search/",
+  "rfcs": [
+    {
+      "rfc": 1945,
+      "lifecycle": "legacy-reference-only",
+      "errata_ids": [7619],
+      "official_sha256": "7f2e1470891479e883c24ae73a17a49bcbb327c8d9d7e1249d759342ede538aa"
+    },
+    {
+      "rfc": 2104,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [501, 2794, 3694, 4459, 4809, 8185, 8296],
+      "official_sha256": "ac2938c6ad744f938e1e243a6465104e476e7634bb66a6fca0f9daef9081b068"
+    },
+    {
+      "rfc": 2119,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [493, 494, 495, 496, 497, 498, 499, 500, 2969, 5101, 5206, 6773, 6954, 8849, 8850],
+      "official_sha256": "7834cbc8a5c1c3e71e19c216474c092ce21d92576c10f0ded87251d28b338d75"
+    },
+    {
+      "rfc": 2616,
+      "lifecycle": "legacy-reference-only",
+      "errata_ids": [408, 411, 412, 652, 653, 892, 1483, 1619, 2301, 2645, 2806, 2998, 3056, 3206, 3407, 4522, 8514],
+      "official_sha256": "ca83fae63d159db70cb124886d92281c4bfee6989f15eaf81325679d95b4321f"
+    },
+    {
+      "rfc": 2617,
+      "lifecycle": "legacy-reference-only",
+      "errata_ids": [410, 606, 1431, 1649, 1796, 1914, 1959, 2600, 3720],
+      "official_sha256": "6afde81c441be62cdf3c4d8822ab8078cb700a54202d0ab2c434a83fbcd16df1"
+    },
+    {
+      "rfc": 3339,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [293, 1584, 3710, 4110, 5624, 5783, 6533],
+      "official_sha256": "43dcb23c9dddf69a07508e9d5c1f3bbfe732c0ab0343d6a6a51fc8942f065d7c"
+    },
+    {
+      "rfc": 3629,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [],
+      "official_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "rfc": 3986,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [1783, 2033, 2525, 2624, 2717, 2933, 3330, 4293, 4393, 4394, 4547, 4789, 4942, 5428, 7019, 7590, 8442],
+      "official_sha256": "aaa3b92d65d2d887bab92c6d98dafe1437fb29194e6530a47abd8a91f3d1ed08"
+    },
+    {
+      "rfc": 4648,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [2837, 4889, 5855, 7514, 8669, 9030],
+      "official_sha256": "9c42dd96d8c43d7e1cb0816a1182101802710df1d6a3269bf4e8ca52247cd9a3"
+    },
+    {
+      "rfc": 5234,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [1423, 2820, 2914, 2968, 3076, 3096, 4040, 4361, 4564, 5110, 6172, 6173],
+      "official_sha256": "724b01b9904dd9471b1dce8c97d4a6dac2798aec1e14296622cc9d665d8b2d76"
+    },
+    {
+      "rfc": 5280,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [1774, 3085, 3200, 3466, 3579, 3674, 3693, 3754, 3986, 4274, 4847, 5802, 5876, 5938, 5967, 5997, 6414, 6830, 7164, 7634, 7658, 7661, 8561],
+      "official_sha256": "c0ec3aba7e8c27a431081f72a610ac51924a95a1d45185db64dab483491d5e34"
+    },
+    {
+      "rfc": 5480,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [1727, 1728, 4170, 6670, 8026],
+      "official_sha256": "dc69636c813441a7119e5371e0488eb25e8df17f95194c6c91e705af2c6c5c23"
+    },
+    {
+      "rfc": 5758,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [2013],
+      "official_sha256": "1602d29fec29203ba4058efd9c1a7488d5ffa008619bd1c31861af8a3e0108a5"
+    },
+    {
+      "rfc": 6066,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [3283, 4817, 5658],
+      "official_sha256": "bee6fd3cf2adefd4ab00245405b9664f58bf5d86aace852bf4221b62482f165c"
+    },
+    {
+      "rfc": 7468,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [4508, 7697],
+      "official_sha256": "e046342c6c435a31a4ba38c6191bd6893a4226bdc4b8bc681dd209720c60a5e4"
+    },
+    {
+      "rfc": 7617,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [],
+      "official_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "rfc": 8174,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [5022, 6878],
+      "official_sha256": "11d0165e1c22c48f2a17f6f15ae97c2f3fe241271a08ad09bee1273dfcafb13d"
+    },
+    {
+      "rfc": 8259,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [5210, 5218, 5318, 5853, 6208, 7307, 7383, 7600, 7603, 7617, 7650, 7673, 8438, 8622, 8874],
+      "official_sha256": "eb9e2864db80a2c834a7b0bcd6d72b67e8784c73c4fa1e531e0754a38f788529"
+    },
+    {
+      "rfc": 8446,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [5483, 5627, 5682, 5717, 5868, 5874, 5976, 6120, 6121, 6122, 6123, 6124, 6125, 6126, 6127, 6128, 6135, 6136, 6137, 6138, 6139, 6140, 6141, 6142, 6143, 6144, 6145, 6146, 6147, 6148, 6150, 6151, 6152, 6204, 6205, 6401, 6820, 7003, 7073, 7250, 7303, 7620, 7774, 8411, 8423, 8794, 8795, 8799, 8803],
+      "official_sha256": "58de58e5d2d27f88e5090d266435c71bff246ae58058436c559c0b3d7a9bd871"
+    },
+    {
+      "rfc": 9110,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [7105, 7107, 7109, 7138, 7306, 7419, 7530, 7599, 7870, 8138, 8268, 8459],
+      "official_sha256": "144283f2f7791a133243275dd621ded58d86f988ed317509bd33658bab6c4376"
+    },
+    {
+      "rfc": 9111,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [7695, 9004],
+      "official_sha256": "11f00f07365f0a0c6213b6ca8bfe86da5af3ba9631bc36ab9fc8a27100f4b048"
+    },
+    {
+      "rfc": 9112,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [7214, 7633, 7744, 8284],
+      "official_sha256": "2ea286c7ec09324f338b4f9722b5854c1e3fcbcb374f8e439c1054733ae4dcfd"
+    },
+    {
+      "rfc": 9205,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [],
+      "official_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "rfc": 9325,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [],
+      "official_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "rfc": 9525,
+      "lifecycle": "pre-implementation",
+      "errata_ids": [8173],
+      "official_sha256": "e46f7908b56aa66b57ef55ba1ad43f94f2f3d0180e85cd4512cb8004c88edf18"
+    }
+  ]
+}

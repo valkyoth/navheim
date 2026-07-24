@@ -343,17 +343,25 @@ model, security invariants, and adapter verification requirements are in
 
 ## Standards Discipline
 
-`standards/manifest.toml` is the machine-readable source of truth. Candidate
-documents are not implementation claims. Before a feature starts:
+`standards/sources.toml` is the reviewed acquisition inventory;
+`standards/manifest.toml` is the machine-readable conformance source of truth.
+Exact RFC Editor text is immutable and checksum-locked under
+`standards/rfc/`; other external document bytes default to the ignored local
+vault. Candidate documents are not implementation claims. Before a feature
+starts:
 
-1. confirm the current official or legally licensed revision;
-2. record publisher, revision, publication/retrieval dates, license class, and
+1. run the networked source/errata freshness reviews and confirm the current
+   official or legally licensed revision;
+2. verify the local byte lock and record publisher, revision,
+   publication/retrieval dates, license class, and
    local-copy policy;
-3. cite sections/tables in code;
-4. map implementation crates and tests;
-5. add official, independent, generated, and adversarial evidence;
-6. preserve unknown/reserved fields where the standard permits;
-7. update coverage and known limitations.
+3. review amendments, errata, service notices, registries, replacement
+   relationships, and legacy conflicts;
+4. cite sections/tables in code;
+5. map implementation crates and tests;
+6. add official, independent, generated, and adversarial evidence;
+7. preserve unknown/reserved fields where the standard permits;
+8. update coverage and known limitations.
 
 Aggregate families are inventory leads, not implementation records. Before
 code begins, split them into exact documents, revisions, amendments, notices,
@@ -361,8 +369,10 @@ assignment snapshots and legally retained vectors. Each implemented record
 maps crate/module, sections/tables/constants, official and independent vectors,
 adversarial tests, feature/profile, known limitations and legal-access class.
 
-Paid or restricted standards are never committed. New revisions create
-versioned conformance profiles rather than silently changing behavior.
+Paid, consent-gated, registration-gated, personalized, or redistribution-
+unclear standards are never committed. Builds and tests never download
+standards. New revisions create versioned conformance profiles rather than
+silently changing behavior.
 
 ## Testing Program
 

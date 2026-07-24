@@ -22,6 +22,18 @@ bounded storage, executable preflight receipts, deterministic DSP, correction
 anti-mixing, privacy/unsafe/platform evidence, strict release provenance, and
 exact standards traceability.
 
+The standards foundation now includes 25 exact, immutable RFC Editor
+references for Navheim's HTTP, encoding, certificate, JSON and TLS boundaries,
+plus a live-checked errata drift snapshot. Legacy NTRIP HTTP references are
+explicitly separated from current secure behavior.
+
+The broader acquisition inventory covers 26 authoritative source families.
+Seventeen freely downloadable GPS, Galileo, NavIC and IGS documents can be
+fetched into an ignored local vault and protected by a local SHA-256 lock.
+Paid, licensed, consent-gated, registration-gated and vendor-profile material
+is metadata-tracked but must be acquired lawfully and remains outside Git and
+crate archives.
+
 A second coverage pass preserves that sequence while closing promised-scope
 gaps with named releases for the navigation crate; RTCM, RINEX and
 Earth-orientation products; typed PVT/orthometric outputs; SDR conditioning;

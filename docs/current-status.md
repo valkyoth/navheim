@@ -18,6 +18,13 @@ Navheim currently provides repository and crate foundations only.
 - Exact-commit pentest-before-tag release process.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
+- Checksum-locked local copies of 25 applicable IETF RFCs, an RFC errata drift
+  snapshot, and a reviewed acquisition inventory spanning 26 GNSS, correction,
+  exchange, aviation, telecom, geodesy, security, receiver, and platform
+  source families.
+- An ignored, locally checksum-locked standards vault with safe allowlisted
+  fetching for public documents; paid, licensed, consent-gated,
+  registration-gated, and vendor-profile documents remain manual/local-only.
 - One-way GNSS timing API boundary: Navheim will produce complete satellite
   timing evidence without depending on generic clock frameworks.
 - Audit-strengthened roadmap with 358 pre-1.0 implementation milestones plus

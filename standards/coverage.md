@@ -19,3 +19,9 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 
 Every status changes only after `standards/manifest.toml` contains a verified
 revision and concrete `implemented_by` and `tests` mappings.
+
+The acquisition inventory in `standards/sources.toml` covers the authoritative
+source families needed by this table. It records current candidates and access
+rules but is not an implementation claim. Exact RFC transport/security
+references are checksum-locked under `standards/rfc/`; all other document
+bytes default to the ignored local vault.

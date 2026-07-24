@@ -21,5 +21,9 @@ must not leak that requirement into published libraries.
 cargo-audit, cargo-sbom, and GitHub Action pins. Compatibility checks use
 explicit `cargo +VERSION` commands.
 
+The release gate also compares RFC errata with the reviewed snapshot, checks
+official standards revision markers, and verifies the ignored local document
+vault. These networked checks stay outside ordinary offline CI.
+
 The full release gate runs on `1.97.1`; earlier supported releases run
 `cargo check --workspace --all-features`.

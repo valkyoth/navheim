@@ -2,8 +2,10 @@
 
 1. Confirm the milestone's Goal, Deliverables, Verification, and Exit criteria
    in `docs/RELEASE_PLAN.md`.
-2. Verify standards revisions, licenses, citations, coverage mappings, and
-   test vectors for changed behavior.
+2. Run the offline RFC/source gates and networked RFC errata and official-page
+   freshness reviews; verify standards revisions, amendments, notices,
+   licenses, local checksums, citations, coverage mappings, and test vectors
+   for changed behavior.
 3. Update code, tests, fuzz targets, docs, current status, changelog, crate
    READMEs, version matrix, release plan metadata, and release notes.
 4. Check newest stable Rust, cargo tools, GitHub Actions, and every changed

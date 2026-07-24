@@ -25,3 +25,10 @@ All notable changes to `navheim` are documented here.
   adding deterministic `no_std` math, DGPS, profiles/discovery, full Android
   platform work, bounded PER and post-protocol crypto milestones, and
   separating PVT facts from integrity assessments.
+- Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
+  publications, checksum/line-ending/read-only gates, lifecycle roles, and a
+  live-checked 210-errata drift snapshot.
+- Added the external standards acquisition inventory and secure local-only
+  vault workflow: 26 authoritative source families, 17 allowlisted public
+  downloads, local SHA-256 locking, official-page revision-marker review, and
+  enforced exclusion of restricted document bytes from Git and crates.

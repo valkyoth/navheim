@@ -3,6 +3,9 @@ set -eu
 
 scripts/checks.sh
 scripts/check_latest_tools.sh
+python3 scripts/rfc_errata.py --live
+python3 scripts/standards-sources.py review-current
+python3 scripts/standards-sources.py verify-local --require-downloads
 
 for toolchain in \
     1.90.0 \

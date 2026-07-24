@@ -1,1 +1,2 @@
 vendor/** linguist-vendored
+standards/rfc/rfc*.txt -text -whitespace

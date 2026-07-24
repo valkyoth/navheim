@@ -1,0 +1,26 @@
+# number URL role
+1945 https://www.rfc-editor.org/rfc/rfc1945.txt ntrip-v1-legacy-http
+2104 https://www.rfc-editor.org/rfc/rfc2104.txt authentication-primitive-model
+2119 https://www.rfc-editor.org/rfc/rfc2119.txt normative-language
+2616 https://www.rfc-editor.org/rfc/rfc2616.txt ntrip-legacy-http
+2617 https://www.rfc-editor.org/rfc/rfc2617.txt ntrip-legacy-authentication
+3339 https://www.rfc-editor.org/rfc/rfc3339.txt internet-timestamps
+3629 https://www.rfc-editor.org/rfc/rfc3629.txt utf8
+3986 https://www.rfc-editor.org/rfc/rfc3986.txt uri-syntax
+4648 https://www.rfc-editor.org/rfc/rfc4648.txt base-encodings
+5234 https://www.rfc-editor.org/rfc/rfc5234.txt grammar
+5280 https://www.rfc-editor.org/rfc/rfc5280.txt certificate-profile
+5480 https://www.rfc-editor.org/rfc/rfc5480.txt ec-certificate-keys
+5758 https://www.rfc-editor.org/rfc/rfc5758.txt ec-certificate-algorithms
+6066 https://www.rfc-editor.org/rfc/rfc6066.txt tls-server-name
+7468 https://www.rfc-editor.org/rfc/rfc7468.txt textual-key-encoding
+7617 https://www.rfc-editor.org/rfc/rfc7617.txt current-basic-authentication
+8174 https://www.rfc-editor.org/rfc/rfc8174.txt normative-language
+8259 https://www.rfc-editor.org/rfc/rfc8259.txt json
+8446 https://www.rfc-editor.org/rfc/rfc8446.txt tls13
+9110 https://www.rfc-editor.org/rfc/rfc9110.txt current-http-semantics
+9111 https://www.rfc-editor.org/rfc/rfc9111.txt current-http-caching
+9112 https://www.rfc-editor.org/rfc/rfc9112.txt current-http11
+9205 https://www.rfc-editor.org/rfc/rfc9205.txt protocols-using-http
+9325 https://www.rfc-editor.org/rfc/rfc9325.txt tls-deployment
+9525 https://www.rfc-editor.org/rfc/rfc9525.txt service-identity

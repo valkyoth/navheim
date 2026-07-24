@@ -1,0 +1,394 @@
+schema_version = 1
+project = "navheim"
+reviewed = "2026-07-24"
+private_directory = "standards/private"
+default_redistribution = "local-only"
+
+# This is the acquisition inventory, not a conformance claim. Exact
+# implementation/test mappings remain in manifest.toml and are frozen by the
+# owning release before code relies on a source.
+
+[[source]]
+id = "gps-sis"
+publisher = "United States Government / GPS.gov"
+scope = "GPS L1 C/A, L1C, L2C, L5 signals, navigation data, health, and time"
+status = "verified-current"
+acquisition = "automatic"
+redistribution = "local-only"
+landing_url = "https://www.gps.gov/interface-control-documents-icds-interface-specifications-iss"
+documents = ["IS-GPS-200N + IRN-IS-200N-003", "IS-GPS-705J + IRN-IS-705J-003", "IS-GPS-800J + IRN-IS-800J-003"]
+first_release = "v0.36.0"
+review_markers = ["IS-GPS-200 N", "IS-GPS-705 J", "IS-GPS-800 J"]
+
+[[source]]
+id = "gps-service"
+publisher = "United States Government / GPS.gov"
+scope = "GPS service performance, health interpretation, timing, and integrity"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.gps.gov/technical"
+documents = ["GPS Standard Positioning Service Performance Standard, 5th Edition", "current civil service notices and NANUs"]
+first_release = "v0.47.0"
+
+[[source]]
+id = "galileo-open-service"
+publisher = "European Union / EUSPA"
+scope = "Galileo open signals, navigation data, health, ionosphere, and time"
+status = "verified-current"
+acquisition = "automatic"
+redistribution = "local-only"
+landing_url = "https://www.gsc-europa.eu/electronic-library/programme-reference-documents/galileo-in-force/open-service"
+documents = ["Galileo OS SIS ICD 2.2, November 2025", "Galileo OS SDD 1.3, November 2023", "I/NAV Info Note 1.0"]
+first_release = "v0.64.0"
+review_markers = ["OS SIS ICD v2.2", "OS SDD v1.3"]
+
+[[source]]
+id = "galileo-osnma"
+publisher = "European Union / EUSPA"
+scope = "Galileo OSNMA signal, receiver processing, trust distribution, and service state"
+status = "verified-current"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.gsc-europa.eu/electronic-library/programme-reference-documents/galileo-in-force/osnma"
+documents = ["OSNMA SIS ICD 1.1", "Receiver Guidelines 1.3 and Annex B vectors", "OSNMA IDD ICD 1.1", "PKI CP/CPS 1.1", "OSNMA SDD 1.0", "in-force service notices"]
+first_release = "v0.147.0"
+review_markers = ["OSNMA SIS ICD v1.1", "OSNMA Receiver Guidelines v1.3", "OSNMA SDD v1.0"]
+
+[[source]]
+id = "galileo-has"
+publisher = "European Union / EUSPA"
+scope = "Galileo HAS signal-in-space and Internet correction products"
+status = "verified-current"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.gsc-europa.eu/electronic-library/programme-reference-documents/galileo-in-force/has"
+documents = ["HAS SIS ICD 1.0", "HAS IDD ICD 1.1, registration required", "HAS SDD 1.0", "HAS reference user algorithm technical note 1.0", "in-force service notices"]
+first_release = "v0.76.0"
+review_markers = ["HAS SIS ICD v1.0", "HAS IDD ICD v1.1"]
+
+[[source]]
+id = "galileo-timing-sar"
+publisher = "European Union / EUSPA"
+scope = "Galileo timing, SAR/RLS, metadata, and operational interpretation"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.gsc-europa.eu/electronic-library/programme-reference-documents"
+documents = ["in-force Galileo Timing Service documents", "SAR SDD 3.0", "public SAR/RLS interface material", "satellite metadata", "in-force NAGUs and service notices"]
+first_release = "v0.75.0"
+
+[[source]]
+id = "glonass-open-service"
+publisher = "GLONASS Information-Analytical Centre"
+scope = "GLONASS FDMA/CDMA open signals, navigation, health, and time"
+status = "verify-before-implementation"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.glonass-iac.ru/en/guide/"
+documents = ["current English/Russian open-service ICDs", "CDMA signal ICDs", "system-time and leap-second notices"]
+first_release = "v0.82.0"
+
+[[source]]
+id = "beidou-open-service"
+publisher = "China Satellite Navigation Office"
+scope = "BeiDou B1I, B1C, B2a, B2b, B3I, PPP-B2b, BDSBAS, health, and time"
+status = "verify-before-implementation"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://en.beidou.gov.cn/SYSTEMS/Officialdocument/"
+documents = ["B1I SIS ICD 3.0", "B1C SIS ICD", "B2a SIS ICD", "B2b SIS ICD 1.0", "B3I SIS ICD", "PPP-B2b SIS ICD 1.0", "BDSBAS-B1C SIS ICD 1.0", "Open Service Performance Standard 3.0"]
+first_release = "v0.92.0"
+
+[[source]]
+id = "qzss-open-services"
+publisher = "Cabinet Office, Government of Japan"
+scope = "QZSS PNT, SLAS, CLAS, MADOCA-PPP, QZNMA, health, and time"
+status = "verified-current"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://qzss.go.jp/en/technical/ps-is-qzss/ps-is-qzss.html"
+documents = ["IS-QZSS-PNT-006", "IS-QZSS-L1S-009", "IS-QZSS-L6-008", "IS-QZSS-MDC-004", "IS-QZSS-SAS-001", "PS-QZSS-003/005 applicability"]
+first_release = "v0.104.0"
+review_markers = ["IS-QZSS-PNT-006", "IS-QZSS-L1S-009", "IS-QZSS-L6-008", "IS-QZSS-SAS-001"]
+
+[[source]]
+id = "navic-open-service"
+publisher = "Indian Space Research Organisation"
+scope = "NavIC L1, L5, S-band signals, ionosphere, health, and time"
+status = "verified-current"
+acquisition = "automatic"
+redistribution = "local-only"
+landing_url = "https://www.isro.gov.in/SatelliteNavigationServices.html"
+documents = ["NavIC L5/S SPS SIS ICD 1.1", "NavIC L1 SPS SIS ICD 1.0", "NeQuick-N model and input data", "week-rollover notice"]
+first_release = "v0.109.0"
+review_markers = ["L5 & S SIS ICD V1.1", "NavIC_SPS_ICD_L1_V1.0"]
+
+[[source]]
+id = "sbas-aviation"
+publisher = "ICAO / RTCA / EUROCAE"
+scope = "provider-neutral legacy and DFMC SBAS, GBAS, ABAS, and aviation integrity"
+status = "licensed-baseline-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://store.icao.int/en/annex-10-aeronautical-telecommunications-volume-i-radio-navigation-aids"
+documents = ["ICAO Annex 10 Volume I current edition/amendments", "RTCA DO-229 current MOPS", "RTCA DO-373 current DFMC SBAS MOPS", "matching EUROCAE documents", "applicable provider public service definitions"]
+first_release = "v0.114.0"
+
+[[source]]
+id = "rtcm-corrections"
+publisher = "RTCM Special Committee 104"
+scope = "legacy DGNSS, RTCM 3 OSR/MSM/SSR, transformations, and registries"
+status = "licensed-baseline-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.rtcm.org/rtcm-standards"
+documents = ["RTCM 10402.3", "RTCM 10403.4 + Amendment 1, 2024-11-01", "current RTCM message/SSR assignments"]
+first_release = "v0.23.0"
+review_markers = ["RTCM 10402.3", "RTCM 10403.4"]
+
+[[source]]
+id = "rtcm-ntrip"
+publisher = "RTCM Special Committee 104"
+scope = "NTRIP v1/v2 client, server, caster, and source-table behavior"
+status = "licensed-baseline-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.rtcm.org/rtcm-standards"
+documents = ["RTCM 10410.1 NTRIP 2.0 with applicable amendment", "legacy NTRIP 1.0 profile"]
+first_release = "v0.27.0"
+review_markers = ["RTCM 10410.1"]
+
+[[source]]
+id = "nmea-0183"
+publisher = "National Marine Electronics Association"
+scope = "NMEA 0183 framing and licensed GNSS sentence semantics"
+status = "licensed-baseline-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.nmea.org/nmea-0183.html"
+documents = ["NMEA 0183 4.30", "applicable published errata and registrations"]
+first_release = "v0.21.0"
+review_markers = ["Version 4.30"]
+
+[[source]]
+id = "nmea-2000-j1939"
+publisher = "NMEA / SAE International"
+scope = "NMEA 2000 GNSS PGNs, CAN transport, fast packet, and address claim"
+status = "licensed-baseline-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.nmea.org/nmea-2000.html"
+documents = ["NMEA 2000 3.000", "licensed GNSS PGN appendices", "applicable SAE J1939-21 and J1939-81 revisions"]
+first_release = "v0.190.0"
+
+[[source]]
+id = "igs-rinex"
+publisher = "International GNSS Service"
+scope = "RINEX 2/3/4 observation, navigation, clock, meteorological, and compact profiles"
+status = "verified-current"
+acquisition = "automatic"
+redistribution = "local-only"
+landing_url = "https://igs.org/formats-and-standards/"
+documents = ["RINEX 2.11", "RINEX 3.05", "RINEX 4.02", "RINEX Clock 3.04", "CRINEX/Hatanaka format and reference tools"]
+first_release = "v0.29.0"
+review_markers = ["RINEX 4.02"]
+
+[[source]]
+id = "igs-products"
+publisher = "International GNSS Service"
+scope = "precise orbit/clock, ionosphere, antenna, reference-frame, and bias products"
+status = "verify-before-implementation"
+acquisition = "automatic"
+redistribution = "local-only"
+landing_url = "https://igs.org/formats-and-standards/"
+documents = ["SP3-d", "IONEX 1.1", "ANTEX 2.0", "SINEX 2.02", "Bias-SINEX 1.00", "IGS SSR format", "current IGS product conventions"]
+first_release = "v0.32.0"
+
+[[source]]
+id = "iers-iau-geodesy"
+publisher = "IERS / IAU / IUGG / NGA / EPSG"
+scope = "time, Earth orientation, reference frames, gravity, ellipsoid, and coordinate operations"
+status = "verify-before-implementation"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://iers-conventions.obspm.fr/"
+documents = ["IERS Conventions 2010 and published updates", "IERS bulletins and EOP formats", "IAU SOFA standards/model notes", "WGS 84 current realization/specification", "EPSG registry methods used by frozen profiles"]
+first_release = "v0.8.0"
+
+[[source]]
+id = "oma-supl"
+publisher = "Open Mobile Alliance"
+scope = "SUPL architecture, ULP/ILP wire messages, sessions, privacy, and conformance"
+status = "profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.openmobilealliance.org/release/SUPL/"
+documents = ["SUPL/ULP 2.0.6 baseline candidate", "2.1 and 3.0 applicability review", "matching architecture, ILP, enabler release definition, ASN.1 modules, and test specifications"]
+first_release = "v0.187.0"
+review_markers = ["V2_0_6-20200804-A", "V2_1-20181213-C", "V3_0-20181213-C"]
+
+[[source]]
+id = "3gpp-lpp"
+publisher = "3GPP"
+scope = "LTE/NR LPP messages, assistance, transactions, extensions, and ASN.1 modules"
+status = "verified-current"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3710"
+documents = ["3GPP TS 37.355 Release 19 version 19.3.0", "older release profiles required by supported Android devices"]
+first_release = "v0.188.0"
+review_markers = ["19.3.0"]
+
+[[source]]
+id = "itu-asn1"
+publisher = "ITU-T"
+scope = "ASN.1 notation, constraints, extensibility, and aligned/unaligned PER"
+status = "verified-current"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.itu.int/rec/t-rec-x.680/en"
+documents = ["ITU-T X.680/X.681/X.682/X.683 (02/2021)", "ITU-T X.691 (02/2021) Packed Encoding Rules"]
+first_release = "v0.186.5"
+review_markers = ["X.680 (02/21)"]
+
+[[source]]
+id = "nist-gnss-crypto"
+publisher = "NIST"
+scope = "hash, HMAC, ECDSA, and curve definitions used by GNSS authentication adapters"
+status = "verified-current"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://csrc.nist.gov/projects/digital-signatures/publications"
+documents = ["FIPS 180-4 plus current planning note", "FIPS 186-5 plus errata", "NIST SP 800-186 plus potential updates"]
+first_release = "v0.148.0"
+review_markers = ["FIPS 186-5", "SP 800-186", "FIPS 180-4"]
+
+[[source]]
+id = "gpsd-json"
+publisher = "gpsd project"
+scope = "gpsd JSON protocol and version negotiation"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://gpsd.gitlab.io/gpsd/gpsd_json.html"
+documents = ["gpsd JSON protocol matching the frozen supported gpsd releases"]
+first_release = "v0.181.0"
+
+[[source]]
+id = "ublox-ubx"
+publisher = "u-blox"
+scope = "UBX framing/messages and receiver timing semantics"
+status = "hardware-profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.u-blox.com/en/docs"
+documents = ["receiver-family interface descriptions for every frozen supported device/firmware pair", "timing application notes"]
+first_release = "v0.182.0"
+
+[[source]]
+id = "septentrio-sbf"
+publisher = "Septentrio"
+scope = "SBF framing/blocks and receiver timing semantics"
+status = "hardware-profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.septentrio.com/en/support/resources"
+documents = ["SBF reference guide and receiver/firmware notes for every frozen supported profile"]
+first_release = "v0.183.0"
+
+[[source]]
+id = "android-gnss"
+publisher = "Google / Android Open Source Project"
+scope = "raw GNSS measurements, clocks, location provenance, USB, and platform lifecycle"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://developer.android.com/develop/sensors-and-location/sensors/gnss"
+documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts"]
+first_release = "v0.186.0"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IS-GPS-200N.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IS-GPS-200N.pdf"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IRN-IS-200N-003.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IRN-IS-200N-003.pdf"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IS-GPS-705J.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IS-GPS-705J.pdf"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IRN-IS-705J-003.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IRN-IS-705J-003.pdf"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IS-GPS-800J.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IS-GPS-800J.pdf"
+
+[[download]]
+source_id = "gps-sis"
+filename = "IRN-IS-800J-003.pdf"
+url = "https://www.gps.gov/sites/default/files/2025-07/IRN-IS-800J-003.pdf"
+
+[[download]]
+source_id = "galileo-open-service"
+filename = "Galileo_OS_SIS_ICD_2.2.pdf"
+url = "https://www.gsc-europa.eu/sites/default/files/sites/all/files/Galileo_OS_SIS_ICD_in_force.pdf"
+
+[[download]]
+source_id = "galileo-osnma"
+filename = "Galileo_OSNMA_SIS_ICD_1.1.pdf"
+url = "https://www.gsc-europa.eu/sites/default/files/sites/all/files/Galileo_OSNMA_SIS_ICD_v1.1.pdf"
+
+[[download]]
+source_id = "galileo-has"
+filename = "Galileo_HAS_SIS_ICD_1.0.pdf"
+url = "https://www.gsc-europa.eu/sites/default/files/sites/all/files/Galileo_HAS_SIS_ICD_v1.0.pdf"
+
+[[download]]
+source_id = "navic-open-service"
+filename = "NavIC_L5_S_SPS_ICD_1.1.pdf"
+url = "https://www.isro.gov.in/media_isro/pdf/SateliteNavigation/irnss_sps_icd_version1.1-2017.pdf"
+
+[[download]]
+source_id = "navic-open-service"
+filename = "NavIC_L1_SPS_ICD_1.0.pdf"
+url = "https://www.isro.gov.in/media_isro/pdf/SateliteNavigation/NavIC_SPS_ICD_L1_final.pdf"
+
+[[download]]
+source_id = "navic-open-service"
+filename = "NavIC_NeQuick-N_model.pdf"
+url = "https://www.isro.gov.in/media_isro/pdf/SateliteNavigation/NeQuick-N_model.pdf"
+
+[[download]]
+source_id = "igs-rinex"
+filename = "RINEX_4.02.pdf"
+url = "https://files.igs.org/pub/data/format/rinex_4.02.pdf"
+
+[[download]]
+source_id = "igs-rinex"
+filename = "RINEX_3.05.pdf"
+url = "https://files.igs.org/pub/data/format/rinex305.pdf"
+
+[[download]]
+source_id = "igs-products"
+filename = "SP3-d.pdf"
+url = "https://files.igs.org/pub/data/format/sp3d.pdf"
+
+[[download]]
+source_id = "igs-products"
+filename = "ANTEX_2.0.pdf"
+url = "https://files.igs.org/pub/resource/working_groups/antenna/ANTEX20.pdf"
+
+[[download]]
+source_id = "igs-products"
+filename = "Bias-SINEX_1.00.pdf"
+url = "https://files.igs.org/pub/data/format/sinex_bias_100.pdf"
