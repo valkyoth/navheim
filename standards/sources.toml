@@ -305,7 +305,7 @@ status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://developer.android.com/develop/sensors-and-location/sensors/gnss"
-documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts", "Android Keystore, hardware-backed/StrongBox, key invalidation, authentication, backup/reinstall and lifecycle contracts", "exact suite-approved canonical protected-envelope binding plus durable commit and atomic compare-and-advance or authority-monotonic/boot-generation writer reservation evidence; otherwise an explicit rollback-resistance non-claim"]
+documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts", "Android Keystore, hardware-backed/StrongBox, key invalidation, authentication, backup/reinstall and lifecycle contracts", "exact suite-approved binding, durable candidate staging/promotion and Pending/AuthorityCommitted/Committed authority-record recovery evidence; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.186.0"
 
 [[source]]
@@ -327,7 +327,7 @@ status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://doc.rust-lang.org/stable/"
-documents = ["Rust 1.90.0 through the pinned stable release notes", "stable core/std ownership, Drop, mem::forget, ManuallyDrop, leak, panic/unwinding, process::abort and thread API documentation", "Rust Reference destructor-elision and process-termination rules", "rustc platform support policy", "portable SIMD tracking and stabilization records used by non-claims"]
+documents = ["Rust 1.90.0 through the pinned stable release notes", "stable core/std ownership, atomics/memory ordering, Drop, mem::forget, ManuallyDrop, leak, panic/unwinding, process::abort and thread API documentation", "Rust Reference destructor-elision and process-termination rules", "rustc platform support policy", "portable SIMD tracking and stabilization records used by non-claims"]
 first_release = "v0.1.0"
 
 [[source]]
@@ -338,7 +338,7 @@ status = "hardware-profile-freeze-required"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://files.ettus.com/manual/"
-documents = ["official rtl-sdr and supported tuner documentation", "libbladeRF API and firmware/FPGA compatibility records", "UHD API and USRP hardware manuals", "LimeSuite API and LimeSDR hardware manuals", "exact success, pre-submission no-mutation, command, error, acknowledgement, rollback, reprobe and coherent-group evidence behavior for each admitted stack", "exact FPGA/toolchain material for admitted bitstreams"]
+documents = ["official rtl-sdr and supported tuner documentation", "libbladeRF API and firmware/FPGA compatibility records", "UHD API and USRP hardware manuals", "LimeSuite API and LimeSDR hardware manuals", "exact exclusive-control, multi-controller, autonomous-change/reset, success, command, error, acknowledgement, rollback, reprobe and coherent-group behavior for each admitted stack", "exact FPGA/toolchain material for admitted bitstreams"]
 first_release = "v0.171.0"
 
 [[source]]
@@ -349,7 +349,7 @@ status = "profile-freeze-required"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://docs.kernel.org/"
-documents = ["Linux UAPI and kernel documentation for admitted interfaces", "FreeBSD manuals and source ABI records", "OpenBSD manuals and source ABI records", "NetBSD manuals and source ABI records", "official documentation for every admitted external AEAD/key-custody authority and filesystem/persistence profile", "exact suite-approved canonical protected-envelope binding plus durable commit and atomic compare-and-advance or authority-monotonic/boot-generation writer reservation evidence, including concurrency, old-file restoration and crash recovery; otherwise an explicit rollback-resistance non-claim"]
+documents = ["Linux UAPI and kernel documentation for admitted interfaces", "FreeBSD manuals and source ABI records", "OpenBSD manuals and source ABI records", "NetBSD manuals and source ABI records", "official documentation for every admitted external AEAD/key-custody authority and filesystem/persistence profile", "exact suite-approved binding, durable candidate staging/promotion and Pending/AuthorityCommitted/Committed authority-record recovery evidence including fsync/rename/directory, concurrency and old-file restoration; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.171.0"
 
 [[source]]
@@ -360,7 +360,7 @@ status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/winusb"
-documents = ["current WinUSB API and driver contract", "Windows communications APIs", "Winsock API", "Windows location provider APIs", "high-resolution timer and cancellation contracts", "exact admitted Windows cryptography, protected key/storage, scope, rotation, backup/restore and durable-commit contracts", "exact suite-approved canonical protected-envelope binding plus atomic compare-and-advance or authority-monotonic/boot-generation writer reservation evidence; otherwise an explicit rollback-resistance non-claim"]
+documents = ["current WinUSB API and driver contract", "Windows communications APIs", "Winsock API", "Windows location provider APIs", "high-resolution timer and cancellation contracts", "exact admitted Windows cryptography, protected key/storage, scope, rotation, backup/restore and durable-commit contracts", "exact suite-approved binding, durable candidate staging/promotion and Pending/AuthorityCommitted/Committed authority-record recovery evidence; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.178.0"
 
 [[source]]
@@ -371,7 +371,7 @@ status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://developer.apple.com/documentation/"
-documents = ["current IOKit USB and serial contracts", "macOS networking contracts", "Core Location macOS/iOS contracts", "permission, background, timestamp, accuracy, mock and lifecycle documentation", "exact admitted Keychain, platform-cryptography, access-control, entitlement, backup/migration and protected-persistence contracts", "exact suite-approved canonical protected-envelope binding plus durable commit and atomic compare-and-advance or authority-monotonic/boot-generation writer reservation evidence; otherwise an explicit rollback-resistance non-claim"]
+documents = ["current IOKit USB and serial contracts", "macOS networking contracts", "Core Location macOS/iOS contracts", "permission, background, timestamp, accuracy, mock and lifecycle documentation", "exact admitted Keychain, platform-cryptography, access-control, entitlement, backup/migration and protected-persistence contracts", "exact suite-approved binding, durable candidate staging/promotion and Pending/AuthorityCommitted/Committed authority-record recovery evidence; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.179.0"
 
 [[source]]

@@ -1081,26 +1081,47 @@ protected envelope, including ciphertext, tag and authenticated metadata.
 Domain separation binds the Navheim snapshot-transaction purpose, authority
 identity, counter namespace, suite/version, counter value and operation.
 Alternative/noncanonical encodings are rejected, and the type provides no
-conversion from generic digest types.
+conversion from generic digest types. The binding is stored in the authority
+transaction record or a separate sidecar and is explicitly excluded from its
+own hash/MAC input, avoiding self-reference. It is computed only after the
+protected envelope is complete and immutable.
 
-Nonce allocation and rollback-counter persistence are crash-safe. A
-`RollbackResistant` seal uses either an atomic compare-and-advance operation
-bound to that `SnapshotTransactionBinding`, or an exclusive expiring writer
-reservation that covers binding creation, sealing, durable snapshot commit and
-monotonic advancement. Reservation expiry uses authority-owned monotonic state
-and boot generation, never UTC, wall time or caller time. Reboot either resumes
-from durable authority recovery evidence or invalidates the reservation and
-reports state unknown. The authority returns rollback-resistant evidence only
-after the admitted transaction has committed or recovered; separate compare/
-write/advance calls cannot qualify. Counter exhaustion, reservation expiry,
-concurrent writers, cloned/restored authority state and every crash boundary
-fail closed. Key rotation has an explicit migration operation that never
-silently weakens the suite, namespace or generation. Outer lengths and
-resource limits are validated before decryption into bounded caller-provided
-plaintext/ciphertext buffers. Authentication failure is uniform and exposes no
-parsing/decryption oracle. The common bridge defines these semantics;
-Linux/BSD, Windows, Apple and Android authorities are admitted and tested in
-separate platform milestones.
+Nonce allocation and rollback-counter persistence are crash-safe. The
+normative cross-authority transaction is:
+
+1. reserve authority identity/namespace, next non-wrapping counter, nonce,
+   transaction ID and authority-monotonic expiry/boot generation in a durable
+   `Pending` record;
+2. seal the complete canonical protected envelope and compute its
+   `SnapshotTransactionBinding`;
+3. durably stage the candidate snapshot under that transaction ID;
+4. atomically compare-and-advance the authority record from `Pending` to
+   `AuthorityCommitted`, binding the counter and candidate;
+5. durably promote exactly that staged candidate as active;
+6. finalize the authority record as `Committed` and only then return
+   `RollbackResistant` evidence.
+
+The pending/authority-committed record defines recovery at every crash point.
+If authority advancement succeeds but promotion fails, the outcome is a
+recoverable pending transaction or fail-closed availability loss—never
+success or permission to restore an older snapshot. Namespace locking/CAS
+ensures recovery and a new writer cannot both commit. Cancellation is allowed
+only before authority commit; afterward recovery, reboot, key rotation and
+counter migration must carry or resolve the transaction before admitting
+another writer. Reservation expiry uses authority-owned monotonic state and
+boot generation, never UTC, wall time or caller time. Reboot either resumes
+from durable authority recovery evidence or leaves freshness unavailable; it
+cannot orphan an apparently current snapshot. Counter exhaustion, reservation
+expiry, concurrent writers, cloned/restored authority state and every crash
+boundary fail closed.
+
+Key rotation has an explicit migration operation that never silently weakens
+the suite, namespace or generation. Outer lengths and resource limits are
+validated before decryption into bounded caller-provided plaintext/ciphertext
+buffers. Authentication failure is uniform and exposes no parsing/decryption
+oracle. The common bridge defines these semantics; Linux/BSD, Windows, Apple
+and Android authorities are admitted and tested in separate platform
+milestones.
 Each authority returns separate evidence for cryptographic verification,
 durable commit completion, trusted monotonic comparison/update, crash recovery
 and key/counter migration. A crash-consistent atomic file replacement plus
@@ -1453,12 +1474,25 @@ unverifiable fields.
 `RejectedNoMutation` is legal only when the adapter positively proves that no
 externally visible command or mutation occurred, such as local validation
 failure before submission; it is the only failure that preserves the previous
-generation. Its private-construction `NoMutationEvidence` binds the plan,
-device identity, prior generation and exact pre-submission or profile-admitted
-proof point. `AppliedTransitionEvidence` binds the new configuration and every
-required per-device/channel command, acknowledgement and read-back. It proves
-only the completed adapter/device transaction; it never implies independently
-observed sample timing, rate, calibration or coherence.
+generation. The checked apply framework privately issues a linear
+`PreSubmissionToken` bound to plan, device identity and prior generation.
+Acquiring the exclusive Navheim command-transport capability consumes that
+token; after acquisition or any submission, constructing
+`RejectedNoMutation` is structurally impossible. Third-party adapters cannot
+mint or implement proof tokens and receive transport only through this
+framework state machine.
+
+`NoMutationEvidence` proves narrowly that no command crossed that exclusive
+Navheim transport boundary. Preserving the prior generation additionally
+requires a still-valid exclusive device-control lease and a frozen profile
+that excludes autonomous relevant reconfiguration. Another controller,
+control-lease loss, reset, hotplug/identity change or possible autonomous
+reconfiguration yields `StateUnknown` even when Navheim issued no command.
+The proof never claims arbitrary physical hardware remained unchanged.
+`AppliedTransitionEvidence` binds the new configuration and every required
+per-device/channel command, acknowledgement and read-back. It proves only the
+completed adapter/device transaction; it never implies independently observed
+sample timing, rate, calibration or coherence.
 
 A timeout, disconnect, lost acknowledgement, transport failure after
 submission or uncertain rollback is `StateUnknown`. `PartiallyApplied` and
@@ -1643,6 +1677,25 @@ completion and claimed return. An `ExecutionHandle<'executor, ...>` is only a
 lifetime-bound observation/claim token for its executor entry; executor
 ownership transfer is not admitted in the 1.0 profile.
 
+Every entry has a linearizable atomic retirement state:
+
+```text
+Registered -> Running -> TerminalUnclaimed
+                            |       |        |
+                         Claimed Discarded ShutdownReclaimed
+```
+
+`JobId` includes executor namespace, slot and a non-wrapping, non-reused
+generation so a reclaimed slot cannot create ABA identity. Worker completion
+publishes all terminal result/lease writes before atomically transitioning
+`Running -> TerminalUnclaimed`. `status(&self)` borrows a status snapshot and
+never claims anything. `try_terminal_result(self)` consumes the handle and
+either atomically claims `TerminalUnclaimed -> Claimed` or returns the still-
+owned nonterminal handle. `join(self)` and `cancel_and_join(self)` consume,
+wait and perform the same claim transition. Shutdown may directly retire a
+never-dispatched `Registered -> ShutdownReclaimed` entry; a running job must
+first cancel/join and publish `TerminalUnclaimed` before shutdown reclaims it.
+
 Two execution modes make those lifetime rules representable:
 
 - Borrowed scoped execution uses an `ExecutionScope<'scope>` and
@@ -1655,11 +1708,13 @@ Two execution modes make those lifetime rules representable:
   scope and be polled through explicit status/terminal-result APIs. Consuming
   `join` and `cancel_and_join` are the only normal paths that wait for a
   running job and recover buffers; recovery occurs only after a completed,
-  cancelled or failed-and-returned terminal state. Dropping a terminal-returned
-  handle releases its already returned resources and may discard its result.
-  Dropping a nonterminal handle is a fail-stop contract violation: `Drop`
-  neither joins, detaches nor panics, but directly invokes
-  `std::process::abort()`, including during panic unwinding. A
+  cancelled or failed-and-returned terminal state. Dropping a handle attempts
+  only `TerminalUnclaimed -> Discarded`; success releases returned resources
+  and discards the result. If the entry is `Registered` or `Running`, `Drop`
+  directly invokes `std::process::abort()` without joining, detaching,
+  panicking or unwinding. Completion racing with drop has one atomic
+  linearization winner: completion must publish `TerminalUnclaimed` before
+  drop's transition or drop observes nonterminal state and aborts. A
   permanently unresponsive job therefore cannot deadlock destruction or
   silently outlive ownership. Navheim 1.0 admits no quarantine/reaper mode; any
   future such profile must preplan bounded slots, retention and shutdown in
@@ -1671,8 +1726,9 @@ result but never unregisters or detaches the job. The entry, buffers and slot
 remain executor/worker-owned; even a completed orphan is not reused by new
 admission before explicit executor shutdown. Consuming `Executor::shutdown`
 cooperatively cancels and joins every registered entry, including lost-handle
-and completed-orphan entries, and returns only after all ownership is
-reconciled; permanently unresponsive work traps that explicit shutdown.
+and completed-orphan entries; it owns remaining transitions to
+`ShutdownReclaimed` and returns only after all ownership is reconciled.
+Permanently unresponsive work traps that explicit shutdown.
 Dropping an executor with any registered entry is fail-stop. Forgetting the
 executor itself intentionally leaks its complete registry and all capacity
 until process termination, but cannot make storage reusable or violate memory
@@ -1681,8 +1737,9 @@ soundness.
 The Tier 2 `std` profile's fatal path is concretely
 `std::process::abort()`: it is non-returning, performs no allocation or
 formatting, never panics/unwinds, and runs no recovery destructors. Fatal
-reason/status is written to preallocated executor state before entering that
-path. Memory soundness and ownership accounting never depend on
+reason/status may be written to preallocated executor memory before entering
+that path, but this is best-effort volatile evidence—not a durable or emitted
+diagnostic claim. Memory soundness and ownership accounting never depend on
 `ExecutionHandle`, executor or worker destructors executing.
 
 The buffer-lease state machine is
@@ -2295,17 +2352,22 @@ Document threats from:
   misrepresented as guaranteed fresh;
 - nonce reuse, protection-suite downgrade, unauthenticated envelope metadata,
   corruption/artifact/transaction-digest confusion, noncanonical protected
-  encodings, caller-time reservation expiry, concurrent rollback/encryption
-  transaction races and platform-keystore lifecycle failure;
+  encodings, caller-time reservation expiry, partially committed cross-
+  authority promotion, competing recovery/writer state and platform-keystore
+  lifecycle failure;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
   receiver-asserted false state, unintended persistent/destructive transition;
 - direct/unplanned/partially applied SDR mutation, missing success/no-mutation
-  proof, lost apply causes/evidence, stale configuration-generation samples,
-  false rollback/coherence or device-asserted state;
+  proof, control-flow proof overstated as physical stability, lost control
+  lease/other-controller/autonomous changes, lost apply causes/evidence, stale
+  configuration-generation samples, false rollback/coherence or device-
+  asserted state;
 - aliased/detached/unresponsive parallel work, forgotten/leaked handles or
-  executors, detached registry entries, premature capacity/buffer reuse,
-  trace overflow, nondeterministic ordering or uncaptured runtime outcomes;
+  executors, completion/drop retirement races, stale/ABA job IDs, detached
+  registry entries, premature capacity/buffer reuse, overstated pre-abort
+  diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
+  outcomes;
 - correction mixing across stations/frames;
 - resource exhaustion and decompression bombs;
 - parser differential behavior;
@@ -2324,13 +2386,14 @@ Document threats from:
 - atomic versioned snapshot restore with separate authenticity/confidentiality,
   independent freshness evidence, minimum sensitive profiles, authenticated
   metadata, nonce/key/rotation/counter lifecycle, consent/retention, external
-  protection plus atomic or exclusively reserved trusted-monotonic
-  transactions over a domain-separated canonical protected-snapshot binding
-  where admitted, authority-clock reservation expiry, narrow counter-checked
+  protection plus staged/pending/authority-commit/promotion/finalization
+  recovery over a domain-separated canonical protected-snapshot binding where
+  admitted, authority-clock reservation expiry, narrow counter-checked
   semantics, honest freshness unavailability and restored-assessment
   invalidation;
 - prepared/reviewable SDR configuration plans with non-reusing generations,
-  proof-carrying success/no-mutation and cause-carrying partial/unknown
+  framework-issued pre-submission tokens, exclusive control leases,
+  proof-carrying success/no-command outcomes and cause-carrying partial/unknown
   outcomes, coherent group transactions, initialized-count reads, transition
   invalidation and observed consistency;
 - typed allowlisted receiver-control plans with configuration generations,
@@ -2338,9 +2401,9 @@ Document threats from:
   independently evidenced configuration assessment;
 - role-aware source withdrawal/composition/reselection, explicit solver-state
   handover and deterministic scoped-borrowed or owned-handle cooperative
-  parallel work with authoritative executor registration, leak-safe accounting,
-  explicit shutdown/fail-stop rules, bounded traces and unresponsive lease
-  ownership;
+  parallel work with authoritative executor registration, atomic generation-
+  safe retirement, leak-safe accounting, explicit claim/shutdown/fail-stop
+  rules, bounded traces and unresponsive lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2818,13 +2881,13 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with authoritative job registration, leak-safe capacity ownership, explicit shutdown and fail-stop destruction.
+- **0.48.3** — `navheim-executor` scoped/owned modes with generation-safe atomic retirement, leak-safe registry ownership, explicit claims/shutdown and fail-stop destruction.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
 - **0.50.2** — independent signal/message vector admission gate required before each constellation implementation.
-- **0.50.3** — side-effect-free front-end preparation, proof/cause/evidence-carrying apply outcomes, coherent group transactions, generations and safe reads.
+- **0.50.3** — side-effect-free front-end preparation, linear pre-submission/transport state, control-lease-bounded proofs, coherent transactions and safe reads.
 
 ### Phase D — GPS end-to-end
 
@@ -3083,7 +3146,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — common snapshot-protection envelope, domain-separated canonical transaction binding, authority-clock reservations and cryptographic lifecycle.
+- **0.189.2** — canonical protected-snapshot binding plus staged cross-authority commit, promotion, finalization and crash recovery.
 - **0.189.3** — Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
 - **0.189.4** — Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
 - **0.189.5** — Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
@@ -3283,13 +3346,16 @@ Navheim 1.0.0 is released only when all of the following are true:
     supervision preserve separate scoped-borrowed and owned-handle modes,
     `#[must_use]` handles, explicit join/cancel-and-join/terminal-result APIs,
     authoritative pre-dispatch registry ownership independent of destructors,
-    non-reusable forgotten-handle entries, shutdown coverage of every orphan,
-    concrete allocation-free/non-unwinding `std::process::abort()` on invalid
-    handle/executor destruction, explicit lease states, deterministic logical
-    ordering, cooperative cancellation, unresponsive ownership, lossless
-    bounded runtime traces, scalar verification, source roles, valid cross-
-    role composition, solver-state-safe same-role handover, withdrawal and
-    caller-authorized no-downgrade failover.
+    generation-safe IDs and atomic registered/running/terminal-unclaimed/
+    claimed/discarded/shutdown-reclaimed transitions, non-reusable forgotten-
+    handle entries, exact observing versus consuming result APIs, shutdown
+    coverage of every orphan, concrete allocation-free/non-unwinding
+    `std::process::abort()` on invalid handle/executor destruction, best-effort
+    non-durable pre-abort diagnostics, explicit lease states, deterministic
+    logical ordering, cooperative cancellation, unresponsive ownership,
+    lossless bounded runtime traces, scalar verification, source roles, valid
+    cross-role composition, solver-state-safe same-role handover, withdrawal
+    and caller-authorized no-downgrade failover.
 52. Receiver control is separate from read-only parsing and uses only planned
     allowlisted typed commands with firmware capabilities, ACK/NAK,
     idempotency, configuration generations, transition queue draining,
@@ -3305,14 +3371,16 @@ Navheim 1.0.0 is released only when all of the following are true:
     guaranteed freshness,
     rollback-resistant sealing uses a distinct suite-approved, domain-
     separated `SnapshotTransactionBinding` over the exact canonical protected
-    envelope—not corruption/artifact digests—with atomic compare-and-advance or
-    an exclusive authority-clock/boot-generation writer reservation across
-    seal/durable commit/advancement, all interpretive metadata is
-    authenticated, nonce/key/rotation/counter state is crash-safe, platform
-    adapters report unavailable freshness honestly, profiles are minimal/
-    consent-bound, restored assessments are reverified/invalidated, correctly
-    ordered state profiles pass uninterrupted equivalence, and every other
-    algorithm reports restore unsupported.
+    envelope—not corruption/artifact digests and excluding its sidecar self—
+    with durable pending reservation, complete-envelope binding, staged
+    candidate, authority commit, durable promotion and finalization in that
+    order; recovery is exclusive against new writers at every crash point,
+    post-authority promotion failure is pending/unavailable rather than
+    success, all interpretive metadata is authenticated, nonce/key/rotation/
+    counter state is crash-safe, platform adapters report unavailable freshness
+    honestly, profiles are minimal/consent-bound, restored assessments are
+    reverified/invalidated, correctly ordered state profiles pass uninterrupted
+    equivalence, and every other algorithm reports restore unsupported.
 54. `navheim-dsp` depends on `navheim-math`; `navheim-geo` depends on
     representation-only `navheim-core` plus `navheim-math`; neither duplicates
     platform/private math, `navheim-geo` owns ENU/NED/body transformations,
@@ -3322,13 +3390,16 @@ Navheim 1.0.0 is released only when all of the following are true:
     applied from an immutable plan; non-reusing front-end generations bind
     hardware, clocks, RF/sample/calibration state, `Applied` structurally
     carries bounded adapter/device transaction evidence,
-    `RejectedNoMutation` carries private-construction positive proof, every
-    other failure preserves its cause and bounded evidence, uncertainty/
-    evidence overflow becomes state-unknown, partial/unknown application
-    retires state and blocks reads, coherent group transactions expose every
-    device result without implying independent consistency and revalidate
-    calibration, transitions invalidate stale samples/mappings/DSP, and reads
-    expose only initialized samples with gaps, overruns and progress state.
+    `RejectedNoMutation` requires an unconsumed framework-only pre-submission
+    token plus exclusive control/no-autonomous-change evidence and proves only
+    no Navheim command crossed the boundary, transport acquisition consumes
+    that possibility, every other failure preserves its cause/evidence,
+    uncertainty/evidence overflow becomes state-unknown, partial/unknown
+    application retires state and blocks reads, coherent group transactions
+    expose every device result without implying independent consistency and
+    revalidate calibration, transitions invalidate stale samples/mappings/DSP,
+    and reads expose only initialized samples with gaps, overruns and progress
+    state.
 
 ---
 

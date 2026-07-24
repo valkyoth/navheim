@@ -94,6 +94,12 @@ Navheim currently provides repository and crate foundations only.
   success/no-mutation proof or failure cause/evidence. Protected-snapshot
   transactions use their own suite-approved, domain-separated canonical
   binding and authority-monotonic/boot-generation reservation expiry.
+- Thirteenth gap review completes those state machines without new milestones:
+  executor completion/drop/claim/shutdown uses generation-safe atomic
+  retirement, SDR no-command proof requires an unconsumed framework token plus
+  exclusive control/no-autonomous-change evidence to preserve a generation,
+  and rollback-resistant snapshots follow a durable pending, authority commit,
+  candidate promotion and finalization sequence with exclusive crash recovery.
 
 ## Not Implemented
 

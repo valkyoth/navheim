@@ -142,6 +142,19 @@ canonical protected envelope; corruption/artifact digests cannot substitute,
 and reservation expiry/reboot recovery uses authority monotonic and boot-
 generation evidence rather than caller time.
 
+The thirteenth coverage pass closes the remaining races and evidence limits.
+Executor registry entries move atomically through registered, running,
+terminal-unclaimed and exactly one claimed/discarded/shutdown-reclaimed state;
+generation-bearing job IDs prevent ABA, and observing status never consumes a
+result. An SDR no-command proof comes only from an unconsumed framework-issued
+pre-submission token; preserving prior configuration also requires exclusive
+device control and a frozen no-autonomous-change profile. Snapshot protection
+now has a normative durable sequence from pending reservation through complete
+envelope binding, candidate staging, authority commit, candidate promotion and
+finalization. Every crash point has exclusive recovery, and an authority-
+committed but unpromoted candidate is pending or unavailable—never a successful
+rollback-resistant snapshot.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

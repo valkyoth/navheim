@@ -79,6 +79,11 @@ All notable changes to `navheim` are documented here.
   success and no-mutation results now carry structural evidence; and snapshot
   freshness transactions use a distinct suite-approved binding over the exact
   canonical protected envelope with authority-owned reservation time.
+- Integrated the thirteenth review into the existing owners: executor job
+  retirement is atomic and generation-safe across completion, drop, claim and
+  shutdown; SDR no-command proof is linear and bounded by exclusive physical-
+  control evidence; and protected snapshots have a normative durable staging,
+  authority-commit, promotion, finalization and crash-recovery sequence.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.
