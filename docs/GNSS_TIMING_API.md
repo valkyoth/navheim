@@ -215,6 +215,27 @@ Floating and lower-resolution adapters state rounding direction and report
 lost precision. UTC and POSIX mappings additionally require an identified,
 valid leap/UTC model and cannot be implemented as numeric casts.
 
+### UTC civil/calendar representation
+
+`UtcCivilLabel` is a checked Gregorian label that can represent second `60`
+under a positive-leap model and can identify a hypothetical negative-leap
+deletion without constructing the deleted label as a valid instant. Civil
+labels are not directly ordered or subtracted; they resolve through a named
+`UtcModel` to `TaiInstant`. The model records revision, announcement,
+activation, replacement, invalidation, expiry and provenance.
+
+POSIX conversion returns explicit ambiguity/loss evidence and never aliases
+POSIX seconds with UTC labels. Leap smear is not a Navheim time scale or an
+implicit conversion. Gregorian date, ordinal day, Julian Date and Modified
+Julian Date adapters identify their epoch, day boundary, scale context,
+precision and rounding.
+
+TT and UT1 are typed precision-geodesy arguments, not ordinary
+`GnssTimeScale` values. TT is derived explicitly from atomic time. UT1 requires
+an identified EOP product/series, revision, interpolation, validity,
+uncertainty and provenance. Missing or out-of-range EOP evidence yields an
+unavailable result.
+
 ### Capture-domain mapping
 
 Opaque capture values become comparable only through an explicit mapping:
@@ -449,6 +470,11 @@ message correctness, and solution integrity into one trusted boolean.
 Before the timing API is stable, tests must cover:
 
 - every supported scale, epoch, rollover, and leap boundary;
+- UTC second 60, synthetic negative-leap deletion, civil-to-TAI ordering,
+  UTC-model replacement/invalidation, POSIX ambiguity/loss and leap-smear
+  non-claims;
+- Gregorian/ordinal/Julian/MJD boundaries and TT/UT1 derivation across EOP
+  interpolation, gaps, expiry and revision changes;
 - truncated-week resolution with absent, stale, conflicting, and malicious
   context;
 - positive and negative cable/receiver delays and uncertainty accumulation;

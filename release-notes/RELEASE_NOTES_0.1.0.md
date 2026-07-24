@@ -68,6 +68,13 @@ navigation/correction/product selection, and early acquisition hints.
 Artifact-ID lifecycle stays in its existing owning milestone, while late
 SUPL/LPP/mobile/receiver assistance translates into the early hint contract.
 
+The sixth coverage pass corrects the linalg and signal-registry dependency
+directions, then adds 11 bounded releases for UTC civil and precision-geodesy
+time, runtime acquisition-decision receipts, deterministic multicore and
+source supervision, capability-gated receiver control, and an opt-in snapshot
+envelope with separate acquisition, tracking/navigation-store, PPP and fusion
+restore profiles.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

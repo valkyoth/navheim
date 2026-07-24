@@ -34,7 +34,7 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 401 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 412 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
@@ -50,6 +50,11 @@ Navheim currently provides repository and crate foundations only.
   bounded linear algebra, conservative statistical kernels, canonical signal
   definitions, artifact-ID lifecycle, deterministic model selection, and
   early acquisition hints now have explicit foundation ownership.
+- Sixth gap review corrected the linalg and signal-registry dependency graph
+  and added explicit civil/precision time, runtime search receipts,
+  deterministic multicore/source supervision, safe receiver control and
+  staged state snapshot/restore ownership without weakening immutable planning
+  or Tier 0 thread-free behavior.
 
 ## Not Implemented
 

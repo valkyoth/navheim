@@ -35,11 +35,15 @@ inside aggregate milestones. The following releases make each one auditable:
 | Machine-readable crate/capability dependency DAG | v0.1.4 |
 | Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
 | Bounded linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
+| UTC civil/calendar and TT/UT1/EOP precision-time arguments | v0.5.5 and v0.7.3 |
 | Safe decoder, algorithm and stage extensions | v0.12.2-v0.12.3 |
-| Canonical constellation/format signal definitions | v0.12.4 |
+| Core signal contracts, constellation physical fragments and format-owned wire mappings | v0.12.4 |
 | Artifact-ID lifecycle and deterministic model selection | v0.13.1 and v0.14.2 |
+| Bounded snapshot envelope and acquisition/tracking/store/PPP/fusion profiles | v0.18.1, v0.42.3, v0.54.2, v0.144.3 and v0.168.3 |
 | Honest resource-evidence classification | v0.17.1 and v0.50.1 |
-| Early acquisition hints and late assistance translation | v0.42.1 and v0.185.1 |
+| Runtime source supervision and authorized failover | v0.20.3 |
+| Early acquisition hints, decision receipts and late assistance translation | v0.42.1-v0.42.2 and v0.185.1 |
+| Deterministic Tier 2 multicore execution | v0.48.3 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |
 | Conditional public NavIC messaging | v0.114.2 |
@@ -50,6 +54,7 @@ inside aggregate milestones. The following releases make each one auditable:
 | Fixed-rate fusion and calibrated native AoA | v0.168.2 and v0.169.5 |
 | FPGA/GPU/external-DSP stage and GitHub-only host/artifact boundary | v0.175.1 |
 | Generic receiver sources and conditional vendor families | v0.185.2-v0.185.3 |
+| Capability-gated active receiver control | v0.185.4 |
 | GitHub-only tool foundation, CLI, daemon, caster, station, survey, inspector, viewer and lab | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark harnesses | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |
 | Packages, service units, containers and deployments | v0.219.1 |

@@ -213,8 +213,8 @@ status = "verify-before-implementation"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://iers-conventions.obspm.fr/"
-documents = ["IERS Conventions 2010 and published updates", "IERS bulletins and EOP formats", "IAU SOFA standards/model notes", "WGS 84 current realization/specification", "EPSG registry methods used by frozen profiles"]
-first_release = "v0.8.0"
+documents = ["IERS Conventions 2010 and published updates", "IERS bulletins and EOP formats", "IAU SOFA standards/model notes for UTC calendars, Julian/MJD, TT and UT1", "WGS 84 current realization/specification", "EPSG registry methods used by frozen profiles"]
+first_release = "v0.5.5"
 
 [[source]]
 id = "oma-supl"

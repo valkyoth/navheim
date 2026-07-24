@@ -35,6 +35,11 @@ All notable changes to `navheim` are documented here.
   first-party bounded linear algebra, conservative statistics, canonical
   signal definitions, deterministic model selection, and early acquisition
   hints now precede the solvers and adapters that consume them.
+- Integrated the sixth review as 11 bounded stops: corrected
+  `navheim-linalg -> navheim-math` and signal/format dependency ownership,
+  added civil UTC and TT/UT1/EOP contracts, separated immutable maximum plans
+  from runtime search decisions, and assigned deterministic multicore, source
+  failover, receiver control and staged snapshot/restore profiles.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

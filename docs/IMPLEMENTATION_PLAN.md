@@ -96,8 +96,9 @@ undeclared edges and silent privilege or tier escalation.
 - `navheim-math`: dependency-free `no_std` deterministic elementary floating
   math, admitted conservative statistical kernels and narrowly scoped backend
   capabilities.
-- `navheim-linalg`: dependency-free `no_std` bounded fixed-capacity and
-  caller-scratch linear algebra with narrow solver-facing APIs.
+- `navheim-linalg`: zero-third-party-dependency `no_std` bounded
+  fixed-capacity and caller-scratch linear algebra depending only on
+  `navheim-math`, with narrow solver-facing APIs.
 - `navheim-dsp`: complex/fixed-point values, filters, resampling, FFT,
   acquisition, tracking, synchronization, and estimators.
 - `navheim-sdr`: front-end traits, sample metadata, coherent arrays, band
@@ -158,7 +159,9 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
   with separately bounded compact/Hatanaka integration.
 - `navheim-products`: precise products plus Earth-orientation/reference-frame
   inputs.
-- `navheim-receiver`
+- `navheim-receiver`: read-only adapters by default; admitted control profiles
+  use side-effect-free allowlisted command plans, ACK/NAK correlation,
+  transition recovery and read-back verification.
 - `navheim-assist`: canonical trust/freshness/session model before SUPL, LPP,
   Android or receiver translations.
 - `navheim-io`
@@ -200,22 +203,26 @@ bypass canonical validation, evidence, privacy, or policy.
 Implementation proceeds in this dependency order:
 
 1. bounded collections, errors, and checked arithmetic;
-2. physical units, exact integer time, deterministic `no_std` math, bounded
-   linear algebra and admitted conservative statistical kernels;
+2. physical units, exact atomic/civil/precision-geodesy time, deterministic
+   `no_std` math, bounded linear algebra and admitted conservative statistical
+   kernels;
 3. coordinates and reference frames;
 4. bit, checksum, parity, and FEC primitives;
 5. extensible identifiers, canonical signal definitions and registries;
-6. observations, ephemerides, corrections, provenance, and events;
-7. capabilities, resource plans, and deterministic source/sink polling;
+6. observations, ephemerides, corrections, provenance, events and the opt-in
+   snapshot envelope;
+7. capabilities, resource plans, deterministic source/sink polling and source
+   supervision;
 8. formats and deterministic replay;
-9. scalar native DSP, dependency-free acquisition hints and timestamp
-   correctness;
+9. scalar native DSP, dependency-free acquisition hints, deterministic Tier 2
+   execution and timestamp correctness;
 10. independent signal/message vector admission, then GPS L1 C/A end-to-end
     as the first observable-to-fix path;
 11. remaining GPS and constellations;
 12. multi-GNSS solution quality, RTK, PPP, integrity, and authentication;
 13. complete the stable GNSS timing observation/event API, then fusion,
-    navigation, hardware, OS, canonical assistance, and NMEA 2000;
+    navigation, state-specific restore profiles, hardware, receiver control,
+    OS, canonical assistance, and NMEA 2000;
 14. optional calibrated science outputs and accelerator integrations only
     after their canonical observations, resource evidence and scalar paths;
 15. simulation, fuzzing, audits, conformance, standards freeze, and release
@@ -262,18 +269,33 @@ Observation stages are separately typed: `TrackingEstimate`,
 `CorrectedObservation`, `ObservationEpoch` and `SolverInputEpoch`. Correction
 ledgers and navigation-store transactions preserve issue, provider, station,
 frame, session, generation, validity, uncertainty and provenance.
-Constellation crates provide the canonical versioned signal definitions;
-format crates translate through them instead of duplicating frequency,
-wavelength, rate, component, modulation, native-time or identifier tables.
+`navheim-core` owns canonical signal-definition/registry contracts;
+constellation crates contribute physical fragments; RINEX/RTCM crates own
+version-specific wire-ID mappings; and the facade composes selected fragments.
+No constellation crate knows a later format standard, and no format crate
+duplicates physical frequency, wavelength, rate, component, modulation or
+native-time tables.
 Navigation models, corrections and products are selected through explicit
 epoch/applicability queries returning considered-candidate evidence and
 `Selected`, `Ambiguous`, `Unavailable` or `Rejected`, never ambient latest-wins.
 
+UTC civil labels preserve positive leap second `60` and hypothetical
+negative-leap deletion semantics. Ordering/arithmetic resolves through an
+identified UTC model to TAI. POSIX mappings are explicit ambiguous/lossy
+adapters; leap smear is a non-claim. Gregorian/ordinal/Julian/MJD conversions
+name their scale and precision. TT and EOP-derived UT1 are typed
+precision-geodesy arguments with product/revision/validity/uncertainty, not
+ordinary GNSS scales.
+
 ## Resource, Progress, and Numerical Contracts
 
 Tier 0 uses a small caller-driven vocabulary: bounded `Push`, `Poll`,
-`Transform`, `Plan` and `Reset` contracts, with snapshot/restore only when the
-state format is explicitly versioned. Parsers report consumed length and
+`Transform`, `Plan` and `Reset` contracts. Snapshot/restore is opt-in only
+through a versioned bounded envelope carrying algorithm/schema, source/
+generation, validity, provenance, model/calibration/product identities,
+capabilities and byte/work limits. Restore treats bytes as untrusted, checks
+compatibility and external anti-rollback authority, remaps provenance,
+validates invariants and commits atomically. Parsers report consumed length and
 either make progress or request more input. Large events use borrowed views or
 caller-provided bounded slots.
 
@@ -287,6 +309,16 @@ Invalidation and security events have sequence, source generation, target
 artifact, effective interval and mandatory-withdrawal semantics. Queue
 pressure cannot silently discard them: the source stops, explicitly coalesces,
 or requires resynchronization.
+
+Tier 0 remains thread-free. The optional Tier 2 executor takes a caller-chosen
+worker count and bounded queues, then deterministically partitions and merges
+work while preserving cancellation, deadline, backpressure, event and
+invalidation order. It must replay equivalently to scalar execution.
+
+The facade source supervisor operates only on explicitly opened sources.
+Loss/change emits gap and withdrawal before bounded caller-authorized retry or
+reselection. Generations cannot mix, and failover cannot silently lower
+accuracy, integrity, authentication or trust policy.
 
 Because canonical crates forbid unsafe code, bounded collections use an honest
 safe representation such as initialized storage, `[Option<T>; N]`,
@@ -315,7 +347,9 @@ from the baseline.
 
 `navheim-linalg` admits only bounded solver-required storage, QR,
 Cholesky/LDLT, triangular solves, rank updates/downdates, square-root updates
-and rank/condition estimates. It rejects dimension/scratch overflow, aliasing,
+and rank/condition estimates. It depends only on `navheim-math` for admitted
+scalar operations and cannot reimplement them or call platform math. It
+rejects dimension/scratch overflow, aliasing,
 singular, indefinite, non-finite and badly scaled cases explicitly. Production
 least squares cannot silently use unqualified normal-equation inversion.
 
@@ -327,10 +361,13 @@ understate risk or make acceptance more permissive.
 
 An early dependency-free `SearchAid`/`AcquisitionHint` carries bounded,
 expiring approximate time/location/velocity/orbit and Doppler windows with
-source, generation, uncertainty and trust class. Plan receipts record every
-search reduction; poisoned/conflicting hints fall back to bounded blind
-search. Late assistance protocols translate into this artifact and never use
-it to resolve canonical time, position or trust.
+source, generation, uncertainty and trust class. The immutable `PlanReceipt`
+bounds maximum blind-search work, channels and scratch. A distinct immutable
+`SearchExecutionReceipt` records runtime hint decisions, accepted/rejected
+windows, actual work, fallback and deterministic order. Poisoned/conflicting
+hints fall back to bounded blind search. Late assistance protocols translate
+into this artifact and never use it to resolve canonical time, position or
+trust.
 
 Format profiles are not aggregate claims. RTCM legacy observations and
 surveying transforms/projections, each RINEX observation/navigation/
@@ -480,8 +517,9 @@ future adapter target and does not alter core types.
 
 The threat model covers malicious RF, receivers, correction/assistance
 servers, files, local devices, time rollback, correction mixing, resource
-exhaustion, differential parsing, supply-chain compromise, FFI/DMA, credential
-exposure, and location privacy.
+exhaustion, differential parsing, stale/hostile algorithm snapshots, source
+failover confusion, receiver-control partial application, parallel ordering,
+supply-chain compromise, FFI/DMA, credential exposure, and location privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -511,21 +549,25 @@ broader 1.0 roadmap:
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
 | Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
+| UTC civil/POSIX/calendar and TT/UT1/EOP precision-time contracts | v0.5.5 and v0.7.3 |
 | Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
 | External algorithm/stage capability, resource, trust and reset contract | v0.12.3 |
-| Canonical versioned signal definitions shared by constellation and format crates | v0.12.4 |
+| Core signal contracts, constellation physical fragments and format-owned mappings | v0.12.4 |
 | Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
 | Non-reusing artifact/provenance ID lifecycle and replay remapping | v0.13.1 |
 | Deterministic navigation/correction/product model selection evidence | v0.14.2 |
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
+| Opt-in bounded snapshot envelope and state-specific restore profiles | v0.18.1, v0.42.3, v0.54.2, v0.144.3 and v0.168.3 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
+| Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
-| Early bounded acquisition hints and late assistance translation | v0.42.1 and v0.185.1 |
+| Early bounded acquisition hints, runtime decision receipts and late assistance translation | v0.42.1-v0.42.2 and v0.185.1 |
+| Deterministic Tier 2 multicore executor with scalar equivalence | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
@@ -543,7 +585,7 @@ broader 1.0 roadmap:
 | Full fusion calibration/mechanization, vector tracking, reacquisition and fixed-rate output | v0.164.1-v0.168.2 |
 | Navigation crate implementation, road-routing non-claim and native AoA producer | v0.169.1-v0.169.5 |
 | FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1 |
-| Generic sources and evidence-gated receiver families | v0.185.2-v0.185.3 |
+| Generic sources, evidence-gated receiver families and safe active control | v0.185.2-v0.185.4 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark tools | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |

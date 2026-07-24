@@ -550,9 +550,10 @@ The following crates have independently useful public APIs and should be publish
 - **`navheim-math`** — zero-dependency, `no_std` deterministic elementary
   floating math, admitted statistical kernels and narrowly scoped backend
   traits used by coordinates, DSP and solvers.
-- **`navheim-linalg`** — zero-dependency, `no_std`, bounded fixed-capacity and
-  caller-scratch linear algebra used by solvers without exposing a broad
-  generic matrix ecosystem prematurely.
+- **`navheim-linalg`** — zero-third-party-dependency, `no_std`, bounded
+  fixed-capacity and caller-scratch linear algebra depending only on
+  `navheim-math`; it does not expose a broad generic matrix ecosystem
+  prematurely or reimplement scalar math.
 - **`navheim-dsp`** — zero-dependency DSP algorithms: complex types, NCOs, filters, FFTs, resamplers, channelizers, acquisition and tracking-loop primitives.
 - **`navheim-sdr`** — source/front-end abstractions, band planning, sample metadata, coherent-array support and device adapter traits.
 
@@ -796,15 +797,17 @@ bounded sets rather than fixed-width masks.
 
 ### 9.1.1 Canonical signal definitions
 
-Constellation crates provide versioned definitions keyed by extensible signal
-IDs. A definition carries nominal or channel-dependent carrier frequency,
-including GLONASS FDMA formulas and applicable channel context; derived
-wavelength; chip/code/symbol rates; data/pilot/component identity; modulation
-and secondary-code properties; native time scale; constellation; observation
-applicability; frozen RINEX/RTCM mappings; revision; and provenance. Unknown or
-partially known definitions remain representable. Format crates translate
-through this interface and do not maintain conflicting frequency/signal
-tables.
+`navheim-core` owns `SignalDefinition`, registry traits and extensible IDs.
+Constellation crates contribute versioned physical fragments keyed by those
+IDs: nominal or channel-dependent carrier frequency, including GLONASS FDMA
+formulas and channel context; derived wavelength; chip/code/symbol rates;
+data/pilot/component identity; modulation and secondary-code properties;
+native time scale; constellation; observation applicability; revision; and
+provenance. RINEX and RTCM crates separately own version-specific wire-ID
+mappings into canonical `SignalId`; constellation crates never depend on those
+format standards. The facade composes only selected fragments without forcing
+format crates to depend on every constellation. Unknown or partial definitions
+and mappings remain representable without duplicate physical tables.
 
 ### 9.2 Units
 
@@ -854,7 +857,10 @@ on the MSRV or behind a separately raised MSRV, never by enabling nightly.
 ### 9.2.2 Bounded linear algebra
 
 `navheim-linalg` owns fixed-capacity vectors, matrices and symmetric storage,
-plus caller-scratch runtime dimensions. Its admitted kernels include
+plus caller-scratch runtime dimensions. It depends inward only on
+`navheim-math` for qualified square-root/hypot and other admitted scalar
+operations; it neither privately reimplements them nor calls platform math.
+Its admitted kernels include
 Householder/Givens QR, Cholesky and LDLT with definiteness checks, triangular
 solves, symmetric rank updates/downdates, square-root covariance/information
 updates, and rank/condition estimation. Dimensions and scratch arithmetic are
@@ -929,6 +935,30 @@ overflow; they never wrap, saturate or silently lose subsecond precision.
 Sequence and generation counters likewise define exhaustion and renewal rather
 than relying on accidental integer wrap.
 
+#### 9.3.1 UTC civil and calendar representations
+
+UTC civil labels preserve Gregorian date, hour/minute and second `60` for a
+positive leap; the model also represents a hypothetical negative-leap deleted
+label without pretending it is an ordinary second. Labels are ordered and
+subtracted only after checked resolution through the identified UTC model to
+TAI. UTC models carry revision, announcement, activation, replacement,
+invalidation, expiry and provenance.
+
+POSIX conversion is an explicit potentially ambiguous/lossy adapter returning
+mapping evidence; Navheim does not identify POSIX seconds with UTC labels and
+does not implement an implicit leap smear. Gregorian calendar, ordinal day,
+Julian Date and Modified Julian Date conversions define epoch, day boundary,
+scale context, precision and rounding for RINEX and precise products.
+
+#### 9.3.2 Precision-geodesy time arguments
+
+TT and UT1 are not `GnssTimeScale` variants. TT is derived explicitly from
+atomic time under a named definition. UT1 is an EOP-derived argument carrying
+the EOP series/product, revision, interpolation method, validity, uncertainty
+and provenance. Earth rotation, tides and precise positioning accept these
+typed arguments and return unavailable outside their evidence interval rather
+than treating them as receiver/GNSS clock scales.
+
 ### 9.4 Observation model
 
 The canonical pipeline never overwrites an earlier stage:
@@ -962,6 +992,22 @@ Important absence uses a reason-bearing `Availability<T, R>` rather than a
 bare `Option`. Stage-specific types prevent corrected/raw measurements,
 unresolved clocks, unavailable fixes and pending assessments from forming
 ambiguous combinations.
+
+#### 9.4.1 Opt-in algorithm-state snapshots
+
+Live state is not serializable by default. An explicitly admitted state type
+may implement a versioned bounded snapshot profile inside a canonical envelope
+carrying type/schema, algorithm, source/generation, creation epoch, validity/
+expiry, parent artifacts, model/calibration/product identities, required
+capabilities, byte/work bounds and integrity digest. Restore treats bytes as
+untrusted input, remaps provenance, checks compatibility and external
+anti-rollback authority, validates all numerical/state invariants, and commits
+atomically or not at all.
+
+The 1.0 admitted profiles are separately versioned for acquisition/
+reacquisition memory, tracking channels/navigation stores, selected PPP state
+and selected fusion state. Other algorithms explicitly report restore as
+unsupported; a raw memory image is never a snapshot.
 
 ### 9.5 Ephemeris and corrections
 
@@ -1346,10 +1392,14 @@ Before acquisition, a dependency-free `SearchAid`/`AcquisitionHint` artifact
 may carry approximate time, location, velocity, orbit/almanac and Doppler
 windows; source/generation; validity; uncertainty; trust class; tracked-signal
 aiding; and reacquisition-memory identity/expiry. Every resulting search-space
-reduction is recorded in `PlanReceipt`. Poisoned, stale or conflicting hints
-fall back to a bounded blind search. Hints may reduce work but cannot resolve
-canonical time/position or establish trust. Later SUPL, LPP, Android and
-receiver assistance adapters translate into this early artifact.
+reduction stays inside the immutable `PlanReceipt` maximum blind-search,
+channel, scratch and work bounds. A separate immutable
+`SearchExecutionReceipt` records the dynamic hint IDs, accepted/rejected
+windows, actual per-search work budget, fallback reason and deterministic
+decision order. Poisoned, stale or conflicting hints fall back to a bounded
+blind search. Hints may reduce work but cannot resolve canonical time/position
+or establish trust. Later SUPL, LPP, Android and receiver assistance adapters
+translate into this early artifact.
 
 The scheduler should combine:
 
@@ -1364,6 +1414,16 @@ The scheduler should combine:
 - GLONASS frequency-channel search.
 
 It must expose why a signal was not searched or why a channel was evicted.
+
+#### 11.5.1 Deterministic Tier 2 multicore execution
+
+Tier 0 remains thread-free and exposes the same scalar polling/scheduling
+semantics. An optional Tier 2 executor accepts caller-selected worker count,
+affinity/priority assumptions and bounded per-stage queues. Partitioning,
+merge order, event/invalidation order, deadline handling, cancellation,
+backpressure and worker failure are deterministic and observable. Every
+parallel result is checked against scalar execution and deterministic replay;
+untrusted input cannot create workers or queues.
 
 ### 11.6 Tracking channel state
 
@@ -1729,6 +1789,18 @@ does not force allocation into Tier 0.
 
 Do not add a decoder based only on reverse-engineered fragments with no conformance evidence. Experimental adapters remain GitHub-only until stable.
 
+#### 17.1.1 Receiver control boundary
+
+Every receiver profile declares read-only, control-capable or unsupported.
+Control begins with a side-effect-free plan of allowlisted typed commands for
+admitted firmware/hardware profiles—never arbitrary byte injection. Plans may
+cover signal enablement, output rates, time-pulse convention, correction
+input, dynamic model and protocol/baud transitions. Execution correlates
+ACK/NAK, uses bounded timeouts/retries, defines idempotency, survives
+reconnect/baud changes, detects partial application and verifies effective
+state by read-back. Capability matrices and logs redact location, credentials
+and sensitive configuration.
+
 ### 17.2 OS-native I/O
 
 `navheim-io` should expose portable traits and target-specific modules:
@@ -1800,6 +1872,16 @@ produces one complete canonical configuration/plan input or a structured
 capability/resource failure; it never silently falls back. Tests compare each
 profile against the equivalent explicit configuration and prove that profiles
 select no alternative implementations or hidden algorithms.
+
+### 18.1 Runtime source supervision
+
+After explicitly opened sources enter a facade, a deterministic supervisor
+tracks their identity, generation, capability, health, gaps and withdrawal.
+Source loss or provider change emits withdrawal/gap artifacts before any
+reselection. Candidate observations and corrections from different generations
+cannot mix. Retry, failover and recovery are bounded caller-authorized policies
+with deterministic ordering and explicit decisions; the supervisor never
+silently lowers accuracy, integrity, authentication or trust requirements.
 
 ---
 
@@ -1893,6 +1975,10 @@ Document threats from:
 - hostile RINEX/product/capture files;
 - compromised local devices;
 - time rollback and stale data;
+- stale, rolled-back or hostile algorithm-state snapshots;
+- source failover/generation confusion and silent trust downgrade;
+- receiver-control partial application or unintended transition;
+- nondeterministic parallel ordering of mandatory events/invalidations;
 - correction mixing across stations/frames;
 - resource exhaustion and decompression bombs;
 - parser differential behavior;
@@ -1908,6 +1994,11 @@ Document threats from:
 - exact CRC/parity/FEC status;
 - time and issue-of-data freshness checks;
 - correction provider/station/coordinate validation;
+- atomic versioned snapshot restore with compatibility, invariant, expiry and
+  external anti-rollback checks;
+- typed allowlisted receiver-control plans with acknowledgement and read-back;
+- generation-safe source withdrawal/reselection and deterministic parallel
+  event ordering;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2274,12 +2365,14 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.5.2** — time rollback/freshness guard and platform persistence-authority contract.
 - **0.5.3** — reason-bearing time availability and targeted invalidation primitives.
 - **0.5.4** — exact TAI/duration epoch, representation, range, granularity and checked-arithmetic contract.
+- **0.5.5** — UTC civil/calendar labels, leap insertion/deletion, POSIX ambiguity/loss and Gregorian/ordinal/Julian/MJD conversion contracts.
 - **0.6.0** — coordinate types: geodetic, ECEF, ENU and NED.
 - **0.6.1** — body frames, velocity, acceleration, rotations, lever arms and sensor latency.
 - **0.6.2** — typed covariance layouts with state ordering, units, frame and epoch.
 - **0.7.0** — geodesic, ellipsoid and reference-frame primitives.
 - **0.7.1** — datum/reference-frame realization and Earth-orientation input contracts.
 - **0.7.2** — bounded UTM/UPS and Transverse Mercator projected-coordinate profiles with explicit zone, frame, epoch, convergence and distortion evidence.
+- **0.7.3** — TT and UT1/EOP-derived precision-geodesy time arguments with revision, validity, uncertainty and explicit separation from GNSS scales.
 - **0.8.0** — bit readers/writers, sign extension and reserved-bit preservation.
 - **0.8.1** — exact-consumption results and original-bit/canonical round-trip modes.
 - **0.9.0** — checksums, CRC framework and GNSS parity primitives.
@@ -2311,10 +2404,12 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.17.1** — executable preflight schema and immutable normalized `PlanReceipt`.
 - **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
+- **0.18.1** — versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti-rollback authority boundary.
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
 - **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
 - **0.20.2** — all named facade profiles, versioned canonical expansion and capability-failure equivalence.
+- **0.20.3** — deterministic runtime source supervisor with explicit withdrawal, gap, authorized retry/failover and generation-safe reselection artifacts.
 
 ### Phase B — File and byte-stream interoperability
 
@@ -2365,6 +2460,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.41.1** — floating numerical replay contract for FMA, denormals, finiteness and platform tolerances.
 - **0.42.0** — polyphase channelizer.
 - **0.42.1** — dependency-free search-aid and acquisition-hint artifacts with bounded fallback, expiry, trust and plan-reduction evidence.
+- **0.42.2** — immutable per-search execution/decision receipt for dynamic hint acceptance, actual work, fallback and deterministic ordering.
+- **0.42.3** — versioned acquisition and reacquisition-memory snapshot profile with expiry, remapping and anti-rollback restore checks.
 - **0.43.0** — acquisition search framework and peak statistics.
 - **0.43.1** — acquisition work tokens, bounded candidates and named false-alarm assumptions.
 - **0.44.0** — DLL/FLL/PLL tracking-loop primitives.
@@ -2377,6 +2474,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
+- **0.48.3** — Tier 2 deterministic multicore executor with caller-selected workers, bounded queues, ordered merge, cancellation and scalar equivalence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
@@ -2389,6 +2487,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.53.0** — GPS L1 C/A tracking and observables.
 - **0.54.0** — GPS LNAV parity/frame/subframe decode.
 - **0.54.1** — bounded multi-page assembly and atomic navigation-store transactions.
+- **0.54.2** — versioned tracking-channel and navigation-store snapshot profiles with compatibility, provenance and model/calibration restore checks.
 - **0.55.0** — GPS LNAV ephemeris, almanac, UTC and ionosphere.
 - **0.56.0** — satellite state and clock computation.
 - **0.57.0** — pseudorange formation and transmit-time iteration.
@@ -2531,6 +2630,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
 - **0.144.1** — PPP tide/loading, wet-delay/gradient and meteorological-input acceptance matrix.
 - **0.144.2** — complete PPP state-layout, observation-combination, bias, interpolation, discontinuity, convergence and rollback matrix.
+- **0.144.3** — versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and anti-rollback binding.
 - **0.145.0** — static/rapid-static survey workflow.
 
 ### Phase K — Authentication and resilience
@@ -2584,6 +2684,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.168.0** — GNSS outage/dead-reckoning lifecycle.
 - **0.168.1** — GNSS reacquisition smoothing with explicit correction and discontinuity artifacts.
 - **0.168.2** — deterministic fixed-rate fusion output at caller epochs with bounded interpolation, propagation, extrapolation, covariance growth and stale/coasting states.
+- **0.168.3** — versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and anti-rollback binding.
 - **0.169.0** — multi-antenna attitude.
 - **0.169.1** — geodesic distance, bearing, destination and cross-track calculations.
 - **0.169.2** — bounded waypoint, route and track models with explicit great-circle/rhumb semantics.
@@ -2620,6 +2721,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.185.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
 - **0.185.2** — generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters.
 - **0.185.3** — evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
+- **0.185.4** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back verification.
 - **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
 - **0.186.1** — Android fused/location-provider fix adapter and provenance.
 - **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
@@ -2800,12 +2902,34 @@ Navheim 1.0.0 is released only when all of the following are true:
     exhaustion, renewal, import/remap, serialization, collision, parent and
     privacy semantics; navigation selection records all candidates and never
     uses ambient latest-wins behavior.
-45. Constellation crates provide canonical versioned signal definitions, and
-    format crates translate through them rather than duplicating frequency,
-    wavelength, rate, component, modulation, time-scale or mapping tables.
+45. Canonical versioned signal definitions expose frequency, wavelength,
+    rates, components, modulation and native-time metadata once, while each
+    format mapping is versioned and round-trippable without duplicating the
+    physical table.
 46. Early acquisition hints are dependency-free, bounded, expiring and
     provenance-rich; every work reduction is receipted, conflicting hints
     fall back safely, and no hint resolves time, position or trust.
+47. `navheim-linalg` depends only on `navheim-math`, carries no third-party
+    dependency, and neither duplicates scalar math nor calls platform math.
+48. Immutable `PlanReceipt` records maximum execution bounds, while each
+    dynamic acquisition choice produces a separate immutable decision receipt
+    with hints, actual work, fallback and deterministic order.
+49. UTC civil/calendar, POSIX ambiguity/loss, leap insertion/deletion,
+    Gregorian/ordinal/Julian/MJD, TT and EOP-derived UT1 semantics are fully
+    typed, model-versioned and boundary-tested; leap smear is a non-claim.
+50. Core owns signal contracts, constellation crates own physical fragments,
+    format crates own versioned wire mappings, and facade composition creates
+    no dependency inversion or forced all-constellation graph.
+51. Tier 0 remains thread-free; Tier 2 multicore execution and runtime source
+    supervision preserve deterministic ordering, scalar equivalence,
+    generations, withdrawal and caller-authorized no-downgrade failover.
+52. Receiver control is separate from read-only parsing and uses only planned
+    allowlisted typed commands with firmware capabilities, ACK/NAK,
+    idempotency, transition recovery and read-back verification.
+53. Snapshot/restore is opt-in, versioned, bounded, atomic, provenance-remapped
+    and anti-rollback checked; acquisition, tracking/navigation-store, PPP and
+    fusion profiles pass uninterrupted-versus-restored equivalence, while
+    every other algorithm explicitly reports restore unsupported.
 
 ---
 
