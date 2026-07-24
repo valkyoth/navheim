@@ -52,6 +52,13 @@ All notable changes to `navheim` are documented here.
   invalidates dependent solver state by default; and receiver transactions,
   observed configuration assessments and optional external snapshot
   protection have explicit implementation stops.
+- Integrated the ninth review as five additional bounded stops plus stronger
+  existing milestones: SDRs now use prepared immutable transition plans and
+  configuration generations; executor deadlines expose cooperative,
+  unresponsive and terminal states; snapshot protection authenticates all
+  interpretive metadata with crash-safe nonce/counter/key lifecycle and
+  separate platform adapters; receiver assessments are interval-scoped
+  `ObservedConsistent`; and local-frame mathematics remains geo-owned.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

@@ -617,9 +617,10 @@ These should be small, optional crates so external dependencies never leak into 
 - **`navheim-tls-rustls`** — Rustls-backed secure transport for NTRIP/SUPL/other network clients.
 - **`navheim-crypto-rustcrypto`** — audited cryptographic primitive backend for OSNMA/QZNMA when the selected algorithms are supported.
 - **`navheim-snapshot-protection`** — optional `std` bridge to
-  caller-provided external AEAD and platform-keystore authorities; it keeps
-  platform dependencies, key custody and encryption policy outside canonical
-  snapshot formats.
+  caller-provided external AEAD and platform-keystore authorities with a
+  common protection-envelope/lifecycle contract and separately admitted
+  platform modules; it keeps platform dependencies, key custody and encryption
+  policy outside canonical snapshot formats.
 - **`navheim-uhd`** — UHD adapter for Ettus/NI radios.
 - **`navheim-bladerf`** — libbladeRF or direct device adapter.
 - **`navheim-lime`** — LimeSuite or direct device adapter.
@@ -910,7 +911,8 @@ out-of-domain cases.
 representations plus dependency-free validation. `navheim-geo` depends on
 `navheim-core` and `navheim-math` and owns every mathematical coordinate
 transformation, projection, ellipsoidal geodesic, great-circle/rhumb primitive
-and frame transformation, including UTM/UPS and Transverse Mercator.
+and frame transformation, including UTM/UPS, Transverse Mercator and
+ENU/NED/body-frame transformations.
 `navheim-navigation` depends on `navheim-geo` and owns only waypoints, routes,
 tracks, geofences, segment policies and navigation-facing composition. This
 prevents core or navigation from privately duplicating trigonometry, square
@@ -1052,6 +1054,23 @@ use the reviewed zeroization boundary where possible, while documentation
 states the limits imposed by copies, allocator/OS behavior and caller-owned
 buffers. Confidential storage remains a caller/platform policy rather than a
 hidden core-cryptography implementation.
+
+An externally protected snapshot carries opaque extensible scheme/suite,
+authority, key/version and nonce-allocation identifiers; authenticated-data
+schema; rollback generation/counter; bounded ciphertext/tag lengths; and
+creation, expiry and rotation context. Associated data authenticates every
+outer field that affects interpretation, including envelope/schema/algorithm,
+state type, source generation, validity, capabilities and lengths. Unknown,
+downgraded or incompatible suites fail closed.
+
+Nonce allocation and rollback-counter persistence are crash-safe, and
+encryption plus counter commit is atomic from the caller's perspective. Key
+rotation has an explicit migration operation that never silently weakens the
+suite or generation. Outer lengths and resource limits are validated before
+decryption into bounded caller-provided plaintext/ciphertext buffers.
+Authentication failure is uniform and exposes no parsing/decryption oracle.
+The common bridge defines these semantics; Linux/BSD, Windows, Apple and
+Android authorities are admitted and tested in separate platform milestones.
 
 Restored authentication, signal-authenticity, correctness, integrity and
 policy assessments never regain authority merely from a valid snapshot,
@@ -1349,10 +1368,41 @@ pub trait SampleSource {
     type Error;
 
     fn capabilities(&self) -> FrontEndCapabilities;
-    fn configure(&mut self, request: FrontEndRequest) -> Result<ActualFrontEnd, Self::Error>;
-    fn read(&mut self, out: &mut [Self::Sample]) -> Result<SampleBlockMeta, Self::Error>;
+    fn prepare(
+        &self,
+        request: &FrontEndRequest,
+        limits: &ResourceLimits,
+    ) -> Result<FrontEndPlan, FrontEndPlanError>;
+    fn apply(
+        &mut self,
+        plan: &FrontEndPlan,
+    ) -> Result<FrontEndTransition, Self::Error>;
+    fn read(
+        &mut self,
+        out: &mut [Self::Sample],
+    ) -> Result<SampleRead, Self::Error>;
 }
 ```
+
+`prepare` is side-effect free and binds the normalized request, capabilities,
+resource limits, exact device/firmware identity and expected transition.
+`apply` accepts only that immutable plan and creates a non-reused
+`FrontEndConfigurationGeneration` covering clock source, antenna/port,
+coherent group, center frequency, bandwidth, sample rate, encoding, I/Q order,
+scaling, gain/AGC, bias tee/antenna power, calibration and effective interval.
+Hardware acknowledgement and read-back are device assertions. A distinct
+front-end assessment records observed sample timing/rate and calibration
+consistency for a stated interval, evidence coverage, uncertainty and
+unverifiable fields.
+
+Retune, gain, clock, port, power or format transitions drain or invalidate old
+sample blocks, terminate old capture mappings, reset affected DSP/tracking
+state and emit explicit gap/discontinuity events before new-generation output.
+This same contract governs sequential band operation and planned
+`Profile::LowPower` switching. `SampleRead` always reports the initialized
+valid sample count, block and configuration generation, timestamp/capture
+mapping, gaps, overruns and explicit data/end-of-stream/would-block state;
+uninitialized capacity is never presented as samples.
 
 Capabilities include:
 
@@ -1486,7 +1536,19 @@ non-overlapping regions; scoped lifetimes for caller-owned buffers; explicit
 `Send` bounds; and no hidden shared mutable state. A stateful channel belongs
 to exactly one worker until deterministic handback. Cancellation joins or
 otherwise proves completion before borrowed storage is released: detached work
-cannot retain it. Result slots and merge failures are bounded and explicit.
+cannot retain it. A deadline or timeout never releases or reuses borrowed
+storage. Result slots and merge failures are bounded and explicit.
+
+Execution distinguishes `CancellationRequested` (cooperative request issued),
+`Cancelled` (worker acknowledged and returned ownership), `DeadlineMissed`
+(deadline passed while work may still run), `WorkerUnresponsive` (ownership is
+not recoverable yet) and `WorkerFailed` (error or admitted unwind-capable
+panic). In-process deadlines are observable scheduling requirements, not
+thread-kill guarantees. Only statically bounded first-party kernels or
+independently admitted extensions with bounded cooperative checkpoints may
+borrow into this executor. Arbitrary/potentially blocking external algorithms
+and I/O stages are prohibited work units; callers needing hard termination
+must use process isolation with process-owned memory.
 
 Logical partitioning, merge order and event/invalidation ordering are
 deterministic. `PlanReceipt` fixes `ExecutionTrace` capacity. The trace records
@@ -1495,10 +1557,11 @@ facts that change semantics; replay consumes those facts instead of consulting
 wall time. Overflow stops execution, forces resynchronization or explicitly
 marks replay unavailable—never silently drops an event. Worker panic is a
 recoverable recorded failure only on an admitted unwind-capable profile;
-`panic = "abort"` is terminal and is never described as contained. Floating
-reductions are bit-exact only where specified, otherwise they use published
-tolerances. Scalar comparison is required verification evidence, not duplicate
-production computation. Untrusted input cannot create workers or queues.
+`panic = "abort"` or permanently stuck work is terminal for that process and
+is never described as contained. Floating reductions are bit-exact only where
+specified, otherwise they use published tolerances. Scalar comparison is
+required verification evidence, not duplicate production computation.
+Untrusted input cannot create workers or queues.
 
 ### 11.6 Tracking channel state
 
@@ -1877,10 +1940,13 @@ state by read-back. These wire facts form a `ControlTransaction`; ACK and
 read-back are receiver assertions, not independent proof that the receiver
 behaves as configured. A separate `ConfigurationAssessment` compares observed
 output rate, enabled signals, protocol, time-pulse behavior and correction
-ingestion with the requested state. It reports `ReceiverAsserted` wherever
-behavior cannot be independently observed and reserves `Verified` for
-independent evidence. Capability matrices and logs redact location,
-credentials and sensitive configuration.
+ingestion with the requested state. It targets one configuration generation
+and carries the observation interval, evidence sources, coverage, uncertainty
+and unverifiable fields. It reports `ReceiverAsserted` wherever behavior cannot
+be independently observed and `ObservedConsistent` only for the behavior and
+interval actually evidenced; neither state proves internal configuration or
+signal authenticity. Capability matrices and logs redact location, credentials
+and sensitive configuration.
 
 Every applied change creates a `ReceiverConfigurationGeneration` bound to
 exact device/firmware identity and an effective epoch or transition interval.
@@ -2083,11 +2149,15 @@ Document threats from:
 - time rollback and stale data;
 - stale, rolled-back, forged, privacy-exposing, misleadingly digest-valid or
   authenticated-but-plaintext algorithm snapshots;
+- nonce reuse, protection-suite downgrade, unauthenticated envelope metadata,
+  rollback/encryption commit races and platform-keystore lifecycle failure;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
   receiver-asserted false state, unintended persistent/destructive transition;
-- aliased/detached parallel work, trace overflow, nondeterministic ordering or
-  uncaptured runtime scheduling outcomes;
+- direct/unplanned SDR mutation, stale configuration-generation samples or
+  device-asserted false front-end state;
+- aliased/detached/unresponsive parallel work, premature buffer reuse, trace
+  overflow, nondeterministic ordering or uncaptured runtime outcomes;
 - correction mixing across stations/frames;
 - resource exhaustion and decompression bombs;
 - parser differential behavior;
@@ -2104,13 +2174,17 @@ Document threats from:
 - time and issue-of-data freshness checks;
 - correction provider/station/coordinate validation;
 - atomic versioned snapshot restore with separate authenticity/confidentiality,
-  minimum sensitive profiles, consent/retention, external protection/
-  anti-rollback checks and restored-assessment invalidation;
+  minimum sensitive profiles, authenticated metadata, nonce/key/rotation/
+  counter lifecycle, consent/retention, external protection/anti-rollback
+  checks and restored-assessment invalidation;
+- prepared/reviewable SDR configuration plans with non-reusing generations,
+  initialized-count reads, transition invalidation and observed consistency;
 - typed allowlisted receiver-control plans with configuration generations,
   command-class authority, transactional acknowledgement/read-back and
   independently evidenced configuration assessment;
 - role-aware source withdrawal/composition/reselection, explicit solver-state
-  handover and deterministic, borrow-safe parallel work with bounded traces;
+  handover and deterministic, borrow-safe cooperative parallel work with
+  bounded traces and explicit unresponsive ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2594,6 +2668,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
 - **0.50.2** — independent signal/message vector admission gate required before each constellation implementation.
+- **0.50.3** — side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads.
 
 ### Phase D — GPS end-to-end
 
@@ -2805,7 +2880,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.169.1** — `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion without navigation-policy duplication.
 - **0.169.2** — `navheim-navigation` bounded waypoint, route and track models plus wrappers over `navheim-geo`.
 - **0.169.3** — geofence boundary, altitude and time-window evaluation.
-- **0.169.4** — local-frame navigation primitives and explicit road-network-routing non-claim.
+- **0.169.4** — local-frame navigation composition over `navheim-geo` ENU/NED/body transformations and explicit road-network-routing non-claim.
 - **0.169.5** — calibrated multi-antenna angle-of-arrival and direction-consistency production with ambiguity, coherence, validity and expiry evidence.
 
 ### Phase M — Hardware, OS and assistance
@@ -2839,7 +2914,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.185.3** — evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
 - **0.185.4** — capability-gated receiver control with side-effect-free plans, allowlisted commands, ACK/NAK correlation, transition recovery and read-back transaction evidence.
 - **0.185.5** — receiver-configuration generation barrier with effective intervals, queue draining, targeted invalidation, correction rebinding and persistent-command authorization.
-- **0.185.6** — receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback.
+- **0.185.6** — receiver control transactions separated from interval-scoped `ObservedConsistent` configuration assessments and receiver-asserted fallback.
 - **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
 - **0.186.1** — Android fused/location-provider fix adapter and provenance.
 - **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
@@ -2852,7 +2927,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement.
+- **0.189.2** — common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
+- **0.189.3** — Linux/BSD admitted external protection-authority and crash-safe persistence profiles with explicit no-universal-keystore non-claim.
+- **0.189.4** — Windows snapshot-protection authority adapter over an exact frozen platform API/profile.
+- **0.189.5** — Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles.
+- **0.189.6** — Android snapshot-protection authority adapter over an exact frozen Android Keystore profile.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
@@ -3046,27 +3125,35 @@ Navheim 1.0.0 is released only when all of the following are true:
     no dependency inversion or forced all-constellation graph.
 51. Tier 0 remains thread-free; Tier 2 multicore execution and runtime source
     supervision preserve scoped exclusive work ownership, deterministic
-    logical ordering, lossless bounded runtime traces, scalar verification,
-    source roles, valid cross-role composition, solver-state-safe same-role
-    handover, withdrawal and caller-authorized no-downgrade failover.
+    logical ordering, cooperative cancellation states, unrecoverable ownership,
+    lossless bounded runtime traces, scalar verification, source roles, valid
+    cross-role composition, solver-state-safe same-role handover, withdrawal
+    and caller-authorized no-downgrade failover.
 52. Receiver control is separate from read-only parsing and uses only planned
     allowlisted typed commands with firmware capabilities, ACK/NAK,
     idempotency, configuration generations, transition queue draining,
     invalidation/rebinding, volatile/persistent/destructive authority,
     flash-wear budgets, receiver-asserted read-back and separately invalidated
-    independent behavioral assessments.
+    interval-scoped `ObservedConsistent` behavioral assessments.
 53. Snapshot/restore is opt-in, versioned, bounded, atomic and provenance-
     remapped; authenticity and confidentiality are orthogonal, unkeyed digests
     imply only corruption detection, external authentication and anti-rollback
     generations establish authenticated state, external encryption protects
-    sensitive bytes, profiles are minimal/consent-bound, restored assessments
-    are reverified/invalidated, correctly ordered state profiles pass
-    uninterrupted equivalence, and every other algorithm reports restore
-    unsupported.
+    sensitive bytes, all interpretive metadata is authenticated, nonce/key/
+    rotation/counter state is crash-safe, platform adapters are separately
+    admitted, profiles are minimal/consent-bound, restored assessments are
+    reverified/invalidated, correctly ordered state profiles pass uninterrupted
+    equivalence, and every other algorithm reports restore unsupported.
 54. `navheim-dsp` depends on `navheim-math`; `navheim-geo` depends on
     representation-only `navheim-core` plus `navheim-math`; neither duplicates
-    platform/private math, `navheim-navigation` depends on `navheim-geo`, and
-    Tier 2 `navheim-executor` remains outside DSP.
+    platform/private math, `navheim-geo` owns ENU/NED/body transformations,
+    `navheim-navigation` only composes them, and Tier 2 `navheim-executor`
+    remains outside DSP.
+55. Every SDR configuration is side-effect-free prepared and explicitly
+    applied from an immutable plan; non-reusing front-end generations bind
+    hardware, clocks, RF/sample/calibration state, transitions invalidate stale
+    samples/mappings/DSP, and reads expose only initialized samples with gaps,
+    overruns and progress state.
 
 ---
 

@@ -92,6 +92,17 @@ and receiver transactions are distinct from independently observed
 configuration assessments. Two bounded stops add behavioral receiver
 assessment and optional external AEAD/platform-keystore snapshot protection.
 
+The ninth coverage pass removes direct SDR hardware mutation in favor of
+side-effect-free preparation, reviewed immutable application plans,
+configuration generations, transition invalidation and initialized-count
+reads. Executor deadlines now distinguish requested/acknowledged cancellation,
+deadline misses, unresponsive ownership and failures without pretending Rust
+can kill a stuck borrowed thread. Snapshot protection gains authenticated
+interpretive metadata, crash-safe nonce/counter/key rotation and four separate
+platform adapter stops. Receiver assessments become interval-scoped
+`ObservedConsistent`, while local-frame transformations remain exclusively in
+`navheim-geo`.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

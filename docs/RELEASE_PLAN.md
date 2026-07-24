@@ -6035,7 +6035,7 @@ reviewable release in Phase C (Native DSP reference implementation).
 Deliverables:
 
 - separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces.
-- Implement scoped WorkPartition/ParallelWorkUnit ownership with deterministic identity/order, immutable input, exclusive non-overlapping output/scratch, Send bounds, single-worker state ownership, joined cancellation and bounded results/merge failures; fix semantics-only ExecutionTrace capacity in PlanReceipt.
+- Implement scoped WorkPartition/ParallelWorkUnit ownership plus distinct CancellationRequested, Cancelled, DeadlineMissed, WorkerUnresponsive and WorkerFailed states; retain borrowed ownership through timeout and admit only bounded cooperative work, with process isolation required for hard termination.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test overlap/alias rejection, non-static caller buffers, hidden sharing, handback, cancellation without detached borrows, result/trace overflow, replay-unavailable/resynchronization, unwind panic versus terminal abort, worker/schedule variation, reduction tolerances and thread-free DSP/Tier 0.
+- Test overlap/alias rejection, non-static buffers, bounded cancellation checkpoints, deadline without ownership return, permanently stuck worker modeling, forbidden blocking I/O/external work, result/trace overflow, unwind panic versus terminal abort, worker/schedule variation and thread-free DSP/Tier 0.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6302,6 +6302,53 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.50.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.50.3 - Side-effect-free front-end preparation, immutable apply plan, configuration generatio...
+
+Status: planned.
+
+Goal: deliver side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads as one bounded,
+reviewable release in Phase C (Native DSP reference implementation).
+
+Deliverables:
+
+- side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads.
+- Define side-effect-free front-end prepare and immutable apply contracts plus FrontEndConfigurationGeneration binding device/firmware, clocks, ports/groups, RF/sample settings, power/gain and calibration; reads return initialized count, block/generation, mapping, gap/overrun and progress state.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase C contract: Accept only immutable validated plan receipts, keep untrusted data inside predeclared work/state limits, and define bit-exact or numerical replay honestly.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.50.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test impossible requests without mutation, stale/foreign/tampered plans, device read-back lies, observed timing/rate/calibration consistency, sequential-band/low-power transitions, queue drain, stale blocks, mapping/DSP/tracking invalidation, partial reads, would-block, end, overrun and uninitialized tails.
+- perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase C acceptance is demonstrated: execution cannot exceed the accepted plan and every optimized result is checked against the normative scalar contract;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.50.3 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase D: GPS end-to-end
 
@@ -14717,17 +14764,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.169.3 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.169.4 - Local-frame navigation primitives and explicit road-network-routing non-claim
+### v0.169.4 - Local-frame navigation composition over `navheim-geo` ENU/NED/body transformations an...
 
 Status: planned.
 
-Goal: deliver local-frame navigation primitives and explicit road-network-routing non-claim as one bounded,
+Goal: deliver local-frame navigation composition over `navheim-geo` ENU/NED/body transformations and explicit road-network-routing non-claim as one bounded,
 reviewable release in Phase L (Timing, fusion and navigation).
 
 Deliverables:
 
-- local-frame navigation primitives and explicit road-network-routing non-claim.
-- Provide local-frame navigation and progress primitives while explicitly excluding road-network search, maps, and turn-by-turn routing.
+- local-frame navigation composition over `navheim-geo` ENU/NED/body transformations and explicit road-network-routing non-claim.
+- Compose navheim-geo ENU/NED/body-frame transformations into bounded local-frame navigation and progress operations without reimplementing transformation mathematics; exclude road-network search, maps, and turn-by-turn routing.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14745,7 +14792,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.
+- Test dependency direction, wrapper equivalence, frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, bounded Tier 0 behavior and scans for duplicated frame math.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14823,6 +14870,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - recorded-I/Q and virtual SDR source.
+- Implement recorded-I/Q and virtual sources against the v0.50.3 prepare/apply/generation/read contract, with deterministic transition simulation and no invented hardware acknowledgement or observed calibration.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14840,6 +14888,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test plan rejection, generation changes, partial reads, initialized counts, gaps/overruns/end/would-block, stale blocks, mapping/DSP invalidation, deterministic replay and honest unavailable device assessments.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14868,6 +14917,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Linux RTL2832U/E4000 reference backend.
+- Implement the frozen RTL2832U/E4000 profile through v0.50.3 prepared plans, configuration generations, initialized-count reads and separate device-asserted versus observed sample behavior.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14885,6 +14935,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test hardware/recorded retune, rate, gain, AGC and bias transitions; stale USB buffers, timestamp limits, overruns, short reads, detach/reset, read-back disagreement, observed rate/calibration and sequential-band gaps.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14913,6 +14964,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - bladeRF adapter.
+- Implement each admitted bladeRF hardware/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14930,6 +14982,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test exact profile mismatch, tuning/rate/bandwidth/gain/clock/port transitions, coherent channels, stale transfers, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14958,6 +15011,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - USRP/UHD adapter.
+- Implement each admitted USRP/UHD device/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14975,6 +15029,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test property/profile mismatch, tuning/rate/bandwidth/gain/clock/antenna transitions, timed/coherent operation, stale packets, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -15003,6 +15058,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - LimeSDR adapter.
+- Implement each admitted LimeSDR/LimeSuite hardware/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -15020,6 +15076,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
+- Test profile mismatch, tuning/rate/bandwidth/gain/clock/port transitions, calibration changes, stale transfers, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16134,17 +16191,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.185.5 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.185.6 - Receiver control transactions separated from independently observed configuration ass...
+### v0.185.6 - Receiver control transactions separated from interval-scoped `ObservedConsistent` con...
 
 Status: planned.
 
-Goal: deliver receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback as one bounded,
+Goal: deliver receiver control transactions separated from interval-scoped `ObservedConsistent` configuration assessments and receiver-asserted fallback as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- receiver control transactions separated from independently observed configuration assessments and receiver-asserted fallback.
-- Create ConfigurationAssessment separately from ControlTransaction by comparing observed rate, enabled signals, protocol, time-pulse and correction-ingestion behavior with the requested generation; label unobservable claims ReceiverAsserted rather than Verified.
+- receiver control transactions separated from interval-scoped `ObservedConsistent` configuration assessments and receiver-asserted fallback.
+- Create ConfigurationAssessment separately from ControlTransaction; target one generation and carry interval, evidence sources, coverage, uncertainty and unverifiable fields, using ReceiverAsserted or interval-scoped ObservedConsistent without claiming internal configuration or signal authenticity.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16162,7 +16219,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test false ACK/read-back, delayed or contradictory streams, partial observability, independent timing/rate/protocol evidence, reset, firmware change, device replacement, assessment invalidation, stale generations and refusal to infer high trust.
+- Test false ACK/read-back, delayed/contradictory streams, partial coverage, uncertainty, unverifiable fields, independent timing/rate/protocol evidence, reset, firmware/device replacement, invalidation, stale generations and refusal to broaden ObservedConsistent.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16737,17 +16794,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.2 - Optional external AEAD/platform-keystore snapshot protection adapters with consent, r...
+### v0.189.2 - Common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/count...
 
 Status: planned.
 
-Goal: deliver optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement as one bounded,
+Goal: deliver common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- optional external AEAD/platform-keystore snapshot protection adapters with consent, retention and plaintext-lifetime enforcement.
-- Implement the optional navheim-snapshot-protection bridge for caller/platform-owned AEAD and keystore handles, keeping keys, algorithms and storage policy outside canonical crates while enforcing consent, retention and bounded plaintext lifetime.
+- common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
+- Define the common snapshot-protection envelope and external-authority bridge with opaque suite, authority/key/version, nonce-allocation, AAD schema, rollback counter, bounded ciphertext/tag lengths, creation/expiry/rotation and authenticated interpretive metadata.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16765,7 +16822,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test nonce/key/generation mismatch, tamper, rotation, rollback, locked/unavailable/revoked keystores, consent denial, retention expiry, plaintext debug/error leakage, cancellation, zeroization limits and platform capability absence.
+- Test unknown/downgraded suites, nonce reuse/crash recovery, key rotation/migration, atomic encryption/counter commit, rollback, tampered outer fields, length validation before decrypt, caller buffer bounds, uniform authentication failure, oracle resistance, consent/retention and Aesynx-ready authority extension.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16783,6 +16840,194 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.189.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.3 - Linux/BSD admitted external protection-authority and crash-safe persistence profiles...
+
+Status: planned.
+
+Goal: deliver linux/BSD admitted external protection-authority and crash-safe persistence profiles with explicit no-universal-keystore non-claim as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- Linux/BSD admitted external protection-authority and crash-safe persistence profiles with explicit no-universal-keystore non-claim.
+- Freeze and implement only admitted Linux/BSD external AEAD, key-custody and crash-safe counter/persistence profiles behind the common bridge; explicitly report unavailable where no qualified authority exists and claim no universal OS keystore.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test exact provider/OS versions, permission/identity changes, locked/unavailable/revoked authority, crash points, nonce/counter rollback, atomic replace, filesystem faults, rotation, process concurrency, bounded buffers and explicit unsupported outcomes.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.4 - Windows snapshot-protection authority adapter over an exact frozen platform API/profile
+
+Status: planned.
+
+Goal: deliver windows snapshot-protection authority adapter over an exact frozen platform API/profile as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- Windows snapshot-protection authority adapter over an exact frozen platform API/profile.
+- Freeze one exact documented Windows protection/key-custody/rollback profile and implement its adapter behind the common bridge without leaking platform handles or widening canonical algorithms.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.4.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test supported Windows versions and identities, user/machine scope, permission/service loss, locked/revoked keys, nonce/counter crash recovery, rotation/migration, tamper, concurrency, cancellation and capability absence.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.4 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.5 - Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/plat...
+
+Status: planned.
+
+Goal: deliver apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles.
+- Freeze exact macOS/iOS Keychain and platform-cryptography profiles and implement admitted Apple snapshot-protection adapters behind the common bridge with device/access-control and background-state semantics.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.5.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test supported OS/device classes, locked device, access-control/entitlement denial, key loss/rotation, backup/restore and migration boundaries, nonce/counter crash recovery, tamper, cancellation, plaintext lifetime and unavailable secure hardware.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.5 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.189.6 - Android snapshot-protection authority adapter over an exact frozen Android Keystore p...
+
+Status: planned.
+
+Goal: deliver android snapshot-protection authority adapter over an exact frozen Android Keystore profile as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- Android snapshot-protection authority adapter over an exact frozen Android Keystore profile.
+- Freeze an exact Android Keystore protection/key-custody/rollback profile and implement its adapter behind the common bridge with API-level, hardware-backed/StrongBox and key-invalidation evidence kept explicit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Before implementation, review and freeze every applicable authoritative
+  document, revision, amendment, erratum, section/table, legal condition, and
+  independent reference; stop rather than guess when evidence is missing or
+  ambiguous.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.189.6.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test supported API/device matrices, software versus hardware-backed keys, lock/auth requirements, StrongBox absence, key invalidation/rotation, reinstall/backup boundaries, nonce/counter crash recovery, tamper, cancellation and capability absence.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- run and map all applicable positive, negative, boundary, malformed,
+  adversarial, conformance, differential, resource, fuzz, platform, and
+  regression tests; document every not-applicable class;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.189.6 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.190.0 - NMEA 2000 transport/legal PGN baseline
 

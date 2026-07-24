@@ -410,8 +410,8 @@ MILESTONE_DETAILS.update(
             "Test boundary equality, holes, dateline/poles, altitude/time limits, uncertain positions, entry/exit ordering, and resource exhaustion.",
         ),
         "0.169.4": (
-            "Provide local-frame navigation and progress primitives while explicitly excluding road-network search, maps, and turn-by-turn routing.",
-            "Test frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, and bounded Tier 0 behavior.",
+            "Compose navheim-geo ENU/NED/body-frame transformations into bounded local-frame navigation and progress operations without reimplementing transformation mathematics; exclude road-network search, maps, and turn-by-turn routing.",
+            "Test dependency direction, wrapper equivalence, frame origins/resets, route-relative geometry, stale solutions, unsupported routing requests, non-claims, bounded Tier 0 behavior and scans for duplicated frame math.",
         ),
         "0.185.1": (
             "Define canonical late assistance with source, generation, freshness, confidence, trust, and validity, translated into the earlier SearchAid contract without creating a second hint model.",

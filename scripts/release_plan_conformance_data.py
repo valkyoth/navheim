@@ -134,8 +134,12 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement scoped WorkPartition/ParallelWorkUnit ownership with deterministic identity/order, immutable input, exclusive non-overlapping output/scratch, Send bounds, single-worker state ownership, joined cancellation and bounded results/merge failures; fix semantics-only ExecutionTrace capacity in PlanReceipt.",
-        "Test overlap/alias rejection, non-static caller buffers, hidden sharing, handback, cancellation without detached borrows, result/trace overflow, replay-unavailable/resynchronization, unwind panic versus terminal abort, worker/schedule variation, reduction tolerances and thread-free DSP/Tier 0.",
+        "Implement scoped WorkPartition/ParallelWorkUnit ownership plus distinct CancellationRequested, Cancelled, DeadlineMissed, WorkerUnresponsive and WorkerFailed states; retain borrowed ownership through timeout and admit only bounded cooperative work, with process isolation required for hard termination.",
+        "Test overlap/alias rejection, non-static buffers, bounded cancellation checkpoints, deadline without ownership return, permanently stuck worker modeling, forbidden blocking I/O/external work, result/trace overflow, unwind panic versus terminal abort, worker/schedule variation and thread-free DSP/Tier 0.",
+    ),
+    "0.50.3": (
+        "Define side-effect-free front-end prepare and immutable apply contracts plus FrontEndConfigurationGeneration binding device/firmware, clocks, ports/groups, RF/sample settings, power/gain and calibration; reads return initialized count, block/generation, mapping, gap/overrun and progress state.",
+        "Test impossible requests without mutation, stale/foreign/tampered plans, device read-back lies, observed timing/rate/calibration consistency, sequential-band/low-power transitions, queue drain, stale blocks, mapping/DSP/tracking invalidation, partial reads, would-block, end, overrun and uninitialized tails.",
     ),
     "0.48.4": (
         "Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, authenticity/confidentiality, provenance remap, sensitivity and anti-rollback authority.",
@@ -166,12 +170,48 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test buffered old/new semantics, transition intervals, queue drain failure, targeted invalidation order, correction rebinding, device replacement, persistent authorization, flash-wear exhaustion, reset/destructive consent, rollback, and recovery.",
     ),
     "0.185.6": (
-        "Create ConfigurationAssessment separately from ControlTransaction by comparing observed rate, enabled signals, protocol, time-pulse and correction-ingestion behavior with the requested generation; label unobservable claims ReceiverAsserted rather than Verified.",
-        "Test false ACK/read-back, delayed or contradictory streams, partial observability, independent timing/rate/protocol evidence, reset, firmware change, device replacement, assessment invalidation, stale generations and refusal to infer high trust.",
+        "Create ConfigurationAssessment separately from ControlTransaction; target one generation and carry interval, evidence sources, coverage, uncertainty and unverifiable fields, using ReceiverAsserted or interval-scoped ObservedConsistent without claiming internal configuration or signal authenticity.",
+        "Test false ACK/read-back, delayed/contradictory streams, partial coverage, uncertainty, unverifiable fields, independent timing/rate/protocol evidence, reset, firmware/device replacement, invalidation, stale generations and refusal to broaden ObservedConsistent.",
     ),
     "0.189.2": (
-        "Implement the optional navheim-snapshot-protection bridge for caller/platform-owned AEAD and keystore handles, keeping keys, algorithms and storage policy outside canonical crates while enforcing consent, retention and bounded plaintext lifetime.",
-        "Test nonce/key/generation mismatch, tamper, rotation, rollback, locked/unavailable/revoked keystores, consent denial, retention expiry, plaintext debug/error leakage, cancellation, zeroization limits and platform capability absence.",
+        "Define the common snapshot-protection envelope and external-authority bridge with opaque suite, authority/key/version, nonce-allocation, AAD schema, rollback counter, bounded ciphertext/tag lengths, creation/expiry/rotation and authenticated interpretive metadata.",
+        "Test unknown/downgraded suites, nonce reuse/crash recovery, key rotation/migration, atomic encryption/counter commit, rollback, tampered outer fields, length validation before decrypt, caller buffer bounds, uniform authentication failure, oracle resistance, consent/retention and Aesynx-ready authority extension.",
+    ),
+    "0.189.3": (
+        "Freeze and implement only admitted Linux/BSD external AEAD, key-custody and crash-safe counter/persistence profiles behind the common bridge; explicitly report unavailable where no qualified authority exists and claim no universal OS keystore.",
+        "Test exact provider/OS versions, permission/identity changes, locked/unavailable/revoked authority, crash points, nonce/counter rollback, atomic replace, filesystem faults, rotation, process concurrency, bounded buffers and explicit unsupported outcomes.",
+    ),
+    "0.189.4": (
+        "Freeze one exact documented Windows protection/key-custody/rollback profile and implement its adapter behind the common bridge without leaking platform handles or widening canonical algorithms.",
+        "Test supported Windows versions and identities, user/machine scope, permission/service loss, locked/revoked keys, nonce/counter crash recovery, rotation/migration, tamper, concurrency, cancellation and capability absence.",
+    ),
+    "0.189.5": (
+        "Freeze exact macOS/iOS Keychain and platform-cryptography profiles and implement admitted Apple snapshot-protection adapters behind the common bridge with device/access-control and background-state semantics.",
+        "Test supported OS/device classes, locked device, access-control/entitlement denial, key loss/rotation, backup/restore and migration boundaries, nonce/counter crash recovery, tamper, cancellation, plaintext lifetime and unavailable secure hardware.",
+    ),
+    "0.189.6": (
+        "Freeze an exact Android Keystore protection/key-custody/rollback profile and implement its adapter behind the common bridge with API-level, hardware-backed/StrongBox and key-invalidation evidence kept explicit.",
+        "Test supported API/device matrices, software versus hardware-backed keys, lock/auth requirements, StrongBox absence, key invalidation/rotation, reinstall/backup boundaries, nonce/counter crash recovery, tamper, cancellation and capability absence.",
+    ),
+    "0.170.0": (
+        "Implement recorded-I/Q and virtual sources against the v0.50.3 prepare/apply/generation/read contract, with deterministic transition simulation and no invented hardware acknowledgement or observed calibration.",
+        "Test plan rejection, generation changes, partial reads, initialized counts, gaps/overruns/end/would-block, stale blocks, mapping/DSP invalidation, deterministic replay and honest unavailable device assessments.",
+    ),
+    "0.171.0": (
+        "Implement the frozen RTL2832U/E4000 profile through v0.50.3 prepared plans, configuration generations, initialized-count reads and separate device-asserted versus observed sample behavior.",
+        "Test hardware/recorded retune, rate, gain, AGC and bias transitions; stale USB buffers, timestamp limits, overruns, short reads, detach/reset, read-back disagreement, observed rate/calibration and sequential-band gaps.",
+    ),
+    "0.172.0": (
+        "Implement each admitted bladeRF hardware/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.",
+        "Test exact profile mismatch, tuning/rate/bandwidth/gain/clock/port transitions, coherent channels, stale transfers, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.",
+    ),
+    "0.173.0": (
+        "Implement each admitted USRP/UHD device/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.",
+        "Test property/profile mismatch, tuning/rate/bandwidth/gain/clock/antenna transitions, timed/coherent operation, stale packets, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.",
+    ),
+    "0.174.0": (
+        "Implement each admitted LimeSDR/LimeSuite hardware/firmware/FPGA profile through the v0.50.3 plan, transition, generation, read and assessment contract.",
+        "Test profile mismatch, tuning/rate/bandwidth/gain/clock/port transitions, calibration changes, stale transfers, timestamps, short reads, overruns, disconnect/reset, device assertions and observed consistency.",
     ),
     "0.37.0": (
         "Make navheim-dsp depend only on navheim-math for runtime twiddles, coefficients, thresholds, CN0/estimators and admitted scalar functions; prohibit private duplicates and platform math.",
