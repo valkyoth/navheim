@@ -1,0 +1,31 @@
+# Modularity Policy
+
+## Source Size
+
+Hand-maintained Rust, Python, and shell source files must not exceed 500 lines.
+Generated files require a documented exception and are excluded only by
+explicit validation logic.
+
+## Crate Boundaries
+
+Create a focused crate when a domain has an independently testable contract,
+different capability tier, different dependency/unsafe policy, separate
+publication value, or a reason to remain GitHub-only.
+
+Do not create one crate per signal or tiny helper. Constellation crates group
+their public signals so versions and dependency graphs remain manageable.
+
+## Dependency Direction
+
+Foundation crates cannot depend on constellation, format, solver, I/O, TLS,
+crypto-backend, device, OS, daemon, or tool crates. Adapter and tool crates may
+depend inward; canonical crates never depend outward.
+
+The `navheim` facade depends on focused stable libraries. Focused libraries do
+not depend on the facade.
+
+## GitHub-Only Code
+
+CLI, daemons, deployables, labs, simulators, conformance runners, fuzz
+packages, benchmarks, capture tools, FPGA artifacts, and packaging stay
+unpublished until an explicit release admits them.

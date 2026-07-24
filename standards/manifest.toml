@@ -1,0 +1,174 @@
+schema_version = 1
+project = "navheim"
+inventory_status = "candidate"
+research_baseline = "2026-07-23"
+last_reviewed = "2026-07-24"
+freeze_target = "1.0.0"
+
+[policy]
+implementation_requires_verified_revision = true
+paid_documents_committed = false
+unknown_fields_preserved_when_safe = true
+silent_revision_updates = false
+
+# Candidate records guide future source verification. `status = "candidate"`
+# is not a conformance or implementation claim. Before code relies on a record,
+# the release must confirm its exact official revision, legal access, section
+# mapping, and test vectors.
+
+[[document]]
+id = "gps-interface-specifications"
+title = "GPS public civil signal interface specifications"
+revision = "verify-current-before-implementation"
+publisher = "United States Government / GPS.gov"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "galileo-os-sis-icd"
+title = "Galileo Open Service Signal-in-Space Interface Control Document"
+revision = "2.2-candidate"
+publisher = "European Union / EUSPA"
+published = "2025-11"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "glonass-public-icds"
+title = "GLONASS public open-service interface control documents"
+revision = "verify-current-before-implementation"
+publisher = "GLONASS Information-Analytical Centre"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "beidou-public-sis-icds"
+title = "BeiDou public signal-in-space interface control documents"
+revision = "verify-current-before-implementation"
+publisher = "China Satellite Navigation Office"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "qzss-public-interface-specifications"
+title = "QZSS public interface specifications"
+revision = "verify-current-before-implementation"
+publisher = "Cabinet Office, Government of Japan"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "navic-public-sps-icds"
+title = "NavIC public Standard Positioning Service interface control documents"
+revision = "verify-current-before-implementation"
+publisher = "Indian Space Research Organisation"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "rtcm-10403"
+title = "RTCM Standard 10403.x for Differential GNSS Services"
+revision = "10403.4-candidate"
+publisher = "RTCM Special Committee 104"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "paid-or-licensed-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "rtcm-10410"
+title = "RTCM Standard 10410.x for NTRIP"
+revision = "10410.1-candidate"
+publisher = "RTCM Special Committee 104"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "paid-or-licensed-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "nmea-0183"
+title = "NMEA 0183"
+revision = "4.30-candidate"
+publisher = "National Marine Electronics Association"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "paid-or-licensed-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "nmea-2000"
+title = "NMEA 2000"
+revision = "3.000-candidate"
+publisher = "National Marine Electronics Association"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "paid-or-licensed-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "rinex"
+title = "Receiver Independent Exchange Format"
+revision = "4.02-candidate"
+publisher = "International GNSS Service / RINEX Working Group"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "oma-supl"
+title = "OMA Secure User Plane Location specifications"
+revision = "verify-current-before-implementation"
+publisher = "Open Mobile Alliance"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-or-membership-reference"
+local_copy = false
+implemented_by = []
+tests = []
+
+[[document]]
+id = "3gpp-lpp"
+title = "3GPP LTE Positioning Protocol specifications"
+revision = "verify-current-before-implementation"
+publisher = "3GPP"
+retrieved = "2026-07-23"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []

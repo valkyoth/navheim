@@ -1,0 +1,92 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "creationInfo": {
+    "created": "2026-07-24T06:43:51Z",
+    "creators": [
+      "Tool: cargo-sbom-v0.10.0"
+    ]
+  },
+  "dataLicense": "CC0-1.0",
+  "documentNamespace": "https://spdx.org/spdxdocs/navheim-0d656258-5e1b-405f-8c16-6e2151baa633",
+  "files": [
+    {
+      "SPDXID": "SPDXRef-File-navheim",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "16e303239d50ba3ba962f3caf4960e386141c92d"
+        }
+      ],
+      "fileName": "./Cargo.lock",
+      "fileTypes": [
+        "SOURCE",
+        "TEXT"
+      ]
+    },
+    {
+      "SPDXID": "SPDXRef-File-navheim_core",
+      "checksums": [
+        {
+          "algorithm": "SHA1",
+          "checksumValue": "16e303239d50ba3ba962f3caf4960e386141c92d"
+        }
+      ],
+      "fileName": "./Cargo.lock",
+      "fileTypes": [
+        "SOURCE",
+        "TEXT"
+      ]
+    }
+  ],
+  "name": "navheim",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-navheim-core-0.1.0",
+      "description": "Dependency-free no_std foundation for Navheim GNSS/PNT types and traits.",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/navheim",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "navheim-core",
+      "versionInfo": "0.1.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-navheim-0.1.0",
+      "description": "Security-first no_std facade for the evolving Navheim GNSS/PNT platform.",
+      "downloadLocation": "NONE",
+      "homepage": "https://github.com/valkyoth/navheim",
+      "licenseConcluded": "MIT OR Apache-2.0",
+      "licenseDeclared": "MIT OR Apache-2.0",
+      "name": "navheim",
+      "versionInfo": "0.1.0"
+    }
+  ],
+  "relationships": [
+    {
+      "relatedSpdxElement": "SPDXRef-Package-navheim-core-0.1.0",
+      "relationshipType": "DEPENDS_ON",
+      "spdxElementId": "SPDXRef-Package-navheim-0.1.0"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-navheim",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-File-navheim_core",
+      "relationshipType": "DESCRIBES",
+      "spdxElementId": "SPDXRef-DOCUMENT"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-navheim-core-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-navheim_core"
+    },
+    {
+      "relatedSpdxElement": "SPDXRef-Package-navheim-0.1.0",
+      "relationshipType": "GENERATED_FROM",
+      "spdxElementId": "SPDXRef-File-navheim"
+    }
+  ],
+  "spdxVersion": "SPDX-2.3"
+}

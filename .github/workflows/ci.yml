@@ -1,0 +1,141 @@
+name: Rust CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  checks:
+    name: Format, lint, test, policy, and audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pinned Rust toolchain
+        run: rustup show
+
+      - name: Install security tools
+        run: |
+          cargo install --locked cargo-deny --version 0.20.2
+          cargo install --locked cargo-audit --version 0.22.2
+
+      - name: Install SBOM tool
+        run: cargo install --locked cargo-sbom --version 0.10.0
+
+      - name: Run local check gate
+        run: scripts/checks.sh
+
+      - name: Check dependency policy
+        run: cargo deny check
+
+      - name: Check RustSec advisories
+        run: cargo audit
+
+      - name: Verify committed SBOM
+        run: scripts/generate-sbom.sh --check
+
+  rust-compatibility:
+    name: Rust ${{ matrix.rust }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        rust:
+          - 1.90.0
+          - 1.91.0
+          - 1.91.1
+          - 1.92.0
+          - 1.93.0
+          - 1.93.1
+          - 1.94.0
+          - 1.94.1
+          - 1.95.0
+          - 1.96.0
+          - 1.96.1
+          - 1.97.0
+          - 1.97.1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install compatibility toolchain
+        run: rustup toolchain install ${{ matrix.rust }} --profile minimal
+
+      - name: Check all features
+        run: cargo +${{ matrix.rust }} check --workspace --all-features
+
+  host-platforms:
+    name: Host check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pinned Rust toolchain
+        run: rustup show
+
+      - name: Check workspace
+        run: cargo check --workspace --all-features
+
+  portable-targets:
+    name: Core target (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - x86_64-unknown-freebsd
+          - x86_64-unknown-netbsd
+          - aarch64-linux-android
+          - wasm32-unknown-unknown
+          - thumbv7em-none-eabi
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install target
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Check no_std crates
+        run: cargo check --workspace --no-default-features --target ${{ matrix.target }}
+
+  ios-target:
+    name: Core target (aarch64-apple-ios)
+    runs-on: macos-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install iOS target
+        run: rustup target add aarch64-apple-ios
+
+      - name: Check no_std crates
+        run: cargo check --workspace --no-default-features --target aarch64-apple-ios

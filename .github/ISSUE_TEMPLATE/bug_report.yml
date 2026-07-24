@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a reproducible Navheim bug without private security details.
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction
+      description: Steps, bounded input, target, toolchain, or test case.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security impact
+      description: Do not include exploitable, precise-location, credential, or unsafe RF details. Use SECURITY.md for private reports.
+    validations:
+      required: false

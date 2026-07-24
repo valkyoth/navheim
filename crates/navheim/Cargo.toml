@@ -1,0 +1,22 @@
+[package]
+name = "navheim"
+description = "Security-first no_std facade for the evolving Navheim GNSS/PNT platform."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["gnss", "gps", "navigation", "positioning", "no-std"]
+categories = ["aerospace", "embedded", "no-std", "science"]
+
+[features]
+default = []
+std = ["navheim-core/std"]
+
+[dependencies]
+navheim-core.workspace = true
+
+[lints]
+workspace = true

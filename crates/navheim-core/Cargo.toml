@@ -1,0 +1,19 @@
+[package]
+name = "navheim-core"
+description = "Dependency-free no_std foundation for Navheim GNSS/PNT types and traits."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["gnss", "navigation", "positioning", "no-std"]
+categories = ["aerospace", "embedded", "no-std", "science"]
+
+[features]
+default = []
+std = []
+
+[lints]
+workspace = true

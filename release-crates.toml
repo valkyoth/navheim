@@ -1,0 +1,17 @@
+[release]
+version = "0.1.0"
+policy = "independent"
+
+[crates."navheim-core"]
+previous_version = "0.0.0"
+version = "0.1.0"
+change = "code"
+publish = true
+reason = "Establishes the dependency-free no_std foundation crate and its security boundary."
+
+[crates.navheim]
+previous_version = "0.0.0"
+version = "0.1.0"
+change = "code"
+publish = true
+reason = "Establishes the no_std facade over navheim-core and the public package metadata."
