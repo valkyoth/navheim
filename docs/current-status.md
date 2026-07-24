@@ -34,7 +34,7 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 412 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 417 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
@@ -55,6 +55,11 @@ Navheim currently provides repository and crate foundations only.
   deterministic multicore/source supervision, safe receiver control and
   staged state snapshot/restore ownership without weakening immutable planning
   or Tier 0 thread-free behavior.
+- Seventh gap review corrected DSP/coordinate/executor dependency ownership,
+  snapshot authenticity versus corruption detection, role-aware source
+  composition and lifecycle ordering; it added post-acquisition receipt/
+  snapshot integration, semantic-store restore and receiver-configuration
+  generation barriers with narrower replayable parallel guarantees.
 
 ## Not Implemented
 

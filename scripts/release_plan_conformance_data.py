@@ -14,8 +14,8 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Compare arbitrary-precision tables across central/extreme tails and domain boundaries; prove integrity/protection rounding never underestimates risk or permits a looser threshold.",
     ),
     "0.7.2": (
-        "Implement bounded UTM/UPS and selected Transverse Mercator profiles with explicit zone/hemisphere, false offsets, datum, frame, epoch, convergence, distortion, and unknown IDs.",
-        "Cross-check independent references and test forward/inverse round trips, polar and zone boundaries, antimeridian, invalid coordinates, and unsupported EPSG-database requests.",
+        "Implement navheim-geo over navheim-core representations and navheim-math operations for bounded UTM/UPS and selected Transverse Mercator profiles with explicit provenance and no platform/private math.",
+        "Cross-check independent references and test dependency direction, forward/inverse round trips, polar/zone boundaries, antimeridian, invalid coordinates, and unsupported EPSG-database requests.",
     ),
     "0.12.3": (
         "Define static Tier 0 and isolated host extension contracts declaring capabilities, numerical backend, determinism, resources, artifacts, provenance, trust, reset, and invalidation.",
@@ -34,20 +34,28 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test future/stale/expired models, equivalent/conflicting healthy sources, issue transitions, session mixing, late authentication, every Selected/Ambiguous/Unavailable/Rejected outcome, considered-candidate evidence, and no latest-wins path.",
     ),
     "0.5.5": (
-        "Define checked UTC civil labels including second 60 and negative-leap deletion, TAI-mediated ordering/arithmetic, UTC-model lifecycle, explicit POSIX loss/ambiguity, and Gregorian/ordinal/Julian/MJD conversions.",
-        "Test positive and hypothetical negative leaps, model announcement/activation/replacement/invalidation, calendar boundaries, Julian/MJD epochs, precision/rounding, POSIX ambiguity, and the leap-smear non-claim.",
+        "Define checked UTC civil labels, TAI-mediated arithmetic, UTC-model lifecycle, POSIX ambiguity, and Gregorian/ordinal/Julian/MJD conversions using integer day plus exact fraction/rational under frozen range/BCE/year-zero rules.",
+        "Test positive/hypothetical negative leaps, model lifecycle, calendar/BCE/range boundaries, Julian/MJD epochs/fractions, precision/rounding, POSIX ambiguity, and the leap-smear non-claim.",
     ),
     "0.7.3": (
         "Define TT and EOP-derived UT1 time arguments with exact derivation, product/series revision, interpolation, validity, uncertainty, provenance, and separation from GnssTimeScale.",
         "Cross-check IERS/IAU references and test EOP gaps/expiry, interpolation boundaries, leap transitions, precision, wrong-scale use, unavailable evidence, and Earth-rotation/tide call-site typing.",
     ),
     "0.18.1": (
-        "Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, digest, and anti-rollback binding.",
-        "Test hostile bytes, versions, sizes, checksums, provenance remap, expired/rolled-back state, missing capabilities, incompatible identities, invariant failure, partial restore, atomic commit, and unsupported-state non-claims.",
+        "Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, corruption digest, and anti-rollback binding.",
+        "Test hostile bytes, versions, sizes, corruption checks, provenance remap, expired/rolled-back state, missing capabilities, incompatible identities, invariant failure, partial restore, atomic commit, and unsupported-state non-claims.",
+    ),
+    "0.18.2": (
+        "Define Untrusted, IntegrityChecked, and AuthenticatedSealed snapshot trust; require injected seal verification plus rollback-resistant generation for sealed state and prohibit an unkeyed digest from implying authenticity.",
+        "Test forged/resealed state, wrong/missing authority, key/authority rotation, rollback, trust downgrade, initializer-only behavior, reacquisition/reconvergence, and invalidation/reverification of restored authentication, correctness, signal-authenticity, integrity, and policy assessments.",
     ),
     "0.20.3": (
         "Supervise only explicitly opened sources through deterministic health, withdrawal, gaps, generation-safe reselection, and bounded caller-authorized retry/failover policies without trust/accuracy downgrade.",
-        "Test source/provider loss and return, flapping, retry exhaustion, generation mixing, policy changes, simultaneous failures, ordering, cancellation, backpressure, recovery, and explicit no-fallback outcomes.",
+        "Test source/provider loss and return, flapping, retry exhaustion, same-role generation replacement, policy changes, simultaneous failures, ordering, cancellation, backpressure, recovery, and explicit no-fallback outcomes.",
+    ),
+    "0.20.4": (
+        "Define logical source roles and an explicit composition/compatibility graph for same-role transitions and valid cross-role receiver/correction, GNSS/sensor, array, and security-comparator use.",
+        "Test clock mapping, correction session, calibration, provenance, epoch and generation compatibility; same-role overlap, declared handover, legitimate cross-role composition, role confusion, reset, and deterministic rejection reasons.",
     ),
     "0.1.3": (
         "Create a bidirectional ledger from architecture requirements and public claims to owners, milestones, sources, tests, status, and non-claims; make authored-file scope explicit.",
@@ -118,32 +126,48 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test immutable maximum PlanReceipt bounds, poisoned/conflicting/stale hints, bounded blind fallback, search equivalence, expiry/reset, work limits, and proof that hints cannot resolve canonical time, position, or trust.",
     ),
     "0.42.2": (
-        "Emit an immutable SearchExecutionReceipt per decision with hint IDs, accepted/rejected windows, actual bounded work, fallback reason, decision order, plan identity, source generation, and outcome.",
-        "Test dynamic hint arrival/loss, no PlanReceipt mutation, conflicting windows, deterministic ties/order, budget exhaustion, fallback, replay equivalence, stale plans/generations, and receipt completeness.",
+        "Define and serialize the bounded immutable SearchExecutionReceipt schema for hint IDs, windows, actual work, fallback, decision order, plan/source identity and outcome without claiming executable acquisition integration.",
+        "Test canonical/original serialization, capacity/size bounds, unknown fields, hostile receipts, schema versions, no PlanReceipt mutation, stale identities, and explicit pre-acquisition non-claim.",
     ),
-    "0.42.3": (
-        "Implement the acquisition/reacquisition-memory snapshot profile over the common envelope with search plan, signal/source identity, expiry, provenance remap, and anti-rollback authority.",
-        "Test cold/warm/hot restore, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt state, deterministic search equivalence, atomic failure, and safe cold-start fallback.",
+    "0.43.2": (
+        "Integrate acquisition with SearchExecutionReceipt production for runtime hint acceptance/rejection, actual bounded work, fallback reason, deterministic decision order and outcome.",
+        "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement an optional Tier 2 executor with caller-selected worker count, bounded queues, deterministic partition/merge, event/invalidation ordering, cancellation, deadlines, backpressure, and worker-failure artifacts.",
-        "Compare scalar and parallel results/replays across worker counts, scheduling perturbations, queue limits, cancellation races, deadlines, worker failure, source reset, and proof Tier 0 creates no threads.",
+        "Implement separate navheim-executor Tier 2 workers with bounded queues and deterministic logical partition/merge plus bounded traces for wall-clock deadline, cancellation, scheduling and worker-failure observations.",
+        "Replay from captured traces; test worker counts, scheduling perturbations, queue limits, cancellation/deadline/failure traces, source reset, bit-exact or tolerance-defined reductions, scalar verification, and proof navheim-dsp/Tier 0 create no threads.",
+    ),
+    "0.48.4": (
+        "Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, trust class, provenance remap, and anti-rollback authority.",
+        "Test cold/warm/hot restore, trust classes, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, search equivalence, assessment invalidation, atomic failure, and safe cold-start fallback.",
     ),
     "0.54.2": (
-        "Implement separate versioned tracking-channel and navigation-store snapshot profiles with source/generation, clock, model, calibration, issue, validity, parent and anti-rollback evidence.",
-        "Test mid-symbol/page/issue state, channel/store compatibility, stale ephemeris, calibration/model changes, source reset, rollback, corruption, provenance remap, atomic restore, and cold reconstruction equivalence.",
+        "Implement separate versioned tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, trust, and anti-rollback evidence.",
+        "Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, provenance remap, assessment invalidation, atomic restore, reacquisition rules, and cold reconstruction equivalence.",
+    ),
+    "0.55.1": (
+        "Implement the semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, trust, provenance and anti-rollback evidence.",
+        "Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, provenance remap, invalidation of restored assessments, atomic restore, and reconstruction equivalence.",
     ),
     "0.144.3": (
-        "Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored solutions and test product/bias/frame changes, discontinuities, stale convergence, covariance invalidity, rollback, version mismatch, corrupt bytes, atomic rejection, and unavailable restore.",
+        "Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and anti-rollback binding.",
+        "Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.",
     ),
     "0.168.3": (
-        "Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, rollback, version mismatch, corrupt bytes, atomic rejection, and unavailable restore.",
+        "Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and anti-rollback binding.",
+        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, trust classes, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection, and unavailable restore.",
     ),
     "0.185.4": (
         "Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency, transitions, and read-back.",
         "Test arbitrary-byte rejection, unsupported firmware, NAK/timeout/reorder, duplicate commands, partial application, baud/protocol reconnect, power loss, read-back mismatch, retry limits, redaction, and recovery to known state.",
+    ),
+    "0.185.5": (
+        "Create ReceiverConfigurationGeneration bound to device/firmware and effective epoch/interval; drain or stale queues, invalidate affected mappings/calibrations/observations, rebind corrections, and classify volatile/persistent/destructive commands.",
+        "Test buffered old/new semantics, transition intervals, queue drain failure, targeted invalidation order, correction rebinding, device replacement, persistent authorization, flash-wear exhaustion, reset/destructive consent, rollback, and recovery.",
+    ),
+    "0.37.0": (
+        "Make navheim-dsp depend only on navheim-math for runtime twiddles, coefficients, thresholds, CN0/estimators and admitted scalar functions; prohibit private duplicates and platform math.",
+        "Test Cargo/DAG edges, no_std/MSRV builds, normative scalar equivalence, fixed-table provenance, backend identity, feature combinations, and scans/reviews for duplicate or platform math paths.",
     ),
     "0.175.1": (
         "Version and bound FPGA/GPU/external-DSP FFT, channelizer, acquisition, candidate, correlator, and tracking artifacts with quantization, scaling, identity, clocks, calibration, build, reset, work, and trust provenance.",

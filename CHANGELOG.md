@@ -40,6 +40,11 @@ All notable changes to `navheim` are documented here.
   added civil UTC and TT/UT1/EOP contracts, separated immutable maximum plans
   from runtime search decisions, and assigned deterministic multicore, source
   failover, receiver control and staged snapshot/restore profiles.
+- Integrated the seventh review as five net-new stops plus one moved
+  milestone: explicit DSP/geo/executor dependencies, snapshot trust/sealing,
+  source-role composition, correctly ordered acquisition and semantic-store
+  persistence, receiver-configuration generations, captured parallel runtime
+  traces and exact Julian/MJD representation.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

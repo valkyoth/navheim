@@ -228,7 +228,9 @@ POSIX conversion returns explicit ambiguity/loss evidence and never aliases
 POSIX seconds with UTC labels. Leap smear is not a Navheim time scale or an
 implicit conversion. Gregorian date, ordinal day, Julian Date and Modified
 Julian Date adapters identify their epoch, day boundary, scale context,
-precision and rounding.
+precision and rounding. Julian/MJD values use an integer day plus an exact
+bounded fraction or reduced rational, not an implicit `f64`. The stable profile
+freezes its proleptic-Gregorian range and BCE/year-zero convention.
 
 TT and UT1 are typed precision-geodesy arguments, not ordinary
 `GnssTimeScale` values. TT is derived explicitly from atomic time. UT1 requires
@@ -473,8 +475,9 @@ Before the timing API is stable, tests must cover:
 - UTC second 60, synthetic negative-leap deletion, civil-to-TAI ordering,
   UTC-model replacement/invalidation, POSIX ambiguity/loss and leap-smear
   non-claims;
-- Gregorian/ordinal/Julian/MJD boundaries and TT/UT1 derivation across EOP
-  interpolation, gaps, expiry and revision changes;
+- Gregorian/ordinal/Julian/MJD range, BCE/year-zero, integer-day and exact-
+  fraction boundaries plus TT/UT1 derivation across EOP interpolation, gaps,
+  expiry and revision changes;
 - truncated-week resolution with absent, stale, conflicting, and malicious
   context;
 - positive and negative cable/receiver delays and uncertainty accumulation;

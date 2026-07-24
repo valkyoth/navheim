@@ -99,10 +99,17 @@ undeclared edges and silent privilege or tier escalation.
 - `navheim-linalg`: zero-third-party-dependency `no_std` bounded
   fixed-capacity and caller-scratch linear algebra depending only on
   `navheim-math`, with narrow solver-facing APIs.
-- `navheim-dsp`: complex/fixed-point values, filters, resampling, FFT,
-  acquisition, tracking, synchronization, and estimators.
+- `navheim-geo`: zero-third-party-dependency `no_std` coordinate, projection,
+  geodesic and frame algorithms depending on representation-only
+  `navheim-core` plus `navheim-math`.
+- `navheim-dsp`: zero-third-party-dependency `no_std` complex/fixed-point
+  values, filters, resampling, FFT, acquisition, tracking, synchronization and
+  estimators, depending on `navheim-math` for all admitted scalar functions.
 - `navheim-sdr`: front-end traits, sample metadata, coherent arrays, band
   planning, deployment validation, and device adapter boundaries.
+- `navheim-executor`: optional Tier 2 `std` worker, cancellation and
+  bounded-queue adapter over canonical scalar work units; never a
+  `navheim-dsp` dependency.
 
 ### Constellations and augmentation
 
@@ -161,7 +168,8 @@ or privileged clock adjustment. Those belong to consumers such as Mundilfari.
   inputs.
 - `navheim-receiver`: read-only adapters by default; admitted control profiles
   use side-effect-free allowlisted command plans, ACK/NAK correlation,
-  transition recovery and read-back verification.
+  transition recovery, configuration generations, targeted invalidation,
+  persistent-write authority and read-back verification.
 - `navheim-assist`: canonical trust/freshness/session model before SUPL, LPP,
   Android or receiver translations.
 - `navheim-io`
@@ -206,7 +214,8 @@ Implementation proceeds in this dependency order:
 2. physical units, exact atomic/civil/precision-geodesy time, deterministic
    `no_std` math, bounded linear algebra and admitted conservative statistical
    kernels;
-3. coordinates and reference frames;
+3. core coordinate/reference-frame representations, then `navheim-geo`
+   algorithms through `navheim-math`;
 4. bit, checksum, parity, and FEC primitives;
 5. extensible identifiers, canonical signal definitions and registries;
 6. observations, ephemerides, corrections, provenance, events and the opt-in
@@ -214,8 +223,8 @@ Implementation proceeds in this dependency order:
 7. capabilities, resource plans, deterministic source/sink polling and source
    supervision;
 8. formats and deterministic replay;
-9. scalar native DSP, dependency-free acquisition hints, deterministic Tier 2
-   execution and timestamp correctness;
+9. scalar native DSP through `navheim-math`, dependency-free acquisition hints,
+   separate deterministic Tier 2 execution and timestamp correctness;
 10. independent signal/message vector admission, then GPS L1 C/A end-to-end
     as the first observable-to-fix path;
 11. remaining GPS and constellations;
@@ -283,7 +292,9 @@ UTC civil labels preserve positive leap second `60` and hypothetical
 negative-leap deletion semantics. Ordering/arithmetic resolves through an
 identified UTC model to TAI. POSIX mappings are explicit ambiguous/lossy
 adapters; leap smear is a non-claim. Gregorian/ordinal/Julian/MJD conversions
-name their scale and precision. TT and EOP-derived UT1 are typed
+name their scale and precision; Julian/MJD uses integer day plus exact bounded
+fraction/rational under a frozen proleptic-Gregorian/BCE convention. TT and
+EOP-derived UT1 are typed
 precision-geodesy arguments with product/revision/validity/uncertainty, not
 ordinary GNSS scales.
 
@@ -293,9 +304,14 @@ Tier 0 uses a small caller-driven vocabulary: bounded `Push`, `Poll`,
 `Transform`, `Plan` and `Reset` contracts. Snapshot/restore is opt-in only
 through a versioned bounded envelope carrying algorithm/schema, source/
 generation, validity, provenance, model/calibration/product identities,
-capabilities and byte/work limits. Restore treats bytes as untrusted, checks
-compatibility and external anti-rollback authority, remaps provenance,
-validates invariants and commits atomically. Parsers report consumed length and
+capabilities, byte/work limits, corruption digest and `Untrusted`,
+`IntegrityChecked` or `AuthenticatedSealed` trust. Unkeyed digests provide no
+authenticity; sealed state requires an injected external sealing authority and
+rollback-resistant generation. Restore treats bytes as untrusted, checks
+compatibility, remaps provenance, validates invariants and commits atomically.
+Prior authentication, signal-authenticity, correctness, integrity and policy
+assessments are invalidated or reverified rather than restored as authoritative.
+Parsers report consumed length and
 either make progress or request more input. Large events use borrowed views or
 caller-provided bounded slots.
 
@@ -310,15 +326,20 @@ artifact, effective interval and mandatory-withdrawal semantics. Queue
 pressure cannot silently discard them: the source stops, explicitly coalesces,
 or requires resynchronization.
 
-Tier 0 remains thread-free. The optional Tier 2 executor takes a caller-chosen
-worker count and bounded queues, then deterministically partitions and merges
-work while preserving cancellation, deadline, backpressure, event and
-invalidation order. It must replay equivalently to scalar execution.
+Tier 0 and `navheim-dsp` remain thread-free. Separate `navheim-executor` takes
+a caller-chosen worker count and bounded queues. Logical partition/merge and
+event/invalidation order are deterministic. Wall-clock deadlines,
+cancellation, scheduling and worker failures become bounded execution-trace
+inputs to replay. Floating reductions are bit-exact only where specified,
+otherwise tolerance-bounded. Scalar equivalence is verification evidence, not
+mandatory duplicate production computation.
 
 The facade source supervisor operates only on explicitly opened sources.
 Loss/change emits gap and withdrawal before bounded caller-authorized retry or
-reselection. Generations cannot mix, and failover cannot silently lower
-accuracy, integrity, authentication or trust policy.
+reselection. Same-role replacement generations cannot overlap without a
+declared transition. Different roles compose only through the checked
+role/clock/session/calibration/provenance/epoch compatibility graph. Failover
+cannot silently lower accuracy, integrity, authentication or trust policy.
 
 Because canonical crates forbid unsafe code, bounded collections use an honest
 safe representation such as initialized storage, `[Option<T>; N]`,
@@ -518,8 +539,10 @@ future adapter target and does not alter core types.
 The threat model covers malicious RF, receivers, correction/assistance
 servers, files, local devices, time rollback, correction mixing, resource
 exhaustion, differential parsing, stale/hostile algorithm snapshots, source
-failover confusion, receiver-control partial application, parallel ordering,
-supply-chain compromise, FFI/DMA, credential exposure, and location privacy.
+role/failover confusion, forged digest-valid state, receiver-control
+configuration/partial-application errors, uncaptured parallel runtime
+outcomes, supply-chain compromise, FFI/DMA, credential exposure, and location
+privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -548,6 +571,7 @@ broader 1.0 roadmap:
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
 | Bounded solver linear algebra and conservative statistical kernels | v0.3.4-v0.3.5 |
+| Explicit linalg/DSP/geo math dependencies and executor isolation | v0.3.4, v0.7.2, v0.37.0 and v0.48.3 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
 | UTC civil/POSIX/calendar and TT/UT1/EOP precision-time contracts | v0.5.5 and v0.7.3 |
 | Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
@@ -559,15 +583,16 @@ broader 1.0 roadmap:
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
-| Opt-in bounded snapshot envelope and state-specific restore profiles | v0.18.1, v0.42.3, v0.54.2, v0.144.3 and v0.168.3 |
+| Snapshot envelope, trust/sealing and correctly ordered state restore profiles | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3 and v0.168.3 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
+| Logical source-role composition and same-role generation transitions | v0.20.4 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
-| Early bounded acquisition hints, runtime decision receipts and late assistance translation | v0.42.1-v0.42.2 and v0.185.1 |
-| Deterministic Tier 2 multicore executor with scalar equivalence | v0.48.3 |
+| Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
+| Separate Tier 2 multicore executor, captured runtime traces and scalar verification | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
@@ -585,7 +610,7 @@ broader 1.0 roadmap:
 | Full fusion calibration/mechanization, vector tracking, reacquisition and fixed-rate output | v0.164.1-v0.168.2 |
 | Navigation crate implementation, road-routing non-claim and native AoA producer | v0.169.1-v0.169.5 |
 | FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1 |
-| Generic sources, evidence-gated receiver families and safe active control | v0.185.2-v0.185.4 |
+| Generic sources, evidence-gated receivers, safe control and configuration-generation barriers | v0.185.2-v0.185.5 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark tools | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |

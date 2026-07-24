@@ -75,6 +75,13 @@ source supervision, capability-gated receiver control, and an opt-in snapshot
 envelope with separate acquisition, tracking/navigation-store, PPP and fusion
 restore profiles.
 
+The seventh coverage pass corrects DSP/geo/executor dependency authority,
+distinguishes snapshot corruption detection from authenticated sealing,
+defines role-aware source composition, narrows parallel determinism to logical
+ordering plus captured runtime traces, moves executable acquisition receipts
+and snapshots after their state exists, separates raw and semantic store
+restore, and adds receiver-configuration generation barriers.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned
