@@ -42,12 +42,12 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Cross-check IERS/IAU references and test EOP gaps/expiry, interpolation boundaries, leap transitions, precision, wrong-scale use, unavailable evidence, and Earth-rotation/tide call-site typing.",
     ),
     "0.18.1": (
-        "Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, corruption digest, and anti-rollback binding.",
+        "Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, corruption digest, and optional external freshness evidence.",
         "Test hostile bytes, versions, sizes, corruption checks, provenance remap, expired/rolled-back state, missing capabilities, incompatible identities, invariant failure, partial restore, atomic commit, and unsupported-state non-claims.",
     ),
     "0.18.2": (
-        "Define orthogonal SnapshotAuthenticity and SnapshotConfidentiality, field sensitivity, minimal profiles, consent/retention and debug/error exclusion; require injected authentication/encryption authorities and prohibit digests or authentication from implying confidentiality.",
-        "Test every authenticity/confidentiality pairing, forged/re-encrypted state, wrong/missing authority, rotation, rollback, consent/retention denial, sensitive formatting, plaintext lifetime/zeroization limits, initializer-only behavior, reconvergence and restored-assessment invalidation.",
+        "Define orthogonal SnapshotAuthenticity, SnapshotConfidentiality and SnapshotFreshness (Unchecked, CounterChecked, RollbackResistant); require trusted external monotonic comparison/update for rollback resistance and prohibit authenticated/encrypted embedded counters from implying freshness.",
+        "Test every authenticity/confidentiality/freshness combination, stale authenticated/encrypted replay, absent/lying monotonic authority, counter compare/update races, freshness downgrade/unavailable, consent/retention, sensitive formatting, plaintext limits, reconvergence and restored-assessment invalidation.",
     ),
     "0.20.3": (
         "Supervise only explicitly opened sources through deterministic health, withdrawal, gaps, generation-safe reselection, and bounded caller-authorized retry/failover policies without trust/accuracy downgrade.",
@@ -134,32 +134,32 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement scoped WorkPartition/ParallelWorkUnit ownership plus distinct CancellationRequested, Cancelled, DeadlineMissed, WorkerUnresponsive and WorkerFailed states; retain borrowed ownership through timeout and admit only bounded cooperative work, with process isolation required for hard termination.",
-        "Test overlap/alias rejection, non-static buffers, bounded cancellation checkpoints, deadline without ownership return, permanently stuck worker modeling, forbidden blocking I/O/external work, result/trace overflow, unwind panic versus terminal abort, worker/schedule variation and thread-free DSP/Tier 0.",
+        "Implement ExecutionScope/ScopedJob for non-escaping borrowed work and ExecutionHandle for explicitly planned owned buffers/arena leases, with CallerOwned->Submitted->WorkerOwned->Returned lease states and distinct cancellation/deadline/unresponsive/failure observations.",
+        "Compile-fail escaping scoped jobs/borrows; test status polling inside scope, scope join/trap behavior, owned-handle polling/recovery, drop/join without detach, hidden Arc/allocation rejection, lease state/return on every path, unresponsive ownership, blocking-work rejection, trace overflow and abort/stuck terminal behavior.",
     ),
     "0.50.3": (
-        "Define side-effect-free front-end prepare and immutable apply contracts plus FrontEndConfigurationGeneration binding device/firmware, clocks, ports/groups, RF/sample settings, power/gain and calibration; reads return initialized count, block/generation, mapping, gap/overrun and progress state.",
-        "Test impossible requests without mutation, stale/foreign/tampered plans, device read-back lies, observed timing/rate/calibration consistency, sequential-band/low-power transitions, queue drain, stale blocks, mapping/DSP/tracking invalidation, partial reads, would-block, end, overrun and uninitialized tails.",
+        "Define Applied, RejectedNoMutation, PartiallyApplied and StateUnknown front-end outcomes; partial/unknown retires prior generation, activates no intended generation, invalidates state, blocks reads and requires reprobe/new plan. Coherent arrays use prepared group transactions with per-device evidence and revalidation.",
+        "Test no-mutation rejection, disconnect/power loss during every setting, partial channels/devices, failed best-effort rollback, unknown state, per-device evidence, no generation activation/read, reprobe recovery, false coherence, clock calibration revalidation, stale blocks, initialized counts, gaps/overruns/end/would-block.",
     ),
     "0.48.4": (
-        "Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, authenticity/confidentiality, provenance remap, sensitivity and anti-rollback authority.",
-        "Test cold/warm/hot restore, authenticity/confidentiality pairings, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, privacy policy, search equivalence, assessment invalidation, atomic failure and safe cold-start fallback.",
+        "Implement the acquisition/reacquisition-memory snapshot profile after scheduler integration with search/source identity, expiry, authenticity/confidentiality/freshness, provenance remap, sensitivity and explicit monotonic-authority evidence.",
+        "Test cold/warm/hot restore, all three evidence dimensions, stale authenticated/encrypted replay, unavailable monotonic state, expired/poisoned hints, mismatch/reset, corrupt/forged state, privacy, equivalence, invalidation, atomic failure and safe cold start.",
     ),
     "0.54.2": (
-        "Implement separate minimal tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, authenticity/confidentiality, sensitivity and anti-rollback evidence.",
-        "Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, assessment invalidation, atomic restore, reacquisition rules and cold reconstruction equivalence.",
+        "Implement minimal tracking-channel/raw-page snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parents, authenticity/confidentiality/freshness, sensitivity and monotonic-authority evidence.",
+        "Test mid-symbol/page state, compatibility, calibration/reset, stale authenticated/encrypted replay, unavailable monotonic state, corruption/forgery, privacy, provenance remap, assessment invalidation, atomic restore, reacquisition and cold reconstruction.",
     ),
     "0.55.1": (
-        "Implement the minimal semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, authenticity/confidentiality, sensitivity, provenance and anti-rollback evidence.",
-        "Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, invalidation of restored assessments, atomic restore and reconstruction equivalence.",
+        "Implement the minimal semantic navigation-store/ephemeris snapshot after GPS models with issue, model, health, validity, source, parents, authenticity/confidentiality/freshness, sensitivity, provenance and monotonic-authority evidence.",
+        "Test stale/conflicting/future ephemerides, issue/model/health/reset, stale authenticated/encrypted replay, unavailable monotonic state, corruption/forgery, privacy, provenance remap, restored-assessment invalidation, atomic restore and reconstruction.",
     ),
     "0.144.3": (
-        "Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.",
+        "Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and independent authenticity/confidentiality/freshness evidence.",
+        "Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality/freshness, stale authenticated replay, unavailable monotonic state, privacy, forgery, version mismatch, reconvergence, atomic rejection and unavailable restore.",
     ),
     "0.168.3": (
-        "Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and anti-rollback binding.",
-        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.",
+        "Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and independent authenticity/confidentiality/freshness evidence.",
+        "Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance/queues, authenticity/confidentiality/freshness, stale authenticated replay, unavailable monotonic state, privacy, forgery, version mismatch, reconvergence, atomic rejection and unavailable restore.",
     ),
     "0.185.4": (
         "Distinguish read-only/control-capable receiver profiles and execute only side-effect-free planned, typed, allowlisted commands with firmware capabilities, ACK/NAK correlation, timeouts, idempotency and transitions; record command, ACK/NAK, read-back and timing facts in ControlTransaction.",
@@ -174,24 +174,24 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test false ACK/read-back, delayed/contradictory streams, partial coverage, uncertainty, unverifiable fields, independent timing/rate/protocol evidence, reset, firmware/device replacement, invalidation, stale generations and refusal to broaden ObservedConsistent.",
     ),
     "0.189.2": (
-        "Define the common snapshot-protection envelope and external-authority bridge with opaque suite, authority/key/version, nonce-allocation, AAD schema, rollback counter, bounded ciphertext/tag lengths, creation/expiry/rotation and authenticated interpretive metadata.",
-        "Test unknown/downgraded suites, nonce reuse/crash recovery, key rotation/migration, atomic encryption/counter commit, rollback, tampered outer fields, length validation before decrypt, caller buffer bounds, uniform authentication failure, oracle resistance, consent/retention and Aesynx-ready authority extension.",
+        "Define the common protection envelope and authority bridge with opaque suite/key/nonce/AAD/counter/length/time/rotation fields plus separate evidence for cryptographic verification, durable commit, trusted monotonic comparison/update, crash recovery and key/counter migration.",
+        "Test unknown/downgraded suites, nonce reuse, atomic crypto/counter commit, authenticated old-snapshot replay, missing/lying monotonic state, crash recovery, migration, tampered outer fields, validate-before-decrypt, uniform failure/oracle resistance and Aesynx-ready extension.",
     ),
     "0.189.3": (
-        "Freeze and implement only admitted Linux/BSD external AEAD, key-custody and crash-safe counter/persistence profiles behind the common bridge; explicitly report unavailable where no qualified authority exists and claim no universal OS keystore.",
-        "Test exact provider/OS versions, permission/identity changes, locked/unavailable/revoked authority, crash points, nonce/counter rollback, atomic replace, filesystem faults, rotation, process concurrency, bounded buffers and explicit unsupported outcomes.",
+        "Freeze only admitted Linux/BSD AEAD, key-custody and persistence profiles; distinguish crash-consistent atomic replacement from trusted rollback resistance, report freshness unavailable without a qualified monotonic authority and claim no universal OS keystore.",
+        "Test exact provider/OS versions, old-file restoration after valid AEAD, atomic replace crash points, filesystem faults, permission/identity changes, locked/revoked authority, nonce/counter races, rotation, concurrency, bounded buffers and explicit freshness/feature unavailability.",
     ),
     "0.189.4": (
-        "Freeze one exact documented Windows protection/key-custody/rollback profile and implement its adapter behind the common bridge without leaking platform handles or widening canonical algorithms.",
-        "Test supported Windows versions and identities, user/machine scope, permission/service loss, locked/revoked keys, nonce/counter crash recovery, rotation/migration, tamper, concurrency, cancellation and capability absence.",
+        "Freeze one exact documented Windows protection/key-custody profile and its durable/monotonic capabilities; implement the adapter without leaking handles, widening algorithms or claiming rollback resistance where trusted monotonic state is absent.",
+        "Test Windows/version identities, user/machine scope, old-state restoration, freshness unavailable/checked/resistant evidence, permission/service loss, locked/revoked keys, crash recovery, rotation/migration, tamper, concurrency and cancellation.",
     ),
     "0.189.5": (
-        "Freeze exact macOS/iOS Keychain and platform-cryptography profiles and implement admitted Apple snapshot-protection adapters behind the common bridge with device/access-control and background-state semantics.",
-        "Test supported OS/device classes, locked device, access-control/entitlement denial, key loss/rotation, backup/restore and migration boundaries, nonce/counter crash recovery, tamper, cancellation, plaintext lifetime and unavailable secure hardware.",
+        "Freeze exact macOS/iOS Keychain/platform-cryptography profiles and their durable/monotonic capabilities; implement admitted adapters with device/access-control/background semantics and no unsupported rollback-resistance claim.",
+        "Test OS/device classes, locked device, access-control/entitlement denial, old-state/backup restoration, freshness evidence/unavailability, key loss/rotation, migration boundaries, nonce/counter crash recovery, tamper, cancellation and unavailable hardware.",
     ),
     "0.189.6": (
-        "Freeze an exact Android Keystore protection/key-custody/rollback profile and implement its adapter behind the common bridge with API-level, hardware-backed/StrongBox and key-invalidation evidence kept explicit.",
-        "Test supported API/device matrices, software versus hardware-backed keys, lock/auth requirements, StrongBox absence, key invalidation/rotation, reinstall/backup boundaries, nonce/counter crash recovery, tamper, cancellation and capability absence.",
+        "Freeze an exact Android Keystore profile and its durable/monotonic capabilities; implement with API-level, hardware-backed/StrongBox and key-invalidation evidence explicit and no unsupported rollback-resistance claim.",
+        "Test API/device matrices, software/hardware-backed keys, lock/auth, StrongBox absence, old-state/backup/reinstall restoration, freshness evidence/unavailability, invalidation/rotation, nonce/counter crash recovery, tamper and cancellation.",
     ),
     "0.170.0": (
         "Implement recorded-I/Q and virtual sources against the v0.50.3 prepare/apply/generation/read contract, with deterministic transition simulation and no invented hardware acknowledgement or observed calibration.",

@@ -72,6 +72,14 @@ Navheim currently provides repository and crate foundations only.
   workers; completes the snapshot cryptographic lifecycle with separately
   admitted platform adapters; narrows receiver evidence to
   `ObservedConsistent`; and preserves geo ownership of local-frame math.
+- Tenth gap review makes those contracts representable and fail-closed:
+  borrowed scoped jobs cannot escape or release storage while stuck, owned
+  handles transfer explicit buffer/arena leases, front-end application reports
+  no-mutation/partial/unknown outcomes including coherent-group evidence, and
+  snapshot freshness is independent from authentication and encryption.
+  Rollback resistance now requires a separately evidenced trusted monotonic
+  compare/update authority; crash-consistent encrypted storage alone cannot
+  claim it.
 
 ## Not Implemented
 

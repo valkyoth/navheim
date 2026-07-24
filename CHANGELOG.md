@@ -59,6 +59,13 @@ All notable changes to `navheim` are documented here.
   interpretive metadata with crash-safe nonce/counter/key lifecycle and
   separate platform adapters; receiver assessments are interval-scoped
   `ObservedConsistent`; and local-frame mathematics remains geo-owned.
+- Integrated the tenth review without inflating or replacing the roadmap:
+  executor milestones now separate non-escaping borrowed scopes from owned
+  lease handles and define exact ownership states; front-end application has
+  mutation-aware and coherent-group outcomes; and snapshot authenticity,
+  confidentiality and freshness are independent. Rollback resistance requires
+  trusted external monotonic comparison/update evidence, while atomic
+  encrypted file replacement is documented only as crash-consistent.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

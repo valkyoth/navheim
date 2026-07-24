@@ -3009,17 +3009,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.18.0 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.1 - Versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti...
+### v0.18.1 - Versioned bounded algorithm-state snapshot envelope, opt-in restore contract and exte...
 
 Status: planned.
 
-Goal: deliver versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti-rollback authority boundary as one bounded,
+Goal: deliver versioned bounded algorithm-state snapshot envelope, opt-in restore contract and external freshness-authority boundary as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti-rollback authority boundary.
-- Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, corruption digest, and anti-rollback binding.
+- versioned bounded algorithm-state snapshot envelope, opt-in restore contract and external freshness-authority boundary.
+- Define an opt-in versioned bounded snapshot envelope with algorithm/schema, source/generation, validity, provenance, model/calibration/product IDs, capability needs, byte/work limits, corruption digest, and optional external freshness evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -3056,17 +3056,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.18.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.18.2 - Orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injecte...
+### v0.18.2 - Orthogonal snapshot authenticity/confidentiality/freshness, minimal sensitive profile...
 
 Status: planned.
 
-Goal: deliver orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy as one bounded,
+Goal: deliver orthogonal snapshot authenticity/confidentiality/freshness, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy as one bounded,
 reviewable release in Phase A (Foundation and contracts).
 
 Deliverables:
 
-- orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
-- Define orthogonal SnapshotAuthenticity and SnapshotConfidentiality, field sensitivity, minimal profiles, consent/retention and debug/error exclusion; require injected authentication/encryption authorities and prohibit digests or authentication from implying confidentiality.
+- orthogonal snapshot authenticity/confidentiality/freshness, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
+- Define orthogonal SnapshotAuthenticity, SnapshotConfidentiality and SnapshotFreshness (Unchecked, CounterChecked, RollbackResistant); require trusted external monotonic comparison/update for rollback resistance and prohibit authenticated/encrypted embedded counters from implying freshness.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -3084,7 +3084,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test every authenticity/confidentiality pairing, forged/re-encrypted state, wrong/missing authority, rotation, rollback, consent/retention denial, sensitive formatting, plaintext lifetime/zeroization limits, initializer-only behavior, reconvergence and restored-assessment invalidation.
+- Test every authenticity/confidentiality/freshness combination, stale authenticated/encrypted replay, absent/lying monotonic authority, counter compare/update races, freshness downgrade/unavailable, consent/retention, sensitive formatting, plaintext limits, reconvergence and restored-assessment invalidation.
 - perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - Separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping wor...
+### v0.48.3 - Separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit leas...
 
 Status: planned.
 
-Goal: deliver separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces as one bounded,
+Goal: deliver separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit lease states, cooperative cancellation, deterministic merge and bounded traces as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces.
-- Implement scoped WorkPartition/ParallelWorkUnit ownership plus distinct CancellationRequested, Cancelled, DeadlineMissed, WorkerUnresponsive and WorkerFailed states; retain borrowed ownership through timeout and admit only bounded cooperative work, with process isolation required for hard termination.
+- separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit lease states, cooperative cancellation, deterministic merge and bounded traces.
+- Implement ExecutionScope/ScopedJob for non-escaping borrowed work and ExecutionHandle for explicitly planned owned buffers/arena leases, with CallerOwned->Submitted->WorkerOwned->Returned lease states and distinct cancellation/deadline/unresponsive/failure observations.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test overlap/alias rejection, non-static buffers, bounded cancellation checkpoints, deadline without ownership return, permanently stuck worker modeling, forbidden blocking I/O/external work, result/trace overflow, unwind panic versus terminal abort, worker/schedule variation and thread-free DSP/Tier 0.
+- Compile-fail escaping scoped jobs/borrows; test status polling inside scope, scope join/trap behavior, owned-handle polling/recovery, drop/join without detach, hidden Arc/allocation rejection, lease state/return on every path, unresponsive ownership, blocking-work rejection, trace overflow and abort/stuck terminal behavior.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6076,13 +6076,13 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and anti-rollback restore checks as one bounded,
+Goal: deliver versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and anti-rollback restore checks.
-- Implement the acquisition/reacquisition-memory snapshot profile after acquisition and scheduler integration, with search plan, signal/source identity, expiry, authenticity/confidentiality, provenance remap, sensitivity and anti-rollback authority.
+- versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
+- Implement the acquisition/reacquisition-memory snapshot profile after scheduler integration with search/source identity, expiry, authenticity/confidentiality/freshness, provenance remap, sensitivity and explicit monotonic-authority evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6100,7 +6100,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test cold/warm/hot restore, authenticity/confidentiality pairings, expired/poisoned hints, plan/profile mismatch, source reset, rollback, corrupt/forged state, privacy policy, search equivalence, assessment invalidation, atomic failure and safe cold-start fallback.
+- Test cold/warm/hot restore, all three evidence dimensions, stale authenticated/encrypted replay, unavailable monotonic state, expired/poisoned hints, mismatch/reset, corrupt/forged state, privacy, equivalence, invalidation, atomic failure and safe cold start.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6303,17 +6303,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.50.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.50.3 - Side-effect-free front-end preparation, immutable apply plan, configuration generatio...
+### v0.50.3 - Side-effect-free front-end preparation, mutation-aware apply outcomes, coherent group...
 
 Status: planned.
 
-Goal: deliver side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads as one bounded,
+Goal: deliver side-effect-free front-end preparation, mutation-aware apply outcomes, coherent group transactions, configuration generations and initialized-count reads as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads.
-- Define side-effect-free front-end prepare and immutable apply contracts plus FrontEndConfigurationGeneration binding device/firmware, clocks, ports/groups, RF/sample settings, power/gain and calibration; reads return initialized count, block/generation, mapping, gap/overrun and progress state.
+- side-effect-free front-end preparation, mutation-aware apply outcomes, coherent group transactions, configuration generations and initialized-count reads.
+- Define Applied, RejectedNoMutation, PartiallyApplied and StateUnknown front-end outcomes; partial/unknown retires prior generation, activates no intended generation, invalidates state, blocks reads and requires reprobe/new plan. Coherent arrays use prepared group transactions with per-device evidence and revalidation.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6331,7 +6331,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test impossible requests without mutation, stale/foreign/tampered plans, device read-back lies, observed timing/rate/calibration consistency, sequential-band/low-power transitions, queue drain, stale blocks, mapping/DSP/tracking invalidation, partial reads, would-block, end, overrun and uninitialized tails.
+- Test no-mutation rejection, disconnect/power loss during every setting, partial channels/devices, failed best-effort rollback, unknown state, per-device evidence, no generation activation/read, reprobe recovery, false coherence, clock calibration revalidation, stale blocks, initialized counts, gaps/overruns/end/would-block.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6587,7 +6587,7 @@ reviewable release in Phase D (GPS end-to-end).
 Deliverables:
 
 - versioned tracking-channel and raw page-assembly snapshot profiles with compatibility, provenance and calibration restore checks.
-- Implement separate minimal tracking-channel and raw page-assembly snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parent, authenticity/confidentiality, sensitivity and anti-rollback evidence.
+- Implement minimal tracking-channel/raw-page snapshot profiles with source/generation, clock, calibration, partial-page issue, validity, parents, authenticity/confidentiality/freshness, sensitivity and monotonic-authority evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6605,7 +6605,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test mid-symbol/page state, compatibility, calibration changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, assessment invalidation, atomic restore, reacquisition rules and cold reconstruction equivalence.
+- Test mid-symbol/page state, compatibility, calibration/reset, stale authenticated/encrypted replay, unavailable monotonic state, corruption/forgery, privacy, provenance remap, assessment invalidation, atomic restore, reacquisition and cold reconstruction.
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -6679,7 +6679,7 @@ reviewable release in Phase D (GPS end-to-end).
 Deliverables:
 
 - versioned semantic navigation-store/ephemeris snapshot profile with issue, model, health, validity and assessment invalidation checks.
-- Implement the minimal semantic navigation-store/ephemeris snapshot profile after semantic GPS models exist, with issue, model, health, validity, source, parents, authenticity/confidentiality, sensitivity, provenance and anti-rollback evidence.
+- Implement the minimal semantic navigation-store/ephemeris snapshot after GPS models with issue, model, health, validity, source, parents, authenticity/confidentiality/freshness, sensitivity, provenance and monotonic-authority evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6697,7 +6697,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test stale/conflicting/future ephemerides, issue/model/health changes, source reset, rollback, corruption/forgery, consent/retention/privacy, provenance remap, invalidation of restored assessments, atomic restore and reconstruction equivalence.
+- Test stale/conflicting/future ephemerides, issue/model/health/reset, stale authenticated/encrypted replay, unavailable monotonic state, corruption/forgery, privacy, provenance remap, restored-assessment invalidation, atomic restore and reconstruction.
 - perform official GPS vectors, generated baseband, recorded independent captures, receiver comparison, malformed navigation data, and end-to-end replay;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -12321,13 +12321,13 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and anti-rollback binding as one bounded,
+Goal: deliver versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and independent authenticity/confidentiality/freshness evidence as one bounded,
 reviewable release in Phase J (RTK and precise positioning).
 
 Deliverables:
 
-- versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and anti-rollback binding.
-- Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and anti-rollback binding.
+- versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and independent authenticity/confidentiality/freshness evidence.
+- Implement admitted PPP snapshot profiles for named state layouts with products, biases, frame, clocks, ambiguity/troposphere state, covariance, convergence, calibration, expiry, trust, provenance, and independent authenticity/confidentiality/freshness evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -12345,7 +12345,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.
+- Compare uninterrupted/restored solutions and test product/bias/frame changes, stale convergence, covariance invalidity, authenticity/confidentiality/freshness, stale authenticated replay, unavailable monotonic state, privacy, forgery, version mismatch, reconvergence, atomic rejection and unavailable restore.
 - perform independent RTK/PPP references, baseline and product replays, ambiguity/slip/freshness faults, frame validation, and receiver/software comparisons;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -14535,13 +14535,13 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and anti-rollback binding as one bounded,
+Goal: deliver versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and independent authenticity/confidentiality/freshness evidence as one bounded,
 reviewable release in Phase L (Timing, fusion and navigation).
 
 Deliverables:
 
-- versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and anti-rollback binding.
-- Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and anti-rollback binding.
+- versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and independent authenticity/confidentiality/freshness evidence.
+- Implement admitted fusion snapshot profiles with named state/covariance layout, sensor clocks/generations, calibration/model identity, delayed queues, validity, expiry, trust, provenance, and independent authenticity/confidentiality/freshness evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -14559,7 +14559,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance, stale queues, authenticity/confidentiality, sensitivity/consent/retention, forgery/rollback, version mismatch, assessment invalidation/reconvergence, atomic rejection and unavailable restore.
+- Compare uninterrupted/restored trajectories and test sensor reset, calibration/model changes, invalid covariance/queues, authenticity/confidentiality/freshness, stale authenticated replay, unavailable monotonic state, privacy, forgery, version mismatch, reconvergence, atomic rejection and unavailable restore.
 - perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16794,17 +16794,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.2 - Common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/count...
+### v0.189.2 - Common snapshot-protection envelope, authenticated metadata, independent freshness ev...
 
 Status: planned.
 
-Goal: deliver common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract as one bounded,
+Goal: deliver common snapshot-protection envelope, authenticated metadata, independent freshness evidence, nonce/key/rotation/counter lifecycle and external-authority bridge contract as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
-- Define the common snapshot-protection envelope and external-authority bridge with opaque suite, authority/key/version, nonce-allocation, AAD schema, rollback counter, bounded ciphertext/tag lengths, creation/expiry/rotation and authenticated interpretive metadata.
+- common snapshot-protection envelope, authenticated metadata, independent freshness evidence, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
+- Define the common protection envelope and authority bridge with opaque suite/key/nonce/AAD/counter/length/time/rotation fields plus separate evidence for cryptographic verification, durable commit, trusted monotonic comparison/update, crash recovery and key/counter migration.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16822,7 +16822,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test unknown/downgraded suites, nonce reuse/crash recovery, key rotation/migration, atomic encryption/counter commit, rollback, tampered outer fields, length validation before decrypt, caller buffer bounds, uniform authentication failure, oracle resistance, consent/retention and Aesynx-ready authority extension.
+- Test unknown/downgraded suites, nonce reuse, atomic crypto/counter commit, authenticated old-snapshot replay, missing/lying monotonic state, crash recovery, migration, tampered outer fields, validate-before-decrypt, uniform failure/oracle resistance and Aesynx-ready extension.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16851,7 +16851,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Linux/BSD admitted external protection-authority and crash-safe persistence profiles with explicit no-universal-keystore non-claim.
-- Freeze and implement only admitted Linux/BSD external AEAD, key-custody and crash-safe counter/persistence profiles behind the common bridge; explicitly report unavailable where no qualified authority exists and claim no universal OS keystore.
+- Freeze only admitted Linux/BSD AEAD, key-custody and persistence profiles; distinguish crash-consistent atomic replacement from trusted rollback resistance, report freshness unavailable without a qualified monotonic authority and claim no universal OS keystore.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16869,7 +16869,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test exact provider/OS versions, permission/identity changes, locked/unavailable/revoked authority, crash points, nonce/counter rollback, atomic replace, filesystem faults, rotation, process concurrency, bounded buffers and explicit unsupported outcomes.
+- Test exact provider/OS versions, old-file restoration after valid AEAD, atomic replace crash points, filesystem faults, permission/identity changes, locked/revoked authority, nonce/counter races, rotation, concurrency, bounded buffers and explicit freshness/feature unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16888,17 +16888,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.3 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.4 - Windows snapshot-protection authority adapter over an exact frozen platform API/profile
+### v0.189.4 - Windows snapshot-protection authority adapter with exact frozen platform API/profile...
 
 Status: planned.
 
-Goal: deliver windows snapshot-protection authority adapter over an exact frozen platform API/profile as one bounded,
+Goal: deliver windows snapshot-protection authority adapter with exact frozen platform API/profile and honest freshness evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Windows snapshot-protection authority adapter over an exact frozen platform API/profile.
-- Freeze one exact documented Windows protection/key-custody/rollback profile and implement its adapter behind the common bridge without leaking platform handles or widening canonical algorithms.
+- Windows snapshot-protection authority adapter with exact frozen platform API/profile and honest freshness evidence.
+- Freeze one exact documented Windows protection/key-custody profile and its durable/monotonic capabilities; implement the adapter without leaking handles, widening algorithms or claiming rollback resistance where trusted monotonic state is absent.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16916,7 +16916,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test supported Windows versions and identities, user/machine scope, permission/service loss, locked/revoked keys, nonce/counter crash recovery, rotation/migration, tamper, concurrency, cancellation and capability absence.
+- Test Windows/version identities, user/machine scope, old-state restoration, freshness unavailable/checked/resistant evidence, permission/service loss, locked/revoked keys, crash recovery, rotation/migration, tamper, concurrency and cancellation.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16935,17 +16935,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.4 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.5 - Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/plat...
+### v0.189.5 - Apple macOS/iOS snapshot-protection authority adapter with exact Keychain/platform-cr...
 
 Status: planned.
 
-Goal: deliver apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles as one bounded,
+Goal: deliver apple macOS/iOS snapshot-protection authority adapter with exact Keychain/platform-crypto profiles and honest freshness evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles.
-- Freeze exact macOS/iOS Keychain and platform-cryptography profiles and implement admitted Apple snapshot-protection adapters behind the common bridge with device/access-control and background-state semantics.
+- Apple macOS/iOS snapshot-protection authority adapter with exact Keychain/platform-crypto profiles and honest freshness evidence.
+- Freeze exact macOS/iOS Keychain/platform-cryptography profiles and their durable/monotonic capabilities; implement admitted adapters with device/access-control/background semantics and no unsupported rollback-resistance claim.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16963,7 +16963,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test supported OS/device classes, locked device, access-control/entitlement denial, key loss/rotation, backup/restore and migration boundaries, nonce/counter crash recovery, tamper, cancellation, plaintext lifetime and unavailable secure hardware.
+- Test OS/device classes, locked device, access-control/entitlement denial, old-state/backup restoration, freshness evidence/unavailability, key loss/rotation, migration boundaries, nonce/counter crash recovery, tamper, cancellation and unavailable hardware.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16982,17 +16982,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.5 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.6 - Android snapshot-protection authority adapter over an exact frozen Android Keystore p...
+### v0.189.6 - Android snapshot-protection authority adapter with exact Android Keystore profile and...
 
 Status: planned.
 
-Goal: deliver android snapshot-protection authority adapter over an exact frozen Android Keystore profile as one bounded,
+Goal: deliver android snapshot-protection authority adapter with exact Android Keystore profile and honest freshness evidence as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- Android snapshot-protection authority adapter over an exact frozen Android Keystore profile.
-- Freeze an exact Android Keystore protection/key-custody/rollback profile and implement its adapter behind the common bridge with API-level, hardware-backed/StrongBox and key-invalidation evidence kept explicit.
+- Android snapshot-protection authority adapter with exact Android Keystore profile and honest freshness evidence.
+- Freeze an exact Android Keystore profile and its durable/monotonic capabilities; implement with API-level, hardware-backed/StrongBox and key-invalidation evidence explicit and no unsupported rollback-resistance claim.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -17010,7 +17010,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test supported API/device matrices, software versus hardware-backed keys, lock/auth requirements, StrongBox absence, key invalidation/rotation, reinstall/backup boundaries, nonce/counter crash recovery, tamper, cancellation and capability absence.
+- Test API/device matrices, software/hardware-backed keys, lock/auth, StrongBox absence, old-state/backup/reinstall restoration, freshness evidence/unavailability, invalidation/rotation, nonce/counter crash recovery, tamper and cancellation.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and

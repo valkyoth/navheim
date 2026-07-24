@@ -1035,11 +1035,16 @@ creation epoch, validity/expiry, parent artifacts, model/calibration/product
 identities, required capabilities, byte/work bounds and corruption digest.
 Authenticity and confidentiality are independent properties:
 `SnapshotAuthenticity::{Untrusted, IntegrityChecked, Authenticated}` and
-`SnapshotConfidentiality::{Plaintext, ExternallyEncrypted}`. An unkeyed digest
-detects corruption only. `Authenticated` requires verification through an
-injected external MAC/signature authority bound to a rollback-resistant
-generation. `ExternallyEncrypted` requires an injected external AEAD or
+`SnapshotConfidentiality::{Plaintext, ExternallyEncrypted}`. Freshness is a
+third independent property:
+`SnapshotFreshness::{Unchecked, CounterChecked, RollbackResistant}`. An
+unkeyed digest detects corruption only. `Authenticated` requires verification
+through an injected external MAC/signature authority but does not establish
+freshness. `ExternallyEncrypted` requires an injected external AEAD or
 platform-keystore authority and never follows merely from authentication.
+`RollbackResistant` requires comparison with and advancement of trusted
+external monotonic state; an authenticated embedded counter alone establishes
+no freshness.
 Restore treats bytes as untrusted input, remaps provenance, checks
 compatibility and external anti-rollback authority, validates all numerical/
 state invariants, and commits atomically or not at all. Untrusted or merely
@@ -1071,6 +1076,12 @@ decryption into bounded caller-provided plaintext/ciphertext buffers.
 Authentication failure is uniform and exposes no parsing/decryption oracle.
 The common bridge defines these semantics; Linux/BSD, Windows, Apple and
 Android authorities are admitted and tested in separate platform milestones.
+Each authority returns separate evidence for cryptographic verification,
+durable commit completion, trusted monotonic comparison/update, crash recovery
+and key/counter migration. A crash-consistent atomic file replacement plus
+AEAD is not rollback-resistant against restoration of an older file. Profiles
+report `Unchecked` or `CounterChecked` whenever qualified external monotonic
+state is unavailable rather than silently upgrading freshness.
 
 Restored authentication, signal-authenticity, correctness, integrity and
 policy assessments never regain authority merely from a valid snapshot,
@@ -1376,11 +1387,18 @@ pub trait SampleSource {
     fn apply(
         &mut self,
         plan: &FrontEndPlan,
-    ) -> Result<FrontEndTransition, Self::Error>;
+    ) -> FrontEndApplyOutcome<Self::Error>;
     fn read(
         &mut self,
         out: &mut [Self::Sample],
     ) -> Result<SampleRead, Self::Error>;
+}
+
+pub enum FrontEndApplyOutcome<E> {
+    Applied(FrontEndConfiguration),
+    RejectedNoMutation(E),
+    PartiallyApplied(TransitionEvidence),
+    StateUnknown(TransitionEvidence),
 }
 ```
 
@@ -1394,6 +1412,21 @@ Hardware acknowledgement and read-back are device assertions. A distinct
 front-end assessment records observed sample timing/rate and calibration
 consistency for a stated interval, evidence coverage, uncertainty and
 unverifiable fields.
+
+`RejectedNoMutation` is the only failure that preserves the previous
+generation. `PartiallyApplied` and `StateUnknown` retire it without activating
+the intended generation, invalidate all queued samples, mappings, calibration
+and affected DSP/tracking state, prohibit reads, and require reprobe plus a new
+plan. `TransitionEvidence` preserves per-device/channel commands, results,
+acknowledgements, read-back, timing and the last independently observed state;
+best-effort rollback is evidence, never an assumed success.
+
+Multi-device or coherent-array configuration is one prepared group transaction
+with bounded per-device outcomes. Coherence remains unavailable unless every
+front end reaches the intended generation and shared clock/timestamp
+calibration is independently revalidated. Disconnect, power loss, partial
+multi-channel application or failed rollback cannot silently retain or claim
+coherence.
 
 Retune, gain, clock, port, power or format transitions drain or invalidate old
 sample blocks, terminate old capture mappings, reset affected DSP/tracking
@@ -1549,6 +1582,27 @@ independently admitted extensions with bounded cooperative checkpoints may
 borrow into this executor. Arbitrary/potentially blocking external algorithms
 and I/O stages are prohibited work units; callers needing hard termination
 must use process isolation with process-owned memory.
+
+Two execution modes make those lifetime rules representable:
+
+- Borrowed scoped execution uses an `ExecutionScope<'scope>` and
+  `ScopedJob<'scope, ...>`. A job may report `DeadlineMissed` or
+  `WorkerUnresponsive` while polled inside the scope, but neither the job nor
+  its borrows can escape. The scope cannot return until every worker returns
+  ownership. Permanently stuck work therefore traps that scope/process.
+- Owned asynchronous execution transfers explicitly planned owned buffers or
+  arena leases into an `ExecutionHandle`. The handle may leave a scope and be
+  polled, but buffers are recoverable only from a completed, cancelled or
+  failed-and-returned handle. Dropping an in-process handle cannot detach work
+  or imply recovery; its documented join may block. No hidden `Arc`, heap
+  allocation, background worker or lease capacity bypasses `PlanReceipt`.
+
+The buffer-lease state machine is
+`CallerOwned -> Submitted -> WorkerOwned -> Returned`, with
+`CancellationRequested` leaving the lease `WorkerOwned` until acknowledged.
+`DeadlineMissed` and `WorkerUnresponsive` are observations, not ownership
+transitions. Every completion/failure path proves exactly which input, output
+and scratch leases returned before exposing them to the caller.
 
 Logical partitioning, merge order and event/invalidation ordering are
 deterministic. `PlanReceipt` fixes `ExecutionTrace` capacity. The trace records
@@ -2147,15 +2201,16 @@ Document threats from:
 - hostile RINEX/product/capture files;
 - compromised local devices;
 - time rollback and stale data;
-- stale, rolled-back, forged, privacy-exposing, misleadingly digest-valid or
-  authenticated-but-plaintext algorithm snapshots;
+- stale, replayed, rolled-back, forged, privacy-exposing, misleadingly
+  digest-valid, authenticated-but-plaintext or authenticated/encrypted but
+  freshness-unchecked algorithm snapshots;
 - nonce reuse, protection-suite downgrade, unauthenticated envelope metadata,
   rollback/encryption commit races and platform-keystore lifecycle failure;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
   receiver-asserted false state, unintended persistent/destructive transition;
-- direct/unplanned SDR mutation, stale configuration-generation samples or
-  device-asserted false front-end state;
+- direct/unplanned/partially applied SDR mutation, stale configuration-
+  generation samples, false rollback/coherence or device-asserted state;
 - aliased/detached/unresponsive parallel work, premature buffer reuse, trace
   overflow, nondeterministic ordering or uncaptured runtime outcomes;
 - correction mixing across stations/frames;
@@ -2174,17 +2229,19 @@ Document threats from:
 - time and issue-of-data freshness checks;
 - correction provider/station/coordinate validation;
 - atomic versioned snapshot restore with separate authenticity/confidentiality,
-  minimum sensitive profiles, authenticated metadata, nonce/key/rotation/
-  counter lifecycle, consent/retention, external protection/anti-rollback
-  checks and restored-assessment invalidation;
+  independent freshness evidence, minimum sensitive profiles, authenticated
+  metadata, nonce/key/rotation/counter lifecycle, consent/retention, external
+  protection plus trusted-monotonic checks where admitted, honest freshness
+  unavailability and restored-assessment invalidation;
 - prepared/reviewable SDR configuration plans with non-reusing generations,
+  mutation-aware partial/unknown outcomes, coherent group transactions,
   initialized-count reads, transition invalidation and observed consistency;
 - typed allowlisted receiver-control plans with configuration generations,
   command-class authority, transactional acknowledgement/read-back and
   independently evidenced configuration assessment;
 - role-aware source withdrawal/composition/reselection, explicit solver-state
-  handover and deterministic, borrow-safe cooperative parallel work with
-  bounded traces and explicit unresponsive ownership;
+  handover and deterministic scoped-borrowed or owned-handle cooperative
+  parallel work with bounded traces and explicit unresponsive lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2590,8 +2647,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.17.1** — executable preflight schema and immutable normalized `PlanReceipt`.
 - **0.17.2** — prepared facade planning and caller review before devices, credentials, networking or threads.
 - **0.18.0** — canonical configuration serialization without external serialization crates.
-- **0.18.1** — versioned bounded algorithm-state snapshot envelope, opt-in restore contract and anti-rollback authority boundary.
-- **0.18.2** — orthogonal snapshot authenticity/confidentiality, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
+- **0.18.1** — versioned bounded algorithm-state snapshot envelope, opt-in restore contract and external freshness-authority boundary.
+- **0.18.2** — orthogonal snapshot authenticity/confidentiality/freshness, minimal sensitive profiles, injected protection authority and restored-assessment invalidation policy.
 - **0.19.0** — allocated convenience layer.
 - **0.20.0** — initial `navheim` facade and `Profile::Replay`.
 - **0.20.1** — structural Tier 0/static, Tier 1/owned and Tier 2/host facade boundaries.
@@ -2662,13 +2719,13 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — separate `navheim-executor` Tier 2 multicore boundary with scoped non-overlapping work ownership, deterministic merge and lossless bounded execution traces.
-- **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and anti-rollback restore checks.
+- **0.48.3** — separate `navheim-executor` scoped-borrowed and owned-handle modes with explicit lease states, cooperative cancellation, deterministic merge and bounded traces.
+- **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
 - **0.50.1** — sealed DSP plan receipt, scratch layout, throughput/latency budget and matching-block enforcement.
 - **0.50.2** — independent signal/message vector admission gate required before each constellation implementation.
-- **0.50.3** — side-effect-free front-end preparation, immutable apply plan, configuration generations, transition invalidation and initialized-count sample reads.
+- **0.50.3** — side-effect-free front-end preparation, mutation-aware apply outcomes, coherent group transactions, configuration generations and initialized-count reads.
 
 ### Phase D — GPS end-to-end
 
@@ -2821,7 +2878,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
 - **0.144.1** — PPP tide/loading, wet-delay/gradient and meteorological-input acceptance matrix.
 - **0.144.2** — complete PPP state-layout, observation-combination, bias, interpolation, discontinuity, convergence and rollback matrix.
-- **0.144.3** — versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and anti-rollback binding.
+- **0.144.3** — versioned admitted PPP state snapshot/restore profiles with product, bias, frame, calibration, expiry and independent authenticity/confidentiality/freshness evidence.
 - **0.145.0** — static/rapid-static survey workflow.
 
 ### Phase K — Authentication and resilience
@@ -2875,7 +2932,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.168.0** — GNSS outage/dead-reckoning lifecycle.
 - **0.168.1** — GNSS reacquisition smoothing with explicit correction and discontinuity artifacts.
 - **0.168.2** — deterministic fixed-rate fusion output at caller epochs with bounded interpolation, propagation, extrapolation, covariance growth and stale/coasting states.
-- **0.168.3** — versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and anti-rollback binding.
+- **0.168.3** — versioned admitted fusion state snapshot/restore profiles with sensor/calibration/model identity, covariance validation, expiry and independent authenticity/confidentiality/freshness evidence.
 - **0.169.0** — multi-antenna attitude.
 - **0.169.1** — `navheim-geo` ellipsoidal geodesic, great-circle and rhumb primitive completion without navigation-policy duplication.
 - **0.169.2** — `navheim-navigation` bounded waypoint, route and track models plus wrappers over `navheim-geo`.
@@ -2927,11 +2984,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — common snapshot-protection envelope, authenticated metadata, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
+- **0.189.2** — common snapshot-protection envelope, authenticated metadata, independent freshness evidence, nonce/key/rotation/counter lifecycle and external-authority bridge contract.
 - **0.189.3** — Linux/BSD admitted external protection-authority and crash-safe persistence profiles with explicit no-universal-keystore non-claim.
-- **0.189.4** — Windows snapshot-protection authority adapter over an exact frozen platform API/profile.
-- **0.189.5** — Apple macOS/iOS snapshot-protection authority adapter over exact frozen Keychain/platform-crypto profiles.
-- **0.189.6** — Android snapshot-protection authority adapter over an exact frozen Android Keystore profile.
+- **0.189.4** — Windows snapshot-protection authority adapter with exact frozen platform API/profile and honest freshness evidence.
+- **0.189.5** — Apple macOS/iOS snapshot-protection authority adapter with exact Keychain/platform-crypto profiles and honest freshness evidence.
+- **0.189.6** — Android snapshot-protection authority adapter with exact Android Keystore profile and honest freshness evidence.
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
@@ -3124,11 +3181,12 @@ Navheim 1.0.0 is released only when all of the following are true:
     format crates own versioned wire mappings, and facade composition creates
     no dependency inversion or forced all-constellation graph.
 51. Tier 0 remains thread-free; Tier 2 multicore execution and runtime source
-    supervision preserve scoped exclusive work ownership, deterministic
-    logical ordering, cooperative cancellation states, unrecoverable ownership,
-    lossless bounded runtime traces, scalar verification, source roles, valid
-    cross-role composition, solver-state-safe same-role handover, withdrawal
-    and caller-authorized no-downgrade failover.
+    supervision preserve separate scoped-borrowed and owned-handle modes,
+    explicit lease states, deterministic logical ordering, cooperative
+    cancellation, unresponsive ownership, lossless bounded runtime traces,
+    scalar verification, source roles, valid cross-role composition,
+    solver-state-safe same-role handover, withdrawal and caller-authorized
+    no-downgrade failover.
 52. Receiver control is separate from read-only parsing and uses only planned
     allowlisted typed commands with firmware capabilities, ACK/NAK,
     idempotency, configuration generations, transition queue draining,
@@ -3136,14 +3194,16 @@ Navheim 1.0.0 is released only when all of the following are true:
     flash-wear budgets, receiver-asserted read-back and separately invalidated
     interval-scoped `ObservedConsistent` behavioral assessments.
 53. Snapshot/restore is opt-in, versioned, bounded, atomic and provenance-
-    remapped; authenticity and confidentiality are orthogonal, unkeyed digests
-    imply only corruption detection, external authentication and anti-rollback
-    generations establish authenticated state, external encryption protects
-    sensitive bytes, all interpretive metadata is authenticated, nonce/key/
-    rotation/counter state is crash-safe, platform adapters are separately
-    admitted, profiles are minimal/consent-bound, restored assessments are
-    reverified/invalidated, correctly ordered state profiles pass uninterrupted
-    equivalence, and every other algorithm reports restore unsupported.
+    remapped; authenticity, confidentiality and freshness are orthogonal,
+    unkeyed digests imply only corruption detection, external authentication
+    establishes authenticated bytes, external encryption protects sensitive
+    bytes, only trusted external monotonic comparison establishes rollback
+    resistance, all interpretive metadata is authenticated, nonce/key/rotation/
+    counter state is crash-safe, platform adapters report unavailable
+    freshness honestly, profiles are minimal/consent-bound, restored
+    assessments are reverified/invalidated, correctly ordered state profiles
+    pass uninterrupted equivalence, and every other algorithm reports restore
+    unsupported.
 54. `navheim-dsp` depends on `navheim-math`; `navheim-geo` depends on
     representation-only `navheim-core` plus `navheim-math`; neither duplicates
     platform/private math, `navheim-geo` owns ENU/NED/body transformations,
@@ -3151,7 +3211,9 @@ Navheim 1.0.0 is released only when all of the following are true:
     remains outside DSP.
 55. Every SDR configuration is side-effect-free prepared and explicitly
     applied from an immutable plan; non-reusing front-end generations bind
-    hardware, clocks, RF/sample/calibration state, transitions invalidate stale
+    hardware, clocks, RF/sample/calibration state, partial/unknown application
+    retires state and blocks reads, coherent group transactions expose every
+    device result and revalidate calibration, transitions invalidate stale
     samples/mappings/DSP, and reads expose only initialized samples with gaps,
     overruns and progress state.
 

@@ -300,12 +300,12 @@ first_release = "v0.183.0"
 [[source]]
 id = "android-gnss"
 publisher = "Google / Android Open Source Project"
-scope = "raw GNSS measurements, clocks, location provenance, USB, Android Keystore, protected persistence, and platform lifecycle"
+scope = "raw GNSS measurements, clocks, location provenance, USB, Android Keystore, protected persistence, trusted monotonic-state capabilities, backup/restore, and platform lifecycle"
 status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://developer.android.com/develop/sensors-and-location/sensors/gnss"
-documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts", "Android Keystore, hardware-backed/StrongBox, key invalidation, authentication, backup and lifecycle contracts"]
+documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts", "Android Keystore, hardware-backed/StrongBox, key invalidation, authentication, backup/reinstall and lifecycle contracts", "exact evidence for durable commit and any trusted monotonic compare/update authority; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.186.0"
 
 [[source]]
@@ -344,34 +344,34 @@ first_release = "v0.171.0"
 [[source]]
 id = "linux-bsd-io"
 publisher = "Linux kernel / FreeBSD / OpenBSD / NetBSD projects"
-scope = "serial, usbfs/ugen, sockets, IIO, PPS, hotplug, permissions, cancellation, external key/protection authorities, crash-safe persistence, and platform lifecycle"
+scope = "serial, usbfs/ugen, sockets, IIO, PPS, hotplug, permissions, cancellation, external key/protection authorities, crash-safe persistence, trusted monotonic-state capabilities, and platform lifecycle"
 status = "profile-freeze-required"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://docs.kernel.org/"
-documents = ["Linux UAPI and kernel documentation for admitted interfaces", "FreeBSD manuals and source ABI records", "OpenBSD manuals and source ABI records", "NetBSD manuals and source ABI records", "official documentation for every admitted external AEAD/key-custody authority and filesystem/persistence profile"]
+documents = ["Linux UAPI and kernel documentation for admitted interfaces", "FreeBSD manuals and source ABI records", "OpenBSD manuals and source ABI records", "NetBSD manuals and source ABI records", "official documentation for every admitted external AEAD/key-custody authority and filesystem/persistence profile", "exact evidence for durable commit and any trusted monotonic compare/update authority, including old-file restoration and crash recovery; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.171.0"
 
 [[source]]
 id = "microsoft-platform-io"
 publisher = "Microsoft"
-scope = "Windows COM, WinUSB, Winsock, location, permissions, timestamps, cancellation, protected key/storage APIs, and device lifecycle"
+scope = "Windows COM, WinUSB, Winsock, location, permissions, timestamps, cancellation, protected key/storage APIs, trusted monotonic-state capabilities, backup/restore, and device lifecycle"
 status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/winusb"
-documents = ["current WinUSB API and driver contract", "Windows communications APIs", "Winsock API", "Windows location provider APIs", "high-resolution timer and cancellation contracts", "exact admitted Windows cryptography, protected key/storage, scope, rotation and rollback-persistence contracts"]
+documents = ["current WinUSB API and driver contract", "Windows communications APIs", "Winsock API", "Windows location provider APIs", "high-resolution timer and cancellation contracts", "exact admitted Windows cryptography, protected key/storage, scope, rotation, backup/restore and durable-commit contracts", "exact evidence for any trusted monotonic compare/update authority; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.178.0"
 
 [[source]]
 id = "apple-platform-io"
 publisher = "Apple"
-scope = "macOS and iOS serial, IOKit USB, networking, Core Location, permissions, timestamps, Keychain/platform cryptography, protected persistence, and lifecycle"
+scope = "macOS and iOS serial, IOKit USB, networking, Core Location, permissions, timestamps, Keychain/platform cryptography, protected persistence, trusted monotonic-state capabilities, backup/restore, and lifecycle"
 status = "verify-before-implementation"
 acquisition = "portal"
 redistribution = "local-only"
 landing_url = "https://developer.apple.com/documentation/"
-documents = ["current IOKit USB and serial contracts", "macOS networking contracts", "Core Location macOS/iOS contracts", "permission, background, timestamp, accuracy, mock and lifecycle documentation", "exact admitted Keychain, platform-cryptography, access-control, entitlement, backup/migration and protected-persistence contracts"]
+documents = ["current IOKit USB and serial contracts", "macOS networking contracts", "Core Location macOS/iOS contracts", "permission, background, timestamp, accuracy, mock and lifecycle documentation", "exact admitted Keychain, platform-cryptography, access-control, entitlement, backup/migration and protected-persistence contracts", "exact evidence for durable commit and any trusted monotonic compare/update authority; otherwise an explicit rollback-resistance non-claim"]
 first_release = "v0.179.0"
 
 [[source]]

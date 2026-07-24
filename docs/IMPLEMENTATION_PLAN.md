@@ -313,12 +313,14 @@ through a minimal versioned bounded envelope carrying algorithm/schema,
 source/generation, validity, provenance, model/calibration/product identities,
 capabilities, byte/work limits and corruption digest. Authenticity is
 `Untrusted`, `IntegrityChecked` or `Authenticated`; confidentiality is
-independently `Plaintext` or `ExternallyEncrypted`. Unkeyed digests provide no
-authenticity; authentication requires an injected external MAC/signature
-authority and rollback-resistant generation, while confidentiality requires
-an external AEAD/platform-keystore authority. Profiles classify sensitive
-fields, minimize included state, require storage/export consent and retention,
-exclude contents from ordinary debug/error output and document owned-plaintext
+independently `Plaintext` or `ExternallyEncrypted`; freshness is independently
+`Unchecked`, `CounterChecked` or `RollbackResistant`. Unkeyed digests provide
+no authenticity. Authentication requires an injected external MAC/signature
+authority but establishes no freshness; confidentiality requires external
+AEAD/platform-keystore authority; rollback resistance requires trusted
+external monotonic comparison/update. Profiles classify sensitive fields,
+minimize included state, require storage/export consent and retention, exclude
+contents from ordinary debug/error output and document owned-plaintext
 zeroization limits. Restore treats bytes as untrusted, checks compatibility,
 remaps provenance, validates invariants and commits atomically.
 The protection envelope has opaque extensible scheme/suite, authority,
@@ -329,7 +331,11 @@ closed; nonce and counter persistence is crash-safe; encryption/counter commit
 is atomic; rotation/migration is explicit; outer resource validation precedes
 decryption into caller buffers; and authentication failure is uniform.
 Concrete Linux/BSD, Windows, Apple and Android authority profiles are separate
-milestones behind the common bridge.
+milestones behind the common bridge. Authorities report separate cryptographic
+verification, durable commit, monotonic compare/update, crash recovery and
+key/counter migration evidence. Atomic file replacement plus AEAD is only
+crash-consistent; it is not rollback-resistant against old-file restoration.
+Missing qualified monotonic state remains `Unchecked` or `CounterChecked`.
 Prior authentication, signal-authenticity, correctness, integrity and policy
 assessments are invalidated or reverified rather than restored as authoritative.
 Parsers report consumed length and
@@ -367,6 +373,16 @@ stuck work is process-terminal. Floating reductions are bit-exact only where
 specified, otherwise tolerance-bounded. Scalar equivalence is verification
 evidence, not mandatory duplicate production computation.
 
+`ExecutionScope<'scope>`/`ScopedJob<'scope, ...>` represent borrowed work:
+unresponsive status is pollable inside the scope, but jobs/borrows cannot
+escape and scope exit waits for ownership. `ExecutionHandle` represents
+explicitly planned owned buffers or arena leases and may be polled outside a
+scope; recovery occurs only after completed/cancelled/failed-returned state.
+Dropping a handle cannot detach or imply recovery and may block joining. No
+hidden `Arc`, allocation, worker or lease bypasses planning. Lease state is
+`CallerOwned -> Submitted -> WorkerOwned -> Returned`; cancellation requests,
+deadline misses and unresponsive reports do not change ownership.
+
 The facade source supervisor operates only on explicitly opened sources.
 Loss/change emits gap and withdrawal before bounded caller-authorized retry or
 reselection. Same-role replacement generations cannot overlap without a
@@ -400,6 +416,14 @@ tracking and emits gaps/discontinuities. Reads report initialized count,
 block/configuration generations, mappings, gaps, overruns and explicit
 data/end/would-block state. Device assertions remain separate from observed
 sample-rate/timing/calibration consistency.
+Apply returns `Applied`, `RejectedNoMutation`, `PartiallyApplied` or
+`StateUnknown`. Partial/unknown outcomes retire the prior generation without
+activating the intended one, invalidate samples/mappings/calibration/DSP/
+tracking, prohibit reads and require reprobe plus a new plan. Coherent arrays
+use a prepared group transaction with bounded per-device evidence; coherence
+is unavailable until every device succeeds and shared clock/timestamp
+calibration is revalidated. Rollback attempts are evidence, not assumed
+success.
 
 Because canonical crates forbid unsafe code, bounded collections use an honest
 safe representation such as initialized storage, `[Option<T>; N]`,
@@ -600,12 +624,13 @@ The threat model covers malicious RF, receivers, correction/assistance
 servers, files, local devices, time rollback, correction mixing, resource
 exhaustion, differential parsing, stale/hostile or privacy-exposing algorithm
 snapshots, source role/failover and solver-handover confusion, forged
-digest-valid or authenticated-plaintext state, nonce/suite/counter/keystore
-lifecycle failures, receiver-asserted configuration/partial-application
-errors, unplanned SDR transitions and stale samples, aliased/detached/
-unresponsive parallel work, premature buffer reuse, trace overflow,
-uncaptured runtime outcomes, supply-chain compromise, FFI/DMA, credential
-exposure, and location privacy.
+digest-valid, authenticated-plaintext or authenticated/encrypted but
+freshness-unchecked state, nonce/suite/counter/keystore lifecycle failures,
+receiver-asserted configuration/partial-application errors, unplanned/
+partial/unknown SDR transitions, stale samples or false coherence, escaped
+borrowed work, hidden owned leases, unresponsive parallel work, premature
+buffer reuse, trace overflow, uncaptured runtime outcomes, supply-chain
+compromise, FFI/DMA, credential exposure, and location privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -646,16 +671,16 @@ broader 1.0 roadmap:
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
-| Snapshot envelope, separate authenticity/confidentiality, cryptographic lifecycle, platform protection and ordered restore | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
+| Snapshot envelope, orthogonal authenticity/confidentiality/freshness, cryptographic lifecycle and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Runtime source withdrawal, supervision and authorized failover | v0.20.3 |
 | Logical source-role composition and solver-state-safe same-role handover | v0.20.4 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
-| Front-end conditioning, capture mapping, SIMD safety, independent vectors and planned configuration generations | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
+| Front-end conditioning, capture mapping, planned mutation-aware/coherent transactions and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Separate Tier 2 executor, cooperative cancellation/unresponsive ownership, lossless traces and scalar verification | v0.48.3 |
+| Tier 2 scoped-borrowed/owned-handle executor, lease states, unresponsive ownership and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |

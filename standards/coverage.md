@@ -17,10 +17,10 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | GNSS time transfer | Common-view/all-in-view results and frozen CGGTTS V2E interoperability | Planned; clock discipline/consensus excluded |
 | Civil/geodetic time | UTC leap/calendar, POSIX ambiguity, Julian/MJD, TT and EOP-derived UT1 arguments | Planned; no implicit POSIX cast or leap-smear claim |
 | Numerical foundations | Bounded linear algebra plus admitted normal/chi-square kernels with conservative integrity rounding | Planned; first-party implementation, independent high-precision evidence |
-| Persistent state protection | Common authenticated snapshot-protection envelope plus separately admitted Linux/BSD, Windows, Apple and Android authority profiles | Planned; no universal keystore or implicit suite claim |
+| Persistent state protection | Orthogonal authenticity/confidentiality/freshness, common protection envelope and separately admitted Linux/BSD, Windows, Apple and Android authorities | Planned; no universal keystore, implicit suite or rollback-resistance claim |
 | Receiver sources/control | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, raw observations, configuration-generation-safe allowlisted control and interval-scoped behavioral assessment | Planned; exact hardware/firmware evidence required, arbitrary commands excluded, ACK/read-back remains receiver-asserted |
 | GNSS science | Calibrated scintillation, reflectometry, space-weather and remote-sensing artifacts from frozen methods | Planned; optional research surface, no unvalidated operational-product claim |
-| SDR/accelerator I/O | Prepared front-end plans, configuration generations and initialized-count reads for named SDR stacks plus bounded FPGA/GPU/external-DSP artifacts | Planned; device read-back and accelerator output remain assertions |
+| SDR/accelerator I/O | Prepared front-end plans, partial/unknown and coherent-group outcomes, configuration generations and safe reads for named SDR stacks plus bounded accelerators | Planned; device read-back and accelerator output remain assertions |
 | GitHub-only tools | Capture, CLI, daemon, caster, station, survey, inspector, viewer, lab, simulator, conformance, fuzz, bench, and deployment | Planned; never in crates.io graph |
 | Aviation integrity | Public SBAS/GBAS/ABAS data models and research interfaces | Planned; no certification claim |
 | Restricted services | Identifier/metadata preservation and RF measurement only | Planned; no decoding claim |

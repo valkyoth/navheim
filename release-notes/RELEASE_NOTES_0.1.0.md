@@ -103,6 +103,18 @@ platform adapter stops. Receiver assessments become interval-scoped
 `ObservedConsistent`, while local-frame transformations remain exclusively in
 `navheim-geo`.
 
+The tenth coverage pass strengthens existing releases rather than adding
+parallel subsystems. Borrowed executor jobs are confined to a scope that
+cannot return before storage does, while owned asynchronous handles transfer
+explicit planned leases and cannot recover them from unresponsive work.
+Front-end application reports applied, rejected-without-mutation, partially
+applied and state-unknown outcomes; partial or unknown coherent-array
+transitions retire prior generations and block reads until reprobe and
+revalidation. Snapshot authenticity, confidentiality and freshness are now
+three independent dimensions. Rollback resistance requires trusted external
+monotonic comparison and update, so authenticated counters and crash-consistent
+encrypted file replacement cannot silently imply freshness.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned
