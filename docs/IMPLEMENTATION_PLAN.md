@@ -69,13 +69,20 @@ uncertainty, or provenance.
 | 2 | explicit `std` for files, sockets, threads, serial, USB, and clocks |
 | 3 | external integrations such as TLS, cryptography, platform APIs, and vendor stacks |
 
-Each crate documents its default tier, optional promotions, worst-case stack,
-heap, scratch, input, and state capacity, and any floating-point assumptions.
+Each crate documents its default tier, optional promotions, exact structural
+resource needs, target/toolchain/profile-specific stack evidence, measured
+envelopes, caller assumptions, unavailable estimates, and floating-point
+assumptions.
 Enabling `std` must not change protocol/wire behavior. Tier 0 uses caller
 buffers, explicit work budgets and allocator-free target evidence. Tier 1
 documents every allocation point. Tier 2 documents threads, clocks, devices,
 files, sockets, cancellation and authority. Tier 3 documents dependencies,
 unsafe code, credentials, trust roots and platform guarantees.
+
+A checked machine-readable crate/capability DAG records normal, optional,
+build and development edges; feature unification; tier; `alloc`/`std`; unsafe;
+TLS; cryptography; publication; and platform scope. CI rejects cycles,
+undeclared edges and silent privilege or tier escalation.
 
 ## Crate Architecture
 
@@ -127,6 +134,8 @@ fragmentation.
 - `navheim-navigation`: geodesic/rhumb calculations, bounded
   waypoint/route/track models, geofences and local-frame navigation; it does
   not claim road-network routing.
+- `navheim-science`: optional calibrated scintillation, reflectometry,
+  space-weather and remote-sensing artifacts with explicit product maturity.
 
 Authentication, signal authenticity, message correctness, and solution
 integrity remain separate types and policies.
@@ -202,7 +211,9 @@ Implementation proceeds in this dependency order:
 12. multi-GNSS solution quality, RTK, PPP, integrity, and authentication;
 13. complete the stable GNSS timing observation/event API, then fusion,
     navigation, hardware, OS, canonical assistance, and NMEA 2000;
-14. simulation, fuzzing, audits, conformance, standards freeze, and release
+14. optional calibrated science outputs and accelerator integrations only
+    after their canonical observations, resource evidence and scalar paths;
+15. simulation, fuzzing, audits, conformance, standards freeze, and release
     candidates.
 
 RTK, PPP, and authentication do not become trusted surfaces until observation
@@ -248,9 +259,12 @@ state format is explicitly versioned. Parsers report consumed length and
 either make progress or request more input. Large events use borrowed views or
 caller-provided bounded slots.
 
-Every execution pipeline is created from a checked immutable `PlanReceipt`
-covering state, stack, scratch, alignment, queues, work, output, throughput,
-latency and recovery. Each input block is checked against that receipt.
+Every execution pipeline is created from a checked immutable `PlanReceipt`.
+Each field is classified as an exact structural amount, a
+target/toolchain/profile-specific static upper bound, a deterministic work
+bound, a measured envelope, a caller assumption, or an unavailable estimate.
+Portable plans never overstate stack, throughput, or latency certainty. Each
+input block is checked against the applicable receipt bounds.
 Invalidation and security events have sequence, source generation, target
 artifact, effective interval and mandatory-withdrawal semantics. Queue
 pressure cannot silently discard them: the source stops, explicitly coalesces,
@@ -453,14 +467,18 @@ broader 1.0 roadmap:
 | Gap | Versioned implementation stops |
 | --- | --- |
 | Repository policy, strict tags, report-parent/package provenance | v0.1.1 |
+| Machine-readable crate/capability DAG and feature/tier escalation checks | v0.1.4 |
 | Exact standards, requirements, claims and test traceability | v0.1.2-v0.1.3 and v0.210.1-v0.210.2 |
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
 | Raw/resolved/atomic/UTC time, exact arithmetic, capture identity and rollback | v0.4.0-v0.5.4 |
-| Namespaced IDs, bounded extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
+| Namespaced IDs, opaque restricted/future records, safe extensions, staged artifacts and assessments | v0.12.0-v0.13.2 |
+| External algorithm/stage capability, resource, trust and reset contract | v0.12.3 |
+| Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
 | Correction taxonomy, duplicate prevention, sessions and anti-mixing | v0.15.1-v0.15.2, v0.139.1 and v0.142.1 |
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
+| Honest exact/static/measured/assumed/unavailable resource evidence | v0.17.1 and v0.50.1 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
 | Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
@@ -469,17 +487,20 @@ broader 1.0 roadmap:
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
-| RTK validation and PPP scientific-model acceptance matrices | v0.135.3 and v0.144.1 |
+| RTK validation, exact network profiles and complete PPP acceptance matrices | v0.135.3, v0.138.1 and v0.144.1-v0.144.2 |
 | Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
-| Exact named SBAS provider/service profiles | v0.119.2 |
+| DFMC implementation matrix and exact named SBAS provider/service profiles including SouthPAN | v0.118.1-v0.119.2 |
 | Conditional public BeiDou SAR/short-message boundary | v0.103.1 |
+| Conditional public NavIC messaging boundary | v0.114.2 |
+| Calibrated science artifacts, scintillation, reflectometry and space weather | v0.124.1-v0.124.4 |
 | Concrete crypto backend and immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
 | Post-protocol crypto and complete resilience evidence matrices | v0.150.1 and v0.155.1 |
+| Caller-provided direction evidence versus native calibrated AoA production | v0.155.0 and v0.169.5 |
 | Exact bounded GNSS timing slot/mapping/withdrawal contract | v0.158.1-v0.162.1 |
 | Common-view/all-in-view time transfer and CGGTTS V2E | v0.163.1 |
-| Full fusion calibration/mechanization, vector tracking and reacquisition | v0.164.1-v0.168.1 |
-| Navigation crate implementation and road-routing non-claim | v0.169.1-v0.169.4 |
-| FPGA/external-DSP output and provenance boundary | v0.175.1 |
+| Full fusion calibration/mechanization, vector tracking, reacquisition and fixed-rate output | v0.164.1-v0.168.2 |
+| Navigation crate implementation, road-routing non-claim and native AoA producer | v0.169.1-v0.169.5 |
+| FPGA/GPU/external-DSP stage, scalar-equivalence and provenance boundary | v0.175.1 |
 | Generic sources and evidence-gated receiver families | v0.185.2-v0.185.3 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
 | Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |

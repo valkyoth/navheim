@@ -25,13 +25,18 @@ All notable changes to `navheim` are documented here.
   adding deterministic `no_std` math, DGPS, profiles/discovery, full Android
   platform work, bounded PER and post-protocol crypto milestones, and
   separating PVT facts from integrity assessments.
+- Integrated the fourth gap review without shrinking existing scope: 14
+  bounded milestones now own the crate/capability DAG, honest resource
+  evidence, projections, kinematics, safe extensions, NavIC messaging, DFMC,
+  GNSS science, network RTK, PPP, fixed-rate fusion, native AoA, SouthPAN and
+  complete FPGA/GPU/external-DSP stage contracts.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.
 - Made shell syntax checks honor Bash versus POSIX-shell shebangs and replaced
   the non-portable CI read-only-mode assertion with checksum/source identity.
 - Added the external standards acquisition inventory and secure local-only
-  vault workflow: 34 authoritative source families, 17 allowlisted public
+  vault workflow: 35 authoritative source families, 17 allowlisted public
   downloads, local SHA-256 locking, official-page revision-marker review, and
   enforced exclusion of restricted document bytes from Git and crates.
 - Completed a repository-wide requirement/specification audit, corrected the

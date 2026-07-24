@@ -35,7 +35,8 @@ frozen into `manifest.toml`.
 The latest human acquisition review is
 [`reviews/2026-07-24.md`](reviews/2026-07-24.md).
 
-The 34-family inventory covers the present 1.0 roadmap, including GNSS
+The 35-family inventory covers the present 1.0 roadmap, including GNSS
 protocols, time transfer, receiver/SDR hardware, Rust and operating-system
-contracts. It is not a claim to cover every possible future GNSS-related
-standard. Newly accepted scope adds its authoritative source before code.
+contracts, and the methods needed to freeze optional scientific profiles. It
+is not a claim to cover every possible future GNSS-related standard. Newly
+accepted scope adds its authoritative source before code.

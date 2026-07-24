@@ -44,8 +44,8 @@ def parse_milestones() -> list[tuple[str, str, str, str]]:
             version, description = release_match.groups()
             description = DESCRIPTION_OVERRIDES.get(version, description)
             milestones.append((phase, phase_title, version, description))
-    if len(milestones) != 383:
-        raise RuntimeError(f"expected 383 roadmap milestones, found {len(milestones)}")
+    if len(milestones) != 397:
+        raise RuntimeError(f"expected 397 roadmap milestones, found {len(milestones)}")
     return milestones
 
 

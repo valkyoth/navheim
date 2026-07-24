@@ -19,7 +19,7 @@ Navheim currently provides repository and crate foundations only.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
 - Checksum-locked local copies of 25 applicable IETF RFCs, an RFC errata drift
-  snapshot, and a reviewed acquisition inventory spanning 34 GNSS, correction,
+  snapshot, and a reviewed acquisition inventory spanning 35 GNSS, correction,
   exchange, aviation, telecom, geodesy, security, timing, receiver, SDR, Rust,
   and platform
   source families.
@@ -34,13 +34,18 @@ Navheim currently provides repository and crate foundations only.
 - Fail-closed implementation evidence policy: exact authoritative documents
   and sections are reviewed before code, and mapped tests ship in the same
   milestone; missing or ambiguous evidence blocks implementation.
-- Audit-strengthened roadmap with 382 pre-1.0 implementation milestones plus
+- Audit-strengthened roadmap with 396 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
   GNSS time transfer, SBAS provider, receiver/FPGA, GitHub-only tool, platform,
   correction/security/provenance and traceability stops are integrated without
   reducing the original civil/open scope.
+- Fourth gap review integrated as bounded milestones for the dependency DAG,
+  honest resource-evidence classes, projected coordinates, typed kinematics,
+  safe processing extensions, conditional NavIC messaging, complete DFMC/
+  network-RTK/PPP matrices, optional GNSS science, fixed-rate fusion, native
+  calibrated AoA, and full accelerator-stage equivalence.
 
 ## Not Implemented
 

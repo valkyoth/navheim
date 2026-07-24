@@ -1,6 +1,22 @@
 """Acceptance data added by the repository-wide requirements audit."""
 
 CONFORMANCE_MILESTONE_DETAILS = {
+    "0.1.4": (
+        "Generate an acyclic crate/capability DAG covering normal, optional, build, and development edges plus features, tiers, alloc/std, unsafe, TLS, crypto, publication, and platforms.",
+        "Test Cargo metadata equivalence, feature unification, cycles, undeclared edges, tier escalation, adapter isolation, and every supported feature combination.",
+    ),
+    "0.7.2": (
+        "Implement bounded UTM/UPS and selected Transverse Mercator profiles with explicit zone/hemisphere, false offsets, datum, frame, epoch, convergence, distortion, and unknown IDs.",
+        "Cross-check independent references and test forward/inverse round trips, polar and zone boundaries, antimeridian, invalid coordinates, and unsupported EPSG-database requests.",
+    ),
+    "0.12.3": (
+        "Define static Tier 0 and isolated host extension contracts declaring capabilities, numerical backend, determinism, resources, artifacts, provenance, trust, reset, and invalidation.",
+        "Test limit lies, nondeterminism, prohibited trust/correctness bypass, stale output, panic/failure isolation, reset, unregister, and canonical fallback.",
+    ),
+    "0.13.3": (
+        "Define typed horizontal and three-dimensional speed, course over ground, and climb rate with frame, epoch, covariance, derivation, and reason-bearing availability.",
+        "Test stationary/low-speed course, vertical-only motion, frame and epoch mismatch, covariance propagation, discontinuities, overflow, and independent trajectories.",
+    ),
     "0.1.3": (
         "Create a bidirectional ledger from architecture requirements and public claims to owners, milestones, sources, tests, status, and non-claims; make authored-file scope explicit.",
         "Reject missing, duplicate, stale, circular, aggregate, ownerless, testless, or unsupported mappings and scan every repository path covered by the source-size and documentation policies.",
@@ -13,17 +29,61 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Freeze the exact lawful public BeiDou SAR/short-message documents and either implement their interoperable profile or publish an explicit unsupported/unavailable matrix.",
         "Test unknown identifiers, malformed content, regional/service applicability, privacy-sensitive payload handling, expiry, and the no-specification non-claim path.",
     ),
+    "0.114.2": (
+        "Freeze exact lawful public NavIC messaging documents and either implement interoperable message profiles or preserve identifiers with explicit unavailable and privacy-sensitive outcomes.",
+        "Test absent or ambiguous specifications, malformed and unknown messages, service/region applicability, sensitive payload handling, expiry, and unsupported-profile non-claims.",
+    ),
+    "0.118.1": (
+        "Freeze DFMC code, acquisition, tracking, symbol/FEC, framing, correction, GEO mode, message, validity, and unsupported-cell matrices before claiming complete DFMC.",
+        "Use licensed official and independent vectors for each admitted cell; test FEC limits, unknown messages, mode transitions, stale corrections, GEO confusion, and unavailable cells.",
+    ),
     "0.119.2": (
-        "Name WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, and current African SBAS profiles with exact service definitions, regions, signals, messages, validity, and limitations.",
+        "Name WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, SouthPAN, and current African SBAS profiles with exact service definitions, regions, signals, messages, validity, and limitations.",
         "Use provider and independent vectors for every admitted matrix cell; test region/profile confusion, future GEO IDs, expiry, conflicting providers, and unsupported profiles.",
+    ),
+    "0.124.1": (
+        "Establish optional navheim-science artifacts with calibration, lock attribution, sample cadence, windows, gaps, batch identity, provenance, uncertainty, and explicit product maturity.",
+        "Test missing/expired calibration, irregular sampling, window edges, gaps, batch mixing, provenance loss, bounded storage/work, and research-versus-operational labels.",
+    ),
+    "0.124.2": (
+        "Implement amplitude and phase scintillation metrics including admitted S4-style profiles with named detrending, bandwidth, lock, sampling, uncertainty, and validity assumptions.",
+        "Compare independent scientific references and test saturation, loss of lock, gaps, low CN0, detrending/window choices, finite arithmetic, and unavailable prerequisites.",
+    ),
+    "0.124.3": (
+        "Represent direct/reflected observables, bistatic geometry, reflection points, path/surface delay, calibration, coherence, uncertainty, and validity without hiding model assumptions.",
+        "Compare selected GNSS-R references and test geometry degeneracy, multipath ambiguity, surface/model mismatch, gaps, calibration expiry, and unsupported retrieval products.",
+    ),
+    "0.124.4": (
+        "Expose calibrated GNSS space-weather and remote-sensing artifacts only for frozen authoritative methods, with cadence, region, model, uncertainty, provenance, and maturity labels.",
+        "Compare admitted reference datasets and test sparse coverage, storms/outliers, stale models, calibration changes, batch reproducibility, and explicit non-product outcomes.",
+    ),
+    "0.138.1": (
+        "Freeze exact standardized VRS, FKP, MAC, and MAX message/session profiles and label every proprietary or undocumented extension separately.",
+        "Use independent network-RTK cases for each admitted profile and test mount/session/station mixing, datum/cell mismatch, handover, expiry, partial sets, and rejected proprietary variants.",
+    ),
+    "0.144.2": (
+        "Freeze PPP state layouts, uncombined/ionosphere-free modes, clock/troposphere/ambiguity/bias states, product interpolation, discontinuity, convergence, rollback, and unavailable matrices.",
+        "Compare independent PPP engines and datasets across every admitted mode; test state transitions, product/bias gaps, frame and epoch mismatch, resets, false convergence, and rollback.",
+    ),
+    "0.155.0": (
+        "Accept caller-provided receiver, antenna, baseline, angle, coherence, calibration, and clock evidence as typed inputs without claiming Navheim produced direction estimates.",
+        "Test missing calibration, frame/clock mismatch, ambiguous direction, stale evidence, conflicting arrays, expiry, provenance, and input-versus-native-producer labels.",
     ),
     "0.163.1": (
         "Produce common-view and all-in-view comparison artifacts and bounded CGGTTS V2E original/canonical records, including frozen BDS-3 conventions, calibration, schedule, uncertainty, and provenance.",
         "Cross-check independent BIPM-compatible results and test missing common satellites, mixed scales, station/calibration errors, malformed records, track boundaries, leap events, and explicit exclusion of discipline/consensus.",
     ),
+    "0.168.2": (
+        "Emit fusion solutions at caller-selected epochs using bounded interpolation or propagation with explicit extrapolation limit, deadline/latency evidence, covariance growth, freshness, and lifecycle.",
+        "Compare independent trajectories and test irregular inputs, deadline misses, extrapolation boundaries, outages, reset, stale/coasting/unavailable transitions, and no invented GNSS freshness.",
+    ),
+    "0.169.5": (
+        "Produce calibrated multi-antenna angle-of-arrival and direction-consistency evidence with array geometry, phase bias, ambiguity set, coherence, clock, frame, validity, uncertainty, and expiry.",
+        "Use surveyed/simulated arrays and test integer ambiguities, reflections, weak signals, incoherent clocks, geometry degeneracy, calibration expiry, spoof cases, reset, and unavailable output.",
+    ),
     "0.175.1": (
-        "Version and bound FPGA/external-DSP correlator and tracking outputs with clock domain, calibration, device, firmware/bitstream, build/toolchain, reset, work, and trust provenance.",
-        "Compare every accepted accelerated artifact with scalar vectors and test hostile lengths/metadata, stale generations, overruns, firmware mismatch, partial transfer, disconnect, and fallback.",
+        "Version and bound FPGA/GPU/external-DSP FFT, channelizer, acquisition, candidate, correlator, and tracking artifacts with quantization, scaling, identity, clocks, calibration, build, reset, work, and trust provenance.",
+        "Compare every accelerated stage with scalar vectors and test hostile metadata, quantization limits, stale/partial outputs, overruns, firmware mismatch, disconnect, reset, and fallback.",
     ),
     "0.185.2": (
         "Adapt NMEA-only, RTCM, RINEX, and canonical raw-observation sources without inventing receiver health, timing precision, or raw measurements that the source does not expose.",

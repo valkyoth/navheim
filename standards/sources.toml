@@ -396,6 +396,17 @@ landing_url = "https://www.skytraq.com.tw/downloads/"
 documents = ["one exact official vendor source record per admitted protocol and hardware/firmware profile; reverse-engineered fragments and unofficial mirrors are insufficient"]
 first_release = "v0.185.3"
 
+[[source]]
+id = "gnss-science-methods"
+publisher = "ITU-R / International GNSS Service / authoritative scientific data providers"
+scope = "GNSS scintillation, reflectometry, space-weather, remote-sensing, calibration, sampling, and window methods"
+status = "profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.itu.int/rec/R-REC-P.531"
+documents = ["ITU-R P.531-16", "exact IGS ionosphere/science product and method documents selected by v0.124.1", "exact authoritative GNSS-R, calibration, algorithm, validation-dataset, and scientific-product records selected by v0.124.1"]
+first_release = "v0.124.1"
+
 [[download]]
 source_id = "gps-sis"
 filename = "IS-GPS-200N.pdf"

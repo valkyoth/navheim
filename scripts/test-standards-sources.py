@@ -47,6 +47,7 @@ REQUIRED = {
     "apple-platform-io",
     "novatel-oem",
     "conditional-receiver-protocols",
+    "gnss-science-methods",
 }
 
 

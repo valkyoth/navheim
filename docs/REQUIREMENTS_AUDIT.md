@@ -32,11 +32,19 @@ inside aggregate milestones. The following releases make each one auditable:
 | Architecture promise | Bounded release stops |
 | --- | --- |
 | Requirement/public-claim ownership and traceability | v0.1.3 and final closure v0.210.2 |
+| Machine-readable crate/capability dependency DAG | v0.1.4 |
+| Projected coordinates and typed derived kinematics | v0.7.2 and v0.13.3 |
+| Safe decoder, algorithm and stage extensions | v0.12.2-v0.12.3 |
+| Honest resource-evidence classification | v0.17.1 and v0.50.1 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |
-| Exact named SBAS provider/service profiles | v0.119.2 |
+| Conditional public NavIC messaging | v0.114.2 |
+| DFMC and exact named SBAS provider/service profiles including SouthPAN | v0.118.1-v0.119.2 |
+| Optional calibrated GNSS science surfaces | v0.124.1-v0.124.4 |
+| Exact network-RTK and complete PPP matrices | v0.138.1 and v0.144.2 |
 | Common-view/all-in-view GNSS time transfer and CGGTTS V2E | v0.163.1 |
-| FPGA/external-DSP inputs and GitHub-only host/artifact boundary | v0.175.1 |
+| Fixed-rate fusion and calibrated native AoA | v0.168.2 and v0.169.5 |
+| FPGA/GPU/external-DSP stage and GitHub-only host/artifact boundary | v0.175.1 |
 | Generic receiver sources and conditional vendor families | v0.185.2-v0.185.3 |
 | GitHub-only tool foundation, CLI, daemon, caster, station, survey, inspector, viewer and lab | v0.190.3-v0.190.11 |
 | Simulator, fuzz, conformance and benchmark harnesses | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |
@@ -50,7 +58,7 @@ existing work.
 ## External Source Findings
 
 The acquisition inventory previously concentrated on GNSS protocols and
-correction formats. Eight missing primary-source families are now represented:
+correction formats. The audit-added primary-source families now represent:
 
 - BIPM/CCTF/ITU-R GNSS time transfer and CGGTTS;
 - stable Rust and target/platform language contracts;
@@ -60,8 +68,10 @@ correction formats. Eight missing primary-source families are now represented:
 - Apple macOS/iOS I/O and location contracts;
 - NovAtel OEM public receiver material;
 - conditionally admitted public receiver protocols.
+- authoritative GNSS scintillation, reflectometry, space-weather,
+  remote-sensing, calibration and validation methods.
 
-The catalog now covers 34 source families. It remains an acquisition inventory,
+The catalog now covers 35 source families. It remains an acquisition inventory,
 not a conformance claim. Every implementation release must freeze exact lawful
 documents, amendments, sections, vectors, hardware/firmware profiles and
 limitations in `standards/manifest.toml`.

@@ -136,10 +136,10 @@ MILESTONE_DETAILS = {
         "producer stop, consumer lag, reset, and forced resynchronization.",
     ),
     "0.17.1": (
-        "Normalize every capacity, scratch region, alignment, work, queue, "
-        "throughput, latency, retention, and recovery limit into a receipt.",
-        "Test arithmetic overflow, overlap/alignment, mismatched blocks, hostile "
-        "metadata, maximum plans, and execution attempts beyond the receipt.",
+        "Classify receipt fields as exact structure, target/profile static "
+        "upper bound, work bound, measured envelope, caller assumption, or unavailable estimate.",
+        "Test arithmetic overflow, evidence misclassification, target/profile "
+        "mismatch, hostile metadata, maximum plans, and execution beyond bounds.",
     ),
     "0.36.2": (
         "Compare semantic artifacts across formats and independent parsers "
@@ -148,10 +148,10 @@ MILESTONE_DETAILS = {
         "overlong, reordered, recovery, and differential-result cases.",
     ),
     "0.50.1": (
-        "Seal deployment and DSP decisions before execution and revalidate every "
-        "sample block against the accepted receipt.",
-        "Exercise maximum channels/candidates/FEC/FFT/scratch/work, gap/overrun, "
-        "metadata lies, throughput failure, and deterministic eviction.",
+        "Seal exact DSP structure/work separately from measured throughput, "
+        "latency and target-specific stack evidence; revalidate every sample block.",
+        "Exercise maximum channels/candidates/FEC/FFT/scratch/work, evidence "
+        "class errors, gap/overrun, metadata lies, and deterministic eviction.",
     ),
     "0.129.1": (
         "Target integrity bounds, assumptions, risk models, exclusions, validity, "

@@ -9,14 +9,15 @@ Status: inventory only; no GNSS protocol behavior is implemented.
 | GLONASS | Public FDMA and officially documented public CDMA services | Planned |
 | BeiDou | Public B1/B2/B3 signals, navigation, PPP-B2b, BDSBAS, and conditional public SAR/short-message interfaces | Planned; messaging requires stable open specification |
 | QZSS | Public L1/L2/L5/L6, SLAS, CLAS, MADOCA, and QZNMA services | Planned |
-| NavIC | Public L1/L5/S SPS signals and navigation | Planned |
-| SBAS | Provider-neutral legacy and DFMC protocol plus documented provider profiles | Planned |
+| NavIC | Public L1/L5/S SPS signals/navigation and conditionally documented public messaging | Planned; messaging requires stable open specification |
+| SBAS | Provider-neutral legacy and DFMC protocol plus exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, SouthPAN and admitted African provider profiles | Planned |
 | Corrections | RTCM OSR/SSR, network RTK, IGS SSR | Planned |
 | Exchange | NMEA 0183, legal NMEA 2000 boundary, RINEX 2/3/4, principal IGS products | Planned |
 | Assistance | OMA SUPL, 3GPP LPP, Android raw measurements, injected assistance | Planned |
 | GNSS time transfer | Common-view/all-in-view results and frozen CGGTTS V2E interoperability | Planned; clock discipline/consensus excluded |
 | Receiver sources | gpsd, named public vendor protocols, NMEA-only, RTCM, RINEX, and raw observations | Planned; exact hardware/firmware evidence required |
-| SDR/FPGA I/O | Named SDR stacks plus bounded FPGA/external-DSP artifacts | Planned; accelerator output remains untrusted |
+| GNSS science | Calibrated scintillation, reflectometry, space-weather and remote-sensing artifacts from frozen methods | Planned; optional research surface, no unvalidated operational-product claim |
+| SDR/accelerator I/O | Named SDR stacks plus bounded FPGA/GPU/external-DSP stage artifacts | Planned; accelerator output remains untrusted |
 | GitHub-only tools | Capture, CLI, daemon, caster, station, survey, inspector, viewer, lab, simulator, conformance, fuzz, bench, and deployment | Planned; never in crates.io graph |
 | Aviation integrity | Public SBAS/GBAS/ABAS data models and research interfaces | Planned; no certification claim |
 | Restricted services | Identifier/metadata preservation and RF measurement only | Planned; no decoding claim |

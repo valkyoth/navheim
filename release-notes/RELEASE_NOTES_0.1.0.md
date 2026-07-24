@@ -31,7 +31,7 @@ RFC integrity is enforced through exact source lists and SHA-256 bytes. Git
 does not preserve general read-only permission bits, so CI does not require
 mode `0444`; developers may still apply the optional local read-only guard.
 
-The broader acquisition inventory covers 34 authoritative source families.
+The broader acquisition inventory covers 35 authoritative source families.
 Seventeen freely downloadable GPS, Galileo, NavIC and IGS documents can be
 fetched into an ignored local vault and protected by a local SHA-256 lock.
 Paid, licensed, consent-gated, registration-gated and vendor-profile material
@@ -53,6 +53,13 @@ bounded extension registration, all facade profiles, DGPS and ordered
 degradation, solver/integrity separation, platform-complete Android support,
 isolated discovery probes, bounded ASN.1 PER, exact SUPL/LPP matrices and
 post-protocol RustCrypto integration.
+
+The fourth coverage pass keeps all earlier work and adds 14 bounded releases
+for a crate/capability DAG, honest resource-evidence categories, projected
+coordinates, typed kinematics, safe processing extensions, conditional NavIC
+messaging, complete DFMC/network-RTK/PPP matrices, optional GNSS science,
+fixed-rate fusion, calibrated native AoA, SouthPAN coverage, and full
+FPGA/GPU/external-DSP stage equivalence.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and

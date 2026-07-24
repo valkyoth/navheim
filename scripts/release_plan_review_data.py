@@ -6,8 +6,8 @@ REVIEW_MILESTONE_DETAILS = {
         "Compare high-precision references across domains, argument reduction, signed zero, subnormal, exceptional, rounding, MSRV, and no_std cases.",
     ),
     "0.12.2": (
-        "Register bounded namespaced user decoders without overriding standards, accessing I/O, or directly mutating canonical state.",
-        "Test duplicate/unknown IDs, capacity/work/output limits, progress, opaque artifacts, prohibited trust claims, isolation, and unregister/reset.",
+        "Register bounded namespaced user decoders while preserving restricted/future frames opaquely and forbidding standard overrides, I/O, or canonical mutation.",
+        "Test duplicate/unknown IDs, capacity/work/output limits, progress, opaque round trips, prohibited trust claims, isolation, and unregister/reset.",
     ),
     "0.20.2": (
         "Expand every named profile from versioned defaults into one printable canonical configuration before planning or side effects.",

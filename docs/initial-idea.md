@@ -104,6 +104,13 @@ claim authentication/integrity, access devices or networking, or mutate
 canonical state directly. It returns opaque or separately namespaced artifacts
 until an explicit caller policy translates them.
 
+The same rule applies to external algorithms and processing stages. A Tier 0
+extension is a statically bound generic implementation with declared
+capabilities, numerical backend, determinism, resources, artifact types,
+provenance, reset and invalidation behavior. Dynamically loaded host
+extensions are isolated to Tier 2/3 adapters. Neither form may bypass
+canonical correctness, trust, resource or policy checks.
+
 ### 2.3 Future and experimental PNT
 
 The architecture must reserve identifiers and plugin points for:
@@ -570,6 +577,9 @@ Each constellation crate contains modules for code generation, acquisition hints
   uncertainty, health, authentication, integrity and consumer-facing events.
 - **`navheim-security`** — navigation-message authentication protocols, anti-spoofing evidence, provenance and security policy. Cryptographic primitives are injected through traits.
 - **`navheim-navigation`** — waypoints, tracks, geofences, bearings, great-circle/rhumb calculations and local-frame navigation. It is intentionally not a road-map routing engine.
+- **`navheim-science`** — optional calibrated scintillation, reflectometry,
+  space-weather and remote-sensing artifacts built from canonical observations;
+  it does not turn exploratory metrics into operational scientific products.
 
 #### Formats and interoperability
 
@@ -706,7 +716,9 @@ Default foundational/constellation builds should be Tier 0 or Tier 1. A `std` fe
 - Solvers expose fixed-capacity and allocated variants.
 - Events borrow internal epoch storage where possible.
 - No `Vec` is created in a hot loop without an explicit allocated profile.
-- Every algorithm documents worst-case stack, heap and scratch use.
+- Every algorithm documents exact heap/scratch/state needs where structurally
+  knowable; stack evidence is target/toolchain/profile-specific or explicitly
+  unavailable, never presented as a portable exact fact.
 
 ### 8.3 Zero hidden execution
 
@@ -717,6 +729,13 @@ Default foundational/constellation builds should be Tier 0 or Tier 1. A `std` fe
 - Cancellation and deadlines are explicit inputs.
 
 ### 8.4 Dependency policy
+
+A checked machine-readable dependency DAG is authoritative for every workspace
+crate and capability. It records normal, optional, build and development
+edges; feature-unified behavior; tier; `alloc`/`std`; unsafe; TLS; cryptography;
+publication; and platform scope. CI rejects cycles, undeclared edges and any
+feature combination that silently promotes a lower tier or canonical GNSS
+crate into OS, unsafe, TLS or cryptographic authority.
 
 Navheim should self-implement everything that defines GNSS correctness:
 
@@ -1026,8 +1045,12 @@ let mut receiver = SoftwareReceiver::builder()
     .build()?;
 ```
 
-A plan computes exact state, stack, scratch, queue, work, throughput and
-latency bounds with checked arithmetic. The immutable receipt accepts only
+A plan classifies every resource statement as an exact structural amount, a
+target/toolchain/profile-specific static upper bound, a deterministic work
+bound, a measured envelope, a caller assumption, or an unavailable estimate.
+Portable plans never mislabel measured throughput/latency or target-specific
+stack evidence as exact facts. All computable bounds use checked arithmetic,
+and the immutable receipt accepts only
 matching sample blocks; untrusted hardware metadata is revalidated for every
 block. RF input cannot choose allocations, FFT plans, thread/channel counts,
 FEC iterations, candidate counts or queue growth. A plan either succeeds
@@ -2158,6 +2181,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.1.1** — metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and package-provenance validation.
 - **0.1.2** — exact standards-document, amendment, legal-access, implementation and test-traceability schema.
 - **0.1.3** — repository-wide requirement, public-claim, ownership, milestone and verification traceability ledger.
+- **0.1.4** — machine-readable crate and capability dependency DAG with normal, optional, build and development edges, tier/feature annotations and escalation checks.
 - **0.2.0** — checked arithmetic, capacities and structured core error model.
 - **0.2.1** — safe fixed byte buffers and checked fixed-capacity UTF-8 strings.
 - **0.2.2** — safe bounded sequence/deque contracts with documented representation and cost.
@@ -2180,6 +2204,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.6.2** — typed covariance layouts with state ordering, units, frame and epoch.
 - **0.7.0** — geodesic, ellipsoid and reference-frame primitives.
 - **0.7.1** — datum/reference-frame realization and Earth-orientation input contracts.
+- **0.7.2** — bounded UTM/UPS and Transverse Mercator projected-coordinate profiles with explicit zone, frame, epoch, convergence and distortion evidence.
 - **0.8.0** — bit readers/writers, sign extension and reserved-bit preservation.
 - **0.8.1** — exact-consumption results and original-bit/canonical round-trip modes.
 - **0.9.0** — checksums, CRC framework and GNSS parity primitives.
@@ -2191,9 +2216,11 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.12.0** — extensible system/satellite/signal identifiers and registry versioning.
 - **0.12.1** — namespaced registry authorities and bounded identifier sets without closed public masks.
 - **0.12.2** — bounded user-decoder registration and namespaced opaque-artifact boundary.
+- **0.12.3** — safe external algorithm and processing-stage extension contracts with preflight capabilities, resource limits, trust, provenance and reset isolation.
 - **0.13.0** — canonical observation/epoch model with distinct transmit, receive and capture times.
 - **0.13.1** — immutable artifacts, bounded provenance parents and separate targeted assessment identifiers.
 - **0.13.2** — tracking, raw receiver, raw SDR, normalized, corrected and solver-input observation stages.
+- **0.13.3** — typed horizontal/three-dimensional speed, course-over-ground and climb-rate observations with covariance, epoch and unavailable-state semantics.
 - **0.14.0** — ephemeris, almanac, health and satellite-clock model traits.
 - **0.14.1** — model issue, validity, discontinuity, delay, uncertainty and transactional generation rules.
 - **0.15.0** — correction and provenance models.
@@ -2360,13 +2387,15 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.113.0** — NavIC L1 SPS.
 - **0.114.0** — NavIC time/orbit/clock and multi-band solution.
 - **0.114.1** — SBAS L1 code generation, acquisition, tracking and bounded GEO search.
+- **0.114.2** — conditional public NavIC messaging profile freeze with lawful-document admission, privacy boundaries and explicit unavailable non-claims.
 - **0.115.0** — generic legacy SBAS L1 framing/messages.
 - **0.116.0** — SBAS correction/degradation state machine.
 - **0.117.0** — SBAS integrity and protection-level inputs.
 - **0.118.0** — DFMC SBAS signal/messages.
+- **0.118.1** — complete DFMC code, acquisition, tracking, symbol/FEC, frame, correction, GEO mode and message acceptance matrix.
 - **0.119.0** — provider profiles and future-ID registry.
 - **0.119.1** — public GBAS/ABAS data-model, applicability and integrity-interface boundary.
-- **0.119.2** — exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS and African SBAS provider/service profile matrix.
+- **0.119.2** — exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, SouthPAN and African SBAS provider/service profile matrix.
 
 ### Phase I — Multi-GNSS solution quality
 
@@ -2381,6 +2410,10 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.122.0** — broadcast ionosphere/troposphere model suite.
 - **0.123.0** — dual/multi-frequency combinations and TEC.
 - **0.124.0** — carrier smoothing and multipath metrics.
+- **0.124.1** — optional `navheim-science` artifact, calibration, sampled-window, gap and batch-provenance foundation.
+- **0.124.2** — amplitude/phase scintillation and S4-style metrics with lock, detrending, bandwidth and validity attribution.
+- **0.124.3** — direct/reflected observable and GNSS reflectometry geometry, surface-delay and uncertainty artifacts.
+- **0.124.4** — calibrated GNSS space-weather and remote-sensing outputs with explicit scientific-product non-claims.
 - **0.125.0** — antenna phase-center and phase-wind-up models.
 - **0.126.0** — Earth rotation, tides and reference-frame transforms.
 - **0.126.1** — geoid/vertical-datum models and typed orthometric-height results.
@@ -2409,6 +2442,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.136.0** — GLONASS FDMA RTK biases.
 - **0.137.0** — moving-base and dual-antenna heading.
 - **0.138.0** — network RTK standardized inputs.
+- **0.138.1** — exact standardized VRS, FKP, MAC and MAX network-RTK profile matrix separated from proprietary extensions.
 - **0.139.0** — RTCM SSR complete public baseline.
 - **0.139.1** — atomic SSR group completeness, expiry and correction-session anti-mixing.
 - **0.140.0** — IGS SSR profile.
@@ -2418,6 +2452,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.143.0** — PPP ambiguity resolution.
 - **0.144.0** — PPP-RTK regional atmosphere/bias models.
 - **0.144.1** — PPP tide/loading, wet-delay/gradient and meteorological-input acceptance matrix.
+- **0.144.2** — complete PPP state-layout, observation-combination, bias, interpolation, discontinuity, convergence and rollback matrix.
 - **0.145.0** — static/rapid-static survey workflow.
 
 ### Phase K — Authentication and resilience
@@ -2435,7 +2470,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.152.0** — Doppler/motion/clock spoofing evidence.
 - **0.153.0** — correlation/power/interference evidence.
 - **0.154.0** — meaconing/time-replay evidence.
-- **0.155.0** — multi-receiver and multi-antenna security inputs.
+- **0.155.0** — caller-provided multi-receiver and multi-antenna security evidence inputs without claiming native direction production.
 - **0.155.1** — complete spoofing/jamming evidence and insufficient-data acceptance matrix.
 - **0.156.0** — security policy engine and fail/degrade reactions.
 - **0.156.1** — versioned targeted policy decisions, hysteresis and ordered reevaluation.
@@ -2470,11 +2505,13 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.167.2** — allocated factor-graph interface sharing canonical fusion artifacts.
 - **0.168.0** — GNSS outage/dead-reckoning lifecycle.
 - **0.168.1** — GNSS reacquisition smoothing with explicit correction and discontinuity artifacts.
+- **0.168.2** — deterministic fixed-rate fusion output at caller epochs with bounded interpolation, propagation, extrapolation, covariance growth and stale/coasting states.
 - **0.169.0** — multi-antenna attitude.
 - **0.169.1** — geodesic distance, bearing, destination and cross-track calculations.
 - **0.169.2** — bounded waypoint, route and track models with explicit great-circle/rhumb semantics.
 - **0.169.3** — geofence boundary, altitude and time-window evaluation.
 - **0.169.4** — local-frame navigation primitives and explicit road-network-routing non-claim.
+- **0.169.5** — calibrated multi-antenna angle-of-arrival and direction-consistency production with ambiguity, coherence, validity and expiry evidence.
 
 ### Phase M — Hardware, OS and assistance
 
@@ -2484,7 +2521,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.173.0** — USRP/UHD adapter.
 - **0.174.0** — LimeSDR adapter.
 - **0.175.0** — coherent multi-device clock/timestamp calibration.
-- **0.175.1** — bounded FPGA/external-DSP correlator and tracking-output boundary plus GitHub-only `navheim-fpga` host/artifact contract.
+- **0.175.1** — bounded FPGA/GPU/external-DSP FFT, channelizer, acquisition, candidate, correlator and tracking boundary plus GitHub-only `navheim-fpga` host/artifact contract.
 - **0.176.0** — portable serial backend.
 - **0.177.0** — native USB backend contracts and Linux implementation.
 - **0.177.1** — isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence.
@@ -2649,6 +2686,31 @@ Navheim 1.0.0 is released only when all of the following are true:
     documentation.
 33. MIT and Apache-2.0 license notices, package metadata, documentation,
     archives and published artifacts consistently identify Navheim.
+34. Every resource claim is explicitly classified as exact structural
+    evidence, a target/toolchain/profile-specific static upper bound, a work
+    bound, a measured envelope, a caller assumption or unavailable; portable
+    APIs never overstate stack, throughput or latency certainty.
+35. A machine-readable acyclic crate/capability graph covers normal, optional,
+    build and development edges, feature unification, tier, `alloc`, `std`,
+    unsafe, TLS and cryptography, and rejects undeclared privilege escalation.
+36. Projected coordinates and derived kinematics have explicit frame, datum,
+    epoch, units, covariance, boundary behavior and unavailable-state tests.
+37. Fixed-rate fusion output never invents GNSS freshness and has bounded,
+    tested propagation, interpolation, extrapolation, latency, covariance
+    growth, reset, stale and coasting semantics.
+38. Optional science APIs preserve raw observations, calibration, lock,
+    sampling, windows, gaps, provenance and uncertainty, and distinguish
+    research metrics from validated operational products.
+39. NavIC messaging, DFMC, every named SBAS provider including SouthPAN,
+    standardized network RTK and every PPP state/product mode are governed by
+    exact acceptance matrices and explicit unsupported cells.
+40. External decoders, algorithms and accelerators declare capabilities and
+    resource limits before execution, cannot bypass canonical correctness or
+    trust policy, and prove deterministic reset, invalidation, scalar
+    equivalence and fallback behavior where applicable.
+41. Caller-provided angle/direction evidence remains distinguished from the
+    native calibrated multi-antenna producer, whose ambiguity, coherence,
+    validity and expiry are independently tested.
 
 ---
 
@@ -2713,6 +2775,9 @@ The standards manifest should continuously track at least:
 - RTCM 10403.x and 10410.x;
 - NMEA 0183 and NMEA 2000;
 - IGS RINEX, SP3, SINEX, IONEX, ANTEX and SSR standards;
+- in-force ITU-R/IGS and other authoritative GNSS scintillation,
+  reflectometry, space-weather and remote-sensing methods selected by the
+  science-profile freeze;
 - OMA SUPL and 3GPP LPP;
 - BIPM/CCTF CGGTTS V2E, current BDS-3 extensions and guidance, together with
   in-force ITU-R GNSS time-transfer terminology and recommendations;
