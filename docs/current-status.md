@@ -120,6 +120,12 @@ Navheim currently provides repository and crate foundations only.
   non-exported single-cleaner CAS. Concurrent attempts return pre-mutation
   `Busy`, selection is bounded and lowest-`JobId` deterministic, and Loom
   covers cleanup against every competing executor transition.
+- Seventeenth gap review removes the remaining v0.48.3 trace contradiction:
+  `Busy` returns a bounded contention receipt without mutating cleanup or trace
+  state, and the failed CAS is its linearization point. Replayable supervisors
+  must bind the receipt to the caller lane/logical call before reacting;
+  overflow follows the existing stop/resynchronize/unavailable policy, while
+  replay reproduces the result without consulting live contention.
 
 ## Not Implemented
 

@@ -101,6 +101,11 @@ All notable changes to `navheim` are documented here.
   non-exported single-cleaner CAS returns pre-mutation `Busy` on contention,
   selects the lowest eligible generation-bearing job ID within bounded work,
   and is tested against completion, claim, drop, admission and shutdown.
+- Integrated the seventeenth review into v0.48.3 by separating mutation
+  domains: `Busy` creates a bounded contention receipt at the failed-CAS
+  linearization point without changing cleanup or trace state. The supervisor
+  records it against a logical call before semantic reaction, and replay uses
+  that fact instead of observing live contention.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

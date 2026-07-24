@@ -185,6 +185,15 @@ selects the lowest eligible generation-bearing job ID. Loom covers cleanup
 against completion, result claims, handle drop, admission, another cleanup
 caller and shutdown.
 
+The seventeenth coverage pass separates cleanup mutation from trace mutation.
+Invalid requests remain wholly mutation-free. A failed single-cleaner CAS
+returns `Busy` with a bounded private contention receipt but changes no
+registry, payload, cleanup, admission or trace state. In replayable profiles,
+the supervisor must bind that receipt to a caller lane and logical call in the
+bounded trace before reacting. Trace exhaustion follows the existing
+fail-closed policy, and replay produces `Busy` from recorded evidence rather
+than live contention.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

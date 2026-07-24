@@ -1785,18 +1785,23 @@ while unrelated lifetime-bound handles remain live; it does not transfer
 executor ownership or introduce an `Arc`. Synchronized interior registry state
 contains an atomic single-cleaner guard. A cleanup call validates its budget,
 then acquires the guard by CAS; a concurrent call returns
-`CleanupStartError::Busy` before changing any entry, payload or admission
-state. The guard is private, non-cloneable and never returned as a capability,
-so callers cannot leak or forget it. Every normal return explicitly releases
-it; cleanup panic/failure aborts the process, so unwinding cannot strand it.
-The executor uses safe `std` synchronization and automatic trait bounds; the
-1.0 profile admits no handwritten unsafe `Sync` implementation.
+`CleanupStartError::Busy(CleanupContentionReceipt)` before changing any
+registry, payload, cleanup, admission or trace state. The failed CAS is the
+contention event's linearization point. All other validation/start errors are
+also entirely mutation-free. The guard is private, non-cloneable and never
+returned as a capability, so callers cannot leak or forget it. Every normal
+return explicitly releases it; cleanup panic/failure aborts the process, so
+unwinding cannot strand it. The executor uses safe `std` synchronization and
+automatic trait bounds; the 1.0 profile admits no handwritten unsafe `Sync`
+implementation.
 
-`PlanReceipt` bounds `Cleaning` entries, total cleanup work, work per poll and
-trace capacity. `CleanupProgress` explicitly reports `Complete` or
-`MoreRequired` plus bounded cleaned/remaining/retired counts and work used;
-there is no hidden wakeup contract. Preflight rejects an invalid/zero budget
-without mutation.
+`PlanReceipt` bounds `Cleaning` entries, supervisor-admitted cleanup logical-
+call sequences, total cleanup work, work per poll, contention events and trace
+capacity. `poll_cleanup` retains no receipt registration or outstanding-count
+state. `CleanupProgress` explicitly reports
+`Complete` or `MoreRequired` plus bounded cleaned/remaining/retired counts and
+work used; there is no hidden wakeup contract. Preflight rejects an invalid or
+zero budget without mutation.
 Once cleanup begins, failure, panic or same-entry reentrancy is
 process-terminal rather than a recoverable return. Admission never performs
 implicit cleanup: when no clean slot is available but dirty slots remain it
@@ -1805,10 +1810,22 @@ returns `AdmissionError::CleanupRequired` with bounded progress information.
 the receipt bounds total drain work. Cleanup order, slot retirement and every
 semantics-affecting result enter `ExecutionTrace` in deterministic order.
 Each poll selects eligible entries by the lowest generation-bearing `JobId`;
-the receipt also bounds the deterministic scan. A `Busy` result performs no
-cleanup mutation; if caller behavior makes that contention semantically
-relevant, its bounded scheduling fact is recorded in the runtime trace before
-the caller proceeds.
+the receipt also bounds the deterministic scan.
+
+`CleanupContentionReceipt` is bounded, opaque, `#[must_use]`, non-cloneable and
+privately constructed, with no public deserialization path. It binds the
+executor namespace, plan/trace generation and failed-CAS observation. The
+default replayable profile requires the caller's supervisor to consume it and
+atomically append it to `ExecutionTrace`, together with the deterministic
+caller lane and logical cleanup-call sequence, before the caller branches,
+retries or requests admission. Recording rejects stale, duplicate or misbound
+receipts. It is a separate trace mutation, not a mutation performed by
+`poll_cleanup`. Trace exhaustion follows the existing stop, resynchronize or
+replay-unavailable policy; a caller may not act on ordinary unrecorded `Busy`.
+Replay reproduces `Busy` at that logical call from the recorded receipt and
+never consults live cleaner contention. A profile may consume the receipt
+without recording only when `PlanReceipt` declares `Busy` semantically inert
+and proves caller-visible results, admission and ordering cannot depend on it.
 
 `Executor` itself is `#[must_use]` because consuming shutdown is the normal
 lifecycle. Dropping it with any registered, running, terminal-unclaimed,
@@ -2484,9 +2501,10 @@ Document threats from:
   executors, dispatch/cancel and completion/drop/cleanup races, arbitrary or
   reentrant destructors in handle `Drop`, hidden/unbounded cleanup, admission
   starvation from live-handle-exclusive cleanup, overlapping cleaners, leaked
-  cleanup authority, nondeterministic entry selection, lifecycle/payload-state
-  divergence, duplicate extraction or destruction, stale/ABA/exhausted job
-  IDs, detached registry entries,
+  cleanup authority, unrecorded or misbound cleanup contention, forged
+  contention receipts, contention-trace exhaustion, nondeterministic entry
+  selection, lifecycle/payload-state divergence, duplicate extraction or
+  destruction, stale/ABA/exhausted job IDs, detached registry entries,
   premature capacity/buffer reuse, overstated pre-abort
   diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
   outcomes;
@@ -2528,11 +2546,11 @@ Document threats from:
   parallel work with authoritative executor registration, dispatch/cancel
   linearization, destructor-free handle retirement, caller-driven receipt-
   bounded shared-borrow cleanup/backpressure with no hidden reaper, internal
-  single-cleaner CAS, deterministic bounded selection and no caller-held
-  cleanup authority, coupled lifecycle/payload state and safe-only 1.0
-  ownership transitions, non-wrapping generation-safe slot reuse, leak-safe
-  accounting, explicit claim/shutdown/fail-stop rules, bounded traces and
-  unresponsive lease ownership;
+  single-cleaner CAS, receipt-bound contention recording/replay, deterministic
+  bounded selection and no caller-held cleanup authority, coupled lifecycle/
+  payload state and safe-only 1.0 ownership transitions, non-wrapping
+  generation-safe slot reuse, leak-safe accounting, explicit claim/shutdown/
+  fail-stop rules, bounded traces and unresponsive lease ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -3010,7 +3028,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
+- **0.48.3** — `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -3483,9 +3501,11 @@ Navheim 1.0.0 is released only when all of the following are true:
     with caller-driven budgeted progress, no hidden reaper or implicit
     admission cleanup, shared-borrow progress usable beside live handles,
     internal non-exported single-cleaner CAS, pre-mutation busy result, bounded
-    lowest-JobId selection, explicit cleanup-required backpressure, must-use
-    executor lifecycle, process-terminal panic/failure/reentrancy, safe-only
-    payload ownership with unsafe extraction excluded from 1.0,
+    lowest-JobId selection, mutation-free bounded contention receipt, mandatory
+    logical-call trace binding before semantic reaction, trace-overflow policy
+    and replay without live contention, explicit cleanup-required backpressure,
+    must-use executor lifecycle, process-terminal panic/failure/reentrancy,
+    safe-only payload ownership with unsafe extraction excluded from 1.0,
     Miri/Loom/Kani exactly-once evidence, slot reuse only after
     result/lease/trace finalization, shutdown
     coverage of every orphan, concrete allocation-free/non-unwinding

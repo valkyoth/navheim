@@ -6029,13 +6029,13 @@ Exit criteria:
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, proved payload ownership, dispatch/cancel linearization and generation-safe slot recycling.
-- Implement Vacant(g)->Registered dispatch/cancel CAS, terminal ownership, caller-driven budgeted poll_cleanup(&self) usable beside live handles with no hidden reaper, an internal non-exported atomic single-cleaner guard with pre-mutation Busy, lowest-JobId deterministic selection, explicit CleanupRequired admission, shutdown cleanup drain, and Vacant(g+1) or permanent retirement. Require must-use executor/handles, handle Drop performing only retirement or abort, safe-only 1.0 payload transitions and no handwritten unsafe Sync implementation.
+- `navheim-executor` scoped/owned modes with live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership and generation-safe slot recycling.
+- Implement caller-driven bounded poll_cleanup(&self) beside live handles with no hidden reaper; a private single-cleaner CAS whose failed attempt returns an opaque must-use non-cloneable/non-deserializable CleanupContentionReceipt without registry/payload/cleanup/admission/trace mutation; consuming supervisor trace binding to caller lane/logical call before semantic reaction; replayed Busy without live contention; explicit inert-profile proof; deterministic lowest-JobId cleanup, CleanupRequired admission and shutdown drain. Preserve the complete generation-safe lifecycle, atomic-only handle Drop, must-use/fail-stop, safe-only ownership and no-unsafe-Sync contracts.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use compile/API, Miri, Loom, Kani/model and subprocess tests for cleanup with unrelated live handles; concurrent cleanup Busy and no entry/payload/admission mutation; unexposed/unforgettable guard and normal release; lowest-JobId selection and bounded scan/trace; cleanup versus completion, claim, drop, admission and shutdown; dispatch/cancel proof; every terminal kind; per-poll/total bounds and no implicit admission cleanup; dirty-executor fail-stop; publication ordering; ABA/stale/exhausted IDs and namespace renewal; safe storage and exactly-once retirement/extraction/destruction; forgotten orphans; panic/reentrancy abort; unresponsive abort; exact observing/consuming/progress APIs and non-durable pre-abort status.
+- Use compile/API, Miri, Loom, Kani/model and subprocess tests for mutation-free validation errors; allocation/registration-free Busy receipt construction at the failed-CAS linearization point; receipt authenticity/namespace/plan/trace-generation binding; bounded supervisor call-ID/event exhaustion; mandatory pre-reaction recording; duplicate/misbound/forged receipt rejection; contention-trace overflow; exact logical-call replay and proved inert omission. Retain tests for live handles, overlapping cleaners, unexposed/unforgettable guard and normal release, bounded lowest-JobId scan/work, cleanup versus completion/claim/drop/admission/shutdown, dispatch/cancel, every terminal kind, no implicit cleanup, fail-stop, publication, ABA/exhaustion/renewal, safe exactly-once storage, forgotten orphans, panic/reentrancy/unresponsive abort, exact APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and

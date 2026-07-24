@@ -452,19 +452,32 @@ wakeup contract. Start errors are preflight-only and perform no mutation; once
 cleanup begins, failure is process-terminal. No hidden worker/reaper exists.
 The shared borrow keeps cleanup usable while unrelated lifetime-bound handles
 remain live. An internal atomic single-cleaner CAS serializes cleanup; a loser
-returns `CleanupStartError::Busy` before entry/payload/admission mutation. The
-guard is private, non-cloneable and never exposed/forgettable, and every normal
-return releases it explicitly. Safe `std` synchronization and automatic trait
-bounds are required; no handwritten unsafe `Sync` implementation is admitted.
-The receipt bounds cleaning entries, total/per-poll work and trace capacity.
+returns `CleanupStartError::Busy(CleanupContentionReceipt)` before registry,
+payload, cleanup, admission or trace mutation; the failed CAS is its
+linearization point. Other validation/start errors are likewise wholly
+mutation-free. The guard is private, non-cloneable and never
+exposed/forgettable, and every normal return releases it explicitly. Safe
+`std` synchronization and automatic trait bounds are required; no handwritten
+unsafe `Sync` implementation is admitted.
+The receipt bounds cleaning entries, supervisor-admitted logical-call
+sequences, total/per-poll work, contention events and trace capacity;
+`poll_cleanup` retains no receipt registration/count state.
 Admission never cleans implicitly and returns
 `CleanupRequired` when only dirty slots remain. Consuming shutdown reconciles
 jobs and then drains bounded cleanup. Cleanup ordering, retirement and
 semantics-affecting outcomes enter the deterministic trace; each poll scans
 within its bound and chooses the lowest eligible generation-bearing `JobId`.
-Semantically relevant `Busy` contention is captured as a bounded scheduling
-fact without cleanup mutation. `Executor` is `#[must_use]`; dropping it with
-any non-vacant payload-owning/cleaning entry uses the same fail-stop abort rule.
+The opaque, must-use, non-cloneable, non-deserializable receipt binds executor
+namespace, plan/trace generation and the failed-CAS observation. In the
+default replayable profile, the supervisor consumes and appends it with caller
+lane/logical call sequence before branching, retry or admission; stale,
+duplicate and misbound receipts fail. That append is the separate trace
+mutation. Overflow stops,
+resynchronizes or marks replay unavailable. Replay returns `Busy` at the
+recorded call without live contention. Only a `PlanReceipt`-declared
+semantically inert profile may consume it without recording. `Executor` is
+`#[must_use]`; dropping it with any non-vacant payload-owning/cleaning entry
+uses the same fail-stop abort rule.
 
 Registry storage uses safe state-owning enums/`Option<T>`. `ManuallyDrop`, if
 retained for layout, may use safe `into_inner`; unsafe take/manual-drop payload
@@ -763,10 +776,11 @@ borrowed work, forgotten/leaked handles or executors, dispatch/cancel and
 completion/drop/cleanup races, arbitrary or reentrant destructors in handle
 Drop, hidden/unbounded cleanup, admission starvation, lifecycle/payload-state
 divergence, exclusive cleanup blocked by live handles, overlapping cleaners,
-leaked cleanup authority, nondeterministic entry selection, duplicate
-extraction/destruction, stale/ABA/exhausted job IDs, detached registry entries,
-hidden owned leases, unresponsive parallel work, premature capacity/buffer
-reuse, overstated pre-abort
+leaked cleanup authority, unrecorded/misbound contention, forged contention
+receipts, contention-trace exhaustion, nondeterministic entry selection,
+duplicate extraction/destruction, stale/ABA/exhausted job IDs, detached
+registry entries, hidden owned leases, unresponsive parallel work, premature
+capacity/buffer reuse, overstated pre-abort
 diagnostics, trace overflow, uncaptured runtime outcomes, supply-chain
 compromise, FFI/DMA, credential exposure, and location privacy.
 
@@ -818,7 +832,7 @@ broader 1.0 roadmap:
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, live-handle-compatible serialized cleanup/backpressure, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, live-handle-compatible serialized cleanup, receipt-recorded contention replay, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
