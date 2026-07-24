@@ -143,6 +143,11 @@ Navheim currently provides repository and crate foundations only.
   before CAS, successful grants carry a checked global order plus exact
   bounded selection/work/progress evidence, and replay gates grants in that
   recorded order rather than observing live cleaner timing.
+- Twenty-first gap review keeps normal replay backpressure out of v0.48.3
+  application errors. The low-level scheduler sees side-effect-free
+  `SupervisedCleanupPoll::Pending` while retaining the same active lane call;
+  controlled drivers expose only ready recorded outcomes or genuine errors,
+  and the base executor neither blocks nor spins.
 
 ## Not Implemented
 

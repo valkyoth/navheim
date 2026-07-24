@@ -120,6 +120,10 @@ All notable changes to `navheim` are documented here.
   grants and results as well as contention. Worst-case event capacity is
   reserved before the cleaner CAS, successful grants receive a checked global
   order, and replay follows that order without using live CAS timing.
+- Integrated the twenty-first review into v0.48.3 by making early replay order
+  a scheduler-only `SupervisedCleanupPoll::Pending`, not an application error.
+  Pending preserves the same active call without state/result transitions;
+  controlled drivers hide it and the base executor never blocks or busy-spins.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

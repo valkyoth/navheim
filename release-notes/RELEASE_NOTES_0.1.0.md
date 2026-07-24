@@ -216,7 +216,15 @@ the cleaner CAS. A winning call receives a checked global `CleanupOrder`,
 records its grant before mutation, and finalizes exact selected/retired job
 IDs, work and progress before publishing reusable state or returning. Replay
 returns `Busy` without CAS and gates grants in their recorded global order;
-early calls remain on the same logical call through `ReplayPending`.
+early calls remain on the same logical call through scheduler `Pending`.
+
+The twenty-first coverage pass makes that `Pending` state non-semantic.
+`ExecutionSupervisor::poll_cleanup` returns `SupervisedCleanupPoll`, whose
+`Ready` contains the recorded result/error and whose `Pending` is consumed only
+by the replay driver. Pending changes no executor, lane sequence, trace, replay
+cursor or application result, cannot admit a second call on its active lane,
+and is hidden from application completion APIs. The base executor never
+blocks or busy-spins; optional blocking requires a separately admitted profile.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and

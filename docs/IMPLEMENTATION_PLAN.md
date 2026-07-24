@@ -446,21 +446,24 @@ No quarantine/reaper or executor-ownership-transfer profile is admitted for
 
 Cleanup is caller-driven through public
 `ExecutionSupervisor::poll_cleanup(&self, &mut CleanupLane, &Executor,
-CleanupBudget)`, returning
-`Result<CleanupProgress, SupervisedCleanupError>`. Progress distinguishes
-complete from more-required and reports bounded counts/work without a hidden
-wakeup contract. The non-cloneable, must-use supervisor is bound to one
-executor namespace, `PlanReceipt` and trace generation; mismatched/duplicate
-authority fails. Safe synchronized trace state supports concurrent shared
-calls without unsafe `Sync`. `PlanReceipt` privately creates a bounded set of
-must-use, non-`Copy`, non-cloneable `CleanupLane` capabilities before
-execution, with no public constructor or serialization/deserialization path.
-Each lane has a deterministic `CleanupLaneId`, checked non-wrapping per-lane
-sequence and binding to the supervisor, executor namespace, plan and trace
-generation. Mutable borrowing prevents concurrent reuse of one lane; separate
-planned lanes admit concurrency. Lane identity never comes from call arrival,
-CAS order, OS thread IDs or async-runtime task identities. No hidden worker/
-reaper exists.
+CleanupBudget)`, returning `SupervisedCleanupPoll`. Its `Ready` variant carries
+`Result<CleanupProgress, SupervisedCleanupError>` and its `Pending` variant is
+scheduler control flow. Progress distinguishes complete from more-required
+and reports bounded counts/work without a hidden wakeup contract. This low-
+level poll boundary is consumed by a replay driver/deterministic scheduler;
+application completion APIs do not expose `Pending`.
+The non-cloneable, must-use supervisor is bound to one executor namespace,
+`PlanReceipt` and trace generation; mismatched/duplicate authority fails. Safe
+synchronized trace state supports concurrent shared calls without unsafe
+`Sync`. `PlanReceipt` privately creates a bounded set of must-use, non-`Copy`,
+non-cloneable `CleanupLane` capabilities before execution, with no public
+constructor or serialization/deserialization path. Each lane has a
+deterministic `CleanupLaneId`, checked non-wrapping per-lane sequence and
+binding to the supervisor, executor namespace, plan and trace generation.
+Mutable borrowing prevents concurrent reuse of one lane; separate planned
+lanes admit concurrency. Lane identity never comes from call arrival, CAS
+order, OS thread IDs or async-runtime task identities. No hidden worker/reaper
+exists.
 
 After mutation-free lane/supervisor/executor/generation and budget validation,
 the supervisor forms the next `(CleanupLaneId, CallSequence)`. Live mode
@@ -471,8 +474,10 @@ budget. Reservation failure leaves the sequence unadvanced and returns
 `TraceUnavailable` before executor CAS/mutation. Replay mode instead retains
 the active key while reading the finalized event without trace mutation.
 Only completed `Busy`/`Granted` handling advances the sequence;
-`ReplayPending` does not. Stale, duplicate, exhausted and cross-supervisor
-lanes likewise fail before executor mutation.
+`Pending` does not. An active lane may repoll only the same bound call and
+cannot start another; mismatched arguments leave it unchanged. Stale,
+duplicate, exhausted and cross-supervisor lanes likewise fail before executor
+mutation.
 
 The supervisor then invokes a crate-private executor primitive in live mode.
 The shared executor borrow keeps cleanup usable while unrelated lifetime-bound
@@ -517,12 +522,25 @@ finalizes the reservation as `Busy` before returning observable `Busy`; stale,
 duplicate or misbound lanes, receipts and orders fail. Replay looks up the
 exact `(CleanupLaneId, CallSequence)` before any live CAS. `Busy` returns
 directly. `Granted` executes only at its recorded next global order under an
-ordered replay gate; an early call returns non-semantic `ReplayPending` while
-the lane retains the same active call for its next poll. Replay checks budget,
-predicted selection, exact selected/retired identities, work and progress
-before advancing its cursor. Missing, duplicate, exhausted, incomplete or
-contradictory events/orders make replay unavailable; post-mutation mismatch is
-fail-stop. Thus callers cannot exchange results under a different schedule.
+ordered replay gate; an early call returns `SupervisedCleanupPoll::Pending`
+while the lane retains the same active call. `Pending` changes no executor,
+lane sequence, trace, replay cursor or application result. It is scheduler
+control flow, not an error/outcome, and polling frequency/order has no cleanup
+semantics. Replay checks budget, predicted selection, exact selected/retired
+identities, work and progress before advancing its cursor. Missing, duplicate,
+exhausted, incomplete or contradictory events/orders make replay unavailable;
+post-mutation mismatch is fail-stop. Thus callers cannot exchange results
+under a different schedule.
+
+The replay driver alone consumes `Pending` under an explicit work budget and
+delivers only ready recorded `Busy`, successful progress or genuine errors to
+application code. Convenience APIs hide pending through controlled scheduling;
+they do not log/fail over/retry differently because of it. The base executor
+never waits or busy-spins. A blocking adapter requires an explicitly admitted
+profile with bounded cancellation/liveness. External behavior intentionally
+conditioned on pending is outside deterministic replay unless separately
+traced by the caller's scheduler.
+
 Only `Busy` may be omitted by a `PlanReceipt`-proved inert policy; successful
 grants/results remain recorded for replayable concurrency. Every profile still
 uses the supervisor and planned lane; no public raw escape exists. `Executor`
@@ -833,12 +851,14 @@ identity, cross-supervisor or concurrent same-lane use, lane sequence wrap/
 exhaustion, unrecorded grants, reversed successful-cleanup order, live-CAS
 replay ownership, under-reserved/incomplete events, global-order wrap/
 exhaustion, grant/result mismatch, replay consulting live contention,
-contention-trace exhaustion, nondeterministic entry selection, duplicate
-extraction/destruction, stale/ABA/exhausted job IDs, detached registry entries,
-hidden owned leases, unresponsive parallel work, premature capacity/buffer
-reuse, overstated pre-abort diagnostics, trace overflow, uncaptured runtime
-outcomes, supply-chain compromise, FFI/DMA, credential exposure, and location
-privacy.
+pending exposed as application error/outcome, application behavior conditioned
+on poll timing/order, second-call start on an active pending lane, unbounded
+busy polling or implicit blocking, contention-trace exhaustion,
+nondeterministic entry selection, duplicate extraction/destruction, stale/ABA/
+exhausted job IDs, detached registry entries, hidden owned leases, unresponsive
+parallel work, premature capacity/buffer reuse, overstated pre-abort
+diagnostics, trace overflow, uncaptured runtime outcomes, supply-chain
+compromise, FFI/DMA, credential exposure, and location privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -888,7 +908,7 @@ broader 1.0 roadmap:
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, supervisor-enforced deterministic cleanup lanes and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, supervisor-enforced deterministic cleanup lanes, scheduler-only pending and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
