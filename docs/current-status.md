@@ -148,6 +148,11 @@ Navheim currently provides repository and crate foundations only.
   `SupervisedCleanupPoll::Pending` while retaining the same active lane call;
   controlled drivers expose only ready recorded outcomes or genuine errors,
   and the base executor neither blocks nor spins.
+- Twenty-second gap review makes that v0.48.3 surface enforceable:
+  `ExecutionSupervisor` has no public poll method; a sealed, plan-bound
+  permit is consumed to create the `ReplayDriver` that owns low-level polling,
+  and the application facade exposes only ready `CleanupCompletion` values.
+  Shared driver calls preserve concurrency across distinct mutable lanes.
 
 ## Not Implemented
 

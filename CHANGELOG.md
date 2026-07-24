@@ -124,6 +124,11 @@ All notable changes to `navheim` are documented here.
   a scheduler-only `SupervisedCleanupPoll::Pending`, not an application error.
   Pending preserves the same active call without state/result transitions;
   controlled drivers hide it and the base executor never blocks or busy-spins.
+- Integrated the twenty-second review into v0.48.3 by moving low-level polling
+  from `ExecutionSupervisor` to a `ReplayDriver` created by consuming a sealed
+  plan-bound permit. The application facade is ready-only and cannot expose
+  driver, lane, permit or poll types, while shared driver calls retain
+  distinct-lane concurrency.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

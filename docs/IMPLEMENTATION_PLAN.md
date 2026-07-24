@@ -444,14 +444,30 @@ lease return, trace finalization and checked generation increment.
 No quarantine/reaper or executor-ownership-transfer profile is admitted for
 1.0.
 
-Cleanup is caller-driven through public
-`ExecutionSupervisor::poll_cleanup(&self, &mut CleanupLane, &Executor,
-CleanupBudget)`, returning `SupervisedCleanupPoll`. Its `Ready` variant carries
-`Result<CleanupProgress, SupervisedCleanupError>` and its `Pending` variant is
-scheduler control flow. Progress distinguishes complete from more-required
-and reports bounded counts/work without a hidden wakeup contract. This low-
-level poll boundary is consumed by a replay driver/deterministic scheduler;
-application completion APIs do not expose `Pending`.
+Cleanup is caller-driven through scheduler-only
+`ReplayDriver::poll_cleanup(&self, &ExecutionSupervisor, &mut CleanupLane,
+&Executor, CleanupBudget)`, returning `SupervisedCleanupPoll`. Its `Ready`
+variant carries `Result<CleanupProgress, SupervisedCleanupError>` and its
+`Pending` variant is scheduler control flow. `ExecutionSupervisor` exposes no
+public pending-returning method. Progress distinguishes complete from more-
+required and reports bounded counts/work without a hidden wakeup contract.
+
+`ReplayDriver` is must-use, non-`Copy`, non-cloneable, non-serializable and has
+no public constructor/deserializer. Exactly one per scheduler generation is
+created by consuming a sealed must-use, non-`Copy`, non-cloneable, non-
+serializable `SchedulerPermit`, privately minted from validated `PlanReceipt`
+and bound to the supervisor, executor namespace, plan, trace and that scheduler
+generation. Applications cannot mint/receive the permit or driver or hold
+scheduler-owned lanes. The ready-only facade submits bounded work and emits
+`CleanupCompletion` only after `Ready`; its signatures contain none of
+`ReplayDriver`, `CleanupLane`, `SchedulerPermit` or `SupervisedCleanupPoll`,
+and completion has no pending variant. Custom scheduler access requires a
+separately reviewed permit/profile with identical obligations; 1.0 has no
+unpermitted extension point. The shared driver borrow and safe synchronized
+interior state preserve concurrent calls on distinct lanes; the mutable lane
+borrow excludes same-lane concurrency. No unsafe `Sync` implementation is
+admitted.
+
 The non-cloneable, must-use supervisor is bound to one executor namespace,
 `PlanReceipt` and trace generation; mismatched/duplicate authority fails. Safe
 synchronized trace state supports concurrent shared calls without unsafe
@@ -465,8 +481,9 @@ lanes admit concurrency. Lane identity never comes from call arrival, CAS
 order, OS thread IDs or async-runtime task identities. No hidden worker/reaper
 exists.
 
-After mutation-free lane/supervisor/executor/generation and budget validation,
-the supervisor forms the next `(CleanupLaneId, CallSequence)`. Live mode
+After mutation-free driver/lane/supervisor/executor/generation and budget
+validation, the sealed driver/supervisor transaction forms the next
+`(CleanupLaneId, CallSequence)`. Live mode
 atomically reserves the worst-case bounded call-event record and moves the
 lane to that active call before CAS. Reservation covers either `Busy` or a
 successful grant and the maximum exact result evidence permitted by that
@@ -493,11 +510,14 @@ Every normal return releases the guard explicitly. Safe `std` synchronization
 and automatic trait bounds are required; no handwritten unsafe `Sync`
 implementation is admitted.
 
-`PlanReceipt` bounds cleaning entries, lane count, calls per lane, successful-
-grant count/global order, lane/order exhaustion and fresh supervisor/lane/
-trace-generation renewal, total/per-poll work, exact selected/retired identity
-evidence, every replay-required call-event record and trace capacity.
-Forgetting a lane only forfeits its bounded remaining calls; the executor
+`PlanReceipt` bounds one permit/driver per scheduler generation, scheduler-
+generation renewal, queued requests/completions, driver work per scheduler
+turn, cleaning entries, lane count, calls per lane, successful-grant count/
+global order, lane/order exhaustion and fresh supervisor/lane/trace-generation
+renewal, total/per-poll work, exact selected/retired identity evidence, every
+replay-required call-event record and trace capacity. Forgetting a lane only
+forfeits its bounded remaining calls; a forgotten permit/driver cannot be
+replaced in that scheduler generation or expose raw cleanup. The executor
 primitive retains no receipt registration/count state, while the supervisor
 and lane capabilities own bounded logical-call/trace state.
 Admission never cleans implicitly and returns
@@ -852,13 +872,16 @@ exhaustion, unrecorded grants, reversed successful-cleanup order, live-CAS
 replay ownership, under-reserved/incomplete events, global-order wrap/
 exhaustion, grant/result mismatch, replay consulting live contention,
 pending exposed as application error/outcome, application behavior conditioned
-on poll timing/order, second-call start on an active pending lane, unbounded
-busy polling or implicit blocking, contention-trace exhaustion,
-nondeterministic entry selection, duplicate extraction/destruction, stale/ABA/
-exhausted job IDs, detached registry entries, hidden owned leases, unresponsive
-parallel work, premature capacity/buffer reuse, overstated pre-abort
-diagnostics, trace overflow, uncaptured runtime outcomes, supply-chain
-compromise, FFI/DMA, credential exposure, and location privacy.
+on poll timing/order, second-call start on an active pending lane, public
+supervisor polling, facade leakage of driver/lane/permit/poll types, forged/
+duplicated/stale/misbound drivers or permits, exclusive driver borrowing that
+serializes distinct lanes, unbounded busy polling or implicit blocking,
+contention-trace exhaustion, nondeterministic entry selection, duplicate
+extraction/destruction, stale/ABA/exhausted job IDs, detached registry entries,
+hidden owned leases, unresponsive parallel work, premature capacity/buffer
+reuse, overstated pre-abort diagnostics, trace overflow, uncaptured runtime
+outcomes, supply-chain compromise, FFI/DMA, credential exposure, and location
+privacy.
 
 Mandatory controls include bounded work, no input-dependent panic under
 declared resource limits, freshness and issue-of-data validation, explicit
@@ -908,7 +931,7 @@ broader 1.0 roadmap:
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, linear transport/control-lease proofs and adapter conformance | v0.37.2, v0.47.2-v0.50.3 and v0.170.0-v0.174.0 |
 | Early hints, receipt schema, post-acquisition receipt integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Tier 2 dispatch/cancel linearization, supervisor-enforced deterministic cleanup lanes, scheduler-only pending and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
+| Tier 2 dispatch/cancel linearization, sealed replay-driver boundary, deterministic cleanup lanes, scheduler-only pending and globally ordered grant/result replay, live-handle serialization, proved payload ownership, generation-safe reuse and lossless traces | v0.48.3 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
 | PVT mode matrix, DGPS and PVT/integrity separation | v0.120.4 and v0.129.3-v0.135.3 |
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |

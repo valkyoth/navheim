@@ -195,12 +195,13 @@ closed policy, and replay produces `Busy` from recorded evidence rather than
 live contention.
 
 The eighteenth coverage pass makes that ordering enforceable in safe Rust.
-Replayable applications call only `ExecutionSupervisor::poll_cleanup`; the raw
-executor primitive and contention receipt are crate-private, so callers cannot
-ignore or forget an unrecorded receipt. The supervisor binds one executor,
-plan and trace generation, advances the planned lane call, records contention
-before returning observable `Busy`, and reports trace unavailability or stops
-if recording fails. Replay is consulted before any live cleaner CAS.
+Replayable cleanup crosses only the supervised driver boundary; the raw
+executor primitive and contention receipt are crate-private, so application
+callers cannot ignore or forget an unrecorded receipt. The supervisor binds
+one executor, plan and trace generation, advances the planned lane call,
+records contention before returning observable `Busy`, and reports trace
+unavailability or stops if recording fails. Replay is consulted before any
+live cleaner CAS.
 
 The nineteenth coverage pass makes concurrent cleanup replay identity stable.
 `PlanReceipt` privately issues a bounded set of non-cloneable `CleanupLane`
@@ -219,12 +220,20 @@ returns `Busy` without CAS and gates grants in their recorded global order;
 early calls remain on the same logical call through scheduler `Pending`.
 
 The twenty-first coverage pass makes that `Pending` state non-semantic.
-`ExecutionSupervisor::poll_cleanup` returns `SupervisedCleanupPoll`, whose
-`Ready` contains the recorded result/error and whose `Pending` is consumed only
-by the replay driver. Pending changes no executor, lane sequence, trace, replay
-cursor or application result, cannot admit a second call on its active lane,
-and is hidden from application completion APIs. The base executor never
-blocks or busy-spins; optional blocking requires a separately admitted profile.
+Low-level cleanup polling returns `SupervisedCleanupPoll`, whose `Ready`
+contains the recorded result/error and whose `Pending` is consumed only by the
+replay driver. Pending changes no executor, lane sequence, trace, replay cursor
+or application result, cannot admit a second call on its active lane, and is
+hidden from application completion APIs. The base executor never blocks or
+busy-spins; optional blocking requires a separately admitted profile.
+
+The twenty-second coverage pass places that poll only on `ReplayDriver`.
+`ExecutionSupervisor` has no public polling method. The must-use, non-cloneable
+driver is created exactly once per scheduler generation by consuming a sealed
+plan-bound `SchedulerPermit`; its shared borrow retains concurrency across
+distinct mutable lanes. Application facade signatures expose none of the
+driver, lane, permit or poll types and emit only ready `CleanupCompletion`
+values. Custom scheduler access requires a separately reviewed permit/profile.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
