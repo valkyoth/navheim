@@ -10,8 +10,18 @@ repository="${2:-.}"
 cd "$repository"
 
 violations="$(
-    find crates tools scripts -type f \
+    find . -type f \
         \( -name '*.rs' -o -name '*.py' -o -name '*.sh' \) \
+        -not -path './.git/*' \
+        -not -path './.agents/*' \
+        -not -path './.codex/*' \
+        -not -path './.cargo-deny-advisory-dbs/*' \
+        -not -path './target/*' \
+        -not -path './fuzz/target/*' \
+        -not -path './standards/private/*' \
+        -not -path './tmp/*' \
+        -not -path './temp/*' \
+        -not -path './dist/*' \
         -not -path '*/generated/*' \
         -exec wc -l {} \; |
         awk '$1 > 500 { print }'

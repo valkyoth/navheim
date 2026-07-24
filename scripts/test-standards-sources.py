@@ -39,6 +39,14 @@ REQUIRED = {
     "ublox-ubx",
     "septentrio-sbf",
     "android-gnss",
+    "gnss-time-transfer",
+    "rust-platform-contracts",
+    "sdr-device-stacks",
+    "linux-bsd-io",
+    "microsoft-platform-io",
+    "apple-platform-io",
+    "novatel-oem",
+    "conditional-receiver-protocols",
 }
 
 

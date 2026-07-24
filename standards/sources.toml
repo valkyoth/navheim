@@ -92,12 +92,12 @@ first_release = "v0.82.0"
 [[source]]
 id = "beidou-open-service"
 publisher = "China Satellite Navigation Office"
-scope = "BeiDou B1I, B1C, B2a, B2b, B3I, PPP-B2b, BDSBAS, health, and time"
+scope = "BeiDou B1I, B1C, B2a, B2b, B3I, PPP-B2b, BDSBAS, conditional public SAR/short-message interfaces, health, and time"
 status = "verify-before-implementation"
 acquisition = "manual"
 redistribution = "local-only"
 landing_url = "https://en.beidou.gov.cn/SYSTEMS/Officialdocument/"
-documents = ["B1I SIS ICD 3.0", "B1C SIS ICD", "B2a SIS ICD", "B2b SIS ICD 1.0", "B3I SIS ICD", "PPP-B2b SIS ICD 1.0", "BDSBAS-B1C SIS ICD 1.0", "Open Service Performance Standard 3.0"]
+documents = ["B1I SIS ICD 3.0", "B1C SIS ICD", "B2a SIS ICD", "B2b SIS ICD 1.0", "B3I SIS ICD", "PPP-B2b SIS ICD 1.0", "BDSBAS-B1C SIS ICD 1.0", "Open Service Performance Standard 3.0", "stable public interoperable SAR/short-message material if officially available at profile freeze"]
 first_release = "v0.92.0"
 
 [[source]]
@@ -307,6 +307,94 @@ redistribution = "local-only"
 landing_url = "https://developer.android.com/develop/sensors-and-location/sensors/gnss"
 documents = ["current GnssMeasurement/GnssClock API contracts", "raw measurement support/version matrix", "location, USB host, permission, and background execution contracts"]
 first_release = "v0.186.0"
+
+[[source]]
+id = "gnss-time-transfer"
+publisher = "BIPM / CCTF / ITU-R"
+scope = "common-view/all-in-view GNSS time transfer, CGGTTS interoperability, terminology, calibration, and uncertainty"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://www.bipm.org/en/committees/cc/cctf/20-2015/resolution-4"
+documents = ["CGGTTS V2E as published in Metrologia 2015 52 G1", "CGGTTS V2E BDS-3 extension agreed in 2023", "CCTF Recommendation 4 (2015)", "current BIPM CGGTTS processing and submission guidance", "ITU-R TF.767-2", "ITU-R TF.686 current in-force revision"]
+first_release = "v0.163.1"
+
+[[source]]
+id = "rust-platform-contracts"
+publisher = "Rust Project"
+scope = "stable Rust, MSRV, no_std, floating behavior, target support, core::arch, and portable-SIMD status"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://doc.rust-lang.org/stable/"
+documents = ["Rust 1.90.0 through the pinned stable release notes", "stable core/std API documentation", "rustc platform support policy", "Rust Reference", "portable SIMD tracking and stabilization records used by non-claims"]
+first_release = "v0.1.0"
+
+[[source]]
+id = "sdr-device-stacks"
+publisher = "osmocom / Nuand / Ettus Research and NI / Lime Microsystems"
+scope = "RTL-SDR, bladeRF, UHD/USRP, LimeSuite, FPGA, firmware, timestamp, calibration, and device lifecycle contracts"
+status = "hardware-profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://files.ettus.com/manual/"
+documents = ["official rtl-sdr and supported tuner documentation", "libbladeRF API and firmware/FPGA compatibility records", "UHD API and USRP hardware manuals", "LimeSuite API and LimeSDR hardware manuals", "exact FPGA/toolchain material for admitted bitstreams"]
+first_release = "v0.171.0"
+
+[[source]]
+id = "linux-bsd-io"
+publisher = "Linux kernel / FreeBSD / OpenBSD / NetBSD projects"
+scope = "serial, usbfs/ugen, sockets, IIO, PPS, hotplug, permissions, cancellation, and platform lifecycle"
+status = "profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://docs.kernel.org/"
+documents = ["Linux UAPI and kernel documentation for admitted interfaces", "FreeBSD manuals and source ABI records", "OpenBSD manuals and source ABI records", "NetBSD manuals and source ABI records"]
+first_release = "v0.171.0"
+
+[[source]]
+id = "microsoft-platform-io"
+publisher = "Microsoft"
+scope = "Windows COM, WinUSB, Winsock, location, permissions, timestamps, cancellation, and device lifecycle"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/winusb"
+documents = ["current WinUSB API and driver contract", "Windows communications APIs", "Winsock API", "Windows location provider APIs", "high-resolution timer and cancellation contracts"]
+first_release = "v0.178.0"
+
+[[source]]
+id = "apple-platform-io"
+publisher = "Apple"
+scope = "macOS and iOS serial, IOKit USB, networking, Core Location, permissions, timestamps, and lifecycle"
+status = "verify-before-implementation"
+acquisition = "portal"
+redistribution = "local-only"
+landing_url = "https://developer.apple.com/documentation/"
+documents = ["current IOKit USB and serial contracts", "macOS networking contracts", "Core Location macOS/iOS contracts", "permission, background, timestamp, accuracy, mock and lifecycle documentation"]
+first_release = "v0.179.0"
+
+[[source]]
+id = "novatel-oem"
+publisher = "Hexagon / NovAtel"
+scope = "public NovAtel OEM framing, messages, raw observations, timing, hardware, and firmware profiles"
+status = "hardware-profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://docs.novatel.com/"
+documents = ["exact OEM receiver-family command/log reference and timing application material for every frozen supported hardware/firmware pair"]
+first_release = "v0.184.0"
+
+[[source]]
+id = "conditional-receiver-protocols"
+publisher = "SkyTraq / SiRF / MediaTek / Trimble and future admitted receiver vendors"
+scope = "conditionally admitted public receiver protocols tied to exact official documents, hardware, and firmware"
+status = "hardware-profile-freeze-required"
+acquisition = "manual"
+redistribution = "local-only"
+landing_url = "https://www.skytraq.com.tw/downloads/"
+documents = ["one exact official vendor source record per admitted protocol and hardware/firmware profile; reverse-engineered fragments and unofficial mirrors are insufficient"]
+first_release = "v0.185.3"
 
 [[download]]
 source_id = "gps-sis"

@@ -8,7 +8,8 @@ mkdir -p \
     "$fixture/crates/navheim/src" \
     "$fixture/crates/navheim-core/src" \
     "$fixture/tools/helper/src" \
-    "$fixture/scripts"
+    "$fixture/scripts" \
+    "$fixture/tests"
 
 cat >"$fixture/Cargo.toml" <<'EOF'
 [workspace]
@@ -45,6 +46,7 @@ EOF
 : >"$fixture/crates/navheim/src/lib.rs"
 : >"$fixture/crates/navheim-core/src/lib.rs"
 : >"$fixture/tools/helper/src/main.rs"
+: >"$fixture/tests/conformance.rs"
 
 scripts/validate-modularity-policy.sh check "$fixture" >/dev/null
 
@@ -59,6 +61,14 @@ if scripts/validate-modularity-policy.sh check "$fixture" >/dev/null 2>&1; then
     exit 1
 fi
 mv "$fixture/Cargo.toml.clean" "$fixture/Cargo.toml"
+
+awk 'BEGIN { for (i = 0; i < 501; i++) print "#" }' \
+    >"$fixture/tests/conformance.rs"
+if scripts/validate-modularity-policy.sh check "$fixture" >/dev/null 2>&1; then
+    echo "modularity policy accepted an oversized test source outside crates/tools/scripts" >&2
+    exit 1
+fi
+: >"$fixture/tests/conformance.rs"
 
 rm "$fixture/crates/navheim-core/README.md"
 if scripts/validate-modularity-policy.sh check "$fixture" >/dev/null 2>&1; then

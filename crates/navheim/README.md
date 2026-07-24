@@ -165,6 +165,7 @@ workflow committed in this repository.
 
 - [Current Status](https://github.com/valkyoth/navheim/blob/main/docs/current-status.md)
 - [Implementation Plan](https://github.com/valkyoth/navheim/blob/main/docs/IMPLEMENTATION_PLAN.md)
+- [Repository Requirements Audit](https://github.com/valkyoth/navheim/blob/main/docs/REQUIREMENTS_AUDIT.md)
 - [GNSS Timing API](https://github.com/valkyoth/navheim/blob/main/docs/GNSS_TIMING_API.md)
 - [Release Plan](https://github.com/valkyoth/navheim/blob/main/docs/RELEASE_PLAN.md)
 - [Release Checklist](https://github.com/valkyoth/navheim/blob/main/docs/release-checklist.md)

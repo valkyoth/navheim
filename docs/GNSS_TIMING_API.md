@@ -240,6 +240,28 @@ mapping interval; it is never normalized away. Raw `C` values have no public
 cross-domain ordering/subtraction convenience API, and mappings cannot be
 silently chained without composing their intervals and uncertainties.
 
+## GNSS Time-Transfer Results
+
+Navheim owns GNSS measurement and format semantics for common-view and
+all-in-view time transfer. The API returns immutable comparison inputs/results,
+not clock-control decisions. A result identifies:
+
+- participating station/receiver/antenna and calibration records;
+- constellation, signal, satellite or all-in-view set and native time scale;
+- track/schedule interval, measurement epochs and capture domains;
+- raw clock-minus-GNSS values, applied ionosphere/product/delay corrections,
+  rejected measurements and the ordered correction ledger;
+- common-view intersection or all-in-view weighting method;
+- asymmetric uncertainty, correlation groups, validity and provenance;
+- original-preserving and canonical CGGTTS V2E records for the frozen profile.
+
+Station clocks remain opaque named endpoints. Navheim may calculate a
+GNSS-derived difference between their observations, but it does not rank clock
+families, build UTC, steer either clock, create holdover or decide that the
+result should discipline a system. CGGTTS parsing/writing follows the ordinary
+raw/correctness/semantic pipeline and never treats a syntactically valid record
+as calibrated or trustworthy.
+
 ## PPS, Time Marks, and Frequency Outputs
 
 Generic edge capture belongs outside Navheim's GNSS core. Navheim accepts a
@@ -444,6 +466,9 @@ Before the timing API is stable, tests must cover:
   uncertainty composition and forbidden direct cross-domain comparison;
 - frequency-output lock loss, discontinuity, correction, and uncertainty;
 - time-only solutions with unhealthy satellites and inconsistent systems;
+- common-view/all-in-view partial visibility, schedule boundaries, station or
+  calibration mismatch, mixed scales, malformed CGGTTS, original/canonical
+  round trips and independent time-transfer comparisons;
 - authenticated, pending, unavailable, failed, and revoked states;
 - spoofing/meaconing/replay evidence and subsequent invalidation;
 - adapter round trips using a foreign capture timestamp newtype;

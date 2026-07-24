@@ -29,6 +29,14 @@ All notable changes to `navheim` are documented here.
   publications, checksum/line-ending/read-only gates, lifecycle roles, and a
   live-checked 210-errata drift snapshot.
 - Added the external standards acquisition inventory and secure local-only
-  vault workflow: 26 authoritative source families, 17 allowlisted public
+  vault workflow: 34 authoritative source families, 17 allowlisted public
   downloads, local SHA-256 locking, official-page revision-marker review, and
   enforced exclusion of restricted document bytes from Git and crates.
+- Completed a repository-wide requirement/specification audit, corrected the
+  copied MIT donor notice, and expanded source-size and Markdown-link checks
+  across all applicable repository paths.
+- Added bounded pre-1.0 releases for CGGTTS common-view/all-in-view timing,
+  exact SBAS providers, conditional BeiDou messaging, FPGA/external DSP,
+  generic and conditional receiver families, every named GitHub-only tool,
+  external evidence data, deployment artifacts, and full requirement/claim
+  traceability.

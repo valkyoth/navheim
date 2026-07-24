@@ -27,7 +27,7 @@ references for Navheim's HTTP, encoding, certificate, JSON and TLS boundaries,
 plus a live-checked errata drift snapshot. Legacy NTRIP HTTP references are
 explicitly separated from current secure behavior.
 
-The broader acquisition inventory covers 26 authoritative source families.
+The broader acquisition inventory covers 34 authoritative source families.
 Seventeen freely downloadable GPS, Galileo, NavIC and IGS documents can be
 fetched into an ignored local vault and protected by a local SHA-256 lock.
 Paid, licensed, consent-gated, registration-gated and vendor-profile material
@@ -49,6 +49,21 @@ bounded extension registration, all facade profiles, DGPS and ordered
 degradation, solver/integrity separation, platform-complete Android support,
 isolated discovery probes, bounded ASN.1 PER, exact SUPL/LPP matrices and
 post-protocol RustCrypto integration.
+
+A repository-wide requirements pass then checked every tracked artifact class,
+corrected the copied MIT donor identity, widened the source-size and
+documentation-link gates to the whole applicable repository, and assigned
+previously aggregate promises to bounded releases. Those stops now cover
+CGGTTS common-view/all-in-view timing, exact SBAS providers, conditional
+BeiDou messaging, FPGA/external-DSP inputs, generic and conditional receiver
+families, all named GitHub-only tools, external evidence data, deployment
+artifacts, and final requirement/claim traceability.
+
+The standards acquisition catalog now also names the missing primary-source
+families for BIPM/CCTF/ITU-R time transfer, Rust contracts, SDR/FPGA stacks,
+Linux/BSD, Microsoft and Apple platform I/O, NovAtel, and conditional receiver
+protocols. Their bytes remain local-only and exact profiles must be frozen
+before implementation.
 
 ## Security
 

@@ -229,6 +229,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.1.2 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.1.3 - Repository-wide requirement, public-claim, ownership, milestone and verification trac...
+
+Status: planned.
+
+Goal: deliver repository-wide requirement, public-claim, ownership, milestone and verification traceability ledger as one bounded,
+reviewable release in Phase A (Foundation and contracts).
+
+Deliverables:
+
+- repository-wide requirement, public-claim, ownership, milestone and verification traceability ledger.
+- Create a bidirectional ledger from architecture requirements and public claims to owners, milestones, sources, tests, status, and non-claims; make authored-file scope explicit.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase A contract: Use private checked representations, explicit availability/failure states, deterministic no_std math, bounded provenance, and executable capacity/resource contracts.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.1.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Reject missing, duplicate, stale, circular, aggregate, ownerless, testless, or unsupported mappings and scan every repository path covered by the source-size and documentation policies.
+- perform MSRV and pinned-stable builds, no_std checks, high-precision math references, boundary tests, metadata checks, and deterministic policy tests;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase A acceptance is demonstrated: invalid states, undeclared resource use, and unavailable math capabilities are rejected before state mutation;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.1.3 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.2.0 - Checked arithmetic, capacities and structured core error model
 
 Status: planned.
@@ -3475,6 +3515,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.36.2 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.36.3 - GitHub-only `navheim-capture` record/import/export utility with privacy-safe metadata
+
+Status: planned.
+
+Goal: deliver GitHub-only `navheim-capture` record/import/export utility with privacy-safe metadata as one bounded,
+reviewable release in Phase B (File and byte-stream interoperability).
+
+Deliverables:
+
+- GitHub-only `navheim-capture` record/import/export utility with privacy-safe metadata.
+- Keep navheim-capture publish-disabled and route every import/export through the frozen replay model with explicit consent and minimized metadata.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase B contract: Separate borrowed raw records, correctness assessment, semantic conversion, and transactional state updates; preserve unknown and original fields.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.36.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test malformed streams, interruption, overwrite refusal, path traversal, device reset, disk exhaustion, metadata redaction, deterministic output, and round trips.
+- perform official format examples, malformed/truncated/adversarial streams, exact-consumption and round-trip properties, recovery tests, and parser fuzz smoke;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase B acceptance is demonstrated: all chunk boundaries, unknown fields, recovery paths, and original/canonical round trips have deterministic evidence;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.36.3 implementation stop reached. Run pentest for this exact commit.`
+
 ## Phase C: Native DSP reference implementation
 
 ### v0.37.0 - Complex/fixed-point types, NCO and oscillators
@@ -6649,6 +6729,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.103.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.103.1 - Public BeiDou SAR/short-message profile freeze with implementation only where a stabl...
+
+Status: planned.
+
+Goal: deliver public BeiDou SAR/short-message profile freeze with implementation only where a stable open interoperable specification exists as one bounded,
+reviewable release in Phase G (BeiDou).
+
+Deliverables:
+
+- public BeiDou SAR/short-message profile freeze with implementation only where a stable open interoperable specification exists.
+- Freeze the exact lawful public BeiDou SAR/short-message documents and either implement their interoperable profile or publish an explicit unsupported/unavailable matrix.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase G contract: Apply the canonical artifact, orbit class, health, time, correction, resource, and transaction contracts to every admitted BeiDou surface.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.103.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test unknown identifiers, malformed content, regional/service applicability, privacy-sensitive payload handling, expiry, and the no-specification non-claim path.
+- perform official BeiDou vectors, GEO/IGSO/MEO cases, generated and recorded signals, time/correction faults, and independent receiver comparison;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase G acceptance is demonstrated: BeiDou outputs preserve orbit/time/correction context and pass official plus independent references;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.103.1 implementation stop reached. Run pentest for this exact commit.`
+
 ## Phase H: QZSS, NavIC and SBAS
 
 ### v0.104.0 - QZSS L1 family and regional geometry
@@ -7336,6 +7456,46 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.119.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.119.2 - Exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS and African SBAS provider/service...
+
+Status: planned.
+
+Goal: deliver exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS and African SBAS provider/service profile matrix as one bounded,
+reviewable release in Phase H (QZSS, NavIC and SBAS).
+
+Deliverables:
+
+- exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS and African SBAS provider/service profile matrix.
+- Name WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS, and current African SBAS profiles with exact service definitions, regions, signals, messages, validity, and limitations.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase H contract: Bind augmentation/provider/profile state explicitly and preserve integrity timeout, regional applicability, and future identifiers.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.119.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Use provider and independent vectors for every admitted matrix cell; test region/profile confusion, future GEO IDs, expiry, conflicting providers, and unsupported profiles.
+- perform official QZSS/NavIC/SBAS vectors, provider/profile cases, generated and recorded signals, integrity timeouts, and independent receiver comparison;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase H acceptance is demonstrated: regional/provider/integrity applicability and expiry are explicit and independently verified;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.119.2 implementation stop reached. Run pentest for this exact commit.`
 
 ## Phase I: Multi-GNSS solution quality
 
@@ -10291,6 +10451,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.163.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.163.1 - Common-view/all-in-view GNSS time-transfer results and CGGTTS V2E interoperability
+
+Status: planned.
+
+Goal: deliver common-view/all-in-view GNSS time-transfer results and CGGTTS V2E interoperability as one bounded,
+reviewable release in Phase L (Timing, fusion and navigation).
+
+Deliverables:
+
+- common-view/all-in-view GNSS time-transfer results and CGGTTS V2E interoperability.
+- Produce common-view and all-in-view comparison artifacts and bounded CGGTTS V2E original/canonical records, including frozen BDS-3 conventions, calibration, schedule, uncertainty, and provenance.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase L contract: Use explicit capture domains, bounded event slots, targeted invalidation, asymmetric correlated uncertainty, deterministic fusion queues, and bounded navigation models.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.163.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Cross-check independent BIPM-compatible results and test missing common satellites, mixed scales, station/calibration errors, malformed records, track boundaries, leap events, and explicit exclusion of discipline/consensus.
+- perform independent timing/fusion/navigation references, rollover and clock faults, delayed/out-of-sequence data, freshness expiry, outage invalidation, foreign-adapter round trips, sensor comparisons, and geodesic edge cases;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase L acceptance is demonstrated: clock-domain changes, queue pressure, stale evidence, invalidation, fusion discontinuities, and navigation boundary cases remain explicit;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.163.1 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.164.0 - Inertial mechanization
 
 Status: planned.
@@ -11267,6 +11467,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.175.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.175.1 - Bounded FPGA/external-DSP correlator and tracking-output boundary plus GitHub-only `n...
+
+Status: planned.
+
+Goal: deliver bounded FPGA/external-DSP correlator and tracking-output boundary plus GitHub-only `navheim-fpga` host/artifact contract as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- bounded FPGA/external-DSP correlator and tracking-output boundary plus GitHub-only `navheim-fpga` host/artifact contract.
+- Version and bound FPGA/external-DSP correlator and tracking outputs with clock domain, calibration, device, firmware/bitstream, build/toolchain, reset, work, and trust provenance.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.175.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Compare every accepted accelerated artifact with scalar vectors and test hostile lengths/metadata, stale generations, overruns, firmware mismatch, partial transfer, disconnect, and fallback.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.175.1 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.176.0 - Portable serial backend
 
 Status: planned.
@@ -11957,6 +12197,86 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.185.1 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.185.2 - Generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters
+
+Status: planned.
+
+Goal: deliver generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters.
+- Adapt NMEA-only, RTCM, RINEX, and canonical raw-observation sources without inventing receiver health, timing precision, or raw measurements that the source does not expose.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.185.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Replay each source independently and test capability absence, mixed sessions, reset, duplicate data, stale epochs, provenance loss, backpressure, and canonical equivalence.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.185.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.185.3 - Evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profil...
+
+Status: planned.
+
+Goal: deliver evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
+- Freeze exact official-document and hardware/firmware matrices for SkyTraq, SiRF, MediaTek/PMTK, Trimble, and other candidates; implement only independently testable admitted profiles.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.185.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test every admitted profile on named hardware plus recorded vectors and prove undocumented, reverse-engineered-only, stale-firmware, ambiguous, and untested profiles remain rejected or experimental.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.185.3 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.186.0 - Android raw GNSS observation-fact adapter without assistance translation
 
 Status: planned.
@@ -12547,6 +12867,366 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.190.2 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.190.3 - GitHub-only tool workspace, privilege, secret, privacy, configuration and `publish =...
+
+Status: planned.
+
+Goal: deliver GitHub-only tool workspace, privilege, secret, privacy, configuration and `publish = false` enforcement foundation as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- GitHub-only tool workspace, privilege, secret, privacy, configuration and `publish = false` enforcement foundation.
+- Create the publish-disabled Rust 1.97.1 tool workspace with common privilege, configuration, secret, consent, logging, cancellation, update, and local-data policies.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Inspect Cargo metadata and packages and test accidental publication, privilege escalation, unsafe defaults, secret/location logging, config expansion, cancellation, and library-boundary bypass.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.3 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.4 - `navheim-cli` inspect, convert, solve, record and replay workflows
+
+Status: planned.
+
+Goal: deliver `navheim-cli` inspect, convert, solve, record and replay workflows as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-cli` inspect, convert, solve, record and replay workflows.
+- Implement navheim-cli inspection, conversion, solving, recording, and replay only through public canonical APIs and explicit side-effect plans.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.4.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test every command and output mode, hostile paths/stdin, overwrite consent, broken pipes, redaction, deterministic replay, unavailable capabilities, and non-zero failure status.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.4 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.5 - `navheimd` local daemon, bounded IPC/management and least-authority service lifecycle
+
+Status: planned.
+
+Goal: deliver `navheimd` local daemon, bounded IPC/management and least-authority service lifecycle as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheimd` local daemon, bounded IPC/management and least-authority service lifecycle.
+- Implement navheimd with authenticated bounded local IPC/management, least-privilege device access, explicit configuration expansion, cancellation, and lifecycle reporting.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.5.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test unauthorized peers, socket/path races, request/queue limits, slow clients, restart/reset, revoked permissions, secret redaction, and clean shutdown.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.5 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.6 - `navheim-caster` NTRIP caster deployment with authenticated tenant/session isolation
+
+Status: planned.
+
+Goal: deliver `navheim-caster` NTRIP caster deployment with authenticated tenant/session isolation as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-caster` NTRIP caster deployment with authenticated tenant/session isolation.
+- Implement navheim-caster with tenant, mountpoint, credential, correction-session, rate, and resource isolation over the frozen NTRIP/TLS cores.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.6.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test cross-tenant leakage, replay, downgrade, redirect, slowloris, reconnect storms, stale corrections, credential logs, load limits, and atomic configuration reload.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.6 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.7 - `navheim-station` reference/base-station service with survey, correction and continui...
+
+Status: planned.
+
+Goal: deliver `navheim-station` reference/base-station service with survey, correction and continuity evidence as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-station` reference/base-station service with survey, correction and continuity evidence.
+- Implement navheim-station with explicit survey state, antenna/frame identity, correction generation, continuity, authority, monitoring, and fail-closed service lifecycle.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.7.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test bad coordinates/antenna metadata, survey rollback, source loss, stale epochs, clock reset, correction interruption, permission loss, and restart continuity.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.7 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.8 - `navheim-survey` field and post-processing survey application
+
+Status: planned.
+
+Goal: deliver `navheim-survey` field and post-processing survey application as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-survey` field and post-processing survey application.
+- Implement navheim-survey field and post-processing workflows with typed datum/frame/height, provenance, uncertainty, project separation, and reproducible reports.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.8.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Compare independent survey results and test mixed projects/frames, stale products, interrupted writes, privacy exports, unavailable quality, and audit reconstruction.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.8 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.9 - `navheim-inspector` bounded message/signal diagnostic TUI
+
+Status: planned.
+
+Goal: deliver `navheim-inspector` bounded message/signal diagnostic TUI as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-inspector` bounded message/signal diagnostic TUI.
+- Implement navheim-inspector as a bounded diagnostic TUI that preserves raw/canonical distinctions and redacts sensitive fields by default.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.9.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test hostile streams, terminal escapes, high-rate backpressure, resize/input races, disconnect, bounded history, export consent, and redacted snapshots.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.9 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.10 - `navheim-viewer` desktop/web visualization with precise-location and provenance priva...
+
+Status: planned.
+
+Goal: deliver `navheim-viewer` desktop/web visualization with precise-location and provenance privacy controls as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-viewer` desktop/web visualization with precise-location and provenance privacy controls.
+- Implement navheim-viewer desktop/web visualization with explicit local/network mode, data minimization, scoped sharing, uncertainty display, and no hidden telemetry.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.10.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test malicious labels/files, browser boundaries, location/time leakage, stale views, unavailable state, large tracks, export consent, and deterministic rendering data.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.10 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.190.11 - `navheim-lab` conducted/shielded robustness experiment controller with transmit-safet...
+
+Status: planned.
+
+Goal: deliver `navheim-lab` conducted/shielded robustness experiment controller with transmit-safety interlocks as one bounded,
+reviewable release in Phase M (Hardware, OS and assistance).
+
+Deliverables:
+
+- `navheim-lab` conducted/shielded robustness experiment controller with transmit-safety interlocks.
+- Implement navheim-lab only for conducted or shielded experiments, with hardware identity, physical interlocks, authorization, power/frequency limits, audit logs, and emergency stop.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase M contract: Plan before side effects, isolate probes/unsafe/FFI, bound PER/protocol work, validate every device report, expose platform limitations, and redact sensitive data.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.190.11.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test absent/bypassed interlocks, unauthorized transmit requests, region/config errors, stale devices, limit overflow, disconnect, emergency stop, and receive-only safe default.
+- perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase M acceptance is demonstrated: permission, reset, disconnect, probe/PER exhaustion, hostile metadata, unsafe boundary, and sensitive-data failures remain bounded and visible;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.190.11 implementation stop reached. Run pentest for this exact commit.`
+
 ## Phase N: Simulation, hardening and 1.0 stabilization
 
 ### v0.191.0 - Synthetic navigation-message generators
@@ -12777,6 +13457,86 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.196.0 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.196.1 - `navheim-sim` high-level scenario and signal-generation tool composition
+
+Status: planned.
+
+Goal: deliver `navheim-sim` high-level scenario and signal-generation tool composition as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- `navheim-sim` high-level scenario and signal-generation tool composition.
+- Compose navheim-sim from the admitted message, signal, dynamics, atmosphere, interference, spoofing, receiver, and replay components without a second implementation.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.196.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test seeded reproducibility, scenario-schema limits, impossible states, cross-constellation time, resource exhaustion, safety labeling, and scalar component equivalence.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.196.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.196.2 - External `navheim-data` capture/vector manifest, object-integrity, access and retenti...
+
+Status: planned.
+
+Goal: deliver external `navheim-data` capture/vector manifest, object-integrity, access and retention contract as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- external `navheim-data` capture/vector manifest, object-integrity, access and retention contract.
+- Define content-addressed external navheim-data manifests with source/license/consent, sensitivity, encryption, retention, access, derivation, and test-vector identity.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.196.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test checksum substitution, partial downloads, unauthorized sensitive data, license mismatch, corpus drift, deletion/retention policy, offline replay, and provenance closure.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.196.2 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.197.0 - Long-duration resource-leak and rollover suite
 
 Status: planned.
@@ -12890,6 +13650,86 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.198.1 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.198.2 - GitHub-only `navheim-fuzz` target/corpus lifecycle and reproducibility harness
+
+Status: planned.
+
+Goal: deliver GitHub-only `navheim-fuzz` target/corpus lifecycle and reproducibility harness as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- GitHub-only `navheim-fuzz` target/corpus lifecycle and reproducibility harness.
+- Keep navheim-fuzz publish-disabled and bind every parser/state-machine target to bounded dictionaries, seed provenance, corpus minimization, sanitizer setup, and reproducible crash artifacts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.198.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test target discovery, stale corpora, nondeterministic reproducers, secret/location scrubbing, timeout/memory limits, malformed artifacts, and fixed-crash regression promotion.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.198.2 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.198.3 - GitHub-only `navheim-conformance` standards/vector test runner
+
+Status: planned.
+
+Goal: deliver GitHub-only `navheim-conformance` standards/vector test runner as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- GitHub-only `navheim-conformance` standards/vector test runner.
+- Implement navheim-conformance as a read-only-by-default runner over exact manifest sections, vectors, profiles, expected failures, implementations, and evidence receipts.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.198.3.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test missing/licensed vectors, wrong revisions, false pass, skipped cells, corrupt evidence, tool/version drift, offline mode, and complete machine-readable reports.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.198.3 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.199.0 - Numerical condition/precision audit
 
@@ -13084,6 +13924,46 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.201.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.201.1 - GitHub-only `navheim-bench` performance, resource and regression harness
+
+Status: planned.
+
+Goal: deliver GitHub-only `navheim-bench` performance, resource and regression harness as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- GitHub-only `navheim-bench` performance, resource and regression harness.
+- Implement navheim-bench with pinned inputs, warmup/statistics policy, CPU/toolchain/feature metadata, correctness prechecks, resource ceilings, and regression thresholds.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.201.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Test scalar/optimized selection, noisy and throttled hosts, changed inputs, false improvements, threshold edges, output reproducibility, and no benchmark-only unsafe shortcut.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.201.1 implementation stop reached. Run pentest for this exact commit.`
 
 ### v0.202.0 - Fixed-point/embedded performance release
 
@@ -13543,6 +14423,46 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.210.1 implementation stop reached. Run pentest for this exact commit.`
 
+### v0.210.2 - Complete architecture requirement, public claim, crate/tool owner, milestone, test an...
+
+Status: planned.
+
+Goal: deliver complete architecture requirement, public claim, crate/tool owner, milestone, test and non-claim traceability closure as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- complete architecture requirement, public claim, crate/tool owner, milestone, test and non-claim traceability closure.
+- Close the bidirectional ledger for every architecture requirement, public claim, published crate, GitHub-only component, conditional profile, source, milestone, test, status, and non-claim.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.210.2.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Machine-check all frozen records and reject orphaned requirements, unowned tools, unsupported claims, incomplete conditional decisions, stale statuses, and evidence outside the reviewed baseline.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.210.2 implementation stop reached. Run pentest for this exact commit.`
+
 ### v0.211.0 - Complete public-signal coverage audit
 
 Status: planned.
@@ -13928,6 +14848,46 @@ Exit criteria:
 - all release-specific and repository-wide gates pass with no unresolved
   critical/high finding and known limitations are explicit;
 - `v0.219.0 implementation stop reached. Run pentest for this exact commit.`
+
+### v0.219.1 - GitHub-only packages, service units, containers and deployment configuration security...
+
+Status: planned.
+
+Goal: deliver GitHub-only packages, service units, containers and deployment configuration security/reproducibility freeze as one bounded,
+reviewable release in Phase N (Simulation, hardening and 1.0 stabilization).
+
+Deliverables:
+
+- GitHub-only packages, service units, containers and deployment configuration security/reproducibility freeze.
+- Freeze publish-disabled packages, service users/permissions, units, containers, images, deployment defaults, upgrade/rollback, secrets, network exposure, and artifact provenance.
+- Add or update only the focused crates and modules required by this outcome;
+  preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
+  boundaries.
+- Phase N contract: Close traceability, privacy, resource, numerical, unsafe, platform, interoperability, and reproducibility evidence without weakening non-claims.
+- Update standards mappings, capability/coverage status, security analysis,
+  public documentation, migration notes, and `RELEASE_NOTES_0.219.1.md`.
+- Add failure-state and resource-limit behavior; do not imply any adjacent
+  planned capability is complete.
+
+Verification:
+
+- run the repository-wide format, lint, test, docs, package, dependency,
+  advisory, SBOM, MSRV, and applicable platform gates;
+- Build from clean environments and test non-root operation, read-only filesystems, dropped capabilities, secret injection, hostile configuration, rollback, shutdown, SBOM/signature identity, and default-deny exposure.
+- perform cross-constellation replay, fuzz coverage, long-duration and rollover tests, numerical/unsafe/API audits, platform matrices, live-sky and shielded-simulator evidence;
+- add at least one negative or adversarial regression for every new untrusted
+  boundary and confirm no input can panic or partially commit state;
+- review changed code, standards provenance, claims, resource bounds, and
+  dependency/tool currency before the pentest handoff.
+
+Exit criteria:
+
+- the stated deliverable is implemented, independently testable, documented,
+  mapped to evidence, and contains no hidden degradation or unsupported claim;
+- Phase N acceptance is demonstrated: the milestone closes its named evidence gap with reproducible artifacts and no unsupported production or certification claim;
+- all release-specific and repository-wide gates pass with no unresolved
+  critical/high finding and known limitations are explicit;
+- `v0.219.1 implementation stop reached. Run pentest for this exact commit.`
 
 ## Production Candidate
 

@@ -2147,6 +2147,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.1.0** — workspace, licenses, security policy, MSRV, CI and `standards/manifest.toml`.
 - **0.1.1** — metadata-driven crate/tier/unsafe policy plus strict SemVer, tag, pentest-parent and package-provenance validation.
 - **0.1.2** — exact standards-document, amendment, legal-access, implementation and test-traceability schema.
+- **0.1.3** — repository-wide requirement, public-claim, ownership, milestone and verification traceability ledger.
 - **0.2.0** — checked arithmetic, capacities and structured core error model.
 - **0.2.1** — safe fixed byte buffers and checked fixed-capacity UTF-8 strings.
 - **0.2.2** — safe bounded sequence/deque contracts with documented representation and cost.
@@ -2234,6 +2235,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.36.0** — deterministic raw-I/Q and observation replay container v0.
 - **0.36.1** — replay checkpoints, digests, corruption recovery and version compatibility.
 - **0.36.2** — cross-format canonical comparison and differential parser audit.
+- **0.36.3** — GitHub-only `navheim-capture` record/import/export utility with privacy-safe metadata.
 
 ### Phase C — Native DSP reference implementation
 
@@ -2332,6 +2334,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.101.0** — BeiDou B2ab combined processing.
 - **0.102.0** — BeiDou PPP-B2b correction service.
 - **0.103.0** — public BDSBAS interfaces.
+- **0.103.1** — public BeiDou SAR/short-message profile freeze with implementation only where a stable open interoperable specification exists.
 
 ### Phase H — QZSS, NavIC and SBAS
 
@@ -2353,6 +2356,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.118.0** — DFMC SBAS signal/messages.
 - **0.119.0** — provider profiles and future-ID registry.
 - **0.119.1** — public GBAS/ABAS data-model, applicability and integrity-interface boundary.
+- **0.119.2** — exact WAAS, EGNOS, MSAS, GAGAN, SDCM, BDSBAS, KASS and African SBAS provider/service profile matrix.
 
 ### Phase I — Multi-GNSS solution quality
 
@@ -2441,6 +2445,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.162.0** — GNSS timing freshness, discontinuity, outage and explicit invalidation.
 - **0.162.1** — targeted withdrawal sequence, acknowledgement, queue-pressure and forced-resynchronization behavior.
 - **0.163.0** — authenticated/integrity-aware GNSS time evidence and consumer policy inputs.
+- **0.163.1** — common-view/all-in-view GNSS time-transfer results and CGGTTS V2E interoperability.
 - **0.164.0** — inertial mechanization.
 - **0.164.1** — IMU bias, scale-factor, axis-misalignment, noise and temperature models.
 - **0.164.2** — coning/sculling compensation plus gravity, Earth-rate and transport-rate models.
@@ -2469,6 +2474,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.173.0** — USRP/UHD adapter.
 - **0.174.0** — LimeSDR adapter.
 - **0.175.0** — coherent multi-device clock/timestamp calibration.
+- **0.175.1** — bounded FPGA/external-DSP correlator and tracking-output boundary plus GitHub-only `navheim-fpga` host/artifact contract.
 - **0.176.0** — portable serial backend.
 - **0.177.0** — native USB backend contracts and Linux implementation.
 - **0.177.1** — isolated unsafe/sys boundary, reproducible bindings and ownership/alignment/unplug safety evidence.
@@ -2487,6 +2493,8 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.184.0** — NovAtel/public receiver adapter baseline.
 - **0.185.0** — receiver-protocol admission gate; every additional protocol requires a named patch milestone.
 - **0.185.1** — canonical assistance artifact, trust, freshness, rollback and translation model.
+- **0.185.2** — generic NMEA-only, RTCM, RINEX and canonical raw-observation receiver/source adapters.
+- **0.185.3** — evidence-gated SkyTraq, SiRF, MediaTek/PMTK, Trimble and other public receiver profile matrix and admitted adapters.
 - **0.186.0** — Android raw GNSS observation-fact adapter without assistance translation.
 - **0.186.1** — Android fused/location-provider fix adapter and provenance.
 - **0.186.2** — Android USB-host lifecycle, permission and detach-safe I/O.
@@ -2502,6 +2510,15 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.190.0** — NMEA 2000 transport/legal PGN baseline.
 - **0.190.1** — bounded J1939 address-claim state machine, fast-packet and licensed PGN semantics.
 - **0.190.2** — CAN frame I/O executing protocol decisions with platform lifecycle ownership.
+- **0.190.3** — GitHub-only tool workspace, privilege, secret, privacy, configuration and `publish = false` enforcement foundation.
+- **0.190.4** — `navheim-cli` inspect, convert, solve, record and replay workflows.
+- **0.190.5** — `navheimd` local daemon, bounded IPC/management and least-authority service lifecycle.
+- **0.190.6** — `navheim-caster` NTRIP caster deployment with authenticated tenant/session isolation.
+- **0.190.7** — `navheim-station` reference/base-station service with survey, correction and continuity evidence.
+- **0.190.8** — `navheim-survey` field and post-processing survey application.
+- **0.190.9** — `navheim-inspector` bounded message/signal diagnostic TUI.
+- **0.190.10** — `navheim-viewer` desktop/web visualization with precise-location and provenance privacy controls.
+- **0.190.11** — `navheim-lab` conducted/shielded robustness experiment controller with transmit-safety interlocks.
 
 ### Phase N — Simulation, hardening and 1.0 stabilization
 
@@ -2511,14 +2528,19 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.194.0** — controlled interference/jamming scenario generation.
 - **0.195.0** — controlled spoofing/meaconing scenario generation.
 - **0.196.0** — cross-constellation full replay suite.
+- **0.196.1** — `navheim-sim` high-level scenario and signal-generation tool composition.
+- **0.196.2** — external `navheim-data` capture/vector manifest, object-integrity, access and retention contract.
 - **0.197.0** — long-duration resource-leak and rollover suite.
 - **0.198.0** — full parser fuzz corpus and coverage audit.
 - **0.198.1** — differential/chunk-boundary parser corpus and sensitive diagnostic snapshot audit.
+- **0.198.2** — GitHub-only `navheim-fuzz` target/corpus lifecycle and reproducibility harness.
+- **0.198.3** — GitHub-only `navheim-conformance` standards/vector test runner.
 - **0.199.0** — numerical condition/precision audit.
 - **0.199.1** — fixed/floating cross-architecture replay and tolerance audit.
 - **0.200.0** — unsafe/FFI audit and device fault injection.
 - **0.200.1** — Miri/Kani/Loom/sanitizer evidence-role and generated-code provenance audit.
 - **0.201.0** — stable-Rust cross-architecture SIMD performance release with scalar fallback.
+- **0.201.1** — GitHub-only `navheim-bench` performance, resource and regression harness.
 - **0.202.0** — fixed-point/embedded performance release.
 - **0.203.0** — WASM decoding/post-processing profile.
 - **0.203.1** — bare-metal and future Aesynx caller-buffer/work-budget conformance contract.
@@ -2531,6 +2553,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.209.0** — multi-band live-sky and simulator evidence release.
 - **0.210.0** — standards inventory refresh and 1.0 baseline freeze.
 - **0.210.1** — exact document/amendment/module/vector/adversarial-test traceability closure.
+- **0.210.2** — complete architecture requirement, public claim, crate/tool owner, milestone, test and non-claim traceability closure.
 - **0.211.0** — complete public-signal coverage audit.
 - **0.212.0** — complete correction/format/assistance coverage audit.
 - **0.213.0** — complete security/integrity/timing audit.
@@ -2541,6 +2564,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.217.0** — 1.0.0 release candidate 1.
 - **0.218.0** — release candidate 2 and only blocker fixes.
 - **0.219.0** — final reproducibility, packaging and provenance rehearsal.
+- **0.219.1** — GitHub-only packages, service units, containers and deployment configuration security/reproducibility freeze.
 - **1.0.0** — frozen, documented and independently tested public civil/open GNSS/PNT platform.
 
 The exact number may change, but features should not be collapsed merely to reach 1.0 sooner.
@@ -2587,6 +2611,34 @@ Navheim 1.0.0 is released only when all of the following are true:
     free until explicit open.
 24. Android location/USB/network and SUPL/LPP PER matrices meet their named
     platform, provenance, lifecycle, interoperability and resource contracts.
+25. Common-view and all-in-view GNSS time transfer produces independently
+    verified, provenance-rich results and interoperates with the frozen CGGTTS
+    V2E profile without performing generic clock discipline or consensus.
+26. Every admitted SBAS provider has an exact service-definition,
+    applicability, message/profile and test matrix; named providers that
+    cannot be implemented from lawful current material remain explicit
+    unsupported profiles rather than inferred equivalents.
+27. BeiDou SAR or short-message behavior is implemented only from a stable
+    public interoperable specification; otherwise identifiers and an explicit
+    unavailable/non-claim outcome are preserved.
+28. NMEA-only, RTCM, RINEX and raw-observation sources share canonical
+    adapters, while every vendor receiver profile is tied to official
+    documentation, exact hardware/firmware and independent hardware evidence.
+29. Every named GitHub-only tool has its own bounded release stop, remains
+    `publish = false`, uses least authority, protects precise location/time and
+    secrets, and cannot bypass canonical validation or policy.
+30. FPGA and external-DSP inputs cross a versioned bounded interface with
+    timestamp, calibration, firmware/bitstream, device and scalar-equivalence
+    provenance; no accelerator output is trusted implicitly.
+31. Every architecture requirement and public claim maps bidirectionally to
+    an owning crate or GitHub-only component, release milestone, authoritative
+    source, verification evidence, current status and explicit non-claim.
+32. All hand-maintained Rust, Python and shell code anywhere in the repository
+    remains at or below 500 lines, and every publishable package has its own
+    package README while GitHub-only components avoid duplicate crate-style
+    documentation.
+33. MIT and Apache-2.0 license notices, package metadata, documentation,
+    archives and published artifacts consistently identify Navheim.
 
 ---
 
@@ -2652,8 +2704,14 @@ The standards manifest should continuously track at least:
 - NMEA 0183 and NMEA 2000;
 - IGS RINEX, SP3, SINEX, IONEX, ANTEX and SSR standards;
 - OMA SUPL and 3GPP LPP;
+- BIPM/CCTF CGGTTS V2E, current BDS-3 extensions and guidance, together with
+  in-force ITU-R GNSS time-transfer terminology and recommendations;
 - official Rust stable/MSRV documentation for `core` floating math,
   target-specific `core::arch` and portable-SIMD stabilization status;
+- official Linux/BSD, Microsoft and Apple platform API/ABI documentation used
+  by each admitted I/O adapter;
+- official RTL-SDR, bladeRF, UHD/USRP, LimeSuite and FPGA/toolchain
+  documentation tied to every supported hardware/firmware profile;
 - official receiver protocol specifications used by adapters.
 
 ## Appendix B — Key 2026 research observations

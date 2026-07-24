@@ -174,3 +174,15 @@ license_class = "public-reference"
 local_copy = false
 implemented_by = []
 tests = []
+
+[[document]]
+id = "cggtts-v2e"
+title = "Common Generic GNSS Time Transfer Standard Version 2E"
+revision = "Metrologia 2015 52 G1 plus public BDS-3 extension; freeze-current-before-implementation"
+publisher = "BIPM / CCTF Working Group on GNSS Time Transfer"
+retrieved = "2026-07-24"
+status = "candidate"
+license_class = "public-reference"
+local_copy = false
+implemented_by = []
+tests = []

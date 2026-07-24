@@ -19,19 +19,24 @@ Navheim currently provides repository and crate foundations only.
 - Initial standards inventory, licensing policy, architecture discussion,
   implementation plan, and complete pre-1.0 release plan.
 - Checksum-locked local copies of 25 applicable IETF RFCs, an RFC errata drift
-  snapshot, and a reviewed acquisition inventory spanning 26 GNSS, correction,
-  exchange, aviation, telecom, geodesy, security, receiver, and platform
+  snapshot, and a reviewed acquisition inventory spanning 34 GNSS, correction,
+  exchange, aviation, telecom, geodesy, security, timing, receiver, SDR, Rust,
+  and platform
   source families.
 - An ignored, locally checksum-locked standards vault with safe allowlisted
   fetching for public documents; paid, licensed, consent-gated,
   registration-gated, and vendor-profile documents remain manual/local-only.
 - One-way GNSS timing API boundary: Navheim will produce complete satellite
   timing evidence without depending on generic clock frameworks.
-- Audit-strengthened roadmap with 358 pre-1.0 implementation milestones plus
+- Repository-wide requirements audit covering every tracked artifact class,
+  correcting the MIT donor notice and expanding code-size/document-link gates
+  to all applicable repository paths.
+- Audit-strengthened roadmap with 382 pre-1.0 implementation milestones plus
   the explicit production candidate and final release: targeted
   artifact/assessment, complete format/navigation/PVT/DGPS/fusion coverage,
   deterministic `no_std` math, bounded preflight/discovery/PER, explicit
-  platform and correction/security/provenance stops are integrated without
+  GNSS time transfer, SBAS provider, receiver/FPGA, GitHub-only tool, platform,
+  correction/security/provenance and traceability stops are integrated without
   reducing the original civil/open scope.
 
 ## Not Implemented
@@ -43,5 +48,6 @@ integrity, authenticate navigation messages, or access platform devices.
 
 ## Next Stop
 
-The next planned release is v0.2.0: bounded collections, fixed-capacity
-strings, capacity errors, and adversarial boundary tests in `navheim-core`.
+After the v0.1.0 exact-commit pentest/report stop, the next planned release is
+v0.1.1: metadata-driven crate/tier/unsafe, strict SemVer, tag,
+pentest-parent and package-provenance enforcement.

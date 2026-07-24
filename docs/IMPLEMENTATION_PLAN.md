@@ -175,6 +175,14 @@ artifacts, packaging, service units, and deployments remain under `tools/`,
 `fuzz/`, or other repository-only paths until separately admitted. They set
 `publish = false` and may use Rust `1.97.1`.
 
+Their named implementation stops are v0.36.3 (`navheim-capture`), v0.175.1
+(`navheim-fpga`), v0.190.3-v0.190.11 (tool foundation, CLI, daemon,
+caster/station/survey, inspector/viewer and lab), v0.196.1-v0.196.2
+(`navheim-sim` and external data), v0.198.2-v0.198.3 (fuzz and conformance),
+v0.201.1 (benchmarks), and v0.219.1 (packaging/deployment). A tool may reuse
+published crates; it may not introduce a parallel GNSS implementation or
+bypass canonical validation, evidence, privacy, or policy.
+
 ## Canonical Model Order
 
 Implementation proceeds in this dependency order:
@@ -437,7 +445,7 @@ broader 1.0 roadmap:
 | Gap | Versioned implementation stops |
 | --- | --- |
 | Repository policy, strict tags, report-parent/package provenance | v0.1.1 |
-| Exact standards and test traceability schema | v0.1.2 and v0.210.1 |
+| Exact standards, requirements, claims and test traceability | v0.1.2-v0.1.3 and v0.210.1-v0.210.2 |
 | Honest safe bounded storage and caller scratch | v0.2.0-v0.2.3 |
 | Exact units, uncertainty and typed covariance | v0.3.0-v0.3.2 and v0.6.2 |
 | Deterministic `no_std` math and stable SIMD/backend policy | v0.3.3, v0.48.2-v0.49.0 and v0.201.0 |
@@ -447,6 +455,7 @@ broader 1.0 roadmap:
 | Borrowed progress, targeted invalidation, counter exhaustion and preflight receipts | v0.16.0-v0.17.2 |
 | Tiered facade, versioned profiles and plan-before-side-effects | v0.20.1-v0.20.2 |
 | Complete RTCM/RINEX/product profiles and bounded compact decoding | v0.26.1-v0.35.1 |
+| Capture utility and external data artifact governance | v0.36.3 and v0.196.2 |
 | Fail-closed streaming/original-preserving format APIs | v0.21.1-v0.36.2 |
 | Front-end conditioning, capture mapping, SIMD safety and independent vectors | v0.37.2, v0.47.2-v0.50.2 |
 | Typed PVT/vertical-datum outputs and sequential GNSS estimator | v0.58.1 and v0.120.1-v0.126.1 |
@@ -454,15 +463,23 @@ broader 1.0 roadmap:
 | Implementable RAIM/ARAIM/SBAS integrity contracts | v0.127.0-v0.129.5 |
 | RTK validation and PPP scientific-model acceptance matrices | v0.135.3 and v0.144.1 |
 | Public GBAS/ABAS applicability and integrity boundary | v0.119.1 |
+| Exact named SBAS provider/service profiles | v0.119.2 |
+| Conditional public BeiDou SAR/short-message boundary | v0.103.1 |
 | Concrete crypto backend and immutable authentication/evidence/policy decisions | v0.146.1-v0.157.1 |
 | Post-protocol crypto and complete resilience evidence matrices | v0.150.1 and v0.155.1 |
 | Exact bounded GNSS timing slot/mapping/withdrawal contract | v0.158.1-v0.162.1 |
+| Common-view/all-in-view time transfer and CGGTTS V2E | v0.163.1 |
 | Full fusion calibration/mechanization, vector tracking and reacquisition | v0.164.1-v0.168.1 |
 | Navigation crate implementation and road-routing non-claim | v0.169.1-v0.169.4 |
+| FPGA/external-DSP output and provenance boundary | v0.175.1 |
+| Generic sources and evidence-gated receiver families | v0.185.2-v0.185.3 |
 | Discovery, Android, canonical assistance, bounded PER and CAN ownership | v0.180.4-v0.190.2 |
+| Publish-disabled CLI, services, inspection, visualization and lab tools | v0.190.3-v0.190.11 |
+| Simulator, fuzz, conformance and benchmark tools | v0.196.1, v0.198.2-v0.198.3 and v0.201.1 |
 | Unsafe/platform/mobile/privacy boundaries | v0.177.1-v0.190.2 |
 | Differential, numerical, unsafe, MSRV and Aesynx audits | v0.198.1-v0.207.1 |
 | Capability/resource/privacy documentation closure | v0.214.1 |
+| Packaging, service and deployment security freeze | v0.219.1 |
 
 These patch milestones are planned compatible implementation passes, not
 permission to bundle unrelated work. A breaking correction moves to the next

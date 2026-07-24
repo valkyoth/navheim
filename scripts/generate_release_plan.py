@@ -14,6 +14,7 @@ from release_plan_data import (
     PHASE_DELIVERABLES,
     PHASE_EXIT_CHECKS,
 )
+from release_plan_conformance_data import CONFORMANCE_MILESTONE_DETAILS
 from release_plan_review_data import REVIEW_MILESTONE_DETAILS
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,8 +44,8 @@ def parse_milestones() -> list[tuple[str, str, str, str]]:
             version, description = release_match.groups()
             description = DESCRIPTION_OVERRIDES.get(version, description)
             milestones.append((phase, phase_title, version, description))
-    if len(milestones) != 359:
-        raise RuntimeError(f"expected 359 roadmap milestones, found {len(milestones)}")
+    if len(milestones) != 383:
+        raise RuntimeError(f"expected 383 roadmap milestones, found {len(milestones)}")
     return milestones
 
 
@@ -72,6 +73,7 @@ def goal_text(description: str) -> str:
         "GLONASS",
         "GNSS",
         "GPS",
+        "GitHub",
         "IMU",
         "iOS",
         "J1939",
@@ -237,6 +239,8 @@ def milestone_block(
     detail = MILESTONE_DETAILS.get(version)
     if detail is None:
         detail = REVIEW_MILESTONE_DETAILS.get(version)
+    if detail is None:
+        detail = CONFORMANCE_MILESTONE_DETAILS.get(version)
     detail_deliverable = f"- {detail[0]}\n" if detail else ""
     detail_verification = f"- {detail[1]}\n" if detail else ""
     return f"""### v{version} - {heading_title(description)}
