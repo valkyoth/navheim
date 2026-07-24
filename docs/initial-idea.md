@@ -1115,6 +1115,27 @@ cannot orphan an apparently current snapshot. Counter exhaustion, reservation
 expiry, concurrent writers, cloned/restored authority state and every crash
 boundary fail closed.
 
+Recovery uses one explicit state matrix; adapters may not infer a weaker
+platform-specific shortcut:
+
+| Durable recovery state | Restore behavior | New writer | Required action |
+| --- | --- | --- | --- |
+| `Committed` | Restore only the exactly bound active snapshot | Allowed after ordinary validation | Normal validation and restore |
+| `Pending` | The previously committed snapshot may restore only under the same namespace lock and pre-authority-commit linearization; the staged candidate cannot | Blocked | Resume or cancel the reservation and deterministically clean its candidate |
+| `AuthorityCommitted` | No older snapshot may restore; the committed candidate is not usable as rollback-resistant until recovery completes | Blocked | Verify the binding, promote and finalize, or report unavailable |
+| `PromotedUnfinalized` | Restore only after synchronous recovery verifies the promoted binding and finalizes `Committed` | Blocked | Verify and finalize, or report unavailable |
+| `CorruptOrUnknown` | No rollback-resistant restore | Blocked | Fail closed and require explicit repair/manual recovery |
+
+Each `PlanReceipt` and authority profile bound active namespaces, one live
+writer transaction per namespace, pending records, staged candidates, retained
+prior/superseded candidates, retained bytes, retry attempts and deterministic
+recovery work. Pre-authority cancellation may delete its staged candidate only
+after proving it is not authority-committed. Superseded committed candidates
+are deleted only after the replacement is finalized and its retention policy
+permits it. Ordinary cleanup never deletes an authority-committed,
+promoted-unfinalized, corrupt or unknown candidate. Cleanup interruption is
+itself recovered through the same bounded state machine.
+
 Key rotation has an explicit migration operation that never silently weakens
 the suite, namespace or generation. Outer lengths and resource limits are
 validated before decryption into bounded caller-provided plaintext/ciphertext
@@ -1677,24 +1698,36 @@ completion and claimed return. An `ExecutionHandle<'executor, ...>` is only a
 lifetime-bound observation/claim token for its executor entry; executor
 ownership transfer is not admitted in the 1.0 profile.
 
-Every entry has a linearizable atomic retirement state:
+Every slot has a linearizable atomic lifecycle:
 
 ```text
-Registered -> Running -> TerminalUnclaimed
-                            |       |        |
-                         Claimed Discarded ShutdownReclaimed
+Vacant(g) -> Registered -> Running -----------------------> TerminalUnclaimed
+              |                                                |    |    |
+              +-> TerminalUnclaimed(CancelledBeforeDispatch)   |    |    |
+                                                        Claimed Discarded ShutdownReclaimed
+                                                             \    |    /
+                                                               Cleaning
+                                                                  |
+                                                     Vacant(g+1) or Retired
 ```
 
 `JobId` includes executor namespace, slot and a non-wrapping, non-reused
-generation so a reclaimed slot cannot create ABA identity. Worker completion
+generation so a reclaimed slot cannot create ABA identity. Generation
+exhaustion permanently retires that slot; an executor namespace may be renewed
+only after every entry is idle/reconciled, and generations never wrap.
+Dispatch and cancellation-before-dispatch compete on exactly one CAS from
+`Registered`: if dispatch wins, the worker owns execution and later
+cancellation is cooperative; if cancellation wins, the worker cannot execute
+the job and the terminal kind is `CancelledBeforeDispatch`. Worker completion
 publishes all terminal result/lease writes before atomically transitioning
 `Running -> TerminalUnclaimed`. `status(&self)` borrows a status snapshot and
 never claims anything. `try_terminal_result(self)` consumes the handle and
 either atomically claims `TerminalUnclaimed -> Claimed` or returns the still-
 owned nonterminal handle. `join(self)` and `cancel_and_join(self)` consume,
-wait and perform the same claim transition. Shutdown may directly retire a
-never-dispatched `Registered -> ShutdownReclaimed` entry; a running job must
-first cancel/join and publish `TerminalUnclaimed` before shutdown reclaims it.
+wait and perform the same claim transition. Shutdown uses the same registered
+CAS to create `CancelledBeforeDispatch`, or reclaims an already terminal
+entry; a running job must first cancel/join and publish
+`TerminalUnclaimed` before shutdown reclaims it.
 
 Two execution modes make those lifetime rules representable:
 
@@ -1709,8 +1742,9 @@ Two execution modes make those lifetime rules representable:
   `join` and `cancel_and_join` are the only normal paths that wait for a
   running job and recover buffers; recovery occurs only after a completed,
   cancelled or failed-and-returned terminal state. Dropping a handle attempts
-  only `TerminalUnclaimed -> Discarded`; success releases returned resources
-  and discards the result. If the entry is `Registered` or `Running`, `Drop`
+  only `TerminalUnclaimed -> Discarded`; it never destroys a caller or generic
+  payload, returns a lease or finalizes a trace. If the entry is `Registered`
+  or `Running`, `Drop`
   directly invokes `std::process::abort()` without joining, detaching,
   panicking or unwinding. Completion racing with drop has one atomic
   linearization winner: completion must publish `TerminalUnclaimed` before
@@ -1720,6 +1754,16 @@ Two execution modes make those lifetime rules representable:
   future such profile must preplan bounded slots, retention and shutdown in
   `PlanReceipt`. No hidden `Arc`, heap allocation, worker or lease capacity
   bypasses planning.
+
+Claim, discard and shutdown retirement feed a separately driven, bounded
+registry cleanup path before a slot becomes `Vacant`. Results and leases are
+held in internal `ManuallyDrop` storage and may be reclaimed in-process only
+through a sealed, reviewed first-party cleanup implementation; extension-owned
+arbitrary destructors are never invoked by handle `Drop` and require an
+explicitly admitted isolation/cleanup profile. Cleanup panic, failure or
+reentrant access to the same entry is process-terminal. The slot becomes
+reusable only after result transfer or destruction, lease return, trace
+finalization and a checked generation increment have all completed.
 
 `mem::forget`, `ManuallyDrop` or a leaked handle permanently forfeits that
 result but never unregisters or detaches the job. The entry, buffers and slot
@@ -2353,8 +2397,10 @@ Document threats from:
 - nonce reuse, protection-suite downgrade, unauthenticated envelope metadata,
   corruption/artifact/transaction-digest confusion, noncanonical protected
   encodings, caller-time reservation expiry, partially committed cross-
-  authority promotion, competing recovery/writer state and platform-keystore
-  lifecycle failure;
+  authority promotion/finalization, ambiguous restore eligibility, unbounded
+  pending candidates/retries/retention, cleanup of unresolved authoritative
+  state, competing recovery/writer state and platform-keystore lifecycle
+  failure;
 - source role/failover/generation confusion and silent trust downgrade;
 - receiver-control partial application, configuration-generation confusion or
   receiver-asserted false state, unintended persistent/destructive transition;
@@ -2364,7 +2410,8 @@ Document threats from:
   configuration-generation samples, false rollback/coherence or device-
   asserted state;
 - aliased/detached/unresponsive parallel work, forgotten/leaked handles or
-  executors, completion/drop retirement races, stale/ABA job IDs, detached
+  executors, dispatch/cancel and completion/drop/cleanup races, arbitrary or
+  reentrant destructors in handle `Drop`, stale/ABA/exhausted job IDs, detached
   registry entries, premature capacity/buffer reuse, overstated pre-abort
   diagnostics, trace overflow, nondeterministic ordering or uncaptured runtime
   outcomes;
@@ -2388,9 +2435,10 @@ Document threats from:
   metadata, nonce/key/rotation/counter lifecycle, consent/retention, external
   protection plus staged/pending/authority-commit/promotion/finalization
   recovery over a domain-separated canonical protected-snapshot binding where
-  admitted, authority-clock reservation expiry, narrow counter-checked
-  semantics, honest freshness unavailability and restored-assessment
-  invalidation;
+  admitted, a common restore/writer/action state matrix, bounded candidates,
+  retention/retries and deterministic cleanup, authority-clock reservation
+  expiry, narrow counter-checked semantics, honest freshness unavailability
+  and restored-assessment invalidation;
 - prepared/reviewable SDR configuration plans with non-reusing generations,
   framework-issued pre-submission tokens, exclusive control leases,
   proof-carrying success/no-command outcomes and cause-carrying partial/unknown
@@ -2401,9 +2449,11 @@ Document threats from:
   independently evidenced configuration assessment;
 - role-aware source withdrawal/composition/reselection, explicit solver-state
   handover and deterministic scoped-borrowed or owned-handle cooperative
-  parallel work with authoritative executor registration, atomic generation-
-  safe retirement, leak-safe accounting, explicit claim/shutdown/fail-stop
-  rules, bounded traces and unresponsive lease ownership;
+  parallel work with authoritative executor registration, dispatch/cancel
+  linearization, destructor-free handle retirement, sealed bounded cleanup,
+  non-wrapping generation-safe slot reuse, leak-safe accounting, explicit
+  claim/shutdown/fail-stop rules, bounded traces and unresponsive lease
+  ownership;
 - TLS certificate validation through Rustls adapter;
 - non-clone/non-serializable secret types, guarded exposure and reviewed
   zeroization where owned buffers exist;
@@ -2881,7 +2931,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.48.0** — scalar real-time scheduler and channel lifecycle.
 - **0.48.1** — scheduler work tokens, candidate/channel eviction, backpressure and resource events.
 - **0.48.2** — SIMD alignment, aliasing, feature-detection, fallback and unsafe-contract boundary.
-- **0.48.3** — `navheim-executor` scoped/owned modes with generation-safe atomic retirement, leak-safe registry ownership, explicit claims/shutdown and fail-stop destruction.
+- **0.48.3** — `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling.
 - **0.48.4** — versioned acquisition and reacquisition-memory snapshot profile after scheduler integration, with expiry, remapping and independent freshness evidence.
 - **0.49.0** — SIMD dispatch boundary with reference equivalence tests.
 - **0.50.0** — SDR deployment/band planner and complete capability errors.
@@ -3146,7 +3196,7 @@ The roadmap deliberately uses many small releases. Each release adds one auditab
 - **0.188.1** — exact LPP message, assistance and PER profile matrix.
 - **0.189.0** — Rustls network adapter and secure credential policy.
 - **0.189.1** — non-clone secret types, redacted diagnostics and reviewed zeroization boundary.
-- **0.189.2** — canonical protected-snapshot binding plus staged cross-authority commit, promotion, finalization and crash recovery.
+- **0.189.2** — canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery.
 - **0.189.3** — Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
 - **0.189.4** — Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
 - **0.189.5** — Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
@@ -3346,9 +3396,13 @@ Navheim 1.0.0 is released only when all of the following are true:
     supervision preserve separate scoped-borrowed and owned-handle modes,
     `#[must_use]` handles, explicit join/cancel-and-join/terminal-result APIs,
     authoritative pre-dispatch registry ownership independent of destructors,
-    generation-safe IDs and atomic registered/running/terminal-unclaimed/
-    claimed/discarded/shutdown-reclaimed transitions, non-reusable forgotten-
-    handle entries, exact observing versus consuming result APIs, shutdown
+    generation-safe IDs and atomic vacant/registered dispatch-or-cancel/
+    running/terminal-unclaimed/claimed/discarded/shutdown-reclaimed/cleaning
+    transitions, permanent retirement or namespace renewal at generation
+    exhaustion, non-reusable forgotten-handle entries, exact observing versus
+    consuming result APIs, destructor-free handle Drop, sealed bounded cleanup
+    with process-terminal panic/failure/reentrancy, slot reuse only after
+    result/lease/trace finalization, shutdown
     coverage of every orphan, concrete allocation-free/non-unwinding
     `std::process::abort()` on invalid handle/executor destruction, best-effort
     non-durable pre-abort diagnostics, explicit lease states, deterministic
@@ -3376,7 +3430,12 @@ Navheim 1.0.0 is released only when all of the following are true:
     candidate, authority commit, durable promotion and finalization in that
     order; recovery is exclusive against new writers at every crash point,
     post-authority promotion failure is pending/unavailable rather than
-    success, all interpretive metadata is authenticated, nonce/key/rotation/
+    success, committed/pending/authority-committed/promoted-unfinalized/
+    corrupt-or-unknown states have one explicit restore/writer/action matrix,
+    each namespace bounds transactions, candidates, retained bytes, retries
+    and cleanup, cancellation/supersession cleanup is deterministic and cannot
+    delete authoritative unresolved state, all interpretive metadata is
+    authenticated, nonce/key/rotation/
     counter state is crash-safe, platform adapters report unavailable freshness
     honestly, profiles are minimal/consent-bound, restored assessments are
     reverified/invalidated, correctly ordered state profiles pass uninterrupted

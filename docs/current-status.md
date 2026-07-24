@@ -100,6 +100,13 @@ Navheim currently provides repository and crate foundations only.
   exclusive control/no-autonomous-change evidence to preserve a generation,
   and rollback-resistant snapshots follow a durable pending, authority commit,
   candidate promotion and finalization sequence with exclusive crash recovery.
+- Fourteenth gap review closes the remaining recycling and recovery ambiguity
+  inside the same releases: executor dispatch and pre-dispatch cancellation
+  share one CAS, handle `Drop` cannot run arbitrary destructors, bounded sealed
+  cleanup precedes slot reuse and exhausted generations never wrap. Snapshot
+  recovery now has an explicit restore/writer/action matrix for every durable
+  state plus bounded transaction, candidate, retention, retry and deterministic
+  cleanup rules.
 
 ## Not Implemented
 

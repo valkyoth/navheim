@@ -134,8 +134,8 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test dynamic hint arrival/loss, conflicting windows, deterministic ties/order, budget exhaustion, blind fallback, stale plans/generations, receipt completeness, and executable replay equivalence.",
     ),
     "0.48.3": (
-        "Implement atomic Registered->Running->TerminalUnclaimed->{Claimed,Discarded,ShutdownReclaimed} registry retirement with generation-bearing non-reused JobId. Status only observes; consuming try-terminal/join claims; Drop discards only terminal-unclaimed or aborts; shutdown owns all remaining transitions.",
-        "Use Loom/model and subprocess tests for completion/drop/claim/shutdown races, never-dispatched reclamation, publication ordering, ABA/stale IDs, duplicate claim/discard, every terminal kind, forgotten orphans, unresponsive abort, exact observing/consuming APIs and proof that pre-abort status is not durable/emitted evidence.",
+        "Implement Vacant(g)->Registered dispatch/cancel CAS, Running or CancelledBeforeDispatch terminal publication, one claimed/discarded/shutdown winner, separately driven Cleaning, and Vacant(g+1) or permanent retirement with generation-bearing non-reused JobId. Handle Drop performs only the terminal-unclaimed discard CAS or aborts; sealed first-party cleanup owns result destruction, lease return and trace finalization.",
+        "Use Loom/model and subprocess tests for dispatch versus pre-dispatch cancellation, proof that cancellation winner never executes, completion/drop/claim/shutdown/cleanup races, publication ordering, ABA/stale IDs, generation exhaustion/namespace renewal, duplicate retirement, every terminal kind, forgotten orphans, panicking and same-entry-reentrant cleanup/destructors, cleanup versus shutdown, unresponsive abort, exact observing/consuming APIs and non-durable pre-abort status.",
     ),
     "0.50.3": (
         "Issue a framework-private linear PreSubmissionToken; acquiring exclusive Navheim command transport consumes it and makes RejectedNoMutation impossible. No-command proof is narrow; prior-generation preservation also requires exclusive control lease plus a frozen no-autonomous-change profile.",
@@ -174,24 +174,24 @@ CONFORMANCE_MILESTONE_DETAILS = {
         "Test false ACK/read-back, delayed/contradictory streams, partial coverage, uncertainty, unverifiable fields, independent timing/rate/protocol evidence, reset, firmware/device replacement, invalidation, stale generations and refusal to broaden ObservedConsistent.",
     ),
     "0.189.2": (
-        "Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Only finalization returns RollbackResistant evidence.",
-        "Test binding self-exclusion, every crash edge, authority-commit/promotion failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older-snapshot fallback.",
+        "Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Freeze the Committed/Pending/AuthorityCommitted/PromotedUnfinalized/CorruptOrUnknown restore-and-writer matrix plus bounded per-namespace transaction, candidate, retained-byte, retry and cleanup rules. Only finalization returns RollbackResistant evidence.",
+        "Test binding self-exclusion, every state and crash edge, authority-commit/promotion/finalization failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, deterministic cancelled/superseded cleanup, cleanup interruption, resource exhaustion, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older-snapshot fallback.",
     ),
     "0.189.3": (
-        "Freeze Linux/BSD binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 Pending/AuthorityCommitted/Committed protocol; otherwise report CounterChecked/Unchecked.",
-        "Test fsync/rename/directory and authority durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot, cancellation, old-file restoration, namespace/exhaustion/migration, bounded buffers and honest freshness unavailability.",
+        "Freeze Linux/BSD binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report CounterChecked/Unchecked.",
+        "Test fsync/rename/directory and authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, cancellation, old-file restoration, namespace/exhaustion/migration, bounded records/candidates/retries/bytes and honest freshness unavailability.",
     ),
     "0.189.4": (
-        "Freeze Windows binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 Pending/AuthorityCommitted/Committed protocol; otherwise report weaker freshness.",
-        "Test Windows storage/authority durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration and CounterChecked rejection.",
+        "Freeze Windows binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report weaker freshness.",
+        "Test Windows storage/authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration, bounded retention/retries and CounterChecked rejection.",
     ),
     "0.189.5": (
-        "Freeze Apple binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 protocol; preserve access/background semantics and report weaker freshness when any transition is unavailable.",
-        "Test storage/Keychain durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot/background interruption, pre-commit cancellation, lock/entitlement denial, backup restoration, exhaustion/migration and unavailable hardware.",
+        "Freeze Apple binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; preserve access/background semantics and report weaker freshness when any transition is unavailable.",
+        "Test storage/Keychain durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup/background interruption, reboot, pre-commit cancellation, lock/entitlement denial, backup restoration, bounded retention/retries, exhaustion/migration and unavailable hardware.",
     ),
     "0.189.6": (
-        "Freeze Android binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 protocol; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any transition is unavailable.",
-        "Test storage/Keystore durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, exhaustion/migration/invalidation and CounterChecked rejection.",
+        "Freeze Android binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any transition is unavailable.",
+        "Test storage/Keystore durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, bounded retention/retries, exhaustion/migration/invalidation and CounterChecked rejection.",
     ),
     "0.170.0": (
         "Implement recorded-I/Q and virtual sources against the v0.50.3 prepare/apply/generation/read contract, with deterministic transition simulation and no invented hardware acknowledgement or observed calibration.",

@@ -155,6 +155,16 @@ finalization. Every crash point has exclusive recovery, and an authority-
 committed but unpromoted candidate is pending or unavailable—never a successful
 rollback-resistant snapshot.
 
+The fourteenth coverage pass resolves the final lifecycle details in those
+same milestones. Dispatch and cancellation-before-dispatch contend on one CAS,
+so a cancellation winner proves the job cannot execute. Handle `Drop` performs
+only terminal retirement; sealed, bounded cleanup separately destroys or
+transfers results, returns leases, finalizes traces and advances a non-wrapping
+generation before slot reuse. Snapshot recovery now freezes the restore,
+writer-blocking and recovery action for committed, pending, authority-
+committed, promoted-unfinalized and corrupt/unknown state, together with
+bounded candidates, retained bytes, retries and deterministic cleanup.
+
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
 documentation-link gates to the whole applicable repository, and assigned

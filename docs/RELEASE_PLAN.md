@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - `navheim-executor` scoped/owned modes with generation-safe atomic retirement, leak-sa...
+### v0.48.3 - `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-...
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with generation-safe atomic retirement, leak-safe registry ownership, explicit claims/shutdown and fail-stop destruction as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with generation-safe atomic retirement, leak-safe registry ownership, explicit claims/shutdown and fail-stop destruction.
-- Implement atomic Registered->Running->TerminalUnclaimed->{Claimed,Discarded,ShutdownReclaimed} registry retirement with generation-bearing non-reused JobId. Status only observes; consuming try-terminal/join claims; Drop discards only terminal-unclaimed or aborts; shutdown owns all remaining transitions.
+- `navheim-executor` scoped/owned modes with dispatch/cancel linearization, destructor-free handle retirement, bounded cleanup and generation-safe slot recycling.
+- Implement Vacant(g)->Registered dispatch/cancel CAS, Running or CancelledBeforeDispatch terminal publication, one claimed/discarded/shutdown winner, separately driven Cleaning, and Vacant(g+1) or permanent retirement with generation-bearing non-reused JobId. Handle Drop performs only the terminal-unclaimed discard CAS or aborts; sealed first-party cleanup owns result destruction, lease return and trace finalization.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use Loom/model and subprocess tests for completion/drop/claim/shutdown races, never-dispatched reclamation, publication ordering, ABA/stale IDs, duplicate claim/discard, every terminal kind, forgotten orphans, unresponsive abort, exact observing/consuming APIs and proof that pre-abort status is not durable/emitted evidence.
+- Use Loom/model and subprocess tests for dispatch versus pre-dispatch cancellation, proof that cancellation winner never executes, completion/drop/claim/shutdown/cleanup races, publication ordering, ABA/stale IDs, generation exhaustion/namespace renewal, duplicate retirement, every terminal kind, forgotten orphans, panicking and same-entry-reentrant cleanup/destructors, cleanup versus shutdown, unresponsive abort, exact observing/consuming APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16794,17 +16794,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.189.1 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.189.2 - Canonical protected-snapshot binding plus staged cross-authority commit, promotion, f...
+### v0.189.2 - Canonical protected-snapshot binding plus bounded staged commit, explicit restore/wri...
 
 Status: planned.
 
-Goal: deliver canonical protected-snapshot binding plus staged cross-authority commit, promotion, finalization and crash recovery as one bounded,
+Goal: deliver canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery as one bounded,
 reviewable release in Phase M (Hardware, OS and assistance).
 
 Deliverables:
 
-- canonical protected-snapshot binding plus staged cross-authority commit, promotion, finalization and crash recovery.
-- Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Only finalization returns RollbackResistant evidence.
+- canonical protected-snapshot binding plus bounded staged commit, explicit restore/writer recovery matrix, deterministic cleanup and crash recovery.
+- Normatively order durable Pending reservation -> complete canonical seal -> sidecar/authority binding -> durable candidate stage -> atomic AuthorityCommitted counter+binding -> durable promotion -> Committed finalization. Freeze the Committed/Pending/AuthorityCommitted/PromotedUnfinalized/CorruptOrUnknown restore-and-writer matrix plus bounded per-namespace transaction, candidate, retained-byte, retry and cleanup rules. Only finalization returns RollbackResistant evidence.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16822,7 +16822,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test binding self-exclusion, every crash edge, authority-commit/promotion failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older-snapshot fallback.
+- Test binding self-exclusion, every state and crash edge, authority-commit/promotion/finalization failure as pending or unavailable, exclusive recovery versus new writer, pre-commit-only cancellation, deterministic cancelled/superseded cleanup, cleanup interruption, resource exhaustion, reboot, reservation expiry, key rotation/counter migration with pending state, staged-candidate mismatch/loss and no older-snapshot fallback.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16851,7 +16851,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Linux/BSD protection/persistence profile with explicit transactional-freshness capability evidence and no-universal-keystore non-claim.
-- Freeze Linux/BSD binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 Pending/AuthorityCommitted/Committed protocol; otherwise report CounterChecked/Unchecked.
+- Freeze Linux/BSD binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report CounterChecked/Unchecked.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16869,7 +16869,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test fsync/rename/directory and authority durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot, cancellation, old-file restoration, namespace/exhaustion/migration, bounded buffers and honest freshness unavailability.
+- Test fsync/rename/directory and authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, cancellation, old-file restoration, namespace/exhaustion/migration, bounded records/candidates/retries/bytes and honest freshness unavailability.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16898,7 +16898,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Windows snapshot-protection adapter with exact platform profile, transactional capability evidence and honest weaker freshness.
-- Freeze Windows binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 Pending/AuthorityCommitted/Committed protocol; otherwise report weaker freshness.
+- Freeze Windows binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; otherwise report weaker freshness.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16916,7 +16916,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test Windows storage/authority durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration and CounterChecked rejection.
+- Test Windows storage/authority durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot, pre-commit cancellation, user/machine scope, old-state restoration, namespace/exhaustion/migration, bounded retention/retries and CounterChecked rejection.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16945,7 +16945,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Apple macOS/iOS snapshot-protection adapter with exact Keychain/crypto profile, transactional capability evidence and honest weaker freshness.
-- Freeze Apple binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 protocol; preserve access/background semantics and report weaker freshness when any transition is unavailable.
+- Freeze Apple binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; preserve access/background semantics and report weaker freshness when any transition is unavailable.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -16963,7 +16963,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test storage/Keychain durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot/background interruption, pre-commit cancellation, lock/entitlement denial, backup restoration, exhaustion/migration and unavailable hardware.
+- Test storage/Keychain durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup/background interruption, reboot, pre-commit cancellation, lock/entitlement denial, backup restoration, bounded retention/retries, exhaustion/migration and unavailable hardware.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and
@@ -16992,7 +16992,7 @@ reviewable release in Phase M (Hardware, OS and assistance).
 Deliverables:
 
 - Android snapshot-protection adapter with exact Keystore profile, transactional capability evidence and honest weaker freshness.
-- Freeze Android binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 protocol; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any transition is unavailable.
+- Freeze Android binding, staging, durable-promotion and authority-record primitives sufficient for the exact v0.189.2 recovery matrix, resource bounds and cleanup protocol; keep API/hardware/StrongBox/invalidation evidence explicit and report weaker freshness when any transition is unavailable.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -17010,7 +17010,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Test storage/Keystore durability boundaries, staged loss/mismatch, commit-before-promotion recovery, competing writer, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, exhaustion/migration/invalidation and CounterChecked rejection.
+- Test storage/Keystore durability boundaries, every recovery state, staged loss/mismatch, commit-before-promotion and promoted-before-finalization recovery, competing writer, cleanup interruption, reboot/process death, pre-commit cancellation, software/hardware keys, backup/reinstall restoration, bounded retention/retries, exhaustion/migration/invalidation and CounterChecked rejection.
 - perform target builds, device/OS fault injection, permission and disconnect handling, bounded discovery/PER/protocol inputs, transport security, and platform/hardware smoke evidence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and

@@ -40,12 +40,12 @@ inside aggregate milestones. The following releases make each one auditable:
 | Safe decoder, algorithm and stage extensions | v0.12.2-v0.12.3 |
 | Core signal contracts, constellation physical fragments and format-owned wire mappings | v0.12.4 |
 | Artifact-ID lifecycle and deterministic model selection | v0.13.1 and v0.14.2 |
-| Snapshot envelope, canonical binding, staged cross-authority commit/recovery and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
+| Snapshot envelope, canonical binding, explicit bounded restore/writer matrix, deterministic cleanup and platform protection | v0.18.1-v0.18.2, v0.48.4, v0.54.2-v0.55.1, v0.144.3, v0.168.3 and v0.189.2-v0.189.6 |
 | Honest resource-evidence classification | v0.17.1 and v0.50.1 |
 | Runtime source supervision and authorized failover | v0.20.3 |
 | Logical source-role composition and solver-state-safe generation handover | v0.20.4 |
 | Early hints, receipt schema/integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Sound Tier 2 atomic registry retirement, generation-safe claims, orphan shutdown and fail-stop | v0.48.3 |
+| Sound Tier 2 dispatch/cancel CAS, destructor-free retirement, bounded cleanup, generation-safe reuse, orphan shutdown and fail-stop | v0.48.3 |
 | Prepared SDR configuration with linear transport tokens, control-lease-bounded proofs and safe reads | v0.50.3 and v0.170.0-v0.174.0 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |

@@ -84,6 +84,12 @@ All notable changes to `navheim` are documented here.
   shutdown; SDR no-command proof is linear and bounded by exclusive physical-
   control evidence; and protected snapshots have a normative durable staging,
   authority-commit, promotion, finalization and crash-recovery sequence.
+- Integrated the fourteenth review without adding releases: executor dispatch
+  races cancellation-before-dispatch on one CAS, handle `Drop` performs no
+  arbitrary destruction, sealed bounded cleanup gates generation-safe slot
+  reuse, and exhausted generations cannot wrap. Protected snapshots now share
+  an explicit restore/writer matrix across all durable states, with bounded
+  pending artifacts, retention, retries and deterministic cleanup.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.
