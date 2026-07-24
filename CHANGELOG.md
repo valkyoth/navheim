@@ -111,6 +111,11 @@ All notable changes to `navheim` are documented here.
   crate-private, so application code cannot ignore or forget an unrecorded
   receipt; recording succeeds before `Busy` is observable, and replay is
   consulted before a live CAS.
+- Integrated the nineteenth review into v0.48.3 by replacing ambient
+  concurrent-call identity with plan-issued `CleanupLane` capabilities. Each
+  lane has a deterministic ID and checked non-wrapping sequence, so replay
+  keys exact lane/call pairs and cannot swap outcomes when call arrival or CAS
+  order changes.
 - Added a Gjallarbru-style immutable RFC workflow with 25 exact RFC Editor
   publications, checksum/line-ending gates, an optional local read-only guard,
   lifecycle roles, and a live-checked 210-errata drift snapshot.

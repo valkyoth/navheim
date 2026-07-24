@@ -45,7 +45,7 @@ inside aggregate milestones. The following releases make each one auditable:
 | Runtime source supervision and authorized failover | v0.20.3 |
 | Logical source-role composition and solver-state-safe generation handover | v0.20.4 |
 | Early hints, receipt schema/integration and late assistance translation | v0.42.1-v0.43.2 and v0.185.1 |
-| Sound Tier 2 dispatch/cancel CAS, supervisor-enforced cleanup contention replay, live-handle serialization, proved payload ownership, generation-safe reuse and fail-stop | v0.48.3 |
+| Sound Tier 2 dispatch/cancel CAS, supervisor-enforced deterministic cleanup lanes/contention replay, live-handle serialization, proved payload ownership, generation-safe reuse and fail-stop | v0.48.3 |
 | Prepared SDR configuration with linear transport tokens, control-lease-bounded proofs and safe reads | v0.50.3 and v0.170.0-v0.174.0 |
 | Capture utility and external evidence-data governance | v0.36.3 and v0.196.2 |
 | Conditional public BeiDou SAR/short-message support | v0.103.1 |

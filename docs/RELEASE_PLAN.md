@@ -6025,17 +6025,17 @@ Exit criteria:
   critical/high finding and known limitations are explicit;
 - `v0.48.2 implementation stop reached. Run pentest for this exact commit.`
 
-### v0.48.3 - `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention rep...
+### v0.48.3 - `navheim-executor` scoped/owned modes with supervisor-enforced deterministic cleanup...
 
 Status: planned.
 
-Goal: deliver `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling as one bounded,
+Goal: deliver `navheim-executor` scoped/owned modes with supervisor-enforced deterministic cleanup lanes and contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling as one bounded,
 reviewable release in Phase C (Native DSP reference implementation).
 
 Deliverables:
 
-- `navheim-executor` scoped/owned modes with supervisor-enforced cleanup contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling.
-- Expose replayable cleanup only as ExecutionSupervisor::poll_cleanup(&self, &Executor, budget), with a must-use non-cloneable supervisor bound to one executor/PlanReceipt/trace generation. After mutation-free validation it allocates the logical call and invokes a crate-private receipt-producing primitive. Live contention is recorded before observable Busy; failure returns TraceUnavailable or stops/resynchronizes; replay consults the trace before any live CAS. Even inert profiles use the supervisor. Preserve bounded lowest-JobId cleanup, generation-safe lifecycle, atomic-only Drop, must-use/fail-stop, safe-only ownership and no-unsafe-Sync contracts.
+- `navheim-executor` scoped/owned modes with supervisor-enforced deterministic cleanup lanes and contention replay, live-handle-compatible serialization, proved payload ownership and generation-safe slot recycling.
+- Expose replayable cleanup only as ExecutionSupervisor::poll_cleanup(&self, &mut CleanupLane, &Executor, budget). PlanReceipt privately issues a bounded set of must-use non-Copy/non-Clone/non-serializable lanes with deterministic CleanupLaneId, checked non-wrapping per-lane sequence and supervisor/executor/plan/trace-generation binding. After mutation-free validation, form (CleanupLaneId, CallSequence), consult replay before live CAS, invoke the crate-private receipt-producing primitive, and record before observable Busy. Never derive identity from arrival/CAS order, OS threads or runtime tasks. Preserve inert-profile supervision, bounded cleanup, generation-safe lifecycle, atomic-only Drop, fail-stop, safe ownership and no-unsafe-Sync.
 - Add or update only the focused crates and modules required by this outcome;
   preserve `no_std`, allocation, dependency, unsafe, and GitHub-only
   boundaries.
@@ -6053,7 +6053,7 @@ Verification:
 
 - run the repository-wide format, lint, test, docs, package, dependency,
   advisory, SBOM, MSRV, and applicable platform gates;
-- Use visibility/compile/API, Miri, Loom, Kani/model and subprocess tests proving applications cannot call raw cleanup or name/ignore/forget its receipt; supervisor namespace/receipt/trace-generation binding and duplicate/mismatch rejection; concurrent shared supervisor calls; mutation-free validation; bounded logical-call allocation; live receipt recording before Busy; trace failure never leaking Busy; exact replay without CAS; and proved inert omission through the supervisor. Retain failed-CAS receipt binding, exhaustion/forgery/duplicate tests, live handles, overlapping cleaners, guard release, bounded lowest-JobId scan/work, cleanup versus completion/claim/drop/admission/shutdown, dispatch/cancel, every terminal kind, no implicit cleanup, dirty-executor fail-stop, publication ordering, ABA/generation exhaustion/namespace renewal, safe exactly-once storage, forgotten orphans, panic/reentrancy/unresponsive abort, exact APIs and non-durable pre-abort status.
+- Use visibility/compile/API, Miri, Loom, Kani/model and subprocess tests for private lane construction; must-use/non-clone/non-Copy behavior; deterministic planned IDs; mutable same-lane exclusion and concurrent distinct lanes; exact (CleanupLaneId, CallSequence) recording/replay under inverted arrival/CAS schedules; stale/duplicate/exhausted/cross-supervisor lane rejection; checked sequence exhaustion and fresh-generation renewal; forgotten-lane bounded capacity loss; mutation-free validation; recording before Busy; trace failure never leaking Busy; replay without CAS; and inert omission through the same lane API. Retain raw-boundary/receipt tests, live handles, overlapping cleaners, guard release, lowest-JobId bounds, lifecycle races, dispatch/cancel, no implicit cleanup, fail-stop, publication, ABA/namespace renewal, safe exactly-once storage, forgotten orphans, panic/reentrancy/unresponsive abort, exact APIs and non-durable pre-abort status.
 - perform independent numerical references, fixed-point and floating comparisons, deterministic replay, resource bounds, and scalar/optimized equivalence;
 - run and map all applicable positive, negative, boundary, malformed,
   adversarial, conformance, differential, resource, fuzz, platform, and

@@ -129,8 +129,14 @@ Navheim currently provides repository and crate foundations only.
 - Eighteenth gap review makes that v0.48.3 policy enforceable in safe Rust:
   applications receive only supervised cleanup, while the raw primitive and
   receipt remain crate-private. The supervisor binds the executor/plan/trace,
-  allocates the logical call, records before exposing `Busy`, maps recording
-  failure to trace-unavailable/stop, and checks replay before any live CAS.
+  advances the planned lane call, records before exposing `Busy`, maps
+  recording failure to trace-unavailable/stop, and checks replay before any
+  live CAS.
+- Nineteenth gap review gives concurrent cleanup calls stable v0.48.3 replay
+  identity. `PlanReceipt` issues bounded non-cloneable `CleanupLane`
+  capabilities with deterministic IDs and checked per-lane sequences; replay
+  keys `(CleanupLaneId, CallSequence)`, never call arrival, CAS order, OS
+  thread IDs or runtime task identities.
 
 ## Not Implemented
 

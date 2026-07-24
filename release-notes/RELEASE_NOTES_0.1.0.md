@@ -198,9 +198,17 @@ The eighteenth coverage pass makes that ordering enforceable in safe Rust.
 Replayable applications call only `ExecutionSupervisor::poll_cleanup`; the raw
 executor primitive and contention receipt are crate-private, so callers cannot
 ignore or forget an unrecorded receipt. The supervisor binds one executor,
-plan and trace generation, allocates the logical call, records contention
+plan and trace generation, advances the planned lane call, records contention
 before returning observable `Busy`, and reports trace unavailability or stops
 if recording fails. Replay is consulted before any live cleaner CAS.
+
+The nineteenth coverage pass makes concurrent cleanup replay identity stable.
+`PlanReceipt` privately issues a bounded set of non-cloneable `CleanupLane`
+capabilities. Each lane binds the supervisor, executor, plan and trace
+generation, carries a deterministic `CleanupLaneId`, and advances a checked
+non-wrapping sequence. Calls and replay use
+`(CleanupLaneId, CallSequence)`, never invocation arrival, CAS order, OS thread
+IDs or runtime-task identities.
 
 A repository-wide requirements pass then checked every tracked artifact class,
 corrected the copied MIT donor identity, widened the source-size and
